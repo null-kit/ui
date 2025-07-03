@@ -11,6 +11,9 @@ export default defineNuxtConfig({
       rootDir: fileURLToPath(new URL('..', import.meta.url))
     }
   },
+  alias: {
+    '@null-kit/ui': fileURLToPath(new URL('../assets/css', import.meta.url))
+  },
   css: ['@/assets/css/app.css'],
   postcss: {
     plugins: {
