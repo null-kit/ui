@@ -1,9 +1,8 @@
 import { fileURLToPath } from 'node:url';
 
 export default defineNuxtConfig({
-  future: {
-    compatibilityVersion: 4
-  },
+  future: { compatibilityVersion: 4 },
+  ssr: false,
   extends: ['..'],
   modules: ['@nuxt/eslint'],
   eslint: {
@@ -13,6 +12,9 @@ export default defineNuxtConfig({
   },
   alias: {
     '@null-kit/ui': fileURLToPath(new URL('../assets/css', import.meta.url))
+  },
+  app: {
+    baseURL: '/ui/'
   },
   css: ['@/assets/css/app.css'],
   postcss: {

@@ -21,3 +21,6 @@ dist
 
 # JetBrains/WebStorm
 .idea/
+
+# Playground
+.playground/dist
