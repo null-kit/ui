@@ -1,0 +1,14 @@
+@utility form-input {
+  @apply w-full appearance-none transition outline-none;
+  @apply max-h-80 min-h-10 px-3 py-2 text-sm font-medium;
+  @apply ring-edison bg-darwin placeholder:text-surface/30 rounded-xl shadow ring;
+  @apply focus:ring-accent hover:ring-surface/20;
+  @apply disabled:bg-surface/5 disabled:text-surface/50 disabled:cursor-not-allowed;
+  @apply dark:disabled:text-surface/30 dark:disabled:bg-surface/3 dark:shadow-black/80;
+}
+
+@utility form-slot {
+  @apply ring-edison min-h-10 rounded-xl text-sm shadow ring;
+  @apply bg-darwin disabled:bg-surface/5;
+  @apply dark:disabled:bg-surface/3 dark:shadow-black;
+}

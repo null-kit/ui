@@ -1,0 +1,24 @@
+@utility bg-polka {
+  background-image:
+    radial-gradient(var(--color-edison) 1px, transparent 1px), radial-gradient(var(--color-edison) 1px, transparent 1px);
+  background-size: 18px 18px;
+  background-position:
+    0 0,
+    9px 9px;
+}
+
+@utility bg-dot {
+  background-image: radial-gradient(circle at 2px 2px, var(--color-edison) 1px, transparent 0);
+  background-size: 15px 15px;
+  background-position: 7px 7px;
+}
+
+@utility bg-diagonal {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--color-edison),
+    var(--color-edison) 1px,
+    transparent 1px,
+    transparent 14px
+  );
+}

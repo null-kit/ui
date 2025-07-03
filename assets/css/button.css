@@ -1,0 +1,57 @@
+@utility btn {
+  @apply inline-flex items-center justify-center;
+  @apply min-h-10 shrink-0 gap-2 px-4 py-2;
+  @apply relative whitespace-nowrap;
+  @apply isolate overflow-clip rounded-xl text-sm font-medium;
+  @apply outline-0 duration-300;
+
+  @apply disabled:bg-surface/10 disabled:cursor-not-allowed;
+
+  @apply hover:bg-surface/4 active:bg-surface/8;
+  @apply dark:hover:bg-surface/5 dark:active:bg-surface/10;
+}
+
+@utility btn-sm {
+  @apply min-h-7 rounded-lg px-2 py-1 text-xs;
+}
+
+@utility btn-lg {
+  @apply min-h-12 px-6 py-3;
+}
+
+@utility btn-default {
+  @apply bg-darwin shadow;
+  @apply ring-edison hover:ring-surface/20 ring;
+}
+
+@utility btn-main {
+  @apply text-white shadow shadow-black/5;
+  @apply bg-accent hover:bg-accent/80 active:bg-accent;
+}
+
+@utility btn-danger {
+  @apply from-red-400 to-red-500 ring-red-500;
+}
+
+@utility btn-group {
+  @apply isolate flex overflow-auto;
+  @apply rounded-xl shadow duration-300;
+  @apply ring-edison hover:ring-surface/20 ring;
+  @apply divide-edison divide-x;
+
+  .btn {
+    @apply rounded-none shadow-none;
+  }
+}
+
+.btn:is(.btn-accent, .btn-danger) {
+  @apply bg-radial-[ellipse_at_top] text-white;
+  @apply inset-ring inset-ring-white/20;
+  @apply bg-[size:100%_200%] bg-[bottom_center];
+  @apply hover:bg-[size:100%_100%] active:bg-[size:100%_200%];
+  text-shadow: 0 1px 1px rgb(0 0 0 / 0.1);
+}
+
+button {
+  @apply cursor-pointer;
+}

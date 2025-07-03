@@ -1,0 +1,19 @@
+[class*='unovis-'] {
+  --vis-font-family: var(--font-sans);
+
+  --vis-axis-grid-color: var(--color-edison);
+  --vis-axis-tick-color: var(--color-edison);
+  --vis-axis-tick-label-color: var(--color-surface);
+
+  --vis-tooltip-padding: 0;
+  --vis-tooltip-text-color: var(--color-surface);
+  --vis-tooltip-border-radius: var(--radius-lg);
+  --vis-tooltip-box-shadow: var(--shadow-md);
+  --vis-tooltip-border-color: var(--color-edison);
+  --vis-tooltip-background-color: var(--color-darwin);
+
+  --vis-donut-central-label-font-size: var(--text-xl);
+  --vis-donut-central-label-text-color: var(--color-surface);
+  --vis-donut-central-sub-label-font-size: var(--text-sm);
+  --vis-donut-central-sub-label-text-color: --alpha(var(--color-surface) / 0.4);
+}

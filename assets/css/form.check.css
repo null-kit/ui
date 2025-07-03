@@ -1,0 +1,10 @@
+@utility form-check {
+  @apply ring-edison;
+  @apply indeterminate:ring-accent checked:ring-accent;
+  @apply disabled:bg-newton disabled:ring-edison/50 disabled:cursor-not-allowed;
+}
+
+@utility form-switch {
+  @apply absolute inset-0.5 size-5;
+  @apply bg-edison rounded-full;
+}

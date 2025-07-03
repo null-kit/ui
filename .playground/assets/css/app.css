@@ -1,0 +1,38 @@
+@import 'tailwindcss';
+@import '@null-kit/ui/all';
+
+@theme {
+  --color-newton: var(--color-slate-100);
+  --color-darwin: var(--color-white);
+  --color-edison: var(--color-slate-200);
+  --color-surface: var(--color-slate-700);
+  --color-accent: var(--color-violet-800);
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer theme {
+  :root:is(.dark) {
+    --chroma: 0.02;
+    --hue: 300;
+
+    --color-newton: oklch(16% var(--chroma) var(--hue));
+    --color-darwin: oklch(20% var(--chroma) var(--hue));
+    --color-edison: oklch(30% var(--chroma) var(--hue));
+    --color-surface: oklch(97% var(--chroma) var(--hue));
+    --color-accent: var(--color-violet-500);
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    @apply m-0 appearance-none;
+  }
+
+  input[type='number'] {
+    appearance: textfield;
+  }
+
+  :is(:root, body) {
+    @apply bg-darwin text-surface overscroll-none antialiased;
+  }
+}

@@ -1,0 +1,5 @@
+@utility modal-content {
+  @apply outline-newton outline-6;
+  @apply bg-newton rounded-2xl shadow-lg;
+  @apply border-edison border;
+}

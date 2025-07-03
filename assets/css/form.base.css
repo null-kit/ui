@@ -1,0 +1,11 @@
+@utility form-label {
+  @apply inline-block cursor-default text-sm font-semibold opacity-80;
+}
+
+@utility form-required {
+  @apply text-orange-600;
+}
+
+@utility form-help {
+  @apply text-xs opacity-40 duration-200 hover:opacity-100;
+}

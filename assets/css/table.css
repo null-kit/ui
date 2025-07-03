@@ -1,0 +1,11 @@
+@utility table-tr {
+  @apply divide-edison divide-x;
+}
+
+@utility table-th {
+  @apply bg-darwin px-4 py-2;
+}
+
+@utility table-td {
+  @apply bg-darwin border-edison border-t px-4 py-2;
+}
