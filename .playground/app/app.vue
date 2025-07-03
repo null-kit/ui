@@ -1,34 +1,34 @@
 <template>
   <div class="container mx-auto grid grid-cols-[15rem_1fr] gap-4">
-    <title>Nuxt UI Layer - Null-Kit</title>
+    <Title>Nuxt UI Layer - Null-Kit</Title>
 
     <aside class="border-edison sticky top-0 flex h-dvh flex-col border-r p-4">
       <nav class="flex flex-col *:justify-start">
-        <a href="#utils" class="btn">Utils</a>
-        <a href="#clipboard" class="btn">Clipboard</a>
-        <a href="#confirm" class="btn">Confirm</a>
-        <a href="#toasts" class="btn">Toasts</a>
-        <a href="#charts" class="btn">Charts</a>
-        <a href="#datepicker" class="btn">Datepicker</a>
-        <a href="#table" class="btn">Table</a>
-        <a href="#tabs" class="btn">Tabs</a>
-        <a href="#icon" class="btn">Icon</a>
-        <a href="#drawer" class="btn">Drawer & Modal</a>
-        <a href="#tooltip" class="btn">Tooltip</a>
-        <a href="#pagination" class="btn">Pagination</a>
-        <a href="#badge" class="btn">Badge</a>
-        <a href="#select" class="btn">Select</a>
-        <a href="#control" class="btn">Control</a>
-        <a href="#tree-select" class="btn">Tree Select</a>
-        <a href="#checkbox" class="btn">Checkbox</a>
-        <a href="#dropdown" class="btn">Dropdown</a>
-        <a href="#editor" class="btn">Editor</a>
+        <NuxtLink to="/#utils" class="btn">Utils</NuxtLink>
+        <NuxtLink to="/#clipboard" class="btn">Clipboard</NuxtLink>
+        <NuxtLink to="/#confirm" class="btn">Confirm</NuxtLink>
+        <NuxtLink to="/#toasts" class="btn">Toasts</NuxtLink>
+        <NuxtLink to="/#charts" class="btn">Charts</NuxtLink>
+        <NuxtLink to="/#datepicker" class="btn">Datepicker</NuxtLink>
+        <NuxtLink to="/#table" class="btn">Table</NuxtLink>
+        <NuxtLink to="/#tabs" class="btn">Tabs</NuxtLink>
+        <NuxtLink to="/#icon" class="btn">Icon</NuxtLink>
+        <NuxtLink to="/#drawer" class="btn">Drawer & Modal</NuxtLink>
+        <NuxtLink to="/#tooltip" class="btn">Tooltip</NuxtLink>
+        <NuxtLink to="/#pagination" class="btn">Pagination</NuxtLink>
+        <NuxtLink to="/#badge" class="btn">Badge</NuxtLink>
+        <NuxtLink to="/#select" class="btn">Select</NuxtLink>
+        <NuxtLink to="/#control" class="btn">Control</NuxtLink>
+        <NuxtLink to="/#tree-select" class="btn">Tree Select</NuxtLink>
+        <NuxtLink to="/#checkbox" class="btn">Checkbox</NuxtLink>
+        <NuxtLink to="/#dropdown" class="btn">Dropdown</NuxtLink>
+        <NuxtLink to="/#editor" class="btn">Editor</NuxtLink>
       </nav>
 
       <button type="button" class="btn btn-default mt-auto" @click="$theme.toggleTheme">Toggle Theme</button>
     </aside>
 
-    <main class="space-y-8 p-4">
+    <main class="min-w-0 space-y-8 p-4">
       <fieldset id="utils">
         <legend>Utils</legend>
 
@@ -131,10 +131,21 @@
         </div>
       </fieldset>
 
-      <fieldset id="table">
+      <fieldset id="table" class="min-w-0">
         <legend>Table</legend>
 
+        <div class="mb-2 text-sm font-bold">Basic Table</div>
         <AppTable :columns="formData.table" sticky-head />
+
+        <div class="mt-10 mb-2 text-sm font-bold">Sticky Email Cell Table and Actions Slot</div>
+        <AppTable :columns="formData.tableBig" sticky-cells="email">
+          <template #actions>
+            <div class="flex gap-2">
+              <button type="button" class="btn btn-default btn-sm">Edit</button>
+              <button type="button" class="btn btn-default btn-sm">Delete</button>
+            </div>
+          </template>
+        </AppTable>
       </fieldset>
 
       <fieldset id="tabs">
@@ -159,6 +170,7 @@
         <legend>Icon</legend>
 
         <div class="flex gap-4">
+          <AppIcon name="editor:bold" />
           <AppIcon name="editor:bold" />
           <AppIcon name="editor:italic" />
           <AppIcon name="editor:underline" />
@@ -349,8 +361,8 @@
           />
 
           <FormCheckGroup
-            :options="['Dog', 'Cat', 'Bird']"
             v-model="formData.pet"
+            :options="['Dog', 'Cat', 'Bird']"
             type="checkbox"
             label="Radio Group"
             name="pet"
@@ -436,7 +448,61 @@ const formData = reactive({
     { id: 1, name: 'John', email: 'john@example.com' },
     { id: 2, name: 'Jane', email: 'jane@example.com' },
     { id: 3, name: 'Jim', email: 'jim@example.com' }
+  ],
+  tableBig: [
+    {
+      id: 1,
+      name: 'John',
+      email: 'john@example.com',
+      size: 'small',
+      status: 'active',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      createdAt: formatDate(new Date())
+    },
+    {
+      id: 2,
+      name: 'Jane',
+      email: 'jane@example.com',
+      size: 'medium',
+      status: 'inactive',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      createdAt: formatDate(new Date())
+    },
+    {
+      id: 3,
+      name: 'Jim',
+      email: 'jim@example.com',
+      size: 'large',
+      status: 'active',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      createdAt: formatDate(new Date())
+    }
   ]
+});
+
+onMounted(() => {
+  document.documentElement.style.scrollBehavior = 'smooth';
+
+  const handleAnchorClick = (event: Event) => {
+    const target = event.target as HTMLElement;
+
+    if (target.getAttribute('href')?.includes('#')) {
+      event.preventDefault();
+
+      const anchor = target.getAttribute('href')?.split('#')[1];
+
+      if (anchor) {
+        const element = document.getElementById(anchor);
+
+        if (element) element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
+  document.addEventListener('click', handleAnchorClick);
 });
 </script>
 

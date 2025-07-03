@@ -8,5 +8,7 @@
   "lastLoginAt": "Last Login",
   "type": "Type",
   "status": "Status",
-  "action": "Action"
+  "action": "Action",
+  "description": "Description",
+  "size": "Size"
 }

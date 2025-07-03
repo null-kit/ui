@@ -3,7 +3,12 @@
   "description": "UI Components Layer",
   "type": "module",
   "version": "1.0.0",
+  "author": "denisarenko",
+  "license": "MIT",
   "main": "./nuxt.config.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "dev": "nuxi dev .playground",
     "dev:prepare": "nuxt prepare .playground",
@@ -37,12 +42,12 @@
     "@tiptap/extension-youtube": "^2.14.0",
     "@tiptap/pm": "^2.14.0",
     "@tiptap/vue-3": "^2.14.0",
-    "@unovis/vue": "^1.5.2"
+    "@unovis/vue": "^1.5.2",
+    "@unovis/ts": "^1.5.2"
   },
   "devDependencies": {
     "@nuxt/eslint": "latest",
     "@tailwindcss/postcss": "^4.1.8",
-    "@unovis/ts": "^1.5.2",
     "eslint": "^9.28.0",
     "nuxt": "^3.17.5",
     "prettier": "^3.5.3",
