@@ -8,7 +8,7 @@
             'peer checked:ring-accent cursor-pointer appearance-none ring duration-200',
             'disabled:bg-newton disabled:ring-edison/50 disabled:cursor-not-allowed',
             isSwitch || type === 'radio' ? 'rounded-full' : 'rounded-md',
-            isSwitch ? 'checked:bg-accent h-6 w-11' : 'size-5 shadow',
+            isSwitch ? 'bg-darwin checked:bg-accent h-6 w-11' : 'size-5 shadow',
             indeterminate ? 'ring-accent' : 'ring-edison'
           ]"
           :type="type"
