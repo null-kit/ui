@@ -12,7 +12,11 @@ Then extend it in your `nuxt.config.ts`:
 
 ```typescript
 export default defineNuxtConfig({
-  extends: [['@null-kit/ui', { install: true }]]
+  // From GitHub
+  extends: [['github:null-kit/ui', { install: true }]]
+
+  // or from NPM
+  extends: [['@null-kit/ui', { install: true }]],
 });
 ```
 
