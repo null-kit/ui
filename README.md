@@ -4,6 +4,16 @@ A comprehensive **Nuxt Layer** providing UI components with TypeScript support, 
 
 ## 📦 Installation
 
+### 1. From GitHub
+
+```typescript
+export default defineNuxtConfig({
+  extends: [['github:null-kit/ui', { install: true }]]
+});
+```
+
+### 2. From NPM
+
 ```bash
 npm install @null-kit/ui
 ```
@@ -12,11 +22,7 @@ Then extend it in your `nuxt.config.ts`:
 
 ```typescript
 export default defineNuxtConfig({
-  // From GitHub
-  extends: [['github:null-kit/ui', { install: true }]]
-
-  // or from NPM
-  extends: [['@null-kit/ui', { install: true }]],
+  extends: [['@null-kit/ui', { install: true }]]
 });
 ```
 
