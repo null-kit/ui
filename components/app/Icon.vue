@@ -19,7 +19,7 @@ const attrs = useAttrs();
 const iconSize = computed(() => ({ 'size-4': !String(attrs.class).includes('size-') }));
 
 const iconLoad = async () => {
-  const match = Object.entries(icons).find(([path]) => path.endsWith(`${props.name}.svg`));
+  const match = Object.entries(icons).find(([path]) => path.endsWith(`/${props.name}.svg`));
 
   if (!match) {
     console.error(`Icon '${props.name}' not found`);

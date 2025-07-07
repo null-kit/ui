@@ -171,7 +171,6 @@
 
         <div class="flex gap-4">
           <AppIcon name="editor:bold" />
-          <AppIcon name="editor:bold" />
           <AppIcon name="editor:italic" />
           <AppIcon name="editor:underline" />
         </div>
