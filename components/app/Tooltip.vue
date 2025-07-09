@@ -9,19 +9,19 @@
     <slot>
       {{ trigger }}
     </slot>
-  </span>
 
-  <Teleport to="#teleports">
-    <Transition enter-from-class="opacity-0" enter-to-class="opacity-100" leave-to-class="opacity-0">
-      <div v-if="isActive" ref="floating" :style="floatingStyles" class="z-10 transition-opacity">
-        <div class="tooltip-content" :class="$attrs.class">
-          <slot name="message">
-            {{ message }}
-          </slot>
+    <Teleport to="#teleports">
+      <Transition enter-from-class="opacity-0" enter-to-class="opacity-100" leave-to-class="opacity-0">
+        <div v-if="isActive" ref="floating" :style="floatingStyles" class="z-10 transition-opacity">
+          <div class="tooltip-content" :class="$attrs.class">
+            <slot name="message">
+              {{ message }}
+            </slot>
+          </div>
         </div>
-      </div>
-    </Transition>
-  </Teleport>
+      </Transition>
+    </Teleport>
+  </span>
 </template>
 
 <script setup lang="ts">
