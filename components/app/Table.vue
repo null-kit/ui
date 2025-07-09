@@ -51,7 +51,11 @@
           </div>
         </div>
 
-        <th v-if="$slots.actions" :class="['table-th w-0', thClass]" />
+        <div
+          v-if="$slots.actions"
+          :class="['table-th w-0', thClass]"
+          :style="{ minWidth: theadCellWidths[theadCellWidths.length - 1] + 'px' }"
+        />
       </div>
     </div>
 
@@ -80,7 +84,7 @@
               :key="cell"
               :class="['table-td', tdClass, { 'left-0 z-1 md:sticky': stickyCells.includes(cell) }]"
             >
-              <component :is="$slots[cell]" v-if="$slots[cell]" :entry="entry" :value="entry[cell]" />
+              <component v-if="$slots[cell]" :is="$slots[cell]" :entry="columns[index]" :value="entry[cell]" />
 
               <template v-else>
                 {{ entry[cell] }}
@@ -155,16 +159,22 @@ const theadHidden = useTemplateRef('theadHidden');
 
 const theadCellWidths = ref<number[]>([]);
 
+const getRect = (element: HTMLElement) => element.getBoundingClientRect();
+
 const getTheadCellWidths = () => {
-  if (!theadHidden.value) return;
+  if (!theadHidden.value || !theadVisible.value) return;
 
   const theadCells = theadHidden.value.querySelectorAll('th');
 
-  theadCellWidths.value = Array.from(theadCells).map((cell) => cell.getBoundingClientRect().width);
+  theadVisible.value.style.marginBottom = `-${getRect(theadVisible.value).height}px`;
+
+  theadCellWidths.value = Array.from(theadCells).map((cell) => getRect(cell).width);
 };
 
-let scrollHandler: (() => void) | null = null;
-let resizeObserver: ResizeObserver | null = null;
+watch(mergedColumnKeys, () => nextTick(getTheadCellWidths));
+
+let scrollHandler: () => void;
+let resizeObserver: ResizeObserver | undefined;
 
 onMounted(() => {
   if (!tableWrapper.value || !theadVisible.value) return;
@@ -172,11 +182,13 @@ onMounted(() => {
   resizeObserver = new ResizeObserver(getTheadCellWidths);
   resizeObserver.observe(tableWrapper.value);
 
-  const { height } = theadVisible.value.getBoundingClientRect();
+  scrollHandler = () => {
+    theadVisible.value?.scrollTo({
+      left: tableWrapper.value?.scrollLeft,
+      top: getRect(theadVisible.value).height
+    });
+  };
 
-  theadVisible.value.style.marginBottom = `-${height}px`;
-
-  scrollHandler = () => theadVisible.value?.scrollTo({ left: tableWrapper.value?.scrollLeft, top: height });
   tableWrapper.value.addEventListener('scroll', scrollHandler);
 });
 
