@@ -107,7 +107,7 @@ const {
   sortBy = []
 } = defineProps<{
   columns: T[];
-  columnsExtra?: string;
+  columnsExtra?: string[];
   stickyHead?: boolean;
   stickyOffset?: string;
   stickyCells: string[];
@@ -131,7 +131,7 @@ const mergedColumns = computed(() => {
   });
 
   if (columnsExtra) {
-    const extra = Object.fromEntries(columnsExtra.split(',').map((key) => [key, null]));
+    const extra = Object.fromEntries(columnsExtra.map((key) => [key, null]));
 
     return omitted.map((column) => ({ ...column, ...extra }));
   }

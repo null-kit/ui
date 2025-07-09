@@ -7,7 +7,7 @@ A flexible table component with sorting, sticky headers, custom cell rendering, 
 | Prop           | Type       | Default   | Description                              |
 | -------------- | ---------- | --------- | ---------------------------------------- |
 | `columns`      | `T[]`      | -         | Array of data objects for table rows     |
-| `columnsExtra` | `string`   | -         | Comma-separated extra column keys to add |
+| `columnsExtra` | `string[]` | -         | Extra column keys to add                 |
 | `stickyHead`   | `boolean`  | `false`   | Whether to make the header sticky        |
 | `stickyOffset` | `string`   | `'top-0'` | CSS class for sticky header positioning  |
 | `stickyCells`  | `string[]` | -         | Column keys to make sticky               |
