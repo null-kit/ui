@@ -84,7 +84,7 @@
               :key="cell"
               :class="['table-td', tdClass, { 'left-0 z-1 md:sticky': stickyCells.includes(cell) }]"
             >
-              <component v-if="$slots[cell]" :is="$slots[cell]" :entry="columns[index]" :value="entry[cell]" />
+              <component :is="$slots[cell]" v-if="$slots[cell]" :entry="columns[index]" :value="entry[cell]" />
 
               <template v-else>
                 {{ entry[cell] }}
@@ -130,7 +130,7 @@ defineSlots<ColumnSlots & CustomSlots>();
 const route = useRoute();
 
 const mergedColumns = computed(() => {
-  let omitted = columns.map((row) => {
+  const omitted = columns.map((row) => {
     return Object.fromEntries(Object.entries(row).filter(([key]) => !omit.includes(key)));
   });
 
@@ -171,7 +171,9 @@ const getTheadCellWidths = () => {
   theadCellWidths.value = Array.from(theadCells).map((cell) => getRect(cell).width);
 };
 
-watch(mergedColumnKeys, () => nextTick(getTheadCellWidths));
+const debouncedGetTheadCellWidths = debounce(getTheadCellWidths, 100);
+
+watch(mergedColumnKeys, () => nextTick(debouncedGetTheadCellWidths), { immediate: true });
 
 let scrollHandler: () => void;
 let resizeObserver: ResizeObserver | undefined;
