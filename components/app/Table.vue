@@ -171,9 +171,9 @@ const getTheadCellWidths = () => {
   theadCellWidths.value = Array.from(theadCells).map((cell) => getRect(cell).width);
 };
 
-const debouncedGetTheadCellWidths = debounce(getTheadCellWidths, 100);
+const debouncedGetTheadCellWidths = debounce(getTheadCellWidths, 30);
 
-watch(mergedColumnKeys, () => nextTick(debouncedGetTheadCellWidths), { immediate: true });
+watch(mergedColumnKeys, () => nextTick().then(() => debouncedGetTheadCellWidths()), { immediate: true });
 
 let scrollHandler: () => void;
 let resizeObserver: ResizeObserver | undefined;
@@ -184,12 +184,7 @@ onMounted(() => {
   resizeObserver = new ResizeObserver(getTheadCellWidths);
   resizeObserver.observe(tableWrapper.value);
 
-  scrollHandler = () => {
-    theadVisible.value?.scrollTo({
-      left: tableWrapper.value?.scrollLeft,
-      top: getRect(theadVisible.value).height
-    });
-  };
+  scrollHandler = () => theadVisible.value?.scrollTo({ left: tableWrapper.value?.scrollLeft });
 
   tableWrapper.value.addEventListener('scroll', scrollHandler);
 });

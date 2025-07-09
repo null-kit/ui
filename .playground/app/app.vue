@@ -138,7 +138,7 @@
         <AppTable :columns="formData.table" sticky-head />
 
         <div class="mt-10 mb-2 text-sm font-bold">Sticky Email Cell Table and Actions Slot</div>
-        <AppTable :columns="formData.tableBig" sticky-cells="email">
+        <AppTable :columns="formData.tableBig" :sticky-cells="['email']">
           <template #actions>
             <div class="flex gap-2">
               <button type="button" class="btn btn-default btn-sm">Edit</button>
@@ -433,7 +433,7 @@ const formData = reactive({
     }
   ],
   areaChart: Array.from({ length: 10 }, (_, index) => ({
-    date: formatDate(`2024-01-${index + 4}`),
+    date: `2024-01-${index + 4}`,
     impressions: Math.floor(Math.random() * 300),
     requests: Math.floor(Math.random() * 150),
     margin: Math.floor(Math.random() * 150)
