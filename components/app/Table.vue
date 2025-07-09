@@ -110,7 +110,7 @@ const {
   columnsExtra?: string[];
   stickyHead?: boolean;
   stickyOffset?: string;
-  stickyCells: string[];
+  stickyCells?: string[];
   sortBy?: string[];
   trClass?: string;
   thClass?: string;
