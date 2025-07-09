@@ -9,23 +9,23 @@
       <label v-for="(option, index) in options" :key="index" class="btn rounded-none">
         <input
           v-model="model"
-          class="peer checked:bg-surface/3 absolute inset-0 cursor-pointer appearance-none"
+          class="peer checked:bg-accent/5 absolute inset-0 cursor-pointer appearance-none"
           :type="type"
           :name="name"
           :value="modifiers.lowercase ? option.toLowerCase() : option"
         />
 
-        <span class="text-sm duration-200 peer-checked:font-medium">{{ option }}</span>
+        <span class="peer-checked:text-accent text-sm font-medium duration-200">{{ option }}</span>
       </label>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-const [model, modifiers] = defineModel<string | string[]>({
+const [model, modifiers] = defineModel<string | string[] | undefined>({
   required: true,
   set(value) {
-    if (modifiers.lowercase) {
+    if (value && modifiers.lowercase) {
       if (Array.isArray(value)) return value.map((option) => option.toLowerCase());
 
       return value.toLowerCase();

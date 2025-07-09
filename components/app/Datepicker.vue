@@ -115,7 +115,7 @@ const { disabledDates = [], ...props } = defineProps<{
   preset?: Preset;
 }>();
 
-const [model, modifiers] = defineModel<Date | Date[]>({
+const [model, modifiers] = defineModel<Date | Date[] | undefined>({
   required: true,
   set(value) {
     if (value && modifiers.iso) {
@@ -275,7 +275,7 @@ const setPreset = (type: Preset) => {
 };
 
 onMounted(() => {
-  if (props.range) {
+  if (props.range && model.value) {
     selectedDates.value = Array.isArray(model.value) ? model.value : [model.value];
   }
 

@@ -1,11 +1,15 @@
 @utility table-tr {
-  @apply divide-edison divide-x;
+  @apply divide-edison divide-x last:[&>td]:border-b-0;
+}
+
+@utility table-thead {
+  @apply bg-darwin text-left font-semibold select-none;
 }
 
 @utility table-th {
-  @apply bg-darwin px-4 py-2;
+  @apply bg-darwin border-edison border-b px-4 py-2;
 }
 
 @utility table-td {
-  @apply bg-darwin border-edison border-t px-4 py-2;
+  @apply bg-darwin border-edison border-b px-4 py-2;
 }
