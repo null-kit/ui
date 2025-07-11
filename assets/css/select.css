@@ -11,3 +11,7 @@
 @utility select-multiple {
   @apply -ml-1;
 }
+
+@utility select-slot {
+  @apply form-slot;
+}

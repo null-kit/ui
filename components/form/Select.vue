@@ -12,40 +12,59 @@
 
     <AppDropdown :autoclose :placement>
       <template #trigger="{ isOpen }">
-        <button type="button" :class="['select-input', inputClass, { 'ring-accent': isOpen }]">
-          <span v-if="multiple" class="select-multiple flex flex-wrap items-center gap-2 font-medium">
-            <span v-for="(option, index) in selected" :key="index" class="btn btn-sm btn-default min-h-auto">
-              {{ getKeyName(option) }}
+        <div class="flex">
+          <div v-if="$slots.left" class="select-slot shrink-0 overflow-clip rounded-r-none">
+            <slot name="left" />
+          </div>
+
+          <div class="relative w-full">
+            <button
+              type="button"
+              :class="[
+                'select-input',
+                inputClass,
+                { 'ring-accent': isOpen, 'rounded-l-none': $slots.left, 'rounded-r-none': $slots.right }
+              ]"
+            >
+              <span v-if="multiple" class="select-multiple flex flex-wrap items-center gap-2 font-medium">
+                <span v-for="(option, index) in selected" :key="index" class="btn btn-sm btn-default min-h-auto">
+                  {{ getKeyName(option) }}
+
+                  <svg
+                    v-if="selected.length > 1"
+                    viewBox="0 0 32 32"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="size-3 shrink-0 cursor-pointer text-current/50 hover:text-red-500"
+                    @click.stop="toggleOption(option)"
+                  >
+                    <path stroke-width="3" stroke="currentColor" d="M25 7 7 25m18 0L7 7" />
+                  </svg>
+                </span>
+              </span>
+
+              <span v-for="(option, index) in selected" v-else :key="index" class="font-medium">
+                {{ getKeyName(option) }}
+              </span>
+
+              <span v-if="!selected.length" class="whitespace-nowrap">{{ placeholder }}</span>
 
               <svg
-                v-if="selected.length > 1"
-                viewBox="0 0 32 32"
                 xmlns="http://www.w3.org/2000/svg"
-                class="size-3 shrink-0 cursor-pointer text-current/50 hover:text-red-500"
-                @click.stop="toggleOption(option)"
+                viewBox="0 0 32 32"
+                class="pointer-events-none absolute top-0 right-2 size-4 h-full opacity-50"
               >
-                <path stroke-width="3" stroke="currentColor" d="M25 7 7 25m18 0L7 7" />
+                <polyline points="10 22 16 28 22 22" fill="none" stroke="currentColor" stroke-width="3" />
+                <polyline points="10 10 16 4 22 10" fill="none" stroke="currentColor" stroke-width="3" />
               </svg>
-            </span>
-          </span>
+            </button>
 
-          <span v-for="(option, index) in selected" v-else :key="index" class="font-medium">
-            {{ getKeyName(option) }}
-          </span>
+            <FormValidate v-if="name" :name />
+          </div>
 
-          <span v-if="!selected.length" class="whitespace-nowrap">{{ placeholder }}</span>
-
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 32 32"
-            class="pointer-events-none absolute top-0 right-2 size-4 h-full opacity-50"
-          >
-            <polyline points="10 22 16 28 22 22" fill="none" stroke="currentColor" stroke-width="3" />
-            <polyline points="10 10 16 4 22 10" fill="none" stroke="currentColor" stroke-width="3" />
-          </svg>
-        </button>
-
-        <FormValidate v-if="name" :name />
+          <div v-if="$slots.right" class="select-slot shrink-0 overflow-clip rounded-l-none">
+            <slot name="right" />
+          </div>
+        </div>
       </template>
 
       <input v-if="search" v-model="searchInput" class="form-input mb-1" placeholder="Search" />

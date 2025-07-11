@@ -1,6 +1,6 @@
 # FormSelect Component
 
-A flexible select component with support for single/multiple selection, search functionality, option groups, and custom rendering. Built on top of AppDropdown for consistent positioning and behavior.
+A flexible and feature-rich select component with support for single/multiple selection, search functionality, option groups, custom rendering, and form validation. Built on top of AppDropdown for consistent positioning and behavior.
 
 ## Props
 
@@ -26,7 +26,7 @@ A flexible select component with support for single/multiple selection, search f
 The component uses Vue 3's `defineModel()` for two-way data binding:
 
 ```typescript
-const model = defineModel<T | T[] | keyof T | T[keyof T]>();
+const model = defineModel<T | T[] | keyof T | T[keyof T] | null>();
 ```
 
 - **Single Selection**: `T` or `keyof T` (when using `keyValue`)
@@ -34,10 +34,14 @@ const model = defineModel<T | T[] | keyof T | T[keyof T]>();
 
 ## Slots
 
-| Slot     | Props          | Description                                 |
-| -------- | -------------- | ------------------------------------------- |
-| `option` | `{ value: T }` | Custom option content rendering             |
-| `help`   | -              | Custom help content (overrides `help` prop) |
+| Slot          | Props          | Description                                 |
+| ------------- | -------------- | ------------------------------------------- |
+| `label-left`  | -              | Content before the label text               |
+| `label-right` | -              | Content after the label text                |
+| `left`        | -              | Content before the select input             |
+| `right`       | -              | Content after the select input              |
+| `option`      | `{ value: T }` | Custom option content rendering             |
+| `help`        | -              | Custom help content (overrides `help` prop) |
 
 ## Features
 
@@ -52,25 +56,28 @@ const model = defineModel<T | T[] | keyof T | T[keyof T]>();
 - **Search Input**: Filter options by typing
 - **Real-time Filtering**: Options update as you type
 - **Case Insensitive**: Search works regardless of case
+- **Group Support**: Search works within option groups
 
 ### Option Groups
 
 - **Grouped Options**: Organize options into logical groups
 - **Group Labels**: Display group names for better organization
 - **Nested Structure**: Support for complex option hierarchies
+- **Group Format**: `{ group: string, list: T[] }`
 
 ### Visual Features
 
-- **Checkmarks**: Visual indicators for selected options
-- **Ordering**: Selected items can appear first in the list
-- **Removable Tags**: Multiple selection shows removable option tags
-- **Empty State**: Shows "No Results" when no options match
+- **Checkmarks**: Visual indicators for selected options with animated transitions
+- **Ordering**: Selected items can appear first in the list when `order` is true
+- **Removable Tags**: Multiple selection shows removable option tags with close icons
+- **Empty State**: Shows "No Results" icon and message when no options match
+- **Dropdown Arrow**: Animated chevron icon indicating dropdown state
+- **Focus States**: Visual feedback with accent color ring
 
 ### Integration
 
-- **Form Validation**: Integrates with FormValidate component
-- **Dropdown Positioning**: Uses AppDropdown for consistent behavior
-- **Accessibility**: Proper ARIA attributes and keyboard support
+- **Form Validation**: Integrates with FormValidate component when `name` is provided
+- **Dropdown Positioning**: Uses AppDropdown for consistent behavior and positioning
 
 ## Usage Examples
 
@@ -126,7 +133,7 @@ const selected = ref([]);
 </template>
 ```
 
-### Searchable Select
+### Searchable Select with Ordering
 
 ```vue
 <script setup>
@@ -138,7 +145,7 @@ const options = ref([
   { id: 5, name: 'C++' }
 ]);
 
-const selected = ref();
+const selected = ref([]);
 </script>
 
 <template>
@@ -147,9 +154,11 @@ const selected = ref();
     :options="options"
     key-name="name"
     key-value="id"
+    multiple
     search
-    label="Programming Language"
-    placeholder="Search languages"
+    order
+    label="Programming Languages"
+    placeholder="Search and select languages"
   />
 </template>
 ```
@@ -225,6 +234,46 @@ const selected = ref();
 </template>
 ```
 
+### With Left/Right Slots
+
+```vue
+<script setup>
+const options = ref([
+  { id: 1, name: 'Option 1' },
+  { id: 2, name: 'Option 2' }
+]);
+
+const selected = ref();
+</script>
+
+<template>
+  <FormSelect
+    v-model="selected"
+    :options="options"
+    key-name="name"
+    key-value="id"
+    label="With Icons"
+    placeholder="Select option"
+  >
+    <template #left>
+      <div class="text-surface/50 flex items-center px-2">
+        <svg class="size-4" viewBox="0 0 32 32">
+          <path d="M16 4l12 12-12 12" stroke="currentColor" fill="none" stroke-width="2" />
+        </svg>
+      </div>
+    </template>
+
+    <template #right>
+      <div class="text-surface/50 flex items-center px-2">
+        <svg class="size-4" viewBox="0 0 32 32">
+          <path d="M16 4l12 12-12 12" stroke="currentColor" fill="none" stroke-width="2" />
+        </svg>
+      </div>
+    </template>
+  </FormSelect>
+</template>
+```
+
 ### Required Field with Validation
 
 ```vue
@@ -257,6 +306,7 @@ The component uses these CSS classes:
 
 - **Input**: `select-input` with conditional `ring-accent` for focus state
 - **Multiple Tags**: `select-multiple` with `btn btn-sm btn-default` for tags
+- **Slot**: `select-slot` with conditional `rounded-l-none` and `rounded-r-none` for left and right slots
 - **Group Labels**: `select-group-label`
 
 Additional classes can be applied via the `inputClass` prop.
@@ -266,16 +316,26 @@ Additional classes can be applied via the `inputClass` prop.
 ### Data Processing
 
 - **Value Mapping**: Supports different properties for display and value
-- **Type Safety**: Full TypeScript generics support
+- **Type Safety**: Full TypeScript generics support with `T extends Record<string, unknown> | string | number`
 - **Array Handling**: Efficient handling of single and multiple selections
+- **Null Safety**: Proper handling of null/undefined values
 
 ### Search Implementation
 
-- **Real-time Filtering**: Updates options as user types
-- **Case Insensitive**: Search works regardless of case
+- **Real-time Filtering**: Updates options as user types using `computed`
+- **Case Insensitive**: Search works regardless of case using `toLowerCase()`
 - **Group Support**: Search works within option groups
+- **Performance**: Efficient filtering with minimal re-renders
+
+### Selection Logic
+
+- **Toggle Behavior**: Click to select/deselect options
+- **Multiple Mode**: Maintains array of selected items
+- **Single Mode**: Single value with toggle to deselect
+- **Value Extraction**: Uses `keyValue` property when specified
 
 ## Dependencies
 
 - **AppDropdown**: For dropdown positioning and behavior
 - **FormValidate**: For form validation integration
+- **Floating UI**: For precise dropdown positioning
