@@ -1,11 +1,6 @@
-type NumberOptions = {
-  currency?: string;
-  options?: Intl.NumberFormatOptions;
-  locale?: string;
-};
-
-export const formatNumber = (value: number | string, { currency, options, locale = 'en-US' }: NumberOptions = {}) => {
-  const defaultOptions: Intl.NumberFormatOptions = currency ? { style: 'currency', currency } : {};
-
-  return new Intl.NumberFormat(locale, options || defaultOptions).format(Number(value));
+export const formatNumber = (value: number | string, props?: Intl.NumberFormatOptions, locale = 'en-US') => {
+  return new Intl.NumberFormat(locale, {
+    ...(props?.currency && { style: 'currency' }),
+    ...props
+  }).format(Number(value));
 };

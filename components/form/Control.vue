@@ -1,8 +1,13 @@
 <template>
-  <div class="block space-y-2 text-left">
+  <div class="flex flex-col space-y-2 text-left">
     <label v-if="label" :for="id" class="form-label">
+      <slot name="label-left" />
+
       {{ label }}
+
       <span v-if="required" title="Required field" class="form-required">*</span>
+
+      <slot name="label-right" />
     </label>
 
     <div class="flex">
@@ -78,7 +83,8 @@ const slots = useSlots();
 const {
   type = 'text',
   name,
-  inputClass
+  inputClass,
+  value
 } = defineProps<{
   label?: string;
   type?: 'text' | 'password' | 'email' | 'number' | 'textarea' | 'select';
@@ -91,6 +97,7 @@ const {
   accept?: string;
   pattern?: string;
   step?: string;
+  value?: string | number | null;
 }>();
 
 const onInput = (event: Event) => {
@@ -104,4 +111,8 @@ const onInput = (event: Event) => {
 };
 
 const inputStyle = ['form-input', slots.left && 'rounded-l-none', slots.right && 'rounded-r-none', inputClass];
+
+onMounted(() => {
+  if (value) model.value = value;
+});
 </script>

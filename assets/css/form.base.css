@@ -1,5 +1,5 @@
 @utility form-label {
-  @apply inline-block cursor-default text-sm font-semibold opacity-80;
+  @apply inline-flex cursor-default items-center gap-1 text-sm font-semibold opacity-80;
 }
 
 @utility form-required {

@@ -1,21 +1,21 @@
 <template>
-  <label class="relative inline-block whitespace-break-spaces">
-    <span class="inline-flex items-center gap-3 text-sm">
+  <label class="relative inline-flex flex-wrap whitespace-break-spaces">
+    <span class="inline-flex items-center gap-2 text-sm">
       <span :class="['relative flex shrink-0', disabled ? 'cursor-not-allowed' : 'cursor-pointer']">
         <input
           v-model="model"
           :class="[
-            'peer checked:ring-accent cursor-pointer appearance-none ring duration-200',
-            'disabled:bg-newton disabled:ring-edison/50 disabled:cursor-not-allowed',
+            'peer bg-darwin checked:ring-accent cursor-pointer appearance-none ring duration-200',
+            'disabled:bg-edison/20 disabled:ring-edison disabled:cursor-not-allowed',
             isSwitch || type === 'radio' ? 'rounded-full' : 'rounded-md',
-            isSwitch ? 'bg-darwin checked:bg-accent h-6 w-11' : 'size-5 shadow',
+            isSwitch ? 'checked:bg-accent h-6 w-11' : 'size-5 not-disabled:shadow',
             indeterminate ? 'ring-accent' : 'ring-edison'
           ]"
           :type="type"
           :name="name"
           :value="value"
           :disabled="disabled"
-          :checked="checked"
+          :checked="checked || isChecked"
         />
 
         <span
@@ -26,8 +26,8 @@
 
         <svg
           v-else
-          xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 32 32"
+          xmlns="http://www.w3.org/2000/svg"
           :class="['absolute inset-0 size-full p-1', disabled ? 'text-edison' : 'text-accent']"
         >
           <circle
@@ -55,14 +55,14 @@
         </svg>
       </span>
 
-      <slot>
-        {{ label }}
-      </slot>
+      <slot name="label-left" />
+      <slot>{{ label }}</slot>
+      <slot name="label-right" />
     </span>
 
     <FormValidate v-if="name" :name />
 
-    <div v-if="help || $slots.help" class="form-help">
+    <div v-if="help || $slots.help" class="form-help mt-1 w-full">
       <slot name="help">{{ help }}</slot>
     </div>
   </label>
@@ -79,7 +79,7 @@ const {
   label?: string;
   type?: 'checkbox' | 'radio';
   name: string;
-  value?: string | number;
+  value?: string | number | boolean;
   isSwitch?: boolean;
   indeterminate?: boolean;
   disabled?: boolean;
@@ -92,6 +92,10 @@ const isChecked = computed(() => {
     return model.value.map(String).includes(String(value));
   }
 
-  return model.value;
+  return Boolean(model.value);
+});
+
+onMounted(() => {
+  model.value = value ? value : Boolean(model.value);
 });
 </script>

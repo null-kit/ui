@@ -36,11 +36,18 @@ let timeout: NodeJS.Timeout;
 const onClose = () => {
   isActive.value = false;
 
+  document.body.removeAttribute('style');
+
   timeout = setTimeout(() => emit('close'), 300);
 };
 
 defineExpose({ onClose });
 
-onMounted(() => (isActive.value = true));
+onMounted(() => {
+  isActive.value = true;
+
+  document.body.style.overflow = 'hidden';
+});
+
 onBeforeUnmount(() => clearTimeout(timeout));
 </script>

@@ -1,8 +1,13 @@
 <template>
   <div class="relative flex flex-col space-y-2">
     <span v-if="label" class="form-label">
+      <slot name="label-left" />
+
       {{ label }}
+
       <span v-if="required" title="Required field" class="form-required">*</span>
+
+      <slot name="label-right" />
     </span>
 
     <AppDropdown :autoclose :placement>
@@ -98,7 +103,7 @@
 <script setup lang="ts" generic="T extends Record<string, unknown> | string | number">
 import type { Placement } from '@floating-ui/vue';
 
-const model = defineModel<T | T[] | keyof T | T[keyof T]>();
+const model = defineModel<T | T[] | keyof T | T[keyof T] | null>();
 
 const props = defineProps<{
   options: T[];

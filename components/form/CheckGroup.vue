@@ -1,11 +1,11 @@
 <template>
-  <div class="shrink-0">
+  <div class="w-fit shrink-0">
     <div v-if="label" class="form-label mb-2">
       {{ label }}
       <span v-if="required" title="Required field" class="form-required">*</span>
     </div>
 
-    <div v-if="options && options.length > 0" class="btn-group">
+    <div v-if="options && options.length > 0" class="btn-group bg-darwin">
       <label v-for="(option, index) in options" :key="index" class="btn rounded-none">
         <input
           v-model="model"
@@ -35,7 +35,7 @@ const [model, modifiers] = defineModel<string | string[] | undefined>({
   }
 });
 
-const { type = 'checkbox' } = defineProps<{
+const { type = 'radio' } = defineProps<{
   options: string[];
   label?: string;
   name?: string;

@@ -2,7 +2,7 @@
   <div v-if="columns && columns.length > 0" class="w-full text-sm whitespace-nowrap">
     <div
       ref="theadVisible"
-      class="table-thead flex overflow-hidden select-none"
+      class="table-thead flex flex-col overflow-hidden select-none"
       :class="[{ 'sticky z-10': stickyHead }, stickyOffset]"
     >
       <component :is="$slots.thead" v-if="$slots.thead" />
@@ -22,7 +22,7 @@
           @click="onSortBy(cell)"
         >
           <div class="flex items-center gap-1">
-            {{ useDictionary(cell) }}
+            {{ useDictionary(dictionaryKey ? `${dictionaryKey}.${cell}` : cell) }}
 
             <component :is="$slots[`th-${cell}`]" v-if="$slots[`th-${cell}`]" />
 
@@ -62,10 +62,12 @@
     <div ref="tableWrapper" class="scrollbar w-full overflow-auto">
       <table class="w-full border-separate border-spacing-0">
         <thead ref="theadHidden" class="table-thead pointer-events-none invisible">
+          <component :is="$slots.thead" v-if="$slots.thead" />
+
           <tr :class="['table-tr', trClass]">
             <th v-for="cell in mergedColumnKeys" :key="cell" :class="['table-th', thClass]">
               <div class="flex items-center gap-1">
-                {{ useDictionary(cell) }}
+                {{ useDictionary(dictionaryKey ? `${dictionaryKey}.${cell}` : cell) }}
 
                 <component :is="$slots[`th-${cell}`]" v-if="$slots[`th-${cell}`]" />
 
@@ -120,6 +122,7 @@ const {
   thClass?: string;
   tdClass?: string;
   omit?: string[];
+  dictionaryKey?: string;
 }>();
 
 type ColumnSlots = { [K in keyof T]?: (props: { entry: T; value: T[K] }) => void };
