@@ -26,8 +26,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         { name: 'color-scheme', content: () => settings.theme },
         {
           name: 'theme-color',
-          content: () =>
-            settings.theme === 'dark' ? (settings?.themeColor?.dark ?? '#000') : (settings?.themeColor?.light ?? '#fff')
+          content: () => (settings.theme === 'dark' ? settings?.themeColor?.dark : settings?.themeColor?.light)
         }
       ]
     });

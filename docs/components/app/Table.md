@@ -4,18 +4,20 @@ A flexible table component with sorting, sticky headers, custom cell rendering, 
 
 ## Props
 
-| Prop           | Type       | Default   | Description                              |
-| -------------- | ---------- | --------- | ---------------------------------------- |
-| `columns`      | `T[]`      | -         | Array of data objects for table rows     |
-| `columnsExtra` | `string[]` | -         | Extra column keys to add                 |
-| `stickyHead`   | `boolean`  | `false`   | Whether to make the header sticky        |
-| `stickyOffset` | `string`   | `'top-0'` | CSS class for sticky header positioning  |
-| `stickyCells`  | `string[]` | -         | Column keys to make sticky               |
-| `sortBy`       | `string[]` | -         | Column keys that are sortable            |
-| `trClass`      | `string`   | -         | Additional CSS classes for table rows    |
-| `thClass`      | `string`   | -         | Additional CSS classes for table headers |
-| `tdClass`      | `string`   | -         | Additional CSS classes for table cells   |
-| `omit`         | `string[]` | -         | Column keys to hide from display         |
+| Prop            | Type       | Default   | Description                              |
+| --------------- | ---------- | --------- | ---------------------------------------- |
+| `columns`       | `T[]`      | -         | Array of data objects for table rows     |
+| `columnsExtra`  | `string[]` | -         | Extra column keys to add                 |
+| `stickyHead`    | `boolean`  | `false`   | Whether to make the header sticky        |
+| `stickyOffset`  | `string`   | `'top-0'` | CSS class for sticky header positioning  |
+| `stickyLeft`    | `string[]` | `[]`      | Column keys to make sticky on the left   |
+| `stickyRight`   | `string[]` | `[]`      | Column keys to make sticky on the right  |
+| `sortBy`        | `string[]` | `[]`      | Column keys that are sortable            |
+| `trClass`       | `string`   | -         | Additional CSS classes for table rows    |
+| `thClass`       | `string`   | -         | Additional CSS classes for table headers |
+| `tdClass`       | `string`   | -         | Additional CSS classes for table cells   |
+| `omit`          | `string[]` | `[]`      | Column keys to hide from display         |
+| `dictionaryKey` | `string`   | -         | Dictionary key prefix for column labels  |
 
 ## Slots
 
@@ -86,8 +88,9 @@ Custom header slots allow you to add additional content to specific column heade
 ### Sticky Elements
 
 - **Sticky Headers**: Keep headers visible during scroll with `stickyHead`
-- **Sticky Cells**: Keep specific columns visible on mobile with `stickyCells`
+- **Sticky Left/Right**: Keep specific columns visible on mobile with `stickyLeft` and `stickyRight`
 - **Responsive**: Sticky behavior adapts to screen size (sticky cells only on md+ screens)
+- **Synchronized Scrolling**: Sticky header scrolls horizontally with table content
 
 ### Customization
 
@@ -96,6 +99,7 @@ Custom header slots allow you to add additional content to specific column heade
 - **Actions Column**: Dedicated slot for row actions
 - **CSS Classes**: Customizable styling for rows, headers, and cells
 - **Responsive Design**: Horizontal scroll on smaller screens
+- **Dictionary Labels**: Use dictionary keys for column labels with `dictionaryKey` prop
 
 ## Usage Examples
 
@@ -110,7 +114,7 @@ const data = ref([
 </script>
 
 <template>
-  <AppTable :columns="data" sort-by="name,email" />
+  <AppTable :columns="data" :sort-by="['name', 'email']" />
 </template>
 ```
 
@@ -178,7 +182,7 @@ const data = ref([
 </script>
 
 <template>
-  <AppTable :columns="data" sort-by="name,email,status">
+  <AppTable :columns="data" :sort-by="['name', 'email', 'status']">
     <template #th-name>
       <AppIcon name="user" class="text-surface/50 size-4" />
     </template>
@@ -198,7 +202,13 @@ const data = ref([
 
 ```vue
 <template>
-  <AppTable :columns="data" sticky-head sticky-cells="name" sort-by="name,email,role" />
+  <AppTable
+    :columns="data"
+    sticky-head
+    :sticky-left="['name']"
+    :sticky-right="['actions']"
+    :sort-by="['name', 'email', 'role']"
+  />
 </template>
 ```
 
@@ -206,7 +216,7 @@ const data = ref([
 
 ```vue
 <template>
-  <AppTable :columns="data" omit="internalId" sort-by="name,email" />
+  <AppTable :columns="data" :omit="['internalId']" :sort-by="['name', 'email']" />
 </template>
 ```
 
@@ -214,7 +224,15 @@ const data = ref([
 
 ```vue
 <template>
-  <AppTable :columns="data" columns-extra="actions,notes" sort-by="name,email" />
+  <AppTable :columns="data" :columns-extra="['actions', 'notes']" :sort-by="['name', 'email']" />
+</template>
+```
+
+### Table with Dictionary Labels
+
+```vue
+<template>
+  <AppTable :columns="data" dictionary-key="table.users" :sort-by="['name', 'email']" />
 </template>
 ```
 
@@ -222,7 +240,7 @@ const data = ref([
 
 ```vue
 <template>
-  <AppTable :columns="data" sort-by="name,email">
+  <AppTable :columns="data" :sort-by="['name', 'email']">
     <template #thead>
       <tr class="table-tr">
         <th class="table-th">Custom Header</th>
@@ -251,46 +269,30 @@ const data = ref([
 
 ### Custom Header Slots
 
-- Use for adding icons, filters, or additional controls to headers
-
-### Performance Considerations
-
-- Custom slots only render when provided
-- Use `v-if` for conditional rendering within slots
-- Avoid heavy computations within slot templates
-
-## Styling
-
-The component uses these CSS classes:
-
-- **Container**: `scrollbar w-full overflow-auto`
-- **Table**: `w-full border-separate border-spacing-0 text-sm whitespace-nowrap`
-- **Header**: `table-thead select-none`
-- **Rows**: `table-tr last:*:border-b-0`
-- **Headers**: `table-th`
-- **Cells**: `table-td`
-
-Additional classes can be applied via `trClass`, `thClass`, and `tdClass` props.
+- Use for additional header controls like filters, icons, or buttons
+- Keep content compact to avoid header overflow
+- Maintain visual hierarchy with the main column label
+- Consider responsive behavior for mobile devices
 
 ## Technical Details
 
-### Data Processing
+### Sticky Header Implementation
 
-- **Column Merging**: Combines data with extra columns using `columnsExtra`
-- **Type Safety**: Full TypeScript generics support with `T extends Record<string, unknown>`
-- **Dynamic Rendering**: Automatically adapts to data structure
+When `stickyHead` is enabled, the component creates two table headers:
+
+1. A visible sticky header that stays in place during scroll
+2. An invisible header that maintains proper column widths
+
+The sticky header automatically synchronizes horizontal scrolling with the main table content and adjusts column widths based on the actual table content.
 
 ### Sorting Implementation
 
-- **URL Integration**: Sort state persists in URL query parameters
-- **Visual Feedback**: Sort arrows indicate direction with accent color
-- **Dictionary Labels**: Uses `useDictionary()` utility for column label formatting
-- **Toggle Logic**: Alternates between ascending and descending on click
+Sorting is handled through URL query parameters using the format `column:direction` (e.g., `name:asc`, `email:desc`). The component automatically:
 
-### Responsive Design
+- Detects the current sort state from the URL
+- Updates the URL when sortable columns are clicked
+- Provides visual feedback for active sort columns and directions
 
-- **Horizontal Scroll**: Table scrolls horizontally on small screens
+### Dictionary Integration
 
-## Dependencies
-
-- **Dictionary**: `useDictionary()` Utility for column label formatting
+When `dictionaryKey` is provided, column labels are resolved using `useDictionary()` with the pattern `${dictionaryKey}.${columnKey}`. This allows for internationalized column labels and consistent naming across the application.

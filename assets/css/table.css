@@ -1,15 +1,20 @@
-@utility table-tr {
-  @apply divide-edison divide-x last:[&>td]:border-b-0;
-}
+@utility table-default {
+  @apply text-sm whitespace-nowrap;
 
-@utility table-thead {
-  @apply bg-darwin text-left font-semibold select-none;
-}
+  tr {
+    @apply divide-edison divide-x;
 
-@utility table-th {
-  @apply bg-darwin border-edison border-b px-4 py-2;
-}
+    &:last-child td {
+      @apply border-b-0;
+    }
+  }
 
-@utility table-td {
-  @apply bg-darwin border-edison border-b px-4 py-2;
+  thead {
+    @apply bg-darwin text-left font-semibold select-none;
+  }
+
+  th,
+  td {
+    @apply bg-darwin border-edison border-b px-4 py-2 transition-colors;
+  }
 }
