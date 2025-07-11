@@ -15,7 +15,7 @@
         ]"
         @click="onSortBy(cell)"
       >
-        <div class="flex items-center gap-1">
+        <div :class="{ 'flex w-full items-center gap-1': slots[`th-${cell}`] || props.sortBy.includes(cell) }">
           {{ useDictionary(props.dictionaryKey ? `${props.dictionaryKey}.${cell}` : cell) }}
 
           <component :is="slots[`th-${cell}`]" v-if="slots[`th-${cell}`]" />

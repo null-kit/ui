@@ -19,6 +19,8 @@ export const useBookmarks = () => {
     } else {
       settings.bookmarks.push(bookmark);
     }
+
+    useLocalStorage().setItem(settings.key, settings);
   };
 
   const isBookmarked = (path: string) => {

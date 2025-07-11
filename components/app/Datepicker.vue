@@ -76,6 +76,7 @@
         <button
           v-for="(date, index) in dates"
           :key="index"
+          type="button"
           class="bg-darwin ring-edison disabled:text-surface/40 p-1 ring disabled:cursor-not-allowed"
           :disabled="isDisabled(date)"
           @click="selectDate(date)"
@@ -115,7 +116,7 @@ const { disabledDates = [], ...props } = defineProps<{
   preset?: Preset;
 }>();
 
-const [model, modifiers] = defineModel<Date | Date[] | undefined>({
+const [model, modifiers] = defineModel<Date | Date[] | string | undefined>({
   required: true,
   set(value) {
     if (value && modifiers.iso) {
@@ -230,12 +231,15 @@ const selectDate = (date: Date) => {
 };
 
 const isSelected = (date: Date) => {
-  return selectedDates.value.some((d) => new Date(d).toDateString() === date.toDateString());
+  return selectedDates.value.some((d) => d.toDateString() === date.toDateString());
 };
 
 const inRange = (date: Date) => {
   if (props.range && selectedDates.value.length === 2 && selectedDates.value[0] && selectedDates.value[1]) {
-    return date > selectedDates.value[0] && date < selectedDates.value[1];
+    const endDate = new Date(selectedDates.value[1]);
+    endDate.setDate(endDate.getDate() - 1);
+
+    return date > selectedDates.value[0] && date <= endDate;
   }
 
   return false;
@@ -253,10 +257,8 @@ const setPreset = (type: Preset) => {
   switch (type) {
     case 'today':
       selectDate(today);
-      selectDate(today);
       break;
     case 'yesterday':
-      selectDate(new Date(today.setDate(today.getDate() - 1)));
       selectDate(new Date(today.setDate(today.getDate() - 1)));
       break;
     case 'last-week':
@@ -276,7 +278,7 @@ const setPreset = (type: Preset) => {
 
 onMounted(() => {
   if (props.range && model.value) {
-    selectedDates.value = Array.isArray(model.value) ? model.value : [model.value];
+    selectedDates.value = Array.isArray(model.value) ? model.value.map((d) => new Date(d)) : [new Date(model.value)];
   }
 
   if (props.preset) setPreset(props.preset);

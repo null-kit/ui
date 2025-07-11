@@ -1,3 +1,7 @@
+@import 'utilities';
+@import 'scrollbar';
+@import 'loading';
+@import 'patterns';
 @import 'button';
 @import 'form.base';
 @import 'form.input';
@@ -9,9 +13,6 @@
 @import 'modal';
 @import 'drawer';
 @import 'chart';
-@import 'scrollbar';
-@import 'patterns';
-@import 'loading';
 
 @source '../../components';
 @source '../../composables';
