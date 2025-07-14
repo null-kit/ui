@@ -1,5 +1,5 @@
 <template>
-  <div v-if="columns && columns.length > 0">
+  <div v-if="data && data.length > 0">
     <div v-if="stickyHead" ref="theadVisible" class="sticky z-5 overflow-hidden" :class="stickyOffset">
       <table class="table-default w-full border-separate border-spacing-0">
         <AppTableHead :merged-column-keys :slots="$slots" :props />
@@ -26,7 +26,7 @@
                 { 'right-0 -left-px z-1 border-l md:sticky': stickyRight.includes(cell) }
               ]"
             >
-              <component :is="$slots[cell]" v-if="$slots[cell]" :entry="columns[index]" :value="entry[cell]" />
+              <component :is="$slots[cell]" v-if="$slots[cell]" :entry="data[index]" :value="entry[cell]" />
 
               <template v-else>
                 {{ entry[cell] }}
@@ -51,7 +51,7 @@ defineSlots<ColumnSlots & CustomSlots>();
 
 const props = withDefaults(
   defineProps<{
-    columns: T[];
+    data: T[];
     columnsExtra?: string[];
     stickyHead?: boolean;
     stickyOffset?: string;
@@ -62,6 +62,7 @@ const props = withDefaults(
     thClass?: string;
     tdClass?: string;
     omit?: string[];
+    pick?: string[];
     dictionaryKey?: string;
   }>(),
   {
@@ -70,22 +71,31 @@ const props = withDefaults(
     stickyLeft: () => [],
     stickyRight: () => [],
     sortBy: () => [],
-    omit: () => []
+    omit: () => [],
+    pick: () => []
   }
 );
 
 const mergedColumns = computed(() => {
-  const omitted = props.columns.map((row) => {
-    return Object.fromEntries(Object.entries(row).filter(([key]) => !props.omit.includes(key)));
+  const merged = props.data.map((row) => {
+    if (props.pick.length > 0) {
+      return Object.fromEntries(Object.entries(row).filter(([key]) => props.pick.includes(key)));
+    }
+
+    if (props.omit.length > 0) {
+      return Object.fromEntries(Object.entries(row).filter(([key]) => !props.omit.includes(key)));
+    }
+
+    return row;
   });
 
   if (props.columnsExtra) {
     const extra = Object.fromEntries(props.columnsExtra.map((key) => [key, null]));
 
-    return omitted.map((column) => ({ ...column, ...extra }));
+    return merged.map((column) => ({ ...column, ...extra }));
   }
 
-  return omitted;
+  return merged;
 });
 
 const mergedColumnKeys = computed(() => Object.keys(mergedColumns.value[0]!));

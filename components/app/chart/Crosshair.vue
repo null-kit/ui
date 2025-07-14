@@ -5,7 +5,7 @@
   <div class="hidden">
     <div v-if="currentData" ref="tooltip" class="text-sm">
       <div v-if="currentData[xKey]" class="border-edison border-b px-3 py-1 font-semibold">
-        {{ currentData[xKey] }}
+        {{ xFormat ? xFormat(currentData[xKey]) : currentData[xKey] }}
       </div>
 
       <div class="flex flex-col gap-1 px-3 py-2">
@@ -15,7 +15,7 @@
           <div class="mr-4">{{ useDictionary(category) }}</div>
 
           <div v-if="currentData[category]" class="ml-auto font-semibold">
-            {{ formatNumber(currentData[category]) }}
+            {{ yFormat ? yFormat(currentData[category]) : formatNumber(currentData[category]) }}
           </div>
         </div>
       </div>
@@ -35,6 +35,8 @@ defineProps<{
   categories: Extract<keyof T, string>[];
   colors?: string[];
   xKey: keyof T;
+  xFormat?: (i: Crosshair[keyof T]) => string;
+  yFormat?: (i: T[string]) => string;
 }>();
 
 const tooltip = useTemplateRef<HTMLDivElement>('tooltip');

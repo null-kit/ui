@@ -13,8 +13,9 @@
         <div
           v-if="isOpen"
           ref="floating"
-          :style="floatingStyles"
           :class="['dropdown-content', dropdownClass]"
+          :style="floatingStyles"
+          :hidden="middlewareData.hide?.referenceHidden"
           @click.stop
           @mouseleave="isOpen = !autoclose"
         >
@@ -28,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { useFloating, offset, shift, flip, size, autoUpdate } from '@floating-ui/vue';
+import { useFloating, offset, shift, flip, size, autoUpdate, hide } from '@floating-ui/vue';
 import type { Placement } from '@floating-ui/vue';
 
 const props = defineProps<{
@@ -41,7 +42,7 @@ const props = defineProps<{
 const reference = useTemplateRef<HTMLDivElement>('reference');
 const floating = useTemplateRef<HTMLDivElement>('floating');
 
-const { floatingStyles } = useFloating(reference, floating, {
+const { floatingStyles, middlewareData } = useFloating(reference, floating, {
   placement: props.placement || 'bottom-start',
   middleware: [
     offset(8),
@@ -55,7 +56,8 @@ const { floatingStyles } = useFloating(reference, floating, {
           maxHeight: `${Math.max(100, availableHeight)}px`
         });
       }
-    })
+    }),
+    hide()
   ],
   whileElementsMounted: autoUpdate
 });

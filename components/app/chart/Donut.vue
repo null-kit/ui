@@ -26,15 +26,8 @@
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, string | number>">
-import { Donut } from '@unovis/ts';
 import { VisSingleContainer, VisDonut, VisTooltip } from '@unovis/vue';
-import twc from 'tailwindcss/colors';
-
-const props = defineProps<{
-  data: T[];
-  categoryKey: keyof T;
-  valueKey: keyof T;
-}>();
+import { Donut } from '@unovis/ts';
 
 type ChartData = {
   data: {
@@ -42,6 +35,12 @@ type ChartData = {
     value: number;
   };
 };
+
+const props = defineProps<{
+  data: T[];
+  categoryKey: keyof T;
+  valueKey: keyof T;
+}>();
 
 const chartData = computed(() => {
   return props.data.map((item) => ({
@@ -54,15 +53,15 @@ const total = computed(() => chartData.value.reduce((sum, item) => sum + item.va
 
 const colors = [
   'var(--color-accent)',
-  twc.yellow[500],
-  twc.orange[500],
-  twc.indigo[500],
-  twc.purple[500],
-  twc.red[500],
-  twc.pink[500],
-  twc.blue[500],
-  twc.cyan[500],
-  twc.emerald[500],
-  twc.violet[500]
+  'var(--color-indigo-500)',
+  'var(--color-orange-500)',
+  'var(--color-violet-500)',
+  'var(--color-pink-500)',
+  'var(--color-yellow-500)',
+  'var(--color-purple-500)',
+  'var(--color-red-500)',
+  'var(--color-blue-500)',
+  'var(--color-cyan-500)',
+  'var(--color-emerald-500)'
 ];
 </script>

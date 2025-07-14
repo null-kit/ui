@@ -152,7 +152,7 @@ const getKeyName = (option: T) => {
 };
 
 const selected = computed<T[]>(() => {
-  if (!model.value) return [];
+  if (model.value === null || model.value === undefined) return [];
 
   if (props.keyName) {
     return props.options.filter((item): item is T => {
@@ -198,7 +198,7 @@ const toggleOption = (option: T) => {
 
     model.value = props.keyValue ? selectOptions.map((item) => getKeyValue(item)) : selectOptions;
   } else {
-    model.value = selected.value[0] === option ? undefined : getKeyValue(option);
+    model.value = selected.value[0] === option ? null : getKeyValue(option);
   }
 };
 
