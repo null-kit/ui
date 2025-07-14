@@ -2,26 +2,28 @@
   <thead>
     <component :is="slots.thead" v-if="slots.thead" />
 
-    <tr :class="props.trClass">
+    <tr :class="trClass">
+      <th v-if="expanded" class="w-0" />
+
       <th
-        v-for="cell in mergedColumnKeys"
+        v-for="cell in cells"
         :key="cell"
         :class="[
-          props.thClass,
-          { 'left-0 md:sticky': props.stickyLeft.includes(cell) },
-          { 'right-0 -left-px border-l md:sticky': props.stickyRight.includes(cell) },
-          { 'hover:bg-surface/3 cursor-pointer duration-200': props.sortBy.includes(cell) },
+          thClass,
+          { 'left-0 md:sticky': stickyLeft.includes(cell) },
+          { 'right-0 -left-px border-l md:sticky': stickyRight.includes(cell) },
+          { 'hover:bg-surface/3 cursor-pointer duration-200': sortBy.includes(cell) },
           { 'text-accent': String($route.query.sort).startsWith(cell + ':') }
         ]"
         @click="onSortBy(cell)"
       >
-        <div :class="{ 'flex w-full items-center gap-1': slots[`th-${cell}`] || props.sortBy.includes(cell) }">
-          {{ useDictionary(props.dictionaryKey ? `${props.dictionaryKey}.${cell}` : cell) }}
+        <div :class="{ 'flex w-full items-center gap-1': slots[`th-${cell}`] || sortBy.includes(cell) }">
+          {{ useDictionary(dictionaryKey ? `${dictionaryKey}.${cell}` : cell) }}
 
           <component :is="slots[`th-${cell}`]" v-if="slots[`th-${cell}`]" />
 
           <svg
-            v-if="props.sortBy.includes(cell)"
+            v-if="sortBy.includes(cell)"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 32 32"
             class="text-surface/50 ml-auto size-3 shrink-0"
@@ -34,32 +36,38 @@
         </div>
       </th>
 
-      <th v-if="slots.actions" :class="['w-0', props.thClass]" />
+      <th v-if="slots.actions" :class="['w-0', thClass]" />
     </tr>
   </thead>
 </template>
 
 <script setup lang="ts">
-const { props } = defineProps<{
-  props: {
-    sortBy: string[];
-    stickyLeft: string[];
-    stickyRight: string[];
-    dictionaryKey: string;
-    trClass: string;
-    thClass: string;
-  };
-  slots: {
-    thead: object;
-    actions: object;
-    [key: string]: object;
-  };
-  mergedColumnKeys: string[];
-}>();
+const props = withDefaults(
+  defineProps<{
+    rows: Record<string, unknown>[];
+    expanded?: string;
+    sortBy?: string[];
+    stickyLeft?: string[];
+    stickyRight?: string[];
+    dictionaryKey?: string;
+    trClass?: string;
+    thClass?: string;
+    slots: {
+      thead?: object;
+      actions?: object;
+      [key: string]: object | undefined;
+    };
+  }>(),
+  {
+    sortBy: () => [],
+    stickyLeft: () => [],
+    stickyRight: () => []
+  }
+);
+
+const cells = computed(() => Object.keys(props.rows[0]!).filter((key) => key !== props.expanded));
 
 const route = useRoute();
-
-const activeSort = (cell: string, direction: string) => String(route.query.sort).startsWith(`${cell}:${direction}`);
 
 const onSortBy = (column: string) => {
   if (!props.sortBy.includes(column)) return;
@@ -68,4 +76,6 @@ const onSortBy = (column: string) => {
 
   navigateTo({ query: { ...route.query, sort: `${column}:${direction}` } });
 };
+
+const activeSort = (cell: string, direction: string) => String(route.query.sort).startsWith(`${cell}:${direction}`);
 </script>

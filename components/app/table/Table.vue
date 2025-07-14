@@ -2,41 +2,36 @@
   <div v-if="data && data.length > 0">
     <div v-if="stickyHead" ref="theadVisible" class="sticky z-5 overflow-hidden" :class="stickyOffset">
       <table class="table-default w-full border-separate border-spacing-0">
-        <AppTableHead :merged-column-keys :slots="$slots" :props />
+        <AppTableHead v-bind="props" :rows :slots />
       </table>
     </div>
 
     <div ref="tableWrapper" class="scrollbar w-full overflow-auto">
       <table class="table-default w-full border-separate border-spacing-0">
-        <AppTableHead
-          :class="{ 'pointer-events-none invisible': stickyHead }"
-          :merged-column-keys
-          :slots="$slots"
-          :props
-        />
+        <AppTableHead :class="{ 'pointer-events-none invisible': stickyHead }" v-bind="props" :rows :slots />
 
         <tbody>
-          <tr v-for="(entry, index) in mergedColumns" :key="index" :class="[trClass]">
-            <td
-              v-for="cell in Object.keys(entry)"
-              :key="cell"
-              :class="[
-                tdClass,
-                { 'left-0 z-1 md:sticky': stickyLeft.includes(cell) },
-                { 'right-0 -left-px z-1 border-l md:sticky': stickyRight.includes(cell) }
-              ]"
+          <template v-for="(entry, pIndex) in rows" :key="pIndex">
+            <AppTableRow v-bind="props" :data="data[pIndex]" :entry :slots @toggle="toggleRow(pIndex)" />
+
+            <TransitionGroup
+              enter-from-class="opacity-0 -translate-y-2"
+              enter-to-class="opacity-100 translate-y-0 duration-200"
+              leave-to-class="opacity-0 -translate-y-2 duration-200"
             >
-              <component :is="$slots[cell]" v-if="$slots[cell]" :entry="data[index]" :value="entry[cell]" />
-
-              <template v-else>
-                {{ entry[cell] }}
+              <template v-if="expanded && isExpanded(pIndex)">
+                <AppTableRow
+                  v-for="(row, cIndex) in entry[expanded]"
+                  :key="cIndex"
+                  v-bind="props"
+                  :data="row"
+                  :entry="row"
+                  :slots
+                  is-nested
+                />
               </template>
-            </td>
-
-            <td v-if="$slots.actions" :class="tdClass">
-              <component :is="$slots.actions" :entry="data[index]" />
-            </td>
-          </tr>
+            </TransitionGroup>
+          </template>
         </tbody>
       </table>
     </div>
@@ -44,10 +39,10 @@
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, unknown>">
-type ColumnSlots = { [K in keyof T]?: (props: { entry: T; value: T[K] }) => void };
-type CustomSlots = { [key: string]: (props: { entry: T; value: T[keyof T] }) => void };
+type DataSlots = { [K in keyof T]?: (props: { entry: T; value: T[K] }) => void };
+type ExtraSlots = { [key: string]: (props: { entry: T; value: T[keyof T] }) => void };
 
-defineSlots<ColumnSlots & CustomSlots>();
+const slots = defineSlots<DataSlots & ExtraSlots>();
 
 const props = withDefaults(
   defineProps<{
@@ -64,9 +59,9 @@ const props = withDefaults(
     omit?: string[];
     pick?: string[];
     dictionaryKey?: string;
+    expanded?: string;
   }>(),
   {
-    stickyHead: false,
     stickyOffset: 'top-0',
     stickyLeft: () => [],
     stickyRight: () => [],
@@ -76,7 +71,7 @@ const props = withDefaults(
   }
 );
 
-const mergedColumns = computed(() => {
+const rows = computed(() => {
   const merged = props.data.map((row) => {
     if (props.pick.length > 0) {
       return Object.fromEntries(Object.entries(row).filter(([key]) => props.pick.includes(key)));
@@ -98,7 +93,17 @@ const mergedColumns = computed(() => {
   return merged;
 });
 
-const mergedColumnKeys = computed(() => Object.keys(mergedColumns.value[0]!));
+const expandedRows = ref(new Set());
+
+const toggleRow = (index: number) => {
+  if (expandedRows.value.has(index)) {
+    return expandedRows.value.delete(index);
+  }
+
+  expandedRows.value.add(index);
+};
+
+const isExpanded = (index: number) => expandedRows.value.has(index);
 
 const tableWrapper = useTemplateRef('tableWrapper');
 const theadVisible = useTemplateRef('theadVisible');
