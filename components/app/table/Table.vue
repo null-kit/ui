@@ -34,7 +34,7 @@
             </td>
 
             <td v-if="$slots.actions" :class="tdClass">
-              <component :is="$slots.actions" :entry />
+              <component :is="$slots.actions" :entry="data[index]" />
             </td>
           </tr>
         </tbody>
