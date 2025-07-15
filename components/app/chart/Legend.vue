@@ -1,49 +1,54 @@
 <template>
-  <VisBulletLegend :items :on-legend-item-click="onLegendItemClick" />
+  <div class="mb-4">
+    <VisBulletLegend :items :on-legend-item-click />
+  </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends Record<string, unknown>">
 import { VisBulletLegend } from '@unovis/vue';
 import type { BulletLegendItemInterface } from '@unovis/ts';
 
+const model = defineModel<Record<string, unknown>[]>({ required: true });
+
 const props = defineProps<{
-  data: Record<string, number[]>[];
   categories: string[];
   colors: string[];
+  data: T[];
+  xIndexes: Set<number>;
 }>();
 
-const model = defineModel<{ data: Record<string, number[]>[]; categories: string[] }>({ required: true });
+let items = props.categories.map((item, index) => ({
+  name: useDictionary(item) as BulletLegendItemInterface['name'],
+  inactive: false,
+  color: props.colors[index]
+}));
 
-const items = ref(
-  props.categories.map((item, index) => ({
-    name: useDictionary(item),
-    label: item,
-    inactive: false,
-    color: props.colors[index]
-  }))
-);
+const onLegendItemClick = (d: BulletLegendItemInterface, i: number) => {
+  if (!items[i]) return;
 
-onMounted(() => {
-  model.value.data = props.data;
-  model.value.categories = props.categories;
-});
+  items = items.map((item, index) => (index === i ? { ...item, inactive: !item.inactive } : item));
 
-const activeCategories = computed(() => items.value.filter((item) => !item.inactive).map((item) => item.label));
+  const hasInactiveItems = items.some((item) => item.inactive);
 
-const onLegendItemClick = (item: BulletLegendItemInterface, i: number) => {
-  items.value[i]!.inactive = !items.value[i]!.inactive;
+  if (!hasInactiveItems) {
+    model.value = props.data;
+    return;
+  }
 
-  const inactives = items.value.filter((item) => item.inactive).map((item) => item.label);
+  model.value = props.data.map((item, index) => {
+    const filteredItem = { ...item } as Record<string, unknown>;
 
-  model.value = {
-    data: props.data.map((d) => {
-      const newData = { ...d };
+    if (props.xIndexes.has(index)) {
+      for (const category of props.categories) filteredItem[category] = 0;
+    } else {
+      for (const category of props.categories) {
+        const cIndex = props.categories.indexOf(category);
 
-      for (const category of inactives) newData[category] = [0];
+        if (items[cIndex]?.inactive) filteredItem[category] = 0;
+      }
+    }
 
-      return newData;
-    }),
-    categories: activeCategories.value
-  };
+    return filteredItem;
+  });
 };
 </script>
