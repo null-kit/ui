@@ -96,6 +96,8 @@ const isChecked = computed(() => {
 });
 
 onMounted(() => {
+  if (Array.isArray(model.value)) return;
+
   model.value = value ? value : Boolean(model.value);
 });
 </script>
