@@ -7,7 +7,7 @@ type DateOptions = {
 };
 
 export const formatDate = (
-  date: Date | string | null,
+  date: Date | string | number | null,
   { format = 'short', time = false, year = true, options, locale = 'en-US' }: DateOptions = {}
 ): Date => {
   if (!date) return 'N/A' as unknown as Date;

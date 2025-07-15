@@ -3,6 +3,8 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   if (!settings || !settings.key || !settings.theme) return;
 
+  const current = ref(settings.theme);
+
   const { setItem, getItem } = useLocalStorage();
 
   const setupTheme = () => {
@@ -20,6 +22,8 @@ export default defineNuxtPlugin((nuxtApp) => {
       settings.theme = colorScheme.matches ? 'dark' : 'light';
     }
 
+    current.value = settings.theme;
+
     useHead({
       htmlAttrs: { class: () => settings.theme },
       meta: [
@@ -34,6 +38,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   const toggleTheme = () => {
     settings.theme = settings.theme === 'dark' ? 'light' : 'dark';
+    current.value = settings.theme;
     setItem(settings.key, settings);
   };
 
@@ -42,6 +47,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   return {
     provide: {
       theme: {
+        current,
         toggleTheme
       }
     }
