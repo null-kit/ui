@@ -6,12 +6,7 @@
       <VisScatter :x :y="(d: T) => d[category]" :color="colors[index]" :size="7" />
     </template>
 
-    <VisAxis
-      type="x"
-      :domain-line="false"
-      :tick-format="(i: number) => (xFormat ? xFormat(data[i]![xKey]) : data[i]![xKey])"
-    />
-
+    <VisAxis type="x" :domain-line="false" :tick-format />
     <VisAxis type="y" :domain-line="false" :tick-format="(i: number) => (yFormat ? yFormat(i) : formatNumber(i))" />
 
     <AppChartCrosshair :categories :colors :x-key :y-format :x-format />
@@ -28,15 +23,21 @@
 <script setup lang="ts" generic="T extends Record<string, unknown | Record<string, unknown>>">
 import { VisXYContainer, VisArea, VisAxis, VisLine, VisScatter } from '@unovis/vue';
 
-defineProps<{
+const props = defineProps<{
   data: T[];
   categories: Extract<keyof T, string>[];
   xKey: Extract<keyof T, string>;
-  xFormat?: (i: T[string] | number) => string;
+  xFormat?: (i: string | number) => string | Date;
   yFormat?: (i: string | number) => string;
 }>();
 
 const x = (d: T, i: number) => i;
+
+const tickFormat = (i: number) => {
+  const value = props.data[i]?.[props.xKey] as string | number;
+
+  return props.xFormat ? props.xFormat(value) : value;
+};
 
 const colors = [
   'var(--color-accent)',

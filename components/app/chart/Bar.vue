@@ -1,5 +1,7 @@
 <template>
   <VisXYContainer :data="chartData" height="25rem" width="100%">
+    <AppChartLegend v-if="showLegend" v-model="chartData" :categories :colors :data :x-indexes />
+
     <VisBar
       :x="(d: T, i: number) => i"
       :y="categories.map((category) => (d: T) => d[category])"
@@ -47,19 +49,20 @@ const props = defineProps<{
   yFormat?: (i: string | number) => string;
   stacked?: boolean;
   roundedCorners?: number;
+  showLegend?: boolean;
 }>();
 
 const VisBar = computed(() => (props.stacked ? VisStackedBar : VisGroupedBar));
 
-const originalData = structuredClone(props.data);
-const chartData = ref<T[]>(props.data);
+const chartData = ref(props.data);
+const cloneData = structuredClone(props.data);
 
 const xIndexes = ref(new Set<number>());
 
 const toggleX = (index: number) => {
   const isHidden = xIndexes.value.has(index);
-  const original = originalData[index];
   const toggled = chartData.value[index] as Record<string, unknown>;
+  const original = cloneData[index];
 
   if (!original || !toggled) return;
 
