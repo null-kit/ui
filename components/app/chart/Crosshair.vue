@@ -12,9 +12,9 @@
         <div v-for="(category, index) in categories" :key="category" class="flex items-center gap-2">
           <div v-if="colors" class="h-3 w-1 rounded-full" :style="{ backgroundColor: colors[index] }" />
 
-          <div class="mr-4">{{ useDictionary(category) }}</div>
+          <div>{{ useDictionary(category) }}</div>
 
-          <div v-if="currentData[category]" class="ml-auto font-semibold">
+          <div v-if="currentData[category]" class="ml-auto pl-4 font-semibold">
             {{ yFormat ? yFormat(currentData[category]) : formatNumber(currentData[category]) }}
           </div>
         </div>
@@ -26,23 +26,18 @@
 <script setup lang="ts" generic="T extends Record<string, string | number>">
 import { VisCrosshair, VisTooltip } from '@unovis/vue';
 
-type Crosshair = T & {
-  x: number;
-  y: number;
-};
-
 defineProps<{
   categories: Extract<keyof T, string>[];
   colors?: string[];
   xKey: keyof T;
-  xFormat?: (i: Crosshair[keyof T]) => string;
-  yFormat?: (i: T[string]) => string;
+  xFormat?: (i: string | number) => string | Date;
+  yFormat?: (i: string | number) => string;
 }>();
 
 const tooltip = useTemplateRef<HTMLDivElement>('tooltip');
-const currentData = ref<Crosshair>();
+const currentData = ref();
 
-const template = (data: Crosshair) => {
+const template = (data: T) => {
   currentData.value = data;
   return tooltip.value;
 };
