@@ -10,7 +10,7 @@
       <slot name="label-right" />
     </span>
 
-    <AppDropdown :autoclose :placement>
+    <AppDropdown :autoclose :placement dropdown-inner-class="p-0">
       <template #trigger="{ isOpen }">
         <div class="flex">
           <div v-if="$slots.left" class="select-slot shrink-0 overflow-clip rounded-r-none">
@@ -31,7 +31,6 @@
                   {{ getKeyName(option) }}
 
                   <svg
-                    v-if="selected.length > 1"
                     viewBox="0 0 32 32"
                     xmlns="http://www.w3.org/2000/svg"
                     class="size-3 shrink-0 cursor-pointer text-current/50 hover:text-red-500"
@@ -67,21 +66,41 @@
         </div>
       </template>
 
-      <input v-if="search" v-model="searchInput" class="form-input mb-1" placeholder="Search" />
+      <input v-if="search" v-model="searchInput" class="form-input rounded-none" placeholder="Search" />
 
       <div
         v-if="hasOptions"
-        class="scrollbar flex max-h-96 min-w-40 shrink-0 flex-col gap-1 overflow-auto whitespace-nowrap"
+        class="scrollbar flex max-h-96 min-w-40 shrink-0 flex-col gap-1 overflow-auto p-1 whitespace-nowrap"
       >
+        <template v-if="presets && presets.length > 0">
+          <div class="select-group-label">Presets</div>
+
+          <div v-for="(preset, index) in presets" :key="index" class="flex items-center gap-1">
+            <button type="button" class="btn flex-1 justify-start" @click="addPreset(preset.list, true)">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 32 32"
+                class="hover:bg-surface/5 -mx-1 size-6 shrink-0 rounded-md p-1 duration-300"
+                @click.stop="addPreset(preset.list)"
+              >
+                <path fill="none" stroke="currentColor" stroke-width="3" d="M16 7v18M7 16h18" />
+              </svg>
+
+              {{ preset.name }}
+            </button>
+          </div>
+        </template>
+
         <template v-for="(optionGroup, indexParent) in filteredOptions" :key="indexParent">
           <div v-if="typeof optionGroup === 'object' && optionGroup.group" class="select-group-label">
             {{ optionGroup.group }}
           </div>
 
           <template v-for="(option, index) in optionGroup.list" :key="index">
-            <div
+            <button
               v-if="!(typeof option === 'object' && option.excluded)"
-              class="btn cursor-pointer justify-start"
+              type="button"
+              class="btn justify-start"
               :class="{ 'bg-current/5 font-medium': isSelected(option), '-order-1': isSelected(option) && order }"
               @click="toggleOption(option)"
             >
@@ -98,7 +117,7 @@
               </svg>
 
               <slot name="option" :value="option">{{ getKeyName(option) }}</slot>
-            </div>
+            </button>
           </template>
         </template>
       </div>
@@ -139,6 +158,10 @@ const props = defineProps<{
   autoclose?: boolean;
   required?: boolean;
   help?: string;
+  presets?: {
+    name: string;
+    list: T[];
+  }[];
 }>();
 
 const searchInput = ref('');
@@ -151,11 +174,21 @@ const getKeyName = (option: T) => {
   return props.keyName && typeof option === 'object' ? option[props.keyName] : option;
 };
 
+const normalizedOptions = computed(() => {
+  const hasGroup = props.options.some((option) => typeof option === 'object' && option.group);
+
+  if (hasGroup) return props.options as unknown as Array<{ group?: string; list: T[] }>;
+
+  return [{ list: props.options }];
+});
+
+const allOptions = computed(() => normalizedOptions.value.flatMap((group) => group.list));
+
 const selected = computed<T[]>(() => {
   if (model.value === null || model.value === undefined) return [];
 
   if (props.keyName) {
-    return props.options.filter((item): item is T => {
+    return allOptions.value.filter((item): item is T => {
       if (Array.isArray(model.value) && typeof item === 'object') {
         if (props.keyValue) return model.value.includes(item[props.keyValue] as T);
 
@@ -203,16 +236,21 @@ const toggleOption = (option: T) => {
 };
 
 const filteredOptions = computed(() => {
-  const hasGroup = props.options.some((option) => typeof option === 'object' && option.group);
+  return normalizedOptions.value.map((optionGroup) => {
+    const filteredList = optionGroup.list.filter((option: T) => {
+      return String(getKeyName(option)).toLowerCase().includes(searchInput.value.toLowerCase());
+    });
 
-  const filtered = props.options.filter((option) => {
-    return String(getKeyName(option)).toLowerCase().includes(searchInput.value.toLowerCase());
+    return {
+      group: filteredList.length ? optionGroup.group : undefined,
+      list: filteredList
+    };
   });
-
-  if (hasGroup) return filtered as unknown as Array<{ group?: string; list: T[] }>;
-
-  return [{ list: filtered }];
 });
 
 const hasOptions = computed(() => filteredOptions.value.some((group) => group.list.length > 0));
+
+const addPreset = (preset: T[], replace = false) => {
+  model.value = replace ? [...new Set(preset)] : [...new Set([...preset, ...(model.value as T[])])];
+};
 </script>

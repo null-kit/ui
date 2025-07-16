@@ -11,7 +11,9 @@
       @click="isOpen = !isOpen"
     >
       <slot name="summary" :is-open>
-        <slot name="icon" />
+        <slot name="icon">
+          <AppIcon v-if="icon" :name="icon" />
+        </slot>
 
         <span :class="titleClass">
           <span v-if="prefix || !title">{{ isOpen ? 'Hide' : 'Show' }}</span>
@@ -23,7 +25,7 @@
     </summary>
 
     <Transition enter-from-class="opacity-0 translate-y-4" enter-active-class="duration-300">
-      <div v-if="isOpen">
+      <div v-if="isOpen" :class="contentClass">
         <slot />
       </div>
     </Transition>
@@ -36,8 +38,10 @@ const props = defineProps<{
   title?: string;
   titleClass?: string;
   summaryClass?: string;
+  contentClass?: string;
   noChevron?: boolean;
   prefix?: boolean;
+  icon?: string;
 }>();
 
 const isOpen = ref(props.open);

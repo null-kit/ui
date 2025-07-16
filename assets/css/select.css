@@ -4,8 +4,8 @@
 }
 
 @utility select-group-label {
-  @apply sticky top-0 mb-1 px-3 py-1;
-  @apply text-surface/40 bg-newton rounded-xl font-medium;
+  @apply sticky top-0 z-1 px-3 py-1;
+  @apply text-surface/40 bg-newton rounded-lg font-medium;
 }
 
 @utility select-multiple {

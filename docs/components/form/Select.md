@@ -202,6 +202,33 @@ const selected = ref();
 </template>
 ```
 
+### Presets
+
+```vue
+<script setup>
+const options = ref([
+  { id: 1, name: 'John Doe', avatar: '/avatar.jpg', role: 'Admin' },
+  { id: 2, name: 'Jane Smith', avatar: '/avatar.jpg', role: 'User' },
+  { id: 3, name: 'Jane Wick', avatar: '/avatar.jpg', role: 'Admin' }
+]);
+
+const presets = [
+  {
+    name: 'Default Preset',
+    list: [1, 2, 3]
+  },
+  {
+    name: 'Top Preset',
+    list: [1, 3]
+  }
+];
+</script>
+
+<template>
+  <FormSelect v-model="selected" :options="options" key-name="name" key-value="id" :presets="presets" />
+</template>
+```
+
 ### Custom Option Rendering
 
 ```vue
