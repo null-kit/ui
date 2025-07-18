@@ -7,6 +7,7 @@
     @click="isActive = true"
   >
     <slot>
+      <AppIcon v-if="icon" :name="icon" :class="iconClass" />
       {{ trigger }}
     </slot>
 
@@ -27,7 +28,15 @@
 <script setup lang="ts">
 import { autoPlacement, offset, shift, useFloating } from '@floating-ui/vue';
 
-defineProps<{ trigger?: string; message?: string; hoverClass?: string }>();
+defineOptions({ inheritAttrs: false });
+
+defineProps<{
+  trigger?: string;
+  message?: string;
+  hoverClass?: string;
+  icon?: string;
+  iconClass?: string;
+}>();
 
 const reference = useTemplateRef<HTMLDivElement>('reference');
 const floating = useTemplateRef<HTMLDivElement>('floating');

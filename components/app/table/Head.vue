@@ -3,7 +3,7 @@
     <component :is="slots.thead" v-if="slots.thead" />
 
     <tr :class="trClass">
-      <th v-if="expanded" class="w-0" />
+      <th v-if="expandedKey" class="w-0" />
 
       <th
         v-for="cell in cells"
@@ -41,11 +41,11 @@
   </thead>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends Record<string, unknown>">
 const props = withDefaults(
   defineProps<{
-    rows: Record<string, unknown>[];
-    expanded?: string;
+    rows: T[];
+    expandedKey?: string;
     sortBy?: string[];
     stickyLeft?: string[];
     stickyRight?: string[];
@@ -65,7 +65,7 @@ const props = withDefaults(
   }
 );
 
-const cells = computed(() => Object.keys(props.rows[0]!).filter((key) => key !== props.expanded));
+const cells = computed(() => Object.keys(props.rows[0]!).filter((key) => key !== props.expandedKey));
 
 const route = useRoute();
 

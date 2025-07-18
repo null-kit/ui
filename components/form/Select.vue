@@ -21,7 +21,7 @@
             <button
               type="button"
               :class="[
-                'select-input',
+                'select-input text-ellipsis',
                 inputClass,
                 { 'ring-accent': isOpen, 'rounded-l-none': $slots.left, 'rounded-r-none': $slots.right }
               ]"

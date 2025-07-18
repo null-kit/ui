@@ -1,6 +1,6 @@
 <template>
   <tr :class="trClass">
-    <td v-if="expanded" class="!px-2">
+    <td v-if="expandedKey" class="!px-2">
       <button v-if="!isNested" type="button" class="btn btn-sm" @click="$emit('toggle', (isExpanded = !isExpanded))">
         <AppIcon name="chevron-right" class="duration-200" :class="{ 'rotate-90': isExpanded }" />
       </button>
@@ -31,7 +31,7 @@ const props = withDefaults(
   defineProps<{
     data?: T;
     entry: T;
-    expanded?: string;
+    expandedKey?: string;
     columnsExtra?: string[];
     pick?: string[];
     omit?: string[];
@@ -72,6 +72,6 @@ const cells = computed(() => {
     merged = { ...merged, ...Object.fromEntries(props.columnsExtra.map((key) => [key, null])) };
   }
 
-  return Object.keys(merged).filter((key) => key !== props.expanded);
+  return Object.keys(merged).filter((key) => key !== props.expandedKey);
 });
 </script>

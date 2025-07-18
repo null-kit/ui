@@ -17,6 +17,14 @@
     @apply bg-darwin text-left font-semibold select-none;
   }
 
+  tfoot {
+    @apply font-semibold select-none;
+
+    tr td {
+      @apply border-edison border-t;
+    }
+  }
+
   th,
   td {
     @apply bg-darwin border-edison border-b px-4 py-2 transition-colors;

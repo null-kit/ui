@@ -4,7 +4,7 @@
       <button
         v-for="(tab, index) in tabs"
         :key="index"
-        :class="['flex-1 overflow-clip rounded-lg', tabClass, isActive(tab) && activeClass]"
+        :class="['flex-1 overflow-clip', tabClass, isActive(tab) && activeClass]"
         type="button"
         @click="toggleTab(tab)"
       >

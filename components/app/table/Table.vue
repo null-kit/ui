@@ -19,9 +19,9 @@
               enter-to-class="opacity-100 translate-y-0 duration-200"
               leave-to-class="opacity-0 -translate-y-2 duration-200"
             >
-              <template v-if="expanded && isExpanded(pIndex)">
+              <template v-if="expandedKey && isExpanded(pIndex)">
                 <AppTableRow
-                  v-for="(row, cIndex) in entry[expanded]"
+                  v-for="(row, cIndex) in entry[expandedKey]"
                   :key="cIndex"
                   v-bind="props"
                   :data="row"
@@ -33,6 +33,8 @@
             </TransitionGroup>
           </template>
         </tbody>
+
+        <AppTableFoot v-if="hasTfoot" v-bind="props" :rows :slots />
       </table>
     </div>
   </div>
@@ -59,7 +61,7 @@ const props = withDefaults(
     omit?: string[];
     pick?: string[];
     dictionaryKey?: string;
-    expanded?: string;
+    expandedKey?: string;
   }>(),
   {
     stickyOffset: 'top-0',
@@ -104,6 +106,8 @@ const toggleRow = (index: number) => {
 };
 
 const isExpanded = (index: number) => expandedRows.value.has(index);
+
+const hasTfoot = computed(() => Object.keys(slots).some((key) => key.startsWith('tfoot-')));
 
 const tableWrapper = useTemplateRef('tableWrapper');
 const theadVisible = useTemplateRef('theadVisible');
