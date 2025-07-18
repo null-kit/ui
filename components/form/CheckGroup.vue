@@ -6,37 +6,24 @@
     </div>
 
     <div v-if="options && options.length > 0" class="btn-group bg-darwin">
-      <label v-for="(option, index) in options" :key="index" class="btn rounded-none">
+      <label v-for="(option, index) in options" :key="index" class="btn">
         <input
           v-model="model"
           class="peer checked:bg-accent/5 absolute inset-0 cursor-pointer appearance-none"
+          :value="toLowerCase(option)"
           :type="type"
           :name="name"
-          :value="modifiers.lowercase ? option.toLowerCase() : option"
         />
 
-        <span class="peer-checked:text-accent text-sm font-medium duration-200">{{ option }}</span>
+        <span class="peer-checked:text-accent duration-200">{{ option }}</span>
       </label>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-const [model, modifiers] = defineModel<string | string[] | undefined>({
-  required: true,
-  set(value) {
-    if (value && modifiers.lowercase) {
-      if (Array.isArray(value)) return value.map((option) => option.toLowerCase());
-
-      return value.toLowerCase();
-    }
-
-    return value;
-  }
-});
-
-const { type = 'radio' } = defineProps<{
-  options: string[];
+<script setup lang="ts" generic="T extends string">
+const { type = 'radio', options } = defineProps<{
+  options: T[];
   label?: string;
   name?: string;
   type?: 'checkbox' | 'radio';
@@ -44,4 +31,18 @@ const { type = 'radio' } = defineProps<{
   keyValue?: string;
   required?: boolean;
 }>();
+
+const [model, modifiers] = defineModel<T | T[] | undefined, 'lowercase'>({
+  required: true,
+  get(value) {
+    if (type === 'checkbox') return Array.isArray(value) ? value : [];
+
+    return value;
+  },
+  set(value) {
+    if (value) return Array.isArray(value) ? value.map(toLowerCase) : toLowerCase(value);
+  }
+});
+
+const toLowerCase = (value: T) => (modifiers.lowercase ? value.toLowerCase() : value);
 </script>
