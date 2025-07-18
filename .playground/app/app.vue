@@ -65,18 +65,34 @@
       <fieldset id="confirm">
         <legend>Confirm</legend>
 
-        <button
-          type="button"
-          class="btn btn-default"
-          @click="
-            useConfirm({
-              message: 'Are you sure you want to delete this user?',
-              onConfirm: async () => setToast('Success!', 'User deleted successfully!')
-            })
-          "
-        >
-          Delete User
-        </button>
+        <div class="flex gap-4">
+          <button
+            type="button"
+            class="btn btn-default"
+            @click="
+              useConfirm({
+                message: 'Are you sure you want to delete this user?',
+                onConfirm: async () => setToast('Success!', 'User deleted successfully!')
+              })
+            "
+          >
+            Delete User
+          </button>
+
+          <AppConfirm message="Are you sure you want to receive a load of money?">
+            <button type="button" class="btn btn-default">Load Money</button>
+          </AppConfirm>
+
+          <AppConfirm
+            message="This action cannot be undone"
+            title="Delete John Wick"
+            confirm-text="Delete"
+            confirm-class="btn-danger"
+            @confirm="setToast('Success!', 'John Wick deleted successfully!', 'success')"
+          >
+            <button type="button" class="btn btn-default">Delete John Wick</button>
+          </AppConfirm>
+        </div>
       </fieldset>
 
       <fieldset id="toasts">
@@ -135,10 +151,10 @@
         <legend>Table</legend>
 
         <div class="mb-2 text-sm font-bold">Basic Table</div>
-        <AppTable :columns="formData.table" sticky-head />
+        <AppTable :data="formData.table" sticky-head />
 
         <div class="mt-10 mb-2 text-sm font-bold">Sticky Email Cell Table and Actions Slot</div>
-        <AppTable :columns="formData.tableBig" :sticky-cells="['email']">
+        <AppTable :data="formData.tableBig" :sticky-left="['email']">
           <template #actions>
             <div class="flex gap-2">
               <button type="button" class="btn btn-default btn-sm">Edit</button>
