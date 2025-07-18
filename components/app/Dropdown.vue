@@ -15,7 +15,6 @@
           ref="floating"
           :class="['dropdown-content', dropdownClass]"
           :style="floatingStyles"
-          :hidden="middlewareData.hide?.referenceHidden"
           @click.stop
           @mouseleave="isOpen = !autoclose"
         >
@@ -29,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { useFloating, offset, shift, flip, size, autoUpdate, hide } from '@floating-ui/vue';
+import { useFloating, offset, flip, size, autoUpdate } from '@floating-ui/vue';
 import type { Placement } from '@floating-ui/vue';
 
 const props = defineProps<{
@@ -42,11 +41,10 @@ const props = defineProps<{
 const reference = useTemplateRef<HTMLDivElement>('reference');
 const floating = useTemplateRef<HTMLDivElement>('floating');
 
-const { floatingStyles, middlewareData } = useFloating(reference, floating, {
+const { floatingStyles } = useFloating(reference, floating, {
   placement: props.placement || 'bottom-start',
   middleware: [
     offset(8),
-    shift({ crossAxis: true }),
     flip({ padding: 8 }),
     size({
       padding: 8,
@@ -56,20 +54,10 @@ const { floatingStyles, middlewareData } = useFloating(reference, floating, {
           maxHeight: `${Math.max(100, availableHeight)}px`
         });
       }
-    }),
-    hide()
+    })
   ],
   whileElementsMounted: autoUpdate
 });
 
-const isOpen = ref(false);
-
-const onClickOutside = (event: MouseEvent) => {
-  if (!isOpen.value || reference.value?.contains(event.target as Node)) return;
-
-  isOpen.value = false;
-};
-
-onMounted(() => document.addEventListener('click', onClickOutside));
-onBeforeUnmount(() => document.removeEventListener('click', onClickOutside));
+const isOpen = useClickOutside(reference);
 </script>
