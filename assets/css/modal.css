@@ -3,3 +3,8 @@
   @apply bg-newton rounded-2xl shadow-lg;
   @apply border-edison border;
 }
+
+@utility modal-motion {
+  transform: perspective(1000px) translateZ(-50px) rotateX(10deg) rotateY(10deg);
+  @apply blur-xs;
+}
