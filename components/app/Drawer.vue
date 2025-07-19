@@ -1,15 +1,16 @@
 <template>
   <Teleport to="#teleports">
-    <Transition enter-from-class="opacity-0" enter-to-class="opacity-100" leave-to-class="opacity-0">
-      <div v-if="isActive" class="fixed inset-0 z-10 bg-black/50 backdrop-blur-xs duration-300" @click="onClose" />
+    <Transition enter-from-class="opacity-0" leave-to-class="opacity-0">
+      <div v-if="isActive" class="fixed inset-0 z-10 bg-black/50 backdrop-blur-xs duration-400" @click="onClose" />
     </Transition>
 
     <Transition
       enter-from-class="translate-y-full"
-      enter-to-class="translate-y-0 duration-300"
-      leave-to-class="translate-y-full duration-300"
+      enter-to-class="duration-400 ease-in-out"
+      leave-to-class="translate-y-full duration-400"
+      :duration="400"
       @after-enter="(el) => (el as HTMLDivElement).focus()"
-      @after-leave="isActive = false"
+      @after-leave="$emit('close')"
     >
       <div v-if="isActive" class="fixed inset-x-2 bottom-0 z-10 outline-0" tabindex="0" @keydown.esc="onClose">
         <div class="drawer-content max-h-[calc(100dvh-3rem)] overflow-y-auto">
@@ -27,27 +28,19 @@
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits<{ close: [] }>();
+defineEmits<{ close: [] }>();
 
 const isActive = ref(false);
 
-let timeout: NodeJS.Timeout;
-
 const onClose = () => {
   isActive.value = false;
-
   document.body.removeAttribute('style');
-
-  timeout = setTimeout(() => emit('close'), 300);
 };
 
 defineExpose({ onClose });
 
 onMounted(() => {
   isActive.value = true;
-
   document.body.style.overflow = 'hidden';
 });
-
-onBeforeUnmount(() => clearTimeout(timeout));
 </script>

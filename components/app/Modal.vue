@@ -1,6 +1,6 @@
 <template>
   <Teleport to="#teleports" class="perspective-distant">
-    <Transition enter-from-class="opacity-0" enter-to-class="opacity-100" leave-to-class="opacity-0">
+    <Transition enter-from-class="opacity-0" leave-to-class="opacity-0">
       <div v-if="isActive" class="fixed inset-0 z-10 bg-black/50 backdrop-blur-xs duration-400" />
     </Transition>
 
@@ -8,7 +8,9 @@
       enter-from-class="opacity-0 modal-motion"
       enter-to-class="duration-400"
       leave-to-class="opacity-0 modal-motion duration-400"
+      :duration="400"
       @after-enter="(el) => (el as HTMLDivElement).focus()"
+      @after-leave="$emit('close')"
     >
       <div
         v-if="isActive"
@@ -41,20 +43,19 @@
 <script setup lang="ts">
 const { modalClass = 'max-w-xl' } = defineProps<{ modalClass?: string }>();
 
-const emit = defineEmits<{ close: [] }>();
+defineEmits<{ close: [] }>();
 
 const isActive = ref(false);
 
-let timeout: NodeJS.Timeout;
-
 const onClose = () => {
   isActive.value = false;
-
-  timeout = setTimeout(() => emit('close'), 300);
+  document.body.removeAttribute('style');
 };
 
 defineExpose({ onClose });
 
-onMounted(() => (isActive.value = true));
-onBeforeUnmount(() => clearTimeout(timeout));
+onMounted(() => {
+  isActive.value = true;
+  document.body.style.overflow = 'hidden';
+});
 </script>
