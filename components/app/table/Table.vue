@@ -18,9 +18,10 @@
         <tbody>
           <template v-for="(entry, pIndex) in rows" :key="pIndex">
             <AppTableRow
-              v-bind="{ entry, expandedKey, columnsExtra, pick, omit, trClass, tdClass, stickyLeft, stickyRight }"
+              v-bind="{ expandedKey, columnsExtra, pick, omit, trClass, tdClass, stickyLeft, stickyRight, slots }"
+              :aria-rowindex="pIndex"
               :data="data[pIndex]"
-              :slots
+              :entry
               @toggle="toggleRow(pIndex)"
             />
 
@@ -34,6 +35,7 @@
                   v-for="(row, cIndex) in entry[expandedKey]"
                   :key="cIndex"
                   v-bind="{ expandedKey, columnsExtra, pick, omit, trClass, tdClass, stickyLeft, stickyRight, slots }"
+                  :aria-rowindex="cIndex"
                   :data="row"
                   :entry="row"
                   is-nested

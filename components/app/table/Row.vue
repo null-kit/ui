@@ -9,6 +9,7 @@
     <td
       v-for="cell in cells"
       :key="cell"
+      :aria-label="cell"
       :class="[
         tdClass,
         { 'left-0 z-1 md:sticky': stickyLeft.includes(cell) },
