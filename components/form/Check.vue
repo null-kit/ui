@@ -15,7 +15,8 @@
           :name="name"
           :value="value"
           :disabled="disabled"
-          :checked="checked || isChecked"
+          :checked="isChecked"
+          :indeterminate="indeterminate"
         />
 
         <span
@@ -36,7 +37,7 @@
             cx="16"
             cy="16"
             r="12"
-            :class="['duration-300', model === value ? 'opacity-100' : 'opacity-0']"
+            :class="['duration-300', isChecked ? 'opacity-100' : 'opacity-0']"
           />
 
           <path
@@ -69,13 +70,9 @@
 </template>
 
 <script setup lang="ts">
-const model = defineModel<boolean | string | number | string[] | number[]>();
+const model = defineModel<boolean | string | number | (string | number | boolean)[]>();
 
-const {
-  type = 'checkbox',
-  checked,
-  value
-} = defineProps<{
+const { type = 'checkbox', value } = defineProps<{
   label?: string;
   type?: 'checkbox' | 'radio';
   name: string;
@@ -83,21 +80,18 @@ const {
   isSwitch?: boolean;
   indeterminate?: boolean;
   disabled?: boolean;
-  checked?: boolean;
   help?: string;
 }>();
 
 const isChecked = computed(() => {
-  if (Array.isArray(model.value) && value) {
+  if (type === 'radio') return model.value === value;
+
+  if (Array.isArray(model.value) && value !== undefined) {
     return model.value.map(String).includes(String(value));
   }
 
+  if (typeof model.value === 'boolean') return model.value;
+
   return Boolean(model.value);
-});
-
-onMounted(() => {
-  if (Array.isArray(model.value)) return;
-
-  model.value = value ? value : Boolean(model.value);
 });
 </script>

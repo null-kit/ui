@@ -29,6 +29,8 @@
     </aside>
 
     <main class="min-w-0 space-y-8 p-4">
+      <FormCheckDemo />
+
       <fieldset id="utils">
         <legend>Utils</legend>
 
@@ -354,34 +356,34 @@
       <fieldset id="checkbox">
         <legend>Form Checkbox</legend>
 
-        <div class="mb-5 flex items-center gap-10">
-          <FormCheck label="Agree to terms and conditions" name="checkbox" />
+        <div class="space-y-4">
+          <h3 class="text-sm opacity-50">Checkbox with Array (Multiple Selection)</h3>
 
-          <div class="flex gap-4">
-            <FormCheck v-model="formData.color" type="radio" label="Red" name="color" value="red" />
-            <FormCheck v-model="formData.color" type="radio" label="Blue" name="color" value="blue" />
-            <FormCheck v-model="formData.color" type="radio" label="Green" name="color" value="green" />
+          <div class="flex flex-wrap gap-4">
+            <FormCheck v-model="formData.fruits" name="fruits" value="apple" label="Apple" />
+            <FormCheck v-model="formData.fruits" name="fruits" value="banana" label="Banana" />
+            <FormCheck v-model="formData.fruits" name="fruits" value="orange" label="Orange" />
+            <FormCheck v-model="formData.fruits" name="fruits" value="grape" label="Grape" />
           </div>
 
-          <FormCheck v-model="formData.status" label="Status" name="status" is-switch />
-        </div>
+          <h3 class="text-sm opacity-50">Checkbox with Boolean (Single Toggle)</h3>
 
-        <div class="flex items-center gap-10">
-          <FormCheckGroup
-            v-model="formData.color"
-            :options="['Red', 'Blue', 'Green']"
-            type="radio"
-            label="Checkbox Group"
-            name="color"
-          />
+          <div class="flex flex-wrap gap-4">
+            <FormCheck v-model="formData.status" name="enabled" label="Enable notifications" />
+            <FormCheck v-model="formData.darkMode" name="darkMode" label="Dark mode" is-switch />
+          </div>
 
-          <FormCheckGroup
-            v-model="formData.pet"
-            :options="['Dog', 'Cat', 'Bird']"
-            type="checkbox"
-            label="Radio Group"
-            name="pet"
-          />
+          <h3 class="text-sm opacity-50">Indeterminate State Example</h3>
+
+          <FormCheck name="categories" label="Categories" indeterminate />
+
+          <h3 class="text-sm opacity-50">Radio (Single Selection)</h3>
+
+          <div class="flex flex-wrap gap-4">
+            <FormCheck v-model="formData.size" type="radio" name="size" value="small" label="Small" />
+            <FormCheck v-model="formData.size" type="radio" name="size" value="medium" label="Medium" />
+            <FormCheck v-model="formData.size" type="radio" name="size" value="large" label="Large" />
+          </div>
         </div>
       </fieldset>
 
@@ -423,9 +425,12 @@ const { copy, statusText } = useClipboard();
 
 const formData = reactive({
   country: '',
-  color: '',
+  color: 'blue',
   status: false,
-  pet: '',
+  darkMode: true,
+  fruits: ['apple', 'grape'],
+  pet: ['Bird'],
+  size: 'medium',
   drawerOpen: false,
   modalOpen: false,
   signleDate: new Date(),
