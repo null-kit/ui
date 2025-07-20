@@ -70,8 +70,6 @@
 </template>
 
 <script setup lang="ts">
-const model = defineModel<boolean | string | number | (string | number | boolean)[]>();
-
 const { type = 'checkbox', value } = defineProps<{
   label?: string;
   type?: 'checkbox' | 'radio';
@@ -83,6 +81,8 @@ const { type = 'checkbox', value } = defineProps<{
   help?: string;
 }>();
 
+const model = defineModel<boolean | string | number | (string | number | boolean)[]>();
+
 const isChecked = computed(() => {
   if (type === 'radio') return model.value === value;
 
@@ -93,5 +93,9 @@ const isChecked = computed(() => {
   if (typeof model.value === 'boolean') return model.value;
 
   return Boolean(model.value);
+});
+
+onMounted(() => {
+  if (!model.value && value) model.value = value;
 });
 </script>

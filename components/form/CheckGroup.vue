@@ -1,5 +1,5 @@
 <template>
-  <div class="w-fit shrink-0">
+  <div class="flex w-fit shrink-0 flex-col">
     <div v-if="label" class="form-label mb-2">
       {{ label }}
       <span v-if="required" title="Required field" class="form-required">*</span>
