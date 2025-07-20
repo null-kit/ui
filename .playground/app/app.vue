@@ -29,8 +29,6 @@
     </aside>
 
     <main class="min-w-0 space-y-8 p-4">
-      <FormCheckDemo />
-
       <fieldset id="utils">
         <legend>Utils</legend>
 
