@@ -6,6 +6,8 @@
     </div>
 
     <div v-if="options && options.length > 0" class="btn-group bg-darwin">
+      <slot name="left" />
+
       <label v-for="(option, index) in options" :key="index" class="btn">
         <input
           v-model="model"
@@ -17,6 +19,8 @@
 
         <span class="peer-checked:text-accent duration-200">{{ option }}</span>
       </label>
+
+      <slot name="right" />
     </div>
   </div>
 </template>
