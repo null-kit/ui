@@ -2,17 +2,27 @@
   <div v-if="data && data.length > 0">
     <div v-if="stickyHead" ref="theadVisible" class="sticky z-5 overflow-hidden" :class="stickyOffset">
       <table class="table-default w-full border-separate border-spacing-0">
-        <AppTableHead v-bind="props" :rows :slots />
+        <AppTableHead
+          v-bind="{ rows, expandedKey, sortBy, stickyLeft, stickyRight, dictionaryKey, trClass, thClass, slots }"
+        />
       </table>
     </div>
 
     <div ref="tableWrapper" class="scrollbar w-full overflow-auto">
       <table class="table-default w-full border-separate border-spacing-0">
-        <AppTableHead :class="{ 'pointer-events-none invisible': stickyHead }" v-bind="props" :rows :slots />
+        <AppTableHead
+          v-bind="{ rows, expandedKey, sortBy, stickyLeft, stickyRight, dictionaryKey, trClass, thClass, slots }"
+          :class="{ 'pointer-events-none invisible': stickyHead }"
+        />
 
         <tbody>
           <template v-for="(entry, pIndex) in rows" :key="pIndex">
-            <AppTableRow v-bind="props" :data="data[pIndex]" :entry :slots @toggle="toggleRow(pIndex)" />
+            <AppTableRow
+              v-bind="{ entry, expandedKey, columnsExtra, pick, omit, trClass, tdClass, stickyLeft, stickyRight }"
+              :data="data[pIndex]"
+              :slots
+              @toggle="toggleRow(pIndex)"
+            />
 
             <TransitionGroup
               enter-from-class="opacity-0 -translate-y-2"
@@ -23,10 +33,9 @@
                 <AppTableRow
                   v-for="(row, cIndex) in entry[expandedKey]"
                   :key="cIndex"
-                  v-bind="props"
+                  v-bind="{ expandedKey, columnsExtra, pick, omit, trClass, tdClass, stickyLeft, stickyRight, slots }"
                   :data="row"
                   :entry="row"
-                  :slots
                   is-nested
                 />
               </template>
@@ -34,7 +43,10 @@
           </template>
         </tbody>
 
-        <AppTableFoot v-if="hasTfoot" v-bind="props" :rows :slots />
+        <AppTableFoot
+          v-if="hasTfoot"
+          v-bind="{ data, rows, expandedKey, stickyLeft, stickyRight, trClass, tdClass, slots }"
+        />
       </table>
     </div>
   </div>
@@ -42,7 +54,7 @@
 
 <script setup lang="ts" generic="T extends Record<string, unknown>">
 type DataSlots = { [K in keyof T]?: (props: { entry: T; value: T[K] }) => void };
-type ExtraSlots = { [key: string]: (props: { entry: T; value: T[keyof T] }) => void };
+type ExtraSlots = { [key: string]: (props: { entry: T; value: T[keyof T]; entries: T[] }) => void };
 
 const slots = defineSlots<DataSlots & ExtraSlots>();
 
