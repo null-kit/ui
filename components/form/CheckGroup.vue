@@ -1,11 +1,16 @@
 <template>
   <div class="flex w-fit shrink-0 flex-col">
     <div v-if="label" class="form-label mb-2">
+      <slot name="label-left" />
+
       {{ label }}
+
       <span v-if="required" title="Required field" class="form-required">*</span>
+
+      <slot name="label-right" />
     </div>
 
-    <div v-if="options && options.length > 0" class="btn-group bg-darwin">
+    <div v-if="options && options.length > 0" class="btn-group bg-darwin" :class="groupClass">
       <slot name="left" />
 
       <label v-for="(option, index) in options" :key="index" class="btn">
@@ -17,7 +22,13 @@
           :name="name"
         />
 
-        <span class="peer-checked:text-accent duration-200">{{ option }}</span>
+        <span
+          class="peer-checked:text-accent duration-200"
+          :class="{ 'flex items-center gap-2': $slots[toLowerCase(option)] }"
+        >
+          {{ option }}
+          <slot :name="toLowerCase(option)" />
+        </span>
       </label>
 
       <slot name="right" />
@@ -34,6 +45,7 @@ const { type = 'radio', options } = defineProps<{
   keyName?: string;
   keyValue?: string;
   required?: boolean;
+  groupClass?: string;
 }>();
 
 const [model, modifiers] = defineModel<T | T[] | undefined, 'lowercase'>({
@@ -48,5 +60,5 @@ const [model, modifiers] = defineModel<T | T[] | undefined, 'lowercase'>({
   }
 });
 
-const toLowerCase = (value: T) => (modifiers.lowercase ? value.toLowerCase() : value);
+const toLowerCase = (value: T) => (modifiers.lowercase ? value.toLowerCase().replace(/\s+/g, '-') : value);
 </script>
