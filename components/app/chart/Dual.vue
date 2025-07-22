@@ -27,7 +27,7 @@
         :tick-text-color="colors[1]"
       />
 
-      <AppChartCrosshair :categories="[leftKey, rightKey]" :colors :x-key :x-format />
+      <LazyAppChartCrosshair :categories="[leftKey, rightKey]" :colors :x-key :x-format />
     </VisXYContainer>
   </div>
 </template>

@@ -18,10 +18,20 @@
         <tbody>
           <template v-for="(entry, pIndex) in rows" :key="pIndex">
             <AppTableRow
-              v-bind="{ expandedKey, columnsExtra, pick, omit, trClass, tdClass, stickyLeft, stickyRight, slots }"
+              v-bind="{
+                expandedKey,
+                columnsExtra,
+                pick,
+                omit,
+                trClass,
+                tdClass,
+                stickyLeft,
+                stickyRight,
+                slots,
+                entry
+              }"
               :aria-rowindex="pIndex"
               :data="data[pIndex]"
-              :entry
               @toggle="toggleRow(pIndex)"
             />
 
@@ -45,7 +55,7 @@
           </template>
         </tbody>
 
-        <AppTableFoot
+        <LazyAppTableFoot
           v-if="hasTfoot"
           v-bind="{ data, rows, expandedKey, stickyLeft, stickyRight, trClass, tdClass, slots }"
         />
@@ -72,8 +82,8 @@ const props = withDefaults(
     trClass?: string;
     thClass?: string;
     tdClass?: string;
-    omit?: string[];
-    pick?: string[];
+    omit?: (keyof T)[];
+    pick?: (keyof T)[];
     dictionaryKey?: string;
     expandedKey?: string;
   }>(),

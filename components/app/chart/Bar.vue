@@ -1,6 +1,6 @@
 <template>
   <VisXYContainer :data="chartData" height="25rem" width="100%">
-    <AppChartLegend v-if="showLegend" v-model="chartData" :categories :colors :data :x-indexes />
+    <LazyAppChartLegend v-if="showLegend" v-model="chartData" :categories :colors :data :x-indexes />
 
     <VisBar
       :x="(d: T, i: number) => i"
@@ -25,7 +25,7 @@
 
     <VisAxis type="y" :tick-format="(i: number) => (yFormat ? yFormat(i) : formatNumber(i))" />
 
-    <AppChartCrosshair :categories :colors :x-key :y-format :x-format />
+    <LazyAppChartCrosshair :categories :colors :x-key :y-format :x-format />
 
     <svg width="0" height="0">
       <linearGradient v-for="(color, i) in colors" :id="`vis-bar-g-${i}`" :key="i" x1="0" y1="0" x2="0" y2="1">

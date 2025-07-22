@@ -9,7 +9,7 @@
     <VisAxis type="x" :domain-line="false" :tick-format :num-ticks="data.length" />
     <VisAxis type="y" :domain-line="false" :tick-format="(i: number) => (yFormat ? yFormat(i) : formatNumber(i))" />
 
-    <AppChartCrosshair :categories :colors :x-key :y-format :x-format />
+    <LazyAppChartCrosshair :categories :colors :x-key :y-format :x-format />
 
     <svg width="0" height="0">
       <linearGradient v-for="(color, i) in colors" :id="`vis-g-${i}`" :key="i" x1="0" y1="0" x2="0" y2="1">

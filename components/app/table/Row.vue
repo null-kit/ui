@@ -34,8 +34,8 @@ const props = withDefaults(
     entry: T;
     expandedKey?: string;
     columnsExtra?: string[];
-    pick?: string[];
-    omit?: string[];
+    omit?: (keyof T)[];
+    pick?: (keyof T)[];
     trClass?: string;
     tdClass?: string;
     stickyLeft?: string[];

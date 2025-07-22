@@ -95,22 +95,22 @@ export default defineAppConfig({
 
 Core application components for building user interfaces.
 
-| Component             | Description                          | Documentation                                            |
-| --------------------- | ------------------------------------ | -------------------------------------------------------- |
-| **AppBadge**          | Status indicators and labels         | [📖 Badge](./docs/components/app/Badge.md)               |
-| **AppDatepicker**     | Date selection with range support    | [📖 Datepicker](./docs/components/app/Datepicker.md)     |
-| **AppDrawer**         | Slide-out side panels                | [📖 Drawer](./docs/components/app/Drawer.md)             |
-| **AppDropdown**       | Contextual menus and overlays        | [📖 Dropdown](./docs/components/app/Dropdown.md)         |
-| **AppIcon**           | SVG icon system                      | [📖 Icon](./docs/components/app/Icon.md)                 |
-| **AppModal**          | Overlay dialogs and popups           | [📖 Modal](./docs/components/app/Modal.md)               |
-| **AppPagination**     | Page navigation with URL sync        | [📖 Pagination](./docs/components/app/Pagination.md)     |
-| **AppTable**          | Data tables with sorting and actions | [📖 Table](./docs/components/app/Table.md)               |
-| **AppTabs**           | Tabbed content with URL state        | [📖 Tabs](./docs/components/app/Tabs.md)                 |
-| **AppTooltip**        | Contextual help and information      | [📖 Tooltip](./docs/components/app/Tooltip.md)           |
-| **AppTour**           | Guided tour system                   | [📖 Tour](./docs/components/app/Tour.md)                 |
-| **AppChartArea**      | Area charts and line graphs          | [📖 Area](./docs/components/app/chart/Area.md)           |
-| **AppChartCrosshair** | Interactive chart crosshairs         | [📖 Crosshair](./docs/components/app/chart/Crosshair.md) |
-| **AppChartDonut**     | Donut and pie charts                 | [📖 Donut](./docs/components/app/chart/Donut.md)         |
+| Component                 | Description                          | Documentation                                            |
+| ------------------------- | ------------------------------------ | -------------------------------------------------------- |
+| **AppBadge**              | Status indicators and labels         | [📖 Badge](./docs/components/app/Badge.md)               |
+| **AppDatepicker**         | Date selection with range support    | [📖 Datepicker](./docs/components/app/Datepicker.md)     |
+| **AppDrawer**             | Slide-out side panels                | [📖 Drawer](./docs/components/app/Drawer.md)             |
+| **AppDropdown**           | Contextual menus and overlays        | [📖 Dropdown](./docs/components/app/Dropdown.md)         |
+| **AppIcon**               | SVG icon system                      | [📖 Icon](./docs/components/app/Icon.md)                 |
+| **AppModal**              | Overlay dialogs and popups           | [📖 Modal](./docs/components/app/Modal.md)               |
+| **AppPagination**         | Page navigation with URL sync        | [📖 Pagination](./docs/components/app/Pagination.md)     |
+| **AppTable**              | Data tables with sorting and actions | [📖 Table](./docs/components/app/Table.md)               |
+| **AppTabs**               | Tabbed content with URL state        | [📖 Tabs](./docs/components/app/Tabs.md)                 |
+| **AppTooltip**            | Contextual help and information      | [📖 Tooltip](./docs/components/app/Tooltip.md)           |
+| **AppTour**               | Guided tour system                   | [📖 Tour](./docs/components/app/Tour.md)                 |
+| **AppChartArea**          | Area charts and line graphs          | [📖 Area](./docs/components/app/chart/Area.md)           |
+| **LazyAppChartCrosshair** | Interactive chart crosshairs         | [📖 Crosshair](./docs/components/app/chart/Crosshair.md) |
+| **AppChartDonut**         | Donut and pie charts                 | [📖 Donut](./docs/components/app/chart/Donut.md)         |
 
 ### Form Components
 
