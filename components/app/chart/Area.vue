@@ -6,7 +6,7 @@
       <VisScatter :x :y="(d: T) => d[category]" :color="colors[index]" :size="7" />
     </template>
 
-    <VisAxis type="x" :domain-line="false" :tick-format :num-ticks="data.length" />
+    <VisAxis type="x" :domain-line="false" :tick-format :num-ticks />
     <VisAxis type="y" :domain-line="false" :tick-format="(i: number) => (yFormat ? yFormat(i) : formatNumber(i))" />
 
     <LazyAppChartCrosshair :categories :colors :x-key :y-format :x-format />
@@ -29,6 +29,7 @@ const props = defineProps<{
   xKey: Extract<keyof T, string>;
   xFormat?: (i: string | number) => string | Date;
   yFormat?: (i: string | number) => string;
+  numTicks?: number;
 }>();
 
 const x = (d: T, i: number) => i;

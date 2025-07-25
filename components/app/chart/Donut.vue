@@ -1,11 +1,11 @@
 <template>
   <VisSingleContainer :data="chartData">
     <VisDonut
-      :pad-angle="0.04"
+      :pad-angle
       :corner-radius="6"
       :show-background="false"
       :arc-width="12"
-      :central-label="total"
+      :central-label="valueFormat ? valueFormat(total) : formatNumber(total)"
       central-sub-label="Total"
       :value="(d: T) => d.value"
       :color="(d: T, i: number) => colors[i]"
@@ -15,9 +15,8 @@
       :triggers="{
         [Donut.selectors.segment]: ({ data }: ChartData, i: number) => {
           return `<div class='text-sm px-3 py-2 flex items-center gap-2'>
-            <div class='h-3 w-1 rounded-full' style='background-color:${colors[i]}'></div>
             <div>${useDictionary(data.category)}</div>
-            <div class='ml-3 font-semibold'>${formatNumber(data.value)}</div>
+            <div class='ml-3 font-semibold'>${valueFormat ? valueFormat(data.value) : formatNumber(data.value)}</div>
           </div>`;
         }
       }"
@@ -36,11 +35,18 @@ type ChartData = {
   };
 };
 
-const props = defineProps<{
-  data: T[];
-  categoryKey: keyof T;
-  valueKey: keyof T;
-}>();
+const props = withDefaults(
+  defineProps<{
+    data: T[];
+    categoryKey: keyof T;
+    valueKey: keyof T;
+    valueFormat?: (i: number) => string;
+    padAngle?: number;
+  }>(),
+  {
+    padAngle: 0.04
+  }
+);
 
 const chartData = computed(() => {
   return props.data.map((item) => ({

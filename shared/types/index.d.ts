@@ -1,6 +1,7 @@
 declare module '@nuxt/schema' {
-  interface CustomAppConfig {
+  interface AppConfig {
     settings: {
+      ddd: string;
       key: string;
       theme: 'system' | 'light' | 'dark';
       themeColor: {
@@ -17,14 +18,4 @@ declare module '@nuxt/schema' {
   }
 }
 
-export default defineAppConfig({
-  settings: {
-    key: 'theme',
-    theme: 'system',
-    themeColor: {
-      light: '#000',
-      dark: '#fff'
-    },
-    bookmarks: []
-  }
-});
+export {};

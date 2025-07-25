@@ -59,6 +59,10 @@
           v-if="hasTfoot"
           v-bind="{ data, rows, expandedKey, stickyLeft, stickyRight, trClass, tdClass, slots }"
         />
+
+        <tfoot v-if="slots.tfoot">
+          <component :is="slots.tfoot" />
+        </tfoot>
       </table>
     </div>
   </div>
@@ -66,7 +70,7 @@
 
 <script setup lang="ts" generic="T extends Record<string, unknown>">
 type DataSlots = { [K in keyof T]?: (props: { entry: T; value: T[K] }) => void };
-type ExtraSlots = { [key: string]: (props: { entry: T; value: T[keyof T]; entries: T[] }) => void };
+type ExtraSlots = { [key: string]: (props: { entry: T; value: T[keyof T]; values: T[] }) => void };
 
 const slots = defineSlots<DataSlots & ExtraSlots>();
 

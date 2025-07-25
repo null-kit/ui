@@ -18,9 +18,13 @@
         @click="onSortBy(cell)"
       >
         <div :class="{ 'flex w-full items-center gap-1': slots[`th-${cell}`] || sortBy.includes(cell) }">
-          {{ useDictionary(dictionaryKey ? `${dictionaryKey}.${cell}` : cell) }}
-
           <component :is="slots[`th-${cell}`]" v-if="slots[`th-${cell}`]" />
+
+          <template v-else>
+            {{ useDictionary(dictionaryKey ? `${dictionaryKey}.${cell}` : cell) }}
+          </template>
+
+          <component :is="slots[`th-${cell}-right`]" v-if="slots[`th-${cell}-right`]" />
 
           <svg
             v-if="sortBy.includes(cell)"

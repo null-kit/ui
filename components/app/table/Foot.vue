@@ -12,7 +12,7 @@
           { 'right-0 -left-px border-l md:sticky': stickyRight.includes(cell) }
         ]"
       >
-        <component :is="slots[`tfoot-${cell}`]" v-if="slots[`tfoot-${cell}`]" :entries="data" />
+        <component :is="slots[`tfoot-${cell}`]" v-if="slots[`tfoot-${cell}`]" :values="values(cell)" />
       </td>
 
       <td v-if="slots.actions" :class="['w-0', tdClass]" />
@@ -43,4 +43,6 @@ const props = withDefaults(
 );
 
 const cells = computed(() => Object.keys(props.rows[0]!).filter((key) => key !== props.expandedKey));
+
+const values = (cell: keyof T): T[keyof T][] => props.data.map((d) => d[cell]);
 </script>
