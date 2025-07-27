@@ -1,5 +1,4 @@
 @utility tooltip-content {
   @apply bg-surface text-darwin rounded-md shadow-md;
   @apply px-3 py-1.5 text-sm;
-  @apply dark:bg-white;
 }

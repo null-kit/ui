@@ -1,7 +1,6 @@
 declare module '@nuxt/schema' {
   interface AppConfig {
     settings: {
-      ddd: string;
       key: string;
       theme: 'system' | 'light' | 'dark';
       themeColor: {

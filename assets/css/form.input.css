@@ -3,12 +3,29 @@
   @apply max-h-80 min-h-10 px-3 py-2 text-sm font-medium;
   @apply ring-edison bg-darwin placeholder:text-surface/30 rounded-xl shadow ring;
   @apply focus:ring-accent hover:ring-surface/20;
-  @apply disabled:bg-surface/5 disabled:text-surface/50 disabled:cursor-not-allowed;
+
+  @apply disabled:cursor-not-allowed;
+  @apply disabled:bg-surface/5 disabled:text-surface/50;
   @apply dark:disabled:text-surface/30 dark:disabled:bg-surface/3 dark:shadow-black/80;
 }
 
 @utility form-slot {
-  @apply ring-edison min-h-10 rounded-xl text-sm shadow ring;
-  @apply bg-darwin disabled:bg-surface/5;
-  @apply dark:disabled:bg-surface/3 dark:shadow-black;
+  @apply bg-darwin ring-edison min-h-10 rounded-xl text-sm shadow ring;
+
+  @apply disabled:cursor-not-allowed;
+  @apply disabled:bg-surface/5 disabled:text-surface/50;
+  @apply dark:disabled:text-surface/30 dark:disabled:bg-surface/3 dark:shadow-black/80;
+}
+
+input:is(:-webkit-autofill, :autofill) {
+  @apply inset-shadow-darwin inset-shadow-[0_20rem_0];
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  @apply m-0 appearance-none;
+}
+
+input[type='number'] {
+  appearance: textfield;
 }
