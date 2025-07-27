@@ -26,7 +26,8 @@
           class="peer-checked:text-accent duration-200"
           :class="{ 'flex items-center gap-2': $slots[toLowerCase(option)] }"
         >
-          {{ option }}
+          {{ getKeyName(option) }}
+
           <slot :name="toLowerCase(option)" />
         </span>
       </label>
@@ -36,22 +37,27 @@
   </div>
 </template>
 
-<script setup lang="ts" generic="T extends string">
-const { type = 'radio', options } = defineProps<{
-  options: T[];
-  label?: string;
-  name?: string;
-  type?: 'checkbox' | 'radio';
-  keyName?: string;
-  keyValue?: string;
-  required?: boolean;
-  groupClass?: string;
-}>();
+<script setup lang="ts" generic="V, T extends string | Record<string, string | number>">
+const props = withDefaults(
+  defineProps<{
+    options: T[];
+    label?: string;
+    name?: string;
+    type?: 'checkbox' | 'radio';
+    value?: V;
+    keyName?: keyof T;
+    keyValue?: keyof T;
+    required?: boolean;
+    groupClass?: string;
+  }>(),
+  {
+    type: 'radio'
+  }
+);
 
 const [model, modifiers] = defineModel<T | T[] | undefined, 'lowercase'>({
-  required: true,
   get(value) {
-    if (type === 'checkbox') return Array.isArray(value) ? value : [];
+    if (props.type === 'checkbox') return Array.isArray(value) ? value : [];
 
     return value;
   },
@@ -60,5 +66,25 @@ const [model, modifiers] = defineModel<T | T[] | undefined, 'lowercase'>({
   }
 });
 
-const toLowerCase = (value: T) => (modifiers.lowercase ? value.toLowerCase().replace(/\s+/g, '-') : value);
+const getKeyValue = (option: T): T => {
+  return props.keyValue && typeof option === 'object' ? (option[props.keyValue] as T) : option;
+};
+
+const getKeyName = (option: T) => {
+  return props.keyName && typeof option === 'object' ? option[props.keyName] : option;
+};
+
+const toLowerCase = (value: T) => {
+  const keyValue = String(getKeyValue(value));
+
+  return modifiers.lowercase ? keyValue.toLowerCase().replace(/\s+/g, '-') : keyValue;
+};
+
+onMounted(() => {
+  if (!model.value?.length && props.value) model.value = props.value as T | T[];
+
+  if (props.keyValue && Array.isArray(model.value)) {
+    model.value = model.value.flatMap<T>((item) => getKeyValue(item));
+  }
+});
 </script>
