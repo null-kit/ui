@@ -1,9 +1,18 @@
 <template>
-  <VisCrosshair :template="template" color="none" />
-  <VisTooltip />
+  <VisCrosshair :template color="none" />
 
-  <div class="hidden">
-    <div v-if="currentData" ref="tooltip" class="text-sm">
+  <VisTooltip
+    :attributes="{
+      class: [
+        'absolute opacity-0 transition-opacity z-10',
+        'ring-edison bg-darwin rounded-lg shadow-lg ring text-sm text-surface',
+        tooltipClass
+      ].join(' ')
+    }"
+  />
+
+  <div hidden>
+    <div v-if="currentData" ref="tooltip">
       <div v-if="currentData[xKey]" class="border-edison border-b px-3 py-1 font-semibold">
         {{ xFormat ? xFormat(currentData[xKey]) : currentData[xKey] }}
       </div>
@@ -32,6 +41,7 @@ defineProps<{
   xKey: keyof T;
   xFormat?: (i: string | number) => string | Date;
   yFormat?: (i: string | number) => string;
+  tooltipClass?: string;
 }>();
 
 const tooltip = useTemplateRef<HTMLDivElement>('tooltip');

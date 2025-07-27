@@ -18,14 +18,12 @@
       :num-ticks="data.length"
       :tick-text-fit-mode="xTrim ? 'trim' : 'none'"
       :tick-text-color="(i: number) => (xIndexes.has(i) ? 'hsl(from var(--color-surface) h s l / 40%)' : '')"
-      :events="{
-        [Axis.selectors.tick]: { click: (i: number) => toggleX(i) }
-      }"
+      :events="{ [Axis.selectors.tick]: { click: (i: number) => toggleX(i) } }"
     />
 
     <VisAxis type="y" :tick-format="(i: number) => (yFormat ? yFormat(i) : formatNumber(i))" />
 
-    <LazyAppChartCrosshair :categories :colors :x-key :y-format :x-format />
+    <LazyAppChartCrosshair v-bind="{ categories, colors, xKey, yFormat, xFormat, tooltipClass }" />
 
     <svg width="0" height="0">
       <linearGradient v-for="(color, i) in colors" :id="`vis-bar-g-${i}`" :key="i" x1="0" y1="0" x2="0" y2="1">
@@ -50,6 +48,7 @@ const props = defineProps<{
   stacked?: boolean;
   roundedCorners?: number;
   showLegend?: boolean;
+  tooltipClass?: string;
 }>();
 
 const VisBar = computed(() => (props.stacked ? VisStackedBar : VisGroupedBar));

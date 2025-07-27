@@ -27,7 +27,7 @@
         :tick-text-color="colors[1]"
       />
 
-      <LazyAppChartCrosshair :categories="[leftKey, rightKey]" :colors :x-key :x-format />
+      <LazyAppChartCrosshair :categories="[leftKey, rightKey]" :colors :x-key :x-format :tooltip-class />
     </VisXYContainer>
   </div>
 </template>
@@ -43,6 +43,7 @@ const props = defineProps<{
   xFormat?: (i: string | number) => string | Date;
   yFormatLeft?: (i: string | number) => string;
   yFormatRight?: (i: string | number) => string;
+  tooltipClass?: string;
 }>();
 
 const margin = { left: 50, right: 50, top: 0, bottom: 40 };

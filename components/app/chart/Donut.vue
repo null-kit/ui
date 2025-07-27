@@ -20,11 +20,18 @@
           </div>`;
         }
       }"
+      :attributes="{
+        class: [
+          'absolute opacity-0 transition-opacity z-10',
+          'ring-edison bg-darwin rounded-lg shadow-lg ring text-sm text-surface',
+          tooltipClass
+        ].join(' ')
+      }"
     />
   </VisSingleContainer>
 </template>
 
-<script setup lang="ts" generic="T extends Record<string, string | number>">
+<script setup lang="ts" generic="T extends Record<string, unknown>">
 import { VisSingleContainer, VisDonut, VisTooltip } from '@unovis/vue';
 import { Donut } from '@unovis/ts';
 
@@ -42,6 +49,7 @@ const props = withDefaults(
     valueKey: keyof T;
     valueFormat?: (i: number) => string;
     padAngle?: number;
+    tooltipClass?: string;
   }>(),
   {
     padAngle: 0.04
