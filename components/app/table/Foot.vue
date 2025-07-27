@@ -11,6 +11,7 @@
           { 'left-0 md:sticky': stickyLeft.includes(cell) },
           { 'right-0 -left-px border-l md:sticky': stickyRight.includes(cell) }
         ]"
+        :aria-label="`tfoot-${cell}`"
       >
         <component :is="slots[`tfoot-${cell}`]" v-if="slots[`tfoot-${cell}`]" :values="values(cell)" />
       </td>

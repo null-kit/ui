@@ -15,6 +15,7 @@
           { 'hover:bg-surface/3 cursor-pointer duration-200': sortBy.includes(cell) },
           { 'text-accent': String($route.query.sort).startsWith(cell + ':') }
         ]"
+        :aria-label="`th-${cell}`"
         @click="onSortBy(cell)"
       >
         <div :class="{ 'flex w-full items-center gap-1': slots[`th-${cell}`] || sortBy.includes(cell) }">
