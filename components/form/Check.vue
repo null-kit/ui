@@ -73,7 +73,7 @@
 const { type = 'checkbox', value } = defineProps<{
   label?: string;
   type?: 'checkbox' | 'radio';
-  name: string;
+  name?: string;
   value?: string | number | boolean;
   isSwitch?: boolean;
   indeterminate?: boolean;

@@ -57,7 +57,9 @@ const props = withDefaults(
 
 const [model, modifiers] = defineModel<T | T[] | undefined, 'lowercase'>({
   get(value) {
-    if (props.type === 'checkbox') return Array.isArray(value) ? value : [];
+    if (value && value.length === 0 && props.value) return props.value as T | T[];
+
+    if (!value && props.type === 'checkbox') return Array.isArray(value) ? value : [];
 
     return value;
   },
@@ -81,10 +83,8 @@ const toLowerCase = (value: T) => {
 };
 
 onMounted(() => {
-  if (!model.value?.length && props.value) model.value = props.value as T | T[];
-
   if (props.keyValue && Array.isArray(model.value)) {
-    model.value = model.value.flatMap<T>((item) => getKeyValue(item));
+    model.value = model.value.map((item) => getKeyValue(item));
   }
 });
 </script>
