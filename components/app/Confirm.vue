@@ -5,7 +5,7 @@
 
   <Teleport to="#teleports">
     <Transition name="confirm" :duration="400">
-      <div v-if="isOpen" ref="floating" :style="floatingStyles" @click.stop>
+      <div v-if="isOpen" ref="floating" class="z-10" :style="floatingStyles" @click.stop>
         <div
           role="dialog"
           class="bg-darwin text-surface inverted flex gap-4 rounded-2xl p-4 shadow-lg"
@@ -18,14 +18,16 @@
               <div class="text-lg font-semibold">{{ title }}</div>
             </div>
 
-            <p>{{ message }}</p>
+            <slot name="message">
+              <p>{{ message }}</p>
+            </slot>
           </div>
 
           <div
             class="flex items-center gap-3 *:flex-1"
             :class="{ 'flex-row-reverse': hasPlacement(['top-end', 'bottom-end']) }"
           >
-            <button type="button" class="btn" :class="confirmClass" @click="$emit('confirm')">
+            <button type="button" class="btn" :class="confirmClass" @click="onConfirm">
               {{ confirmText }}
             </button>
 
@@ -40,7 +42,7 @@
 <script setup lang="ts">
 import { useFloating, offset, flip, size, autoUpdate } from '@floating-ui/vue';
 
-defineEmits<{ confirm: [] }>();
+const emit = defineEmits<{ confirm: [] }>();
 
 withDefaults(
   defineProps<{
@@ -78,6 +80,12 @@ const { floatingStyles, middlewareData } = useFloating(reference, floating, {
 const isOpen = useClickOutside(reference);
 
 const hasPlacement = (placements: string[]) => placements.includes(middlewareData.value.offset?.placement ?? '');
+
+const onConfirm = () => {
+  isOpen.value = false;
+
+  emit('confirm');
+};
 </script>
 
 <style>
