@@ -44,7 +44,7 @@ export const useToast = () => {
           toast.type && h(AppIcon, { name: meta[toast.type].icon, class: 'size-5 ' + meta[toast.type].color }),
           h('div', { class: 'w-full' }, [
             h('h3', { class: 'font-semibold' }, toast.title),
-            toast.message && h('p', { class: 'mt-0.5' }, toast.message)
+            toast.message && h('p', { class: 'mt-0.5 whitespace-break-spaces' }, toast.message)
           ]),
           h(
             'svg',
