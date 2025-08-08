@@ -1,8 +1,8 @@
 <template>
   <div class="relative">
-    <VisXYContainer :data :margin :auto-margin="false" height="20rem">
-      <VisLine :x :y="(d: T) => d[leftKey]" :color="colors[0]" />
-      <VisScatter :x :y="(d: T) => d[leftKey]" :color="colors[0]" :size="7" />
+    <VisXYContainer :data :margin :auto-margin="false" class="pointer-events-none" height="20rem">
+      <VisLine :x :y="(d: T) => Number(d[leftKey])" :color="colors[0]" />
+      <VisScatter :x :y="(d: T) => Number(d[leftKey])" :color="colors[0]" :size="7" />
 
       <VisAxis
         type="y"
@@ -11,12 +11,12 @@
         :tick-text-color="colors[0]"
       />
 
-      <VisAxis type="x" :num-ticks="data.length" :tick-format />
+      <VisAxis type="x" :num-ticks :tick-format />
     </VisXYContainer>
 
     <VisXYContainer :data :margin :auto-margin="false" class="-mt-80" height="20rem">
-      <VisLine :x :y="(d: T) => d[rightKey]" :color="colors[1]" />
-      <VisScatter :x :y="(d: T) => d[rightKey]" :color="colors[1]" :size="7" />
+      <VisLine :x :y="(d: T) => Number(d[rightKey])" :color="colors[1]" />
+      <VisScatter :x :y="(d: T) => Number(d[rightKey])" :color="colors[1]" :size="7" />
 
       <VisAxis
         type="y"
@@ -27,7 +27,7 @@
         :tick-text-color="colors[1]"
       />
 
-      <LazyAppChartCrosshair :categories="[leftKey, rightKey]" :colors :x-key :x-format :tooltip-class />
+      <AppChartCrosshair :categories="[leftKey, rightKey]" :colors :x-key :x-format :tooltip-class />
     </VisXYContainer>
   </div>
 </template>
@@ -44,6 +44,7 @@ const props = defineProps<{
   yFormatLeft?: (i: string | number) => string;
   yFormatRight?: (i: string | number) => string;
   tooltipClass?: string;
+  numTicks?: number;
 }>();
 
 const margin = { left: 50, right: 50, top: 0, bottom: 40 };
