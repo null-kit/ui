@@ -13,7 +13,7 @@
           { 'left-0 md:sticky': stickyLeft.includes(cell) },
           { 'right-0 -left-px border-l md:sticky': stickyRight.includes(cell) },
           { 'hover:bg-surface/3 cursor-pointer duration-200': sortBy.includes(cell) },
-          { 'text-accent': String($route.query.sort).startsWith(cell + ':') }
+          { 'text-accent': String($route.query.sortBy).startsWith(cell + ':') }
         ]"
         :aria-label="`th-${cell}`"
         @click="onSortBy(cell)"
@@ -52,6 +52,7 @@ const props = withDefaults(
     rows: T[];
     expandedKey?: string;
     sortBy?: string[];
+    sortByClient?: string[];
     stickyLeft?: string[];
     stickyRight?: string[];
     dictionaryKey?: string;
@@ -65,6 +66,7 @@ const props = withDefaults(
   }>(),
   {
     sortBy: () => [],
+    sortByClient: () => [],
     stickyLeft: () => [],
     stickyRight: () => []
   }
@@ -74,13 +76,15 @@ const cells = computed(() => Object.keys(props.rows[0]!).filter((key) => key !==
 
 const route = useRoute();
 
+const sortBy = computed(() => [...props.sortBy, ...props.sortByClient]);
+
 const onSortBy = (column: string) => {
-  if (!props.sortBy.includes(column)) return;
+  if (!sortBy.value.includes(column)) return;
 
-  const direction = String(route.query.sort).endsWith(':desc') ? 'asc' : 'desc';
+  const direction = String(route.query.sortBy).endsWith(':desc') ? 'asc' : 'desc';
 
-  navigateTo({ query: { ...route.query, sort: `${column}:${direction}` } });
+  navigateTo({ query: { ...route.query, sortBy: `${column}:${direction}` } });
 };
 
-const activeSort = (cell: string, direction: string) => String(route.query.sort).startsWith(`${cell}:${direction}`);
+const activeSort = (cell: string, direction: string) => String(route.query.sortBy).startsWith(`${cell}:${direction}`);
 </script>
