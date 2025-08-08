@@ -10,7 +10,7 @@ const escapeCsvValue = (value: unknown): string => {
   return str;
 };
 
-export const formatCsv = (headers: string[], rows: Record<string, unknown>[]) => {
+export const formatCsv = (headers: string[], rows: Record<string, unknown>[] | (string | number | Date)[][]) => {
   const content = [
     headers.join(','),
     ...rows.map((row) => {
