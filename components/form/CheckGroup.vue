@@ -59,6 +59,8 @@ const [model, modifiers] = defineModel<T | T[] | undefined, 'lowercase'>({
   get(value) {
     if (value && value.length === 0 && props.value) return props.value as T | T[];
 
+    if (props.value) return props.value as T | T[];
+
     if (!value && props.type === 'checkbox') return Array.isArray(value) ? value : [];
 
     return value;
