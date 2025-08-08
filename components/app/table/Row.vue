@@ -21,7 +21,10 @@
       <template v-else>{{ entry[cell] }}</template>
     </td>
 
-    <td v-if="slots.actions" :class="tdClass">
+    <td
+      v-if="slots.actions"
+      :class="[{ 'right-0 -left-px border-l md:sticky': stickyRight.includes('actions') }, tdClass]"
+    >
       <component :is="slots.actions" :entry="data" />
     </td>
   </tr>
@@ -41,6 +44,7 @@ const props = withDefaults(
     stickyLeft?: string[];
     stickyRight?: string[];
     isNested?: boolean;
+    isExpanded?: boolean;
     slots: {
       actions?: object;
       [key: string]: object | undefined;
@@ -56,7 +60,7 @@ const props = withDefaults(
 
 defineEmits<{ toggle: [boolean] }>();
 
-const isExpanded = ref(false);
+const isExpanded = ref(props.isExpanded || false);
 
 const cells = computed(() => {
   let merged: Record<string, unknown> = { ...props.data };

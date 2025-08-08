@@ -15,45 +15,33 @@
           :class="{ 'pointer-events-none invisible': stickyHead }"
         />
 
-        <tbody>
-          <template v-for="(entry, pIndex) in rows" :key="pIndex">
-            <AppTableRow
-              v-bind="{
-                expandedKey,
-                columnsExtra,
-                pick,
-                omit,
-                trClass,
-                tdClass,
-                stickyLeft,
-                stickyRight,
-                slots,
-                entry
-              }"
-              :aria-rowindex="pIndex"
-              :data="data[pIndex]"
-              @toggle="toggleRow(pIndex)"
-            />
+        <AppTableBody v-bind="{ rows, expandedKey, virtual, expandedRows }" v-slot="{ entry, startIndex }">
+          <AppTableRow
+            v-bind="{ expandedKey, columnsExtra, pick, omit, trClass, tdClass, stickyLeft, stickyRight, slots, entry }"
+            :aria-rowindex="startIndex"
+            :data="data[startIndex]"
+            :is-expanded="isExpanded(startIndex)"
+            @toggle="toggleRow(startIndex)"
+          />
 
-            <TransitionGroup
-              enter-from-class="opacity-0 -translate-y-2"
-              enter-to-class="opacity-100 translate-y-0 duration-200"
-              leave-to-class="opacity-0 -translate-y-2 duration-200"
-            >
-              <template v-if="expandedKey && isExpanded(pIndex)">
-                <AppTableRow
-                  v-for="(row, cIndex) in entry[expandedKey]"
-                  :key="cIndex"
-                  v-bind="{ expandedKey, columnsExtra, pick, omit, trClass, tdClass, stickyLeft, stickyRight, slots }"
-                  :aria-rowindex="cIndex"
-                  :data="row"
-                  :entry="row"
-                  is-nested
-                />
-              </template>
-            </TransitionGroup>
-          </template>
-        </tbody>
+          <TransitionGroup
+            enter-from-class="opacity-0 rotate-x-45"
+            enter-to-class="duration-300"
+            leave-to-class="opacity-0 rotate-x-45 duration-300"
+          >
+            <template v-if="expandedKey && isExpanded(startIndex)">
+              <AppTableRow
+                v-for="(row, cIndex) in entry[expandedKey]"
+                :key="cIndex"
+                v-bind="{ expandedKey, columnsExtra, pick, omit, trClass, tdClass, stickyLeft, stickyRight, slots }"
+                :aria-rowindex="cIndex"
+                :data="row"
+                :entry="row"
+                is-nested
+              />
+            </template>
+          </TransitionGroup>
+        </AppTableBody>
 
         <LazyAppTableFoot
           v-if="hasTfoot"
@@ -90,6 +78,7 @@ const props = withDefaults(
     pick?: (keyof T)[];
     dictionaryKey?: string;
     expandedKey?: string;
+    virtual?: boolean;
   }>(),
   {
     stickyOffset: 'top-0',
@@ -97,7 +86,8 @@ const props = withDefaults(
     stickyRight: () => [],
     sortBy: () => [],
     omit: () => [],
-    pick: () => []
+    pick: () => [],
+    virtual: false
   }
 );
 
@@ -126,11 +116,11 @@ const rows = computed(() => {
 const expandedRows = ref(new Set());
 
 const toggleRow = (index: number) => {
-  if (expandedRows.value.has(index)) {
-    return expandedRows.value.delete(index);
-  }
+  const row = new Set(expandedRows.value);
 
-  expandedRows.value.add(index);
+  row.has(index) ? row.delete(index) : row.add(index);
+
+  expandedRows.value = row;
 };
 
 const isExpanded = (index: number) => expandedRows.value.has(index);

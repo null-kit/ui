@@ -41,7 +41,10 @@
         </div>
       </th>
 
-      <th v-if="slots.actions" :class="['w-0', thClass]" />
+      <th
+        v-if="slots.actions"
+        :class="['w-0', { 'right-0 -left-px border-l md:sticky': stickyRight.includes('actions') }, thClass]"
+      />
     </tr>
   </thead>
 </template>
