@@ -29,7 +29,7 @@
   th,
   td {
     @apply bg-darwin border-edison border-b px-4 py-2 transition-colors;
-    @apply aria-expanded:bg-gray-50;
+    @apply aria-expanded:bg-tint-edison/70;
 
     &[aria-expanded] {
       @apply w-13 px-2;

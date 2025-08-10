@@ -164,9 +164,18 @@
         </AppTable>
 
         <div class="mt-10 mb-2 text-sm font-bold">Table with Virtual Rows and Expanded Rows</div>
-        <AppTable :data="bigData" virtual :sort-by-client="['name', 'id']" sticky-head expanded-key="extra">
-          <template #hhh="{ entry }">
-            <div>{{ entry.name }}</div>
+        <AppTable
+          :data="bigData"
+          virtual
+          :sort-by-client="['name', 'id']"
+          :omit="['wpi']"
+          sticky-head
+          expanded-key="extra"
+        >
+          <template #name="{ value, entry }">
+            <div>{{ value }}</div>
+
+            <div class="text-xs opacity-50">qsi: {{ entry.qsi }} / msi: {{ entry.msi }} / wpi: {{ entry.wpi }}</div>
           </template>
         </AppTable>
       </fieldset>

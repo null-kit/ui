@@ -38,7 +38,12 @@
           { 'right-0 -left-px z-1 border-l md:sticky': table.stickyRight?.includes(cell) }
         ]"
       >
-        <component :is="slots[cell]" v-if="slots[cell]" :entry="entry" :value="entry[cell]" />
+        <component
+          :is="slots[cell]"
+          v-if="slots[cell]"
+          :entry="getEntry(entry, startIndex + index)"
+          :value="entry[cell]"
+        />
 
         <template v-else>{{ entry[cell] }}</template>
       </td>
@@ -47,7 +52,7 @@
         v-if="slots.actions"
         :class="[{ 'right-0 -left-px border-l md:sticky': table.stickyRight?.includes('actions') }, table.tdClass]"
       >
-        <component :is="slots.actions" :entry="entry" />
+        <component :is="slots.actions" :entry="getEntry(entry, startIndex + index)" />
       </td>
     </tr>
 
@@ -68,4 +73,10 @@ defineProps<{
 const table = useTable();
 
 const { startIndex, visibleRows, topPadding, bottomPadding } = useVirtualRows(toRef(table, 'rows'), table.virtual);
+
+const getEntry = (entry: Record<string, unknown>, index: number) => {
+  if (entry.isNested) return entry;
+
+  return table.data[index];
+};
 </script>
