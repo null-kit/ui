@@ -154,12 +154,19 @@
         <AppTable :data="formData.table" sticky-head />
 
         <div class="mt-10 mb-2 text-sm font-bold">Sticky Email Cell Table and Actions Slot</div>
-        <AppTable :data="formData.tableBig" :sticky-left="['email']">
+        <AppTable :data="formData.tableBig" :sticky-left="['email']" :sticky-right="['actions']">
           <template #actions>
             <div class="flex gap-2">
               <button type="button" class="btn btn-default btn-sm">Edit</button>
               <button type="button" class="btn btn-default btn-sm">Delete</button>
             </div>
+          </template>
+        </AppTable>
+
+        <div class="mt-10 mb-2 text-sm font-bold">Table with Virtual Rows and Expanded Rows</div>
+        <AppTable :data="bigData" virtual :sort-by-client="['name', 'id']" sticky-head expanded-key="extra">
+          <template #hhh="{ entry }">
+            <div>{{ entry.name }}</div>
           </template>
         </AppTable>
       </fieldset>
@@ -420,6 +427,31 @@
 const { setErrors, clearErrors } = useValidate();
 const { setToast } = useToast();
 const { copy, statusText } = useClipboard();
+
+const bigData = Array.from({ length: 100 }, (_, i) => ({
+  id: i + 1,
+  name: `Row ${i + 1}`,
+  value: Math.floor(Math.random() * 100),
+  bidFloor: Math.floor(Math.random() * 100),
+  qps: Math.floor(Math.random() * 100),
+  qsi: Math.floor(Math.random() * 100),
+  msi: Math.floor(Math.random() * 100),
+  wpi: Math.floor(Math.random() * 100),
+  qsiLimit: Math.floor(Math.random() * 100),
+  wpiLimit: Math.floor(Math.random() * 100),
+  extra: Array.from({ length: 100 }, (_, i) => ({
+    id: i + Math.floor(Math.random() * 100),
+    name: `Extra Row ${i + Math.floor(Math.random() * 100)}`,
+    value: Math.floor(Math.random() * 100),
+    bidFloor: Math.floor(Math.random() * 100),
+    qps: Math.floor(Math.random() * 100),
+    qsi: Math.floor(Math.random() * 100),
+    msi: Math.floor(Math.random() * 100),
+    wpi: Math.floor(Math.random() * 100),
+    qsiLimit: Math.floor(Math.random() * 100),
+    wpiLimit: Math.floor(Math.random() * 100)
+  }))
+}));
 
 const formData = reactive({
   country: '',

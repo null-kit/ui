@@ -1,5 +1,6 @@
 @utility table-default {
   @apply text-sm whitespace-nowrap;
+  @apply border-separate border-spacing-0;
 
   tr {
     @apply divide-edison divide-x;
@@ -28,5 +29,10 @@
   th,
   td {
     @apply bg-darwin border-edison border-b px-4 py-2 transition-colors;
+    @apply aria-expanded:bg-gray-50;
+
+    &[aria-expanded] {
+      @apply w-13 px-2;
+    }
   }
 }
