@@ -10,9 +10,9 @@
       <table class="table-default w-full">
         <AppTableHead :slots :class="{ 'pointer-events-none invisible': stickyHead }" />
 
-        <AppTableBody :slots />
+        <AppTableBody :data="data" :slots />
 
-        <LazyAppTableFooter :slots />
+        <AppTableFooter :slots />
       </table>
     </div>
   </div>

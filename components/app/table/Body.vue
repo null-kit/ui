@@ -39,10 +39,11 @@
         ]"
       >
         <component
+          :key="cell + index"
           :is="slots[cell]"
           v-if="slots[cell]"
           :entry="getEntry(entry, startIndex + index)"
-          :value="entry[cell]"
+          :value="getEntry(entry, startIndex + index)?.[cell]"
         />
 
         <template v-else>{{ entry[cell] }}</template>
@@ -63,7 +64,8 @@
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, unknown>">
-defineProps<{
+const props = defineProps<{
+  data: T[];
   slots: {
     actions?: object;
     [key: string]: object | undefined;
@@ -77,6 +79,6 @@ const { startIndex, visibleRows, topPadding, bottomPadding } = useVirtualRows(to
 const getEntry = (entry: Record<string, unknown>, index: number) => {
   if (entry.isNested) return entry;
 
-  return table.data[index];
+  return props.data[index] || props.data[Number(entry._rowIndex)];
 };
 </script>

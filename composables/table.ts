@@ -7,61 +7,60 @@ export const useTable = <T extends Record<string, unknown>>(props?: TableProps<T
 
   if (!props) throw new Error('Please provide table props');
 
-  const meta = reactive({
-    data: props.data,
-    sortBy: props.sortBy || [],
-    sortByClient: props.sortByClient || []
-  });
+  const route = useRoute();
 
   // Merge rows with extra columns and nested rows
-  const rows = computed(() => {
-    const pick = props.pick || [];
-    const omit = props.omit || [];
-    const columnsExtra = props.columnsExtra || [];
+  const rows = computed({
+    get() {
+      const pick = props.pick || [];
+      const omit = props.omit || [];
+      const columnsExtra = props.columnsExtra || [];
 
-    const mergedRows = meta.data.map((row) => {
-      if (pick.length > 0) {
-        return Object.fromEntries(Object.entries(row).filter(([key]) => pick.includes(key)));
-      }
+      const mergedRows = props.data.map((row) => {
+        if (pick.length > 0) {
+          return Object.fromEntries(Object.entries(row).filter(([key]) => pick.includes(key)));
+        }
 
-      if (omit.length > 0) {
-        return Object.fromEntries(Object.entries(row).filter(([key]) => !omit.includes(key)));
-      }
+        if (omit.length > 0) {
+          return Object.fromEntries(Object.entries(row).filter(([key]) => !omit.includes(key)));
+        }
 
-      if (columnsExtra.length > 0) {
-        return Object.assign(row, Object.fromEntries(columnsExtra.map((key) => [key, null])));
-      }
+        if (columnsExtra.length > 0) {
+          return Object.assign(row, Object.fromEntries(columnsExtra.map((key) => [key, null])));
+        }
 
-      return row;
-    });
+        return row;
+      });
 
-    if (props.expandedKey) {
-      const unpackedRows: Record<string, unknown>[] = [];
+      if (props.expandedKey) {
+        const unpackedRows: Record<string, unknown>[] = [];
 
-      for (const [rowIndex, row] of mergedRows.entries()) {
-        unpackedRows.push({ ...row, _rowIndex: rowIndex });
+        for (const [rowIndex, row] of mergedRows.entries()) {
+          unpackedRows.push({ ...row, _rowIndex: rowIndex });
 
-        const nestedArray = row[props.expandedKey];
+          const nestedArray = row[props.expandedKey];
 
-        if (Array.isArray(nestedArray)) {
-          for (const nested of nestedArray) {
-            unpackedRows.push({
-              ...nested,
-              isNested: true,
-              _parentIndex: rowIndex
-            });
+          if (Array.isArray(nestedArray)) {
+            for (const nested of nestedArray) {
+              unpackedRows.push({
+                ...nested,
+                isNested: true,
+                _parentIndex: rowIndex
+              });
+            }
           }
         }
+
+        return unpackedRows.filter((row) => {
+          if (!row.isNested) return true;
+
+          return expandedRows.value.has(row._parentIndex);
+        });
       }
 
-      return unpackedRows.filter((row) => {
-        if (!row.isNested) return true;
-
-        return expandedRows.value.has(row._parentIndex);
-      });
-    }
-
-    return mergedRows;
+      return mergedRows;
+    },
+    set: (newValue) => newValue
   });
 
   // Create cells array based on rows
@@ -89,24 +88,29 @@ export const useTable = <T extends Record<string, unknown>>(props?: TableProps<T
   };
 
   // Sorting Functions
-  const canSortBy = (column: string) => [...meta.sortBy, ...meta.sortByClient].includes(column);
+  const canSortBy = (column: string) => {
+    const sortBy = props.sortBy || [];
+    const sortByClient = props.sortByClient || [];
+
+    return [...sortBy, ...sortByClient].includes(column);
+  };
 
   const onSortBy = (column: string) => {
     if (!canSortBy(column)) return;
-
-    const route = useRoute();
 
     const direction = String(route.query.sortBy).endsWith(':desc') ? 'asc' : 'desc';
 
     navigateTo({ query: { ...route.query, sortBy: `${column}:${direction}` } });
 
     // Client sorting if sort-by-client prop is provided
-    if (!meta.sortByClient.includes(column)) return;
+    if (!props.sortByClient?.includes(column)) return;
 
-    meta.data = meta.data.sort((a, b) => compareValues(a[column], b[column], direction));
+    expandedRows.value = new Set([...expandedRows.value]); // Trigger re-render
 
-    if (props.expandedKey && meta.data.length > 0) {
-      for (const item of meta.data) {
+    rows.value = props.data.sort((a, b) => compareValues(a[column], b[column], direction));
+
+    if (props.expandedKey && rows.value.length > 0) {
+      for (const item of rows.value) {
         const nested = item[props.expandedKey];
 
         if (!Array.isArray(nested)) continue;

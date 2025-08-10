@@ -167,7 +167,7 @@
         <AppTable
           :data="bigData"
           virtual
-          :sort-by-client="['name', 'id']"
+          :sort-by-client="['name', 'id', 'qsi']"
           :omit="['wpi']"
           sticky-head
           expanded-key="extra"
