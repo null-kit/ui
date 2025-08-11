@@ -17,7 +17,7 @@ export const useTable = <T extends Record<string, unknown>>(props?: TableProps<T
       const columnsExtra = props.columnsExtra || [];
 
       const mergedRows = props.data.map((row) => {
-        let entries: Record<string, unknown> = {};
+        let entries: Record<string, unknown> = { ...row };
 
         if (pick.length > 0) {
           entries = Object.fromEntries(Object.entries(row).filter(([key]) => pick.includes(key)));
