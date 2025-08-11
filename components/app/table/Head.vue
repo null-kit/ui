@@ -12,7 +12,7 @@
           table.thClass,
           { 'left-0 md:sticky': table.stickyLeft?.includes(cell) },
           { 'right-0 -left-px border-l md:sticky': table.stickyRight?.includes(cell) },
-          { 'hover:bg-surface/3 cursor-pointer duration-200': table?.canSortBy(cell) },
+          { 'hover:bg-surface/3 cursor-pointer duration-200': canSortBy(cell) },
           { 'text-accent': String($route.query.sortBy).startsWith(cell + ':') }
         ]"
         :aria-label="`th-${cell}`"
@@ -28,7 +28,7 @@
           <component :is="slots[`th-${cell}-right`]" v-if="slots[`th-${cell}-right`]" />
 
           <svg
-            v-if="table?.canSortBy(cell)"
+            v-if="canSortBy(cell)"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 32 32"
             class="text-surface/50 ml-auto size-3 shrink-0"
@@ -64,6 +64,8 @@ defineProps<{
 
 const table = useTable();
 const route = useRoute();
+
+const canSortBy = (column: string) => [...(table.sortBy || []), ...(table.sortByClient || [])].includes(column);
 
 const isSorted = (cell: string, direction: string) => {
   return String(route.query.sortBy).startsWith(`${cell}:${direction}`);

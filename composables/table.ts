@@ -90,15 +90,8 @@ export const useTable = <T extends Record<string, unknown>>(props?: TableProps<T
   };
 
   // Sorting Functions
-  const canSortBy = (column: string) => {
-    const sortBy = props.sortBy || [];
-    const sortByClient = props.sortByClient || [];
-
-    return [...sortBy, ...sortByClient].includes(column);
-  };
-
   const onSortBy = (column: string) => {
-    if (!canSortBy(column)) return;
+    if (![...(props.sortBy || []), ...(props.sortByClient || [])].includes(column)) return;
 
     const direction = String(route.query.sortBy).endsWith(':desc') ? 'asc' : 'desc';
 
@@ -127,7 +120,6 @@ export const useTable = <T extends Record<string, unknown>>(props?: TableProps<T
     rows,
     cells,
     onSortBy,
-    canSortBy,
     expandedRows,
     toggleRow,
     isExpanded
