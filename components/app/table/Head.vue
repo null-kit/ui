@@ -13,7 +13,7 @@
           { 'left-0 md:sticky': meta.stickyLeft.includes(cell) },
           { 'right-0 -left-px border-l md:sticky': meta.stickyRight.includes(cell) },
           { 'hover:bg-surface/3 cursor-pointer duration-200': canSortBy(cell) },
-          { 'text-accent': String($route.query.sortBy).startsWith(cell + ':') }
+          { 'text-accent': canSortBy(cell) && String($route.query.sortBy).startsWith(cell + ':') }
         ]"
         :aria-label="`th-${cell}`"
         @click="onSort(cell)"
@@ -91,6 +91,8 @@ const isSorted = (cell: string, direction: string) => {
 };
 
 const onSort = (column: string) => {
+  if (!canSortBy(column)) return;
+
   const direction = String(route.query.sortBy).endsWith(':desc') ? 'asc' : 'desc';
 
   navigateTo({ query: { ...route.query, sortBy: `${column}:${direction}` } });
