@@ -1,5 +1,4 @@
-// @ts-expect-error: Import from main project
-import dictionary from '/assets/dictionary.json';
+import dictionary from '~/assets/dictionary.json';
 
 export const useDictionary = (key: string) => {
   const list: Record<string, string> = dictionary;

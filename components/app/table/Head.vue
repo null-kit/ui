@@ -2,27 +2,27 @@
   <thead>
     <component :is="slots.thead" v-if="slots.thead" />
 
-    <tr :class="table.trClass">
-      <th v-if="table.expandedKey" class="w-0" />
+    <tr :class="meta.trClass">
+      <th v-if="meta.expandedKey" class="w-0" />
 
       <th
-        v-for="cell in table.cells"
+        v-for="cell in cells"
         :key="cell"
         :class="[
-          table.thClass,
-          { 'left-0 md:sticky': table.stickyLeft?.includes(cell) },
-          { 'right-0 -left-px border-l md:sticky': table.stickyRight?.includes(cell) },
+          meta.thClass,
+          { 'left-0 md:sticky': meta.stickyLeft.includes(cell) },
+          { 'right-0 -left-px border-l md:sticky': meta.stickyRight.includes(cell) },
           { 'hover:bg-surface/3 cursor-pointer duration-200': canSortBy(cell) },
           { 'text-accent': String($route.query.sortBy).startsWith(cell + ':') }
         ]"
         :aria-label="`th-${cell}`"
-        @click="onSortBy(cell)"
+        @click="onSort(cell)"
       >
         <div class="flex w-full items-center gap-1">
           <component :is="slots[`th-${cell}`]" v-if="slots[`th-${cell}`]" />
 
           <template v-else>
-            {{ useDictionary(table.dictionaryKey ? `${table.dictionaryKey}.${cell}` : cell) }}
+            {{ useDictionary(meta.dictionaryKey ? `${meta.dictionaryKey}.${cell}` : cell) }}
           </template>
 
           <component :is="slots[`th-${cell}-right`]" v-if="slots[`th-${cell}-right`]" />
@@ -43,57 +43,60 @@
 
       <th
         v-if="slots.actions"
-        :class="[
-          'w-0',
-          { 'right-0 -left-px border-l md:sticky': table.stickyRight?.includes('actions') },
-          table.thClass
-        ]"
+        :class="['w-0', { 'right-0 -left-px border-l md:sticky': meta.stickyRight.includes('actions') }, meta.thClass]"
       />
     </tr>
   </thead>
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  slots: {
-    thead?: object;
-    actions?: object;
-    [key: string]: object | undefined;
-  };
-}>();
+const emit = defineEmits<{ sort: [column: string] }>();
 
-const table = useTable();
+const props = withDefaults(
+  defineProps<{
+    cells: string[];
+
+    meta: {
+      expandedKey?: string;
+      dictionaryKey?: string;
+
+      trClass?: string;
+      thClass?: string;
+
+      stickyLeft: string[];
+      stickyRight: string[];
+    };
+
+    sortBy?: string[];
+    sortByClient?: string[];
+
+    slots: {
+      thead?: object;
+      actions?: object;
+      [key: string]: object | undefined;
+    };
+  }>(),
+  {
+    sortBy: () => [],
+    sortByClient: () => []
+  }
+);
+
 const route = useRoute();
 
-const canSortBy = (column: string) => [...(table.sortBy || []), ...(table.sortByClient || [])].includes(column);
+const canSortBy = (column: string) => [...props.sortBy, ...props.sortByClient].includes(column);
 
 const isSorted = (cell: string, direction: string) => {
   return String(route.query.sortBy).startsWith(`${cell}:${direction}`);
 };
 
-// Sorting Functions
-const onSortBy = (column: string) => {
-  if (!canSortBy(column)) return;
-
+const onSort = (column: string) => {
   const direction = String(route.query.sortBy).endsWith(':desc') ? 'asc' : 'desc';
 
   navigateTo({ query: { ...route.query, sortBy: `${column}:${direction}` } });
 
-  // Client sorting if sort-by-client prop is provided
-  if (!table.sortByClient?.includes(column)) return;
-
-  table.expandedRows = new Set([...table.expandedRows]); // Trigger re-render
-
-  table.rows = table.data.sort((a, b) => compareValues(a[column], b[column], direction));
-
-  if (table.expandedKey && table.rows.length > 0) {
-    for (const item of table.rows) {
-      const nested = item[table.expandedKey];
-
-      if (!Array.isArray(nested)) continue;
-
-      nested.sort((a, b) => compareValues(a[column], b[column], direction));
-    }
+  if (props.sortByClient && props.sortByClient.includes(column)) {
+    emit('sort', column);
   }
 };
 </script>
