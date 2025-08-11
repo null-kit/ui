@@ -16,7 +16,7 @@
           { 'text-accent': String($route.query.sortBy).startsWith(cell + ':') }
         ]"
         :aria-label="`th-${cell}`"
-        @click="table?.onSortBy(cell)"
+        @click="onSortBy(cell)"
       >
         <div class="flex w-full items-center gap-1">
           <component :is="slots[`th-${cell}`]" v-if="slots[`th-${cell}`]" />
@@ -69,5 +69,31 @@ const canSortBy = (column: string) => [...(table.sortBy || []), ...(table.sortBy
 
 const isSorted = (cell: string, direction: string) => {
   return String(route.query.sortBy).startsWith(`${cell}:${direction}`);
+};
+
+// Sorting Functions
+const onSortBy = (column: string) => {
+  if (!canSortBy(column)) return;
+
+  const direction = String(route.query.sortBy).endsWith(':desc') ? 'asc' : 'desc';
+
+  navigateTo({ query: { ...route.query, sortBy: `${column}:${direction}` } });
+
+  // Client sorting if sort-by-client prop is provided
+  if (!table.sortByClient?.includes(column)) return;
+
+  table.expandedRows = new Set([...table.expandedRows]); // Trigger re-render
+
+  table.rows = table.data.sort((a, b) => compareValues(a[column], b[column], direction));
+
+  if (table.expandedKey && table.rows.length > 0) {
+    for (const item of table.rows) {
+      const nested = item[table.expandedKey];
+
+      if (!Array.isArray(nested)) continue;
+
+      nested.sort((a, b) => compareValues(a[column], b[column], direction));
+    }
+  }
 };
 </script>

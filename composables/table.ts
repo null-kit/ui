@@ -7,8 +7,6 @@ export const useTable = <T extends Record<string, unknown>>(props?: TableProps<T
 
   if (!props) throw new Error('Please provide table props');
 
-  const route = useRoute();
-
   // Merge rows with extra columns and nested rows
   const rows = computed({
     get() {
@@ -89,37 +87,10 @@ export const useTable = <T extends Record<string, unknown>>(props?: TableProps<T
     expandedRows.value = row;
   };
 
-  // Sorting Functions
-  const onSortBy = (column: string) => {
-    if (![...(props.sortBy || []), ...(props.sortByClient || [])].includes(column)) return;
-
-    const direction = String(route.query.sortBy).endsWith(':desc') ? 'asc' : 'desc';
-
-    navigateTo({ query: { ...route.query, sortBy: `${column}:${direction}` } });
-
-    // Client sorting if sort-by-client prop is provided
-    if (!props.sortByClient?.includes(column)) return;
-
-    expandedRows.value = new Set([...expandedRows.value]); // Trigger re-render
-
-    rows.value = props.data.sort((a, b) => compareValues(a[column], b[column], direction));
-
-    if (props.expandedKey && rows.value.length > 0) {
-      for (const item of rows.value) {
-        const nested = item[props.expandedKey];
-
-        if (!Array.isArray(nested)) continue;
-
-        nested.sort((a, b) => compareValues(a[column], b[column], direction));
-      }
-    }
-  };
-
   const tableData = reactive({
     ...props,
     rows,
     cells,
-    onSortBy,
     expandedRows,
     toggleRow,
     isExpanded
