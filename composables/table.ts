@@ -17,19 +17,21 @@ export const useTable = <T extends Record<string, unknown>>(props?: TableProps<T
       const columnsExtra = props.columnsExtra || [];
 
       const mergedRows = props.data.map((row) => {
+        let entries: Record<string, unknown> = {};
+
         if (pick.length > 0) {
-          return Object.fromEntries(Object.entries(row).filter(([key]) => pick.includes(key)));
+          entries = Object.fromEntries(Object.entries(row).filter(([key]) => pick.includes(key)));
         }
 
         if (omit.length > 0) {
-          return Object.fromEntries(Object.entries(row).filter(([key]) => !omit.includes(key)));
+          entries = Object.fromEntries(Object.entries(row).filter(([key]) => !omit.includes(key)));
         }
 
         if (columnsExtra.length > 0) {
-          return Object.assign(row, Object.fromEntries(columnsExtra.map((key) => [key, null])));
+          Object.assign(entries, Object.fromEntries(columnsExtra.map((key) => [key, null])));
         }
 
-        return row;
+        return entries;
       });
 
       if (props.expandedKey) {
