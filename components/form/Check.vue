@@ -5,7 +5,7 @@
         <input
           v-model="model"
           :class="[
-            'peer bg-darwin checked:ring-accent cursor-pointer appearance-none ring duration-200',
+            'peer/check bg-darwin checked:ring-accent cursor-pointer appearance-none ring duration-200',
             'disabled:bg-edison/20 disabled:ring-edison disabled:cursor-not-allowed',
             isSwitch || type === 'radio' ? 'rounded-full' : 'rounded-md',
             isSwitch ? 'checked:bg-accent h-6 w-11' : 'size-5 not-disabled:shadow',
@@ -21,8 +21,8 @@
 
         <span
           v-if="isSwitch"
-          class="bg-edison absolute inset-0.5 size-5 rounded-full duration-200 peer-checked:translate-x-full"
-          :class="{ 'peer-checked:bg-white': !disabled }"
+          class="bg-edison absolute inset-0.5 size-5 rounded-full duration-200 peer-checked/check:translate-x-full"
+          :class="{ 'peer-checked/check:bg-white': !disabled }"
         />
 
         <svg
@@ -70,24 +70,29 @@
 </template>
 
 <script setup lang="ts">
-const { type = 'checkbox', value } = defineProps<{
-  label?: string;
-  type?: 'checkbox' | 'radio';
-  name?: string;
-  value?: string | number | boolean;
-  isSwitch?: boolean;
-  indeterminate?: boolean;
-  disabled?: boolean;
-  help?: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    label?: string;
+    type?: 'checkbox' | 'radio';
+    name?: string;
+    value?: string | number | boolean | null;
+    isSwitch?: boolean;
+    indeterminate?: boolean;
+    disabled?: boolean;
+    help?: string;
+  }>(),
+  {
+    type: 'checkbox'
+  }
+);
 
 const model = defineModel<boolean | string | number | (string | number | boolean)[]>();
 
 const isChecked = computed(() => {
-  if (type === 'radio') return model.value === value;
+  if (props.type === 'radio') return model.value === props.value;
 
-  if (Array.isArray(model.value) && value !== undefined) {
-    return model.value.map(String).includes(String(value));
+  if (Array.isArray(model.value) && props.value !== undefined) {
+    return model.value.map(String).includes(String(props.value));
   }
 
   if (typeof model.value === 'boolean') return model.value;
@@ -96,6 +101,8 @@ const isChecked = computed(() => {
 });
 
 onMounted(() => {
-  if (!model.value && value) model.value = value;
+  if (!model.value && typeof props.value === 'boolean') model.value = props.value;
+
+  if (!model.value && typeof props.value === 'number') model.value = Boolean(props.value);
 });
 </script>
