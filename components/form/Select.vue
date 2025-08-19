@@ -145,6 +145,7 @@ const model = defineModel<T | T[] | keyof T | T[keyof T] | null>();
 
 const props = defineProps<{
   options: T[];
+  value?: T | T[] | keyof T | T[keyof T];
   label?: string;
   name?: string;
   placeholder?: string;
@@ -253,4 +254,10 @@ const hasOptions = computed(() => filteredOptions.value.some((group) => group.li
 const addPreset = (preset: T[], replace = false) => {
   model.value = replace ? [...new Set(preset)] : [...new Set([...preset, ...(model.value as T[])])];
 };
+
+onMounted(() => {
+  if (!model.value && props.value) {
+    model.value = Array.isArray(props.value) ? props.value.map(getKeyValue) : props.value;
+  }
+});
 </script>
