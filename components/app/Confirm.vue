@@ -19,7 +19,7 @@
             </div>
 
             <slot name="message">
-              <p>{{ message }}</p>
+              <p class="whitespace-break-spaces">{{ message }}</p>
             </slot>
           </div>
 
