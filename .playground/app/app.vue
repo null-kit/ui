@@ -265,30 +265,7 @@
         </div>
       </fieldset>
 
-      <fieldset id="select">
-        <legend>Form Select</legend>
-
-        <div class="flex gap-4">
-          <FormSelect
-            v-model="formData.country"
-            label="Default Select"
-            name="country"
-            placeholder="Select a country"
-            :options="['United States', 'Canada', 'United Kingdom']"
-          />
-
-          <FormSelect
-            v-model="formData.country"
-            label="Multiple Select"
-            name="country"
-            placeholder="Select countries"
-            :options="['United States', 'Canada', 'United Kingdom']"
-            multiple
-            search
-            order
-          />
-        </div>
-      </fieldset>
+      <DemoSelect />
 
       <fieldset id="control">
         <legend>Form Control</legend>
@@ -367,39 +344,7 @@
         <FormTreeSelect name="treeSelect" :options="formData.treeSelect" search />
       </fieldset>
 
-      <fieldset id="checkbox">
-        <legend>Form Checkbox</legend>
-
-        <div class="space-y-4">
-          <h3 class="text-sm opacity-50">Checkbox with Array (Multiple Selection)</h3>
-
-          <div class="flex flex-wrap gap-4">
-            <FormCheck v-model="formData.fruits" name="fruits" value="apple" label="Apple" />
-            <FormCheck v-model="formData.fruits" name="fruits" value="banana" label="Banana" />
-            <FormCheck v-model="formData.fruits" name="fruits" value="orange" label="Orange" />
-            <FormCheck v-model="formData.fruits" name="fruits" value="grape" label="Grape" />
-          </div>
-
-          <h3 class="text-sm opacity-50">Checkbox with Boolean (Single Toggle)</h3>
-
-          <div class="flex flex-wrap gap-4">
-            <FormCheck v-model="formData.status" name="enabled" label="Enable notifications" />
-            <FormCheck v-model="formData.darkMode" name="darkMode" label="Dark mode" is-switch />
-          </div>
-
-          <h3 class="text-sm opacity-50">Indeterminate State Example</h3>
-
-          <FormCheck name="categories" label="Categories" indeterminate />
-
-          <h3 class="text-sm opacity-50">Radio (Single Selection)</h3>
-
-          <div class="flex flex-wrap gap-4">
-            <FormCheck v-model="formData.size" type="radio" name="size" value="small" label="Small" />
-            <FormCheck v-model="formData.size" type="radio" name="size" value="medium" label="Medium" />
-            <FormCheck v-model="formData.size" type="radio" name="size" value="large" label="Large" />
-          </div>
-        </div>
-      </fieldset>
+      <DemoCheckbox />
 
       <fieldset id="dropdown">
         <legend>Dropdown</legend>
@@ -542,8 +487,15 @@ const formData = reactive({
   ]
 });
 
+const route = useRoute();
+
 onMounted(() => {
-  document.documentElement.style.scrollBehavior = 'smooth';
+  document.documentElement.style.scrollPaddingTop = '20px';
+
+  if (route.hash) {
+    const element = document.getElementById(route.hash.slice(1));
+    if (element) element.scrollIntoView();
+  }
 
   const handleAnchorClick = (event: Event) => {
     const target = event.target as HTMLElement;
@@ -565,16 +517,22 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
+<style>
 fieldset {
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-2xl);
   padding: calc(var(--spacing) * 4);
+  padding-top: calc(var(--spacing) * 3);
   border: 1px solid var(--color-edison);
+  box-shadow: var(--shadow-xs);
+
+  fieldset {
+    border-radius: var(--radius-lg);
+  }
 }
 
 legend {
-  font-size: 0.875rem;
-  padding-inline: 0.5rem;
+  font-size: var(--text-sm);
+  padding-inline: calc(var(--spacing) * 1);
   background-color: var(--color-darwin);
 }
 </style>
