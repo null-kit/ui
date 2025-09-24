@@ -1,6 +1,6 @@
 <template>
-  <div class="relative flex w-fit shrink-0 flex-col">
-    <div v-if="label" class="form-label mb-2">
+  <div class="relative flex w-fit shrink-0 flex-col gap-2" :title="props.readonly ? 'Readonly' : undefined">
+    <div v-if="label" class="form-label">
       <slot name="label-left" />
 
       {{ label }}
@@ -16,12 +16,14 @@
       <label v-for="(option, index) in options" :key="index" class="btn">
         <input
           v-model="model"
-          class="peer checked:bg-accent/5 absolute inset-0 cursor-pointer appearance-none disabled:cursor-not-allowed"
+          class="peer checked:bg-accent/5 absolute inset-0 appearance-none disabled:cursor-not-allowed"
+          :class="props.readonly ? 'cursor-default' : 'cursor-pointer'"
           :value="toLowerCase(option)"
           :type="type"
           :name="name"
           :disabled="disabled"
-          @click="onClick(option)"
+          :readonly="props.readonly"
+          @click="onClick($event, option)"
         />
 
         <span
@@ -38,6 +40,10 @@
     </div>
 
     <FormValidate v-if="name" :name />
+
+    <div v-if="help || $slots.help" class="form-help">
+      <slot name="help">{{ help }} </slot>
+    </div>
   </div>
 </template>
 
@@ -54,13 +60,16 @@ const props = withDefaults(
     required?: boolean;
     groupClass?: string;
     disabled?: boolean;
+    help?: string;
+    readonly?: boolean;
+    noToggle?: boolean;
   }>(),
   {
     type: 'radio'
   }
 );
 
-const [model, modifiers] = defineModel<T | T[], 'lowercase'>({
+const [model, modifiers] = defineModel<unknown, 'lowercase' | 'number'>({
   set(value) {
     if (value && modifiers.lowercase) {
       return Array.isArray(value) ? value.map(toLowerCase) : toLowerCase(value as T);
@@ -84,8 +93,10 @@ const toLowerCase = (value: T) => {
   return modifiers.lowercase ? keyValue.toLowerCase().replace(/\s+/g, '-') : keyValue;
 };
 
-const onClick = (option: T) => {
-  if (model.value === toLowerCase(option)) {
+const onClick = (event: Event, option: T) => {
+  if (props.readonly) return event.preventDefault();
+
+  if (model.value === toLowerCase(option) && !props.noToggle) {
     model.value = undefined;
   }
 };

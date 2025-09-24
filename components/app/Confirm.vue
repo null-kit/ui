@@ -98,7 +98,7 @@ const onConfirm = () => {
 .confirm-enter-from [role='dialog'],
 .confirm-leave-to [role='dialog'] {
   transform: perspective(500px) rotateX(20deg) skewY(5deg) translateY(30px);
-  filter: blur(12px);
+  filter: blur(8px);
   opacity: 0;
 }
 </style>

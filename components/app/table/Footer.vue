@@ -1,7 +1,7 @@
 <template>
   <tfoot>
     <tr v-if="hasFooter" :class="meta.trClass">
-      <th v-if="meta.expandedKey" class="w-0" />
+      <td v-if="meta.expandedKey" class="w-0" />
 
       <td
         v-for="cell in cells"

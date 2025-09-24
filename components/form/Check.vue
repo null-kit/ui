@@ -17,7 +17,8 @@
             value,
             disabled,
             indeterminate,
-            ...(trueValue && { 'true-value': trueValue })
+            ...(trueValue !== undefined && { 'true-value': trueValue }),
+            ...(falseValue !== undefined && { 'false-value': falseValue })
           }"
         />
 
@@ -95,6 +96,7 @@ const model = defineModel<boolean | string | number | string[] | number[]>();
 
 onMounted(() => {
   if (!model.value && props.value) model.value = Boolean(props.value);
-  if (props.trueValue && Boolean(model.value)) model.value = props.trueValue;
+  if (props.trueValue !== undefined && Boolean(model.value)) model.value = props.trueValue;
+  if (props.falseValue !== undefined && !Boolean(model.value)) model.value = props.falseValue;
 });
 </script>

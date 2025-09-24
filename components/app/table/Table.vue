@@ -27,6 +27,7 @@
             :key="startIndex + index"
             :class="trClass"
             :aria-rowindex="startIndex + index"
+            :aria-expanded="(expandedKey && isExpanded(entry._rowIndex)) || undefined"
           >
             <td v-if="expandedKey" :aria-expanded="Boolean(entry.isNested) || isExpanded(entry._rowIndex)">
               <button

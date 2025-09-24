@@ -17,7 +17,14 @@
 
       <div class="relative w-full">
         <template v-if="type === 'select'">
-          <select :id v-model="model" :class="[inputStyle, 'pr-7', 'cursor-pointer']" :name :disabled>
+          <select
+            :id
+            v-model="model"
+            class="form-input"
+            :class="[inputClass, 'pr-7', 'cursor-pointer', hasSlotStyle($slots)]"
+            :name
+            :disabled
+          >
             <option selected disabled value>{{ placeholder }}</option>
 
             <slot />
@@ -36,8 +43,8 @@
           v-else-if="type === 'textarea'"
           :id
           v-model="model"
-          class="flex"
-          :class="inputStyle"
+          class="form-input flex"
+          :class="[inputClass, hasSlotStyle($slots)]"
           rows="3"
           :name
           :placeholder
@@ -49,7 +56,8 @@
           v-else
           :id
           v-model="model"
-          :class="inputStyle"
+          class="form-input"
+          :class="[inputClass, hasSlotStyle($slots)]"
           :name
           :type="type === 'number' ? 'text' : type"
           :placeholder
@@ -110,7 +118,9 @@ const onInput = (event: Event) => {
   }
 };
 
-const inputStyle = ['form-input', slots.left && 'rounded-l-none', slots.right && 'rounded-r-none', inputClass];
+const hasSlotStyle = (slot: { left?: boolean; right?: boolean }) => {
+  return [slot.left && 'rounded-l-none', slot.right && 'rounded-r-none'].filter(Boolean);
+};
 
 onMounted(() => {
   if (value) model.value = value;
