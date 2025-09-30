@@ -35,8 +35,8 @@
             stroke="currentColor"
             stroke-width="4"
           >
-            <polyline points="10 22 16 28 22 22" fill="none" :class="{ 'text-accent': isSorted(cell, 'asc') }" />
-            <polyline points="10 10 16 4 22 10" fill="none" :class="{ 'text-accent': isSorted(cell, 'desc') }" />
+            <polyline points="10 22 16 28 22 22" fill="none" :class="{ 'text-accent': isSorted(cell, 'desc') }" />
+            <polyline points="10 10 16 4 22 10" fill="none" :class="{ 'text-accent': isSorted(cell, 'asc') }" />
           </svg>
         </div>
       </th>
