@@ -1,16 +1,17 @@
 <template>
-  <details :open>
-    <summary
+  <div role="details">
+    <div
+      role="summary"
       class="flex items-center gap-2"
       :class="[
-        isOpen ? 'cursor-n-resize' : 'cursor-s-resize',
+        noToggle ? 'cursor-default' : isOpen ? 'cursor-n-resize' : 'cursor-s-resize',
         !summaryClass && 'border-b px-4 py-2',
         isOpen && !summaryClass ? 'border-edison' : 'border-transparent',
         summaryClass
       ]"
-      @click="isOpen = !isOpen"
+      @click="noToggle ? $event.preventDefault() : onToggle()"
     >
-      <slot name="summary" :is-open>
+      <slot name="summary" :is-open="isOpen" @toggle="onToggle">
         <slot name="icon">
           <AppIcon v-if="icon" :name="icon" />
         </slot>
@@ -21,15 +22,20 @@
         </span>
       </slot>
 
-      <AppIcon v-if="!noChevron" name="chevron-right" class="duration-300" :class="{ 'rotate-90': isOpen }" />
-    </summary>
+      <AppIcon
+        v-if="!noChevron && !noToggle"
+        name="chevron-right"
+        class="duration-300"
+        :class="{ 'rotate-90': isOpen }"
+      />
+    </div>
 
     <Transition enter-from-class="opacity-0 translate-y-4" enter-active-class="duration-300">
       <div v-if="isOpen" :class="contentClass">
         <slot />
       </div>
     </Transition>
-  </details>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -40,9 +46,14 @@ const props = defineProps<{
   summaryClass?: string;
   contentClass?: string;
   noChevron?: boolean;
+  noToggle?: boolean;
   prefix?: boolean;
   icon?: string;
 }>();
 
 const isOpen = ref(props.open);
+
+const onToggle = () => {
+  isOpen.value = !isOpen.value;
+};
 </script>
