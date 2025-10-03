@@ -21,7 +21,7 @@
             <button
               type="button"
               :class="[
-                'select-input text-ellipsis',
+                'select-input flex items-center gap-2 text-ellipsis',
                 inputClass,
                 { 'ring-accent': isOpen, 'rounded-l-none': $slots.left, 'rounded-r-none': $slots.right }
               ]"
@@ -47,14 +47,27 @@
 
               <span v-if="!selected.length" class="whitespace-nowrap">{{ placeholder }}</span>
 
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 32 32"
-                class="pointer-events-none absolute top-0 right-2 size-4 h-full opacity-50"
-              >
-                <polyline points="10 22 16 28 22 22" fill="none" stroke="currentColor" stroke-width="3" />
-                <polyline points="10 10 16 4 22 10" fill="none" stroke="currentColor" stroke-width="3" />
-              </svg>
+              <span class="ml-auto flex items-center gap-1">
+                <span
+                  v-if="multiple && selected.length > 1"
+                  class="btn btn-sm btn-default min-h-6 text-current/50 hover:text-red-500"
+                  title="Remove all"
+                  @click.stop="model = null"
+                >
+                  <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="size-3 shrink-0">
+                    <path stroke-width="3" stroke="currentColor" d="M25 7 7 25m18 0L7 7" />
+                  </svg>
+                </span>
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 32 32"
+                  class="pointer-events-none size-4 h-full shrink-0 opacity-50"
+                >
+                  <polyline points="10 22 16 28 22 22" fill="none" stroke="currentColor" stroke-width="3" />
+                  <polyline points="10 10 16 4 22 10" fill="none" stroke="currentColor" stroke-width="3" />
+                </svg>
+              </span>
             </button>
 
             <FormValidate v-if="name" :name />
@@ -76,19 +89,31 @@
           <div class="select-group-label">Presets</div>
 
           <div v-for="(preset, index) in presets" :key="index" class="flex items-center gap-1">
-            <button type="button" class="btn flex-1 justify-start" @click="addPreset(preset.list, true)">
+            <button
+              type="button"
+              class="btn flex-1 justify-start"
+              :class="{ 'bg-current/5 font-medium': hasPreset(preset.list) }"
+              @click="addPreset(preset.list, true)"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 32 32"
                 class="hover:bg-surface/5 -mx-1 size-6 shrink-0 rounded-md p-1 duration-300"
                 @click.stop="addPreset(preset.list)"
               >
-                <path fill="none" stroke="currentColor" stroke-width="3" d="M16 7v18M7 16h18" />
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3"
+                  :d="hasPreset(preset.list) ? 'm5 18 6 6L26 9' : 'M16 7v18M7 16h18'"
+                />
               </svg>
 
               {{ preset.name }}
             </button>
           </div>
+
+          <div class="select-group-label">All</div>
         </template>
 
         <template v-for="(optionGroup, indexParent) in filteredOptions" :key="indexParent">
@@ -161,7 +186,7 @@ const props = defineProps<{
   help?: string;
   presets?: {
     name: string;
-    list: T[];
+    list: string[];
   }[];
 }>();
 
@@ -176,7 +201,7 @@ const getKeyName = (option: T) => {
 };
 
 const normalizedOptions = computed(() => {
-  const hasGroup = props.options.some((option) => typeof option === 'object' && option.group);
+  const hasGroup = props.options?.some((option) => typeof option === 'object' && option.group);
 
   if (hasGroup) return props.options as unknown as Array<{ group?: string; list: T[] }>;
 
@@ -238,21 +263,29 @@ const toggleOption = (option: T) => {
 
 const filteredOptions = computed(() => {
   return normalizedOptions.value.map((optionGroup) => {
-    const filteredList = optionGroup.list.filter((option: T) => {
+    const filteredList = optionGroup.list?.filter((option: T) => {
       return String(getKeyName(option)).toLowerCase().includes(searchInput.value.toLowerCase());
     });
 
     return {
-      group: filteredList.length ? optionGroup.group : undefined,
+      group: filteredList?.length ? optionGroup.group : undefined,
       list: filteredList
     };
   });
 });
 
-const hasOptions = computed(() => filteredOptions.value.some((group) => group.list.length > 0));
+const hasOptions = computed(() => filteredOptions.value.some((group) => group.list?.length > 0));
 
-const addPreset = (preset: T[], replace = false) => {
+const addPreset = (preset: string[], replace = false) => {
   model.value = replace ? [...new Set(preset)] : [...new Set([...preset, ...(model.value as T[])])];
+};
+
+const hasPreset = (preset: string[]) => {
+  if (preset.every((value) => Array.isArray(model.value) && model.value.includes(value))) {
+    return true;
+  }
+
+  return false;
 };
 
 onMounted(() => {

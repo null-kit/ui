@@ -1,6 +1,6 @@
 @utility select-input {
   @apply form-input;
-  @apply relative overflow-auto pr-8 text-left transition outline-none;
+  @apply relative overflow-auto text-left transition outline-none;
 }
 
 @utility select-group-label {
