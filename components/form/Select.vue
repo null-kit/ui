@@ -21,12 +21,15 @@
             <button
               type="button"
               :class="[
-                'select-input flex items-center gap-2 text-ellipsis',
+                'select-input flex gap-2 text-ellipsis',
                 inputClass,
                 { 'ring-accent': isOpen, 'rounded-l-none': $slots.left, 'rounded-r-none': $slots.right }
               ]"
             >
-              <span v-if="multiple" class="select-multiple flex flex-wrap items-center gap-2 font-medium">
+              <span
+                v-if="multiple && selected.length > 0"
+                class="select-multiple flex flex-wrap items-center gap-2 font-medium"
+              >
                 <span v-for="(option, index) in selected" :key="index" class="btn btn-sm btn-default min-h-auto">
                   {{ getKeyName(option) }}
 
@@ -45,9 +48,9 @@
                 {{ getKeyName(option) }}
               </span>
 
-              <span v-if="!selected.length" class="whitespace-nowrap">{{ placeholder }}</span>
+              <span v-if="!selected.length" class="my-auto whitespace-nowrap">{{ placeholder }}</span>
 
-              <span class="ml-auto flex items-center gap-1">
+              <span class="sticky top-0 ml-auto flex items-center gap-1">
                 <span
                   v-if="multiple && selected.length > 1"
                   class="btn btn-sm btn-default min-h-6 text-current/50 hover:text-red-500"
