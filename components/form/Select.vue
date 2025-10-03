@@ -44,11 +44,11 @@
                 </span>
               </span>
 
-              <span v-for="(option, index) in selected" v-else :key="index" class="font-medium">
+              <span v-for="(option, index) in selected" v-else :key="index" class="self-center font-medium">
                 {{ getKeyName(option) }}
               </span>
 
-              <span v-if="!selected.length" class="my-auto whitespace-nowrap">{{ placeholder }}</span>
+              <span v-if="!selected.length" class="self-center whitespace-nowrap">{{ placeholder }}</span>
 
               <span class="sticky top-0 ml-auto flex items-center gap-1">
                 <span
