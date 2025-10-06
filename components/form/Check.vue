@@ -1,16 +1,9 @@
 <template>
   <label class="relative inline-flex flex-wrap whitespace-break-spaces">
     <span class="group inline-flex items-center gap-2 text-sm">
-      <span :class="['relative flex shrink-0', disabled ? 'cursor-not-allowed' : 'cursor-pointer']">
+      <span :class="['relative flex shrink-0', disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer']">
         <input
           v-model="model"
-          :class="[
-            'bg-darwin checked:ring-accent cursor-pointer appearance-none ring duration-200',
-            'disabled:bg-edison/20 disabled:ring-edison disabled:cursor-not-allowed',
-            isSwitch || type === 'radio' ? 'rounded-full' : 'rounded-md',
-            isSwitch ? 'checked:bg-accent h-6 w-11' : 'size-5 not-disabled:shadow',
-            indeterminate ? 'ring-accent' : 'ring-edison'
-          ]"
           v-bind="{
             type,
             name,
@@ -20,20 +13,13 @@
             ...(trueValue !== undefined && { 'true-value': trueValue }),
             ...(falseValue !== undefined && { 'false-value': falseValue })
           }"
+          class="form-check"
+          :aria-label="isSwitch ? 'switch' : undefined"
         />
 
-        <span
-          v-if="isSwitch"
-          class="bg-edison absolute inset-0.5 size-5 rounded-full duration-200 group-has-checked:translate-x-full"
-          :class="{ 'group-has-checked:bg-darwin': !disabled }"
-        />
+        <span v-if="isSwitch" class="form-switch" />
 
-        <svg
-          v-else
-          viewBox="0 0 32 32"
-          xmlns="http://www.w3.org/2000/svg"
-          class="group-has-disabled:text-edison text-accent absolute inset-0 size-full p-1"
-        >
+        <svg v-else viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 size-full p-1">
           <circle
             v-if="type === 'radio'"
             fill="currentColor"

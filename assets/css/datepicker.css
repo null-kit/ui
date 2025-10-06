@@ -1,0 +1,27 @@
+.datepicker {
+  @apply ring-edison rounded-md ring;
+  @apply dark:shadow dark:shadow-black;
+}
+
+.datepicker-day {
+  @apply bg-darwin ring-edison p-1 ring;
+  @apply disabled:text-surface/40 disabled:cursor-not-allowed;
+
+  span {
+    @apply mx-auto size-8 rounded-full duration-200;
+    @apply grid place-items-center;
+    @apply hover:bg-accent/20 hover:text-accent;
+  }
+
+  &.day-selected span {
+    @apply bg-accent hover:bg-accent text-newton;
+  }
+
+  &.day-in-range span {
+    @apply bg-accent/20 text-accent;
+  }
+
+  &.day-outside span {
+    @apply opacity-40;
+  }
+}

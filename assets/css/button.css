@@ -36,7 +36,7 @@
 @utility btn-group {
   @apply isolate flex overflow-auto;
   @apply rounded-xl shadow duration-300;
-  @apply ring-edison hover:ring-surface/20 ring;
+  @apply ring-edison hover:ring-surface/20 bg-darwin ring;
   @apply divide-edison divide-x;
 
   &:has(.btn-sm) {

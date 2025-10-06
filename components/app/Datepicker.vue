@@ -34,9 +34,11 @@
     <div class="space-y-2 p-1 text-center">
       <div class="flex justify-between gap-2">
         <button type="button" class="btn btn-sm px-2" @click="prevMonth">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="size-5">
-            <path fill="none" stroke-width="2" stroke="currentColor" d="m20 6-10 10 10 10" />
-          </svg>
+          <slot name="prev-icon">
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="size-5">
+              <path fill="none" stroke-width="2" stroke="currentColor" d="m20 6-10 10 10 10" />
+            </svg>
+          </slot>
         </button>
 
         <div class="flex w-full justify-center gap-2 font-medium">
@@ -62,13 +64,15 @@
         </div>
 
         <button type="button" class="btn btn-sm px-2" @click="nextMonth">
-          <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="size-5">
-            <path fill="none" stroke-width="2" stroke="currentColor" d="m12 26 10-10-10-10" />
-          </svg>
+          <slot name="next-icon">
+            <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="size-5">
+              <path fill="none" stroke-width="2" stroke="currentColor" d="m12 26 10-10-10-10" />
+            </svg>
+          </slot>
         </button>
       </div>
 
-      <div class="ring-edison grid min-w-max grid-cols-7 overflow-hidden rounded-md ring dark:shadow dark:shadow-black">
+      <div class="datepicker grid min-w-max grid-cols-7 overflow-hidden">
         <div v-for="day in days" :key="day" class="p-1 text-xs font-medium uppercase opacity-40">
           {{ day }}
         </div>
@@ -77,29 +81,29 @@
           v-for="(date, index) in dates"
           :key="index"
           type="button"
-          class="bg-darwin ring-edison disabled:text-surface/40 p-1 ring disabled:cursor-not-allowed"
+          class="datepicker-day"
+          :class="{
+            'day-selected': isSelected(date),
+            'day-in-range': inRange(date),
+            'day-outside': isOutside(date),
+            'day-today': isToday(date)
+          }"
           :disabled="isDisabled(date)"
           @click="selectDate(date)"
         >
-          <span
-            :class="[
-              'mx-auto grid size-8 place-items-center rounded-full duration-200',
-              { 'opacity-40': isOutside(date) },
-              { 'bg-accent/20 text-accent': inRange(date) },
-              isSelected(date) ? 'bg-accent hover:bg-accent text-white' : 'hover:bg-accent/20 hover:text-accent'
-            ]"
-          >
+          <span class="datepicker-day-inner">
             {{ date.getDate() }}
           </span>
         </button>
       </div>
 
       <div v-if="range" class="grid grid-cols-2 gap-2 rounded-md">
-        <button type="button" class="btn btn-sm btn-default" @click="setPreset('today')">Today</button>
-        <button type="button" class="btn btn-sm btn-default" @click="setPreset('this-month')">This Month</button>
-
-        <button type="button" class="btn btn-sm btn-default" @click="setPreset('last-week')">Last Week</button>
-        <button type="button" class="btn btn-sm btn-default" @click="setPreset('last-month')">Last Month</button>
+        <slot name="presets" :set-preset>
+          <button type="button" class="btn btn-sm btn-default" @click="setPreset('today')">Today</button>
+          <button type="button" class="btn btn-sm btn-default" @click="setPreset('this-month')">This Month</button>
+          <button type="button" class="btn btn-sm btn-default" @click="setPreset('last-week')">Last Week</button>
+          <button type="button" class="btn btn-sm btn-default" @click="setPreset('last-month')">Last Month</button>
+        </slot>
       </div>
     </div>
   </AppDropdown>
@@ -228,6 +232,10 @@ const selectDate = (date: Date) => {
 
   currentMonth.value = date.getMonth();
   currentYear.value = date.getFullYear();
+};
+
+const isToday = (date: Date) => {
+  return date.toDateString() === new Date().toDateString();
 };
 
 const isSelected = (date: Date) => {

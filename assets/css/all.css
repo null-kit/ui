@@ -1,11 +1,9 @@
-@import 'utilities';
+@import 'source';
 @import 'scrollbar';
 @import 'loading';
 @import 'patterns';
 @import 'button';
-@import 'form.base';
-@import 'form.input';
-@import 'form.check';
+@import 'input';
 @import 'select';
 @import 'table';
 @import 'dropdown';
@@ -13,6 +11,4 @@
 @import 'modal';
 @import 'drawer';
 @import 'chart';
-
-@source '../../components';
-@source '../../composables';
+@import 'datepicker';

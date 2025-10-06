@@ -10,7 +10,7 @@
       <slot name="label-right" />
     </div>
 
-    <div v-if="options && options.length > 0" class="btn-group bg-darwin" :class="groupClass">
+    <div v-if="options && options.length > 0" class="btn-group" :class="groupClass">
       <slot name="left" />
 
       <label v-for="(option, index) in options" :key="index" class="btn">

@@ -1,3 +1,17 @@
+/* Base */
+@utility form-label {
+  @apply inline-flex cursor-default items-center gap-1 text-sm font-semibold opacity-80;
+}
+
+@utility form-required {
+  @apply text-orange-600;
+}
+
+@utility form-help {
+  @apply text-xs opacity-40 duration-200 hover:opacity-100;
+}
+
+/* Input */
 @utility form-input {
   @apply w-full appearance-none transition outline-none;
   @apply max-h-80 min-h-10 px-3 py-2 text-sm font-medium;
@@ -28,4 +42,32 @@ input::-webkit-inner-spin-button {
 
 input[type='number'] {
   appearance: textfield;
+}
+
+/* Checkbox */
+@utility form-check {
+  @apply cursor-pointer appearance-none duration-200;
+  @apply bg-darwin ring-edison size-5 ring;
+  @apply indeterminate:ring-accent checked:ring-accent not-disabled:shadow;
+  @apply disabled:bg-edison/20 disabled:ring-edison disabled:cursor-not-allowed;
+
+  @apply [&~svg]:text-accent;
+
+  &[type='radio'] {
+    @apply rounded-full;
+  }
+
+  &[type='checkbox'] {
+    @apply rounded-md;
+  }
+
+  &[aria-label='switch'] {
+    @apply checked:bg-accent h-6 w-11 rounded-full;
+  }
+}
+
+@utility form-switch {
+  @apply absolute inset-0.5 size-5;
+  @apply bg-edison rounded-full duration-200;
+  @apply group-has-checked:bg-darwin group-has-checked:translate-x-full;
 }

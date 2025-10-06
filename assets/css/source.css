@@ -1,2 +1,6 @@
+@utility bg-tint-* {
+  background-color: color-mix(in oklab, --value(--color-*, [*]), var(--color-darwin) calc(--modifier(integer) * 1%));
+}
+
 @source '../../components';
 @source '../../composables';
