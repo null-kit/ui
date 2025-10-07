@@ -4,11 +4,12 @@ type DateOptions = {
   year?: boolean;
   options?: Intl.DateTimeFormatOptions;
   locale?: string;
+  hourCycle?: Intl.DateTimeFormatOptions['hourCycle'];
 };
 
 export const formatDate = (
   date: Date | string | number | null,
-  { format = 'short', time = false, year = true, options, locale = 'en-US' }: DateOptions = {}
+  { format = 'short', time = false, year = true, options, locale = 'en-US', hourCycle = 'h23' }: DateOptions = {}
 ): Date => {
   if (!date) return 'N/A' as unknown as Date;
 
@@ -23,7 +24,7 @@ export const formatDate = (
   }
 
   const defaultOptions: Intl.DateTimeFormatOptions = {
-    hourCycle: 'h23',
+    hourCycle,
     month: format === 'long' ? 'long' : 'short',
     day: 'numeric',
     ...(time ? { hour: 'numeric', minute: 'numeric' } : {}),
