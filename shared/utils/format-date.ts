@@ -23,7 +23,7 @@ export const formatDate = (
   }
 
   const defaultOptions: Intl.DateTimeFormatOptions = {
-    hourCycle: 'h24',
+    hourCycle: 'h23',
     month: format === 'long' ? 'long' : 'short',
     day: 'numeric',
     ...(time ? { hour: 'numeric', minute: 'numeric' } : {}),
