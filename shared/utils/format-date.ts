@@ -10,8 +10,8 @@ type DateOptions = {
 export const formatDate = (
   date: Date | string | number | null,
   { format = 'short', time = false, year = true, options, locale = 'en-US', hourCycle = 'h23' }: DateOptions = {}
-): Date => {
-  if (!date) return 'N/A' as unknown as Date;
+) => {
+  if (!date) return 'N/A';
 
   const dateObject = date instanceof Date ? date : new Date(date);
 
@@ -20,7 +20,7 @@ export const formatDate = (
     const month = String(dateObject.getMonth() + 1).padStart(2, '0');
     const day = String(dateObject.getDate()).padStart(2, '0');
 
-    return `${year}-${month}-${day}` as unknown as Date;
+    return `${year}-${month}-${day}`;
   }
 
   const defaultOptions: Intl.DateTimeFormatOptions = {
@@ -31,5 +31,5 @@ export const formatDate = (
     ...(year ? { year: 'numeric' } : {})
   };
 
-  return new Intl.DateTimeFormat(locale, options || defaultOptions).format(dateObject) as unknown as Date;
+  return new Intl.DateTimeFormat(locale, options || defaultOptions).format(dateObject);
 };
