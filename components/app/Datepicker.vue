@@ -97,9 +97,10 @@
         </button>
       </div>
 
-      <div v-if="range" class="grid grid-cols-2 gap-2 rounded-md">
+      <div v-if="range" class="flex max-w-70 flex-wrap gap-2 rounded-md *:flex-1">
         <slot name="presets" :set-preset>
           <button type="button" class="btn btn-sm btn-default" @click="setPreset('today')">Today</button>
+          <button type="button" class="btn btn-sm btn-default" @click="setPreset('yesterday')">Yesterday</button>
           <button type="button" class="btn btn-sm btn-default" @click="setPreset('this-month')">This Month</button>
           <button type="button" class="btn btn-sm btn-default" @click="setPreset('last-week')">Last Week</button>
           <button type="button" class="btn btn-sm btn-default" @click="setPreset('last-month')">Last Month</button>
@@ -110,7 +111,7 @@
 </template>
 
 <script setup lang="ts">
-type Preset = 'today' | 'yesterday' | 'last-week' | 'this-month' | 'last-month';
+type Preset = 'today' | 'yesterday' | 'last-week' | 'this-month' | 'this-month-today' | 'last-month';
 
 const { disabledDates = [], ...props } = defineProps<{
   range?: boolean;
@@ -118,9 +119,10 @@ const { disabledDates = [], ...props } = defineProps<{
   dateMode?: boolean | 'short';
   iso?: boolean;
   preset?: Preset;
+  maxToday?: boolean;
 }>();
 
-const [model, modifiers] = defineModel<Date | Date[] | string | undefined>({
+const [model, modifiers] = defineModel<Date | Date[] | string | string[] | undefined>({
   required: true,
   set(value) {
     if (value && modifiers.iso) {
@@ -256,7 +258,17 @@ const inRange = (date: Date) => {
 const isOutside = (date: Date) => date.getMonth() !== currentMonth.value;
 
 const isDisabled = (date: Date) => {
-  return disabledDates.some((d) => new Date(d).toDateString() === date.toDateString());
+  if (disabledDates.some((d) => new Date(d).toDateString() === date.toDateString())) {
+    return true;
+  }
+
+  if (props.maxToday) {
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+    return date > today;
+  }
+
+  return false;
 };
 
 const setPreset = (type: Preset) => {
@@ -278,6 +290,10 @@ const setPreset = (type: Preset) => {
     case 'this-month':
       selectDate(new Date(today.getFullYear(), today.getMonth(), 1));
       selectDate(new Date(today.getFullYear(), today.getMonth() + 1, 0));
+      break;
+    case 'this-month-today':
+      selectDate(new Date(today.getFullYear(), today.getMonth(), 1));
+      selectDate(today);
       break;
     case 'last-month':
       selectDate(new Date(today.getFullYear(), today.getMonth() - 1, 1));

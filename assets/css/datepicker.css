@@ -6,15 +6,16 @@
 .datepicker-day {
   @apply bg-darwin ring-edison p-1 ring;
   @apply disabled:text-surface/40 disabled:cursor-not-allowed;
+  @apply not-disabled:hover:text-accent;
 
   span {
     @apply mx-auto size-8 rounded-full duration-200;
     @apply grid place-items-center;
-    @apply hover:bg-accent/20 hover:text-accent;
+    @apply hover:bg-current/20;
   }
 
   &.day-selected span {
-    @apply bg-accent hover:bg-accent text-newton;
+    @apply bg-accent text-newton;
   }
 
   &.day-in-range span {
