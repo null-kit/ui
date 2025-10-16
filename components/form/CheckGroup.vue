@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex w-fit shrink-0 flex-col gap-2" :title="props.readonly ? 'Readonly' : undefined">
+  <div class="relative flex shrink-0 flex-col gap-2" :title="props.readonly ? 'Readonly' : undefined">
     <div v-if="label" class="form-label">
       <slot name="label-left" />
 
