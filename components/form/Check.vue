@@ -65,7 +65,7 @@ const props = withDefaults(
     label?: string;
     type?: 'checkbox' | 'radio';
     name?: string;
-    value?: string | number | boolean | null;
+    value?: string | number | boolean | null | Record<string, unknown>;
     isSwitch?: boolean;
     indeterminate?: boolean;
     disabled?: boolean;
