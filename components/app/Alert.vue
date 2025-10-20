@@ -1,16 +1,19 @@
 <template>
-  <span
-    class="inline-flex items-center justify-center gap-1.5 font-medium ring ring-inset"
-    :class="[type && styles[type], size && sizes[size]]"
-  >
+  <span class="flex items-baseline gap-2 ring ring-inset" :class="[type && styles[type], size && sizes[size]]">
     <slot>
       <slot name="icon">
-        <AppIcon v-if="icon" :name="icon" class="size-3 shrink-0" />
+        <AppIcon v-if="icon" :name="icon" class="relative top-0.5 size-3.5 shrink-0" />
       </slot>
 
-      <slot name="label">
-        {{ label }}
-      </slot>
+      <div class="flex flex-col gap-1">
+        <slot name="label">
+          <span v-if="label" class="font-semibold">{{ label }}</span>
+        </slot>
+
+        <slot name="message">
+          {{ message }}
+        </slot>
+      </div>
     </slot>
   </span>
 </template>
@@ -19,13 +22,15 @@
 const {
   type = 'default',
   label,
+  message,
   size = 'default',
   icon = undefined
 } = defineProps<{
   type?: 'default' | 'success' | 'warning' | 'danger' | 'info' | 'accent';
   label?: string | number;
+  message?: string | number;
   icon?: string;
-  size?: 'default' | 'sm' | 'lg';
+  size?: 'default';
 }>();
 
 const styles = {
@@ -38,8 +43,6 @@ const styles = {
 };
 
 const sizes = {
-  default: 'px-2 py-1 text-xs rounded-md',
-  sm: 'px-1.5 py-0.5 text-xs rounded-md',
-  lg: 'px-2.5 py-1.5 text-sm rounded-lg'
+  default: 'px-3 py-2 text-sm rounded-lg'
 };
 </script>
