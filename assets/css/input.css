@@ -49,7 +49,7 @@ input[type='number'] {
   @apply cursor-pointer appearance-none duration-200;
   @apply bg-darwin ring-edison size-5 ring;
   @apply indeterminate:ring-accent checked:ring-accent not-disabled:shadow;
-  @apply disabled:bg-edison/20 disabled:ring-edison disabled:cursor-not-allowed;
+  @apply disabled:bg-edison/20 disabled:not-checked:ring-edison disabled:cursor-not-allowed;
 
   @apply [&~svg]:text-accent;
 
