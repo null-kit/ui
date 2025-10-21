@@ -96,7 +96,7 @@ const toLowerCase = (value: T) => {
 const onClick = (event: Event, option: T) => {
   if (props.readonly) return event.preventDefault();
 
-  if (model.value === toLowerCase(option) && !props.noToggle) {
+  if (toLowerCase(model.value as T) === toLowerCase(option) && !props.noToggle) {
     model.value = undefined;
   }
 };

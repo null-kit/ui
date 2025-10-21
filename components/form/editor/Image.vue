@@ -81,16 +81,35 @@ watchEffect(() => {
 </script>
 
 <style scoped>
-input[type='range']::-webkit-slider-thumb {
-  cursor: grab;
-  appearance: none;
-  width: 1rem;
-  height: 1rem;
-  border-radius: 50%;
-  background: var(--color-surface);
-}
+input[type='range'] {
+  &::-webkit-slider-thumb {
+    cursor: grab;
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: none;
+    border-radius: var(--radius-2xl);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+  }
 
-input[type='range']::-webkit-slider-thumb:active {
-  cursor: grabbing;
+  &::-moz-range-thumb {
+    cursor: grab;
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    border: none;
+    border-radius: var(--radius-2xl);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-sm);
+  }
+
+  &::-webkit-slider-thumb:active {
+    cursor: grabbing;
+  }
+
+  &::-moz-range-thumb:active {
+    cursor: grabbing;
+  }
 }
 </style>
