@@ -17,7 +17,7 @@
         :min
         :max
         :step
-        class="ring-edison my-auto h-2 w-full appearance-none rounded ring"
+        class="ring-edison my-auto h-2 w-full appearance-none rounded ring outline-none"
       />
 
       <input type="number" v-model="model" class="w-10 appearance-none text-center outline-none" @input="onInput" />
@@ -66,9 +66,10 @@ input[type='range'] {
     appearance: none;
     width: 0.75rem;
     height: 1.5rem;
-    border: none;
+    transition: border-color 0.2s ease-in-out;
+    border: 1px solid color-mix(in oklab, var(--color-surface) 20%, transparent);
     border-radius: var(--radius-md);
-    background: var(--color-surface);
+    background: var(--color-darwin);
     box-shadow: var(--shadow-sm);
   }
 
@@ -77,17 +78,20 @@ input[type='range'] {
     appearance: none;
     width: 0.75rem;
     height: 1.5rem;
-    border: none;
+    transition: border-color 0.2s ease-in-out;
+    border: 1px solid color-mix(in oklab, var(--color-surface) 20%, transparent);
     border-radius: var(--radius-md);
-    background: var(--color-surface);
+    background: var(--color-darwin);
     box-shadow: var(--shadow-sm);
   }
 
   &::-webkit-slider-thumb:active {
+    border-color: var(--color-accent);
     cursor: grabbing;
   }
 
   &::-moz-range-thumb:active {
+    border-color: var(--color-accent);
     cursor: grabbing;
   }
 }
