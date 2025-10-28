@@ -9,7 +9,7 @@
       </table>
     </div>
 
-    <div ref="tableWrapper" class="scrollbar w-full overflow-auto">
+    <div ref="tableWrapper" class="scrollbar isolate w-full overflow-auto">
       <table class="table-default w-full">
         <AppTableHead
           v-bind="{ meta, cells, slots, sortBy, sortByClient }"

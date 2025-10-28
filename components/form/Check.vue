@@ -1,6 +1,6 @@
 <template>
   <label class="relative inline-flex flex-wrap whitespace-break-spaces">
-    <span class="group inline-flex items-center gap-2 text-sm">
+    <span class="inline-flex items-center gap-2 text-sm">
       <span :class="['relative flex shrink-0', disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer']">
         <input
           v-model="model"
@@ -13,21 +13,19 @@
             ...(trueValue !== undefined && { 'true-value': trueValue }),
             ...(falseValue !== undefined && { 'false-value': falseValue })
           }"
-          class="form-check"
+          class="form-check peer"
           :aria-label="isSwitch ? 'switch' : undefined"
         />
 
         <span v-if="isSwitch" class="form-switch" />
 
-        <svg v-else viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="absolute inset-0 size-full p-1">
-          <circle
-            v-if="type === 'radio'"
-            fill="currentColor"
-            cx="16"
-            cy="16"
-            r="12"
-            class="opacity-0 duration-300 group-has-checked:opacity-100"
-          />
+        <svg
+          v-else
+          viewBox="0 0 32 32"
+          xmlns="http://www.w3.org/2000/svg"
+          class="group absolute inset-0 size-full p-1 opacity-0 duration-300 peer-checked:opacity-100"
+        >
+          <circle v-if="type === 'radio'" fill="currentColor" cx="16" cy="16" r="12" />
 
           <rect v-else-if="indeterminate" x="5" y="14" width="22" height="4" fill="currentColor" />
 
@@ -36,9 +34,8 @@
             fill="none"
             stroke-width="4"
             d="m5 18 7 7L28 9"
-            class="duration-300 group-has-checked:opacity-100 group-has-checked:[stroke-dashoffset:0]"
+            class="duration-300 group-peer-checked:[stroke-dashoffset:0]"
             stroke="currentColor"
-            opacity="0"
             stroke-dashoffset="31"
             stroke-dasharray="32"
             stroke-linecap="round"
