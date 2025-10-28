@@ -7,7 +7,7 @@
 
   @apply disabled:bg-surface/10 disabled:text-surface/50 disabled:cursor-not-allowed;
 
-  @apply hover:bg-surface/4 active:bg-surface/8;
+  @apply not-disabled:hover:bg-surface/4 not-disabled:active:bg-surface/8;
   @apply dark:hover:bg-surface/5 dark:active:bg-surface/10;
 }
 
