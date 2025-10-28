@@ -26,7 +26,7 @@
 
 @utility btn-main {
   @apply text-white shadow shadow-black/5;
-  @apply bg-accent hover:bg-accent/80 active:bg-accent;
+  @apply bg-accent not-disabled:hover:bg-accent/80 not-disabled:active:bg-accent;
 }
 
 @utility btn-danger {
