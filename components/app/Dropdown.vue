@@ -31,6 +31,8 @@
 import { useFloating, offset, flip, size, autoUpdate } from '@floating-ui/vue';
 import type { Placement } from '@floating-ui/vue';
 
+const emit = defineEmits<{ close: [] }>();
+
 const props = defineProps<{
   placement?: Extract<Placement, string>;
   autoclose?: boolean;
@@ -60,4 +62,8 @@ const { floatingStyles } = useFloating(reference, floating, {
 });
 
 const isOpen = useClickOutside(reference);
+
+watch(isOpen, (value) => {
+  if (!value) emit('close');
+});
 </script>
