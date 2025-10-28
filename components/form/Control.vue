@@ -5,7 +5,7 @@
 
       {{ label }}
 
-      <span v-if="required" title="Required field" class="form-required">*</span>
+      <span v-if="required" title="Required" class="form-required">*</span>
 
       <slot name="label-right" />
     </label>
@@ -74,6 +74,8 @@
       <div v-if="slots.right" class="form-slot shrink-0 overflow-clip rounded-l-none">
         <slot name="right" />
       </div>
+
+      <span v-if="!label && required" title="Required" class="form-required absolute -top-2 -right-1.5">*</span>
     </div>
 
     <div v-if="help || $slots.help" class="form-help">

@@ -3,7 +3,7 @@
     v-bind="{ data, meta, pick, omit, columnsExtra }"
     v-slot="{ cells, startIndex, topPadding, bottomPadding, visibleRows, onSortByClient, isExpanded, toggleRow }"
   >
-    <div v-if="stickyHead" ref="theadVisible" class="sticky z-5 overflow-hidden" :class="stickyOffset">
+    <div v-if="stickyHead" ref="theadVisible" class="sticky z-1 overflow-hidden" :class="stickyOffset">
       <table class="table-default w-full">
         <AppTableHead v-bind="{ meta, cells, slots, sortBy, sortByClient }" @sort="onSortByClient" />
       </table>

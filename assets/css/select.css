@@ -15,3 +15,8 @@
 @utility select-slot {
   @apply form-slot;
 }
+
+@utility select-options {
+  @apply max-h-96 min-w-40 shrink-0 p-1;
+  @apply scrollbar flex flex-col gap-0.5 overflow-auto whitespace-nowrap;
+}

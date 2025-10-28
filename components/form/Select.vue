@@ -5,7 +5,7 @@
 
       {{ label }}
 
-      <span v-if="required" title="Required field" class="form-required">*</span>
+      <span v-if="required" title="Required" class="form-required">*</span>
 
       <slot name="label-right" />
     </span>
@@ -79,15 +79,14 @@
           <div v-if="$slots.right" class="select-slot shrink-0 overflow-clip rounded-l-none">
             <slot name="right" />
           </div>
+
+          <span v-if="!label && required" title="Required" class="form-required absolute -top-2 -right-1.5">*</span>
         </div>
       </template>
 
       <input v-if="search" v-model="searchInput" class="form-input rounded-none" placeholder="Search" />
 
-      <div
-        v-if="hasOptions"
-        class="scrollbar flex max-h-96 min-w-40 shrink-0 flex-col gap-1 overflow-auto p-1 whitespace-nowrap"
-      >
+      <div v-if="hasOptions" class="select-options">
         <template v-if="presets && presets.length > 0">
           <div class="select-group-label">Presets</div>
 

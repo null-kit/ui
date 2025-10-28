@@ -135,11 +135,13 @@ const filterOptions = (options: TreeOption[]): TreeOption[] => {
   const query = searchQuery.value.toLowerCase();
 
   return toRef(options).value.filter((item) => {
+    const found = item.name.toLowerCase().includes(query);
+
+    if (found) return true;
+
     if (hasChildren(item)) {
       return item.children?.some((child) => child.name.toLowerCase().includes(query));
     }
-
-    return item.name.toLowerCase().includes(query);
   });
 };
 </script>

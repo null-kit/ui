@@ -37,6 +37,8 @@
       </label>
 
       <slot name="right" />
+
+      <span v-if="!label && required" title="Required" class="form-required absolute -top-2 -right-1.5">*</span>
     </div>
 
     <FormValidate v-if="name" :name />

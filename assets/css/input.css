@@ -1,6 +1,7 @@
 /* Base */
 @utility form-label {
-  @apply inline-flex cursor-default items-center gap-1 text-sm font-semibold opacity-80;
+  @apply inline-flex items-center gap-1 text-sm font-semibold opacity-80;
+  @apply cursor-default select-none;
 }
 
 @utility form-required {
@@ -20,7 +21,7 @@
 
   @apply disabled:cursor-not-allowed;
   @apply disabled:bg-surface/5 disabled:text-surface/50;
-  @apply dark:disabled:text-surface/30 dark:disabled:bg-surface/3 dark:shadow-black/80;
+  @apply dark:disabled:text-surface/30 dark:disabled:bg-surface/3;
 }
 
 @utility form-slot {
@@ -28,7 +29,7 @@
 
   @apply disabled:cursor-not-allowed;
   @apply disabled:bg-surface/5 disabled:text-surface/50;
-  @apply dark:disabled:text-surface/30 dark:disabled:bg-surface/3 dark:shadow-black/80;
+  @apply dark:disabled:text-surface/30 dark:disabled:bg-surface/3;
 }
 
 input:is(:-webkit-autofill, :autofill) {
