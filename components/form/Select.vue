@@ -10,7 +10,7 @@
       <slot name="label-right" />
     </span>
 
-    <AppDropdown :autoclose :placement dropdown-inner-class="p-0">
+    <AppDropdown :autoclose :placement :order dropdown-inner-class="p-0">
       <template #trigger="{ isOpen }">
         <div class="flex">
           <div v-if="$slots.left" class="select-slot shrink-0 overflow-clip rounded-r-none">
