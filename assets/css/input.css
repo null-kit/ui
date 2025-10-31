@@ -70,5 +70,5 @@ input[type='number'] {
 @utility form-switch {
   @apply absolute inset-0.5 size-5;
   @apply bg-edison rounded-full duration-200;
-  @apply group-has-checked:bg-darwin group-has-checked:translate-x-full;
+  @apply peer-checked:bg-darwin peer-checked:translate-x-full;
 }
