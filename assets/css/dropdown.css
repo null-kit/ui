@@ -1,8 +1,8 @@
 @layer components {
   .dropdown-content {
-    @apply scrollbar bg-darwin z-10 overflow-auto rounded-2xl;
+    @apply scrollbar bg-darwin z-10 overflow-auto rounded-xl;
     @apply ring-edison ring;
-    @apply shadow-lg shadow-black/5 dark:shadow-black/30;
+    @apply shadow-lg;
   }
 
   .dropdown-inner {

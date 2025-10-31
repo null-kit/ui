@@ -50,7 +50,7 @@
               <span class="sticky top-0 ml-auto flex items-center gap-1">
                 <span
                   v-if="multiple && selected.length > 1"
-                  class="btn btn-sm btn-default size-6 text-current/50 hover:text-red-500"
+                  class="btn btn-sm btn-default size-5 text-current/50 hover:text-red-500"
                   title="Remove all"
                   @click.stop="model = null"
                 >

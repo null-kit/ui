@@ -16,15 +16,15 @@
 }
 
 @utility btn-sm {
-  @apply min-h-6 rounded-md px-2 py-1 text-xs/none;
+  @apply min-h-6 rounded-md px-2 py-1 text-xs;
 }
 
 @utility btn-md {
-  @apply min-h-10 rounded-xl;
+  @apply min-h-10;
 }
 
 @utility btn-lg {
-  @apply min-h-12 rounded-2xl px-6 py-3;
+  @apply min-h-12 rounded-xl px-6 py-3;
 }
 
 @utility btn-default {
@@ -96,7 +96,7 @@
   }
 
   &:has(.btn-lg) {
-    @apply rounded-2xl;
+    @apply rounded-xl;
   }
 
   & > .btn {
