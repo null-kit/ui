@@ -1,9 +1,11 @@
-@utility dropdown-content {
-  @apply scrollbar bg-darwin z-10 overflow-auto rounded-2xl;
-  @apply ring-edison ring;
-  @apply shadow-lg shadow-black/5 dark:shadow-black/30;
-}
+@layer components {
+  .dropdown-content {
+    @apply scrollbar bg-darwin z-10 overflow-auto rounded-2xl;
+    @apply ring-edison ring;
+    @apply shadow-lg shadow-black/5 dark:shadow-black/30;
+  }
 
-@utility dropdown-inner {
-  @apply p-1 text-sm;
+  .dropdown-inner {
+    @apply p-1 text-sm;
+  }
 }

@@ -5,7 +5,7 @@
 
       {{ label }}
 
-      <span v-if="required" title="Required field" class="form-required">*</span>
+      <span v-if="required" title="Required field" class="form-required" />
 
       <slot name="label-right" />
     </div>
@@ -38,7 +38,7 @@
 
       <slot name="right" />
 
-      <span v-if="!label && required" title="Required" class="form-required absolute -top-2 -right-1.5">*</span>
+      <span v-if="!label && required" title="Required" class="form-required-floating" />
     </div>
 
     <FormValidate v-if="name" :name />

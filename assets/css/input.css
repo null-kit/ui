@@ -1,74 +1,79 @@
-/* Base */
-@utility form-label {
-  @apply inline-flex items-center gap-1 text-sm font-semibold opacity-80;
-  @apply cursor-default select-none;
-}
+@layer base {
+  input:is(:-webkit-autofill, :autofill) {
+    @apply inset-shadow-darwin inset-shadow-[0_20rem_0];
+  }
 
-@utility form-required {
-  @apply text-orange-600;
-}
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    @apply m-0 appearance-none;
+  }
 
-@utility form-help {
-  @apply text-xs opacity-40 duration-200 hover:opacity-100;
+  input[type='number'] {
+    appearance: textfield;
+  }
 }
 
 /* Input */
 @utility form-input {
-  @apply w-full appearance-none transition outline-none;
-  @apply max-h-80 min-h-10 px-3 py-2 text-sm font-medium;
-  @apply ring-edison bg-darwin placeholder:text-surface/30 rounded-xl shadow ring;
+  @apply w-full appearance-none transition duration-200 outline-none;
+  @apply max-h-80 min-h-8 px-3 py-2;
+  @apply rounded-xl text-sm font-medium;
+  @apply ring-edison bg-darwin shadow ring;
+  @apply placeholder:text-surface/30 disabled:cursor-not-allowed;
   @apply focus:ring-accent hover:ring-surface/20;
-
-  @apply disabled:cursor-not-allowed;
   @apply disabled:bg-surface/5 disabled:text-surface/50;
-  @apply dark:disabled:text-surface/30 dark:disabled:bg-surface/3;
 }
 
 @utility form-slot {
-  @apply bg-darwin ring-edison min-h-10 rounded-xl text-sm shadow ring;
-
+  @apply bg-darwin ring-edison min-h-8 ring;
+  @apply flex shrink-0 overflow-clip rounded-xl text-sm shadow;
   @apply disabled:cursor-not-allowed;
   @apply disabled:bg-surface/5 disabled:text-surface/50;
-  @apply dark:disabled:text-surface/30 dark:disabled:bg-surface/3;
 }
 
-input:is(:-webkit-autofill, :autofill) {
-  @apply inset-shadow-darwin inset-shadow-[0_20rem_0];
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  @apply m-0 appearance-none;
-}
-
-input[type='number'] {
-  appearance: textfield;
-}
-
-/* Checkbox */
-@utility form-check {
-  @apply cursor-pointer appearance-none duration-200;
-  @apply bg-darwin ring-edison size-5 ring;
-  @apply indeterminate:ring-accent checked:ring-accent not-disabled:shadow;
-  @apply disabled:bg-edison/20 disabled:not-checked:ring-edison disabled:cursor-not-allowed;
-
-  @apply [&~svg]:text-accent;
-
-  &[type='radio'] {
-    @apply rounded-full;
+@layer components {
+  .form-label {
+    @apply inline-flex items-center gap-1 text-xs font-medium opacity-80;
+    @apply mb-1.5 cursor-default select-none;
   }
 
-  &[type='checkbox'] {
-    @apply rounded-md;
+  .form-required {
+    @apply -mt-1 size-1 rounded-full bg-red-600 shadow;
   }
 
-  &[aria-label='switch'] {
-    @apply checked:bg-accent h-6 w-11 rounded-full;
+  .form-required-floating {
+    @apply absolute top-1.5 left-1.5 size-1 rounded-full bg-red-600 shadow;
   }
-}
 
-@utility form-switch {
-  @apply absolute inset-0.5 size-5;
-  @apply bg-edison rounded-full duration-200;
-  @apply peer-checked:bg-darwin peer-checked:translate-x-full;
+  .form-help {
+    @apply mt-1.5 text-xs opacity-40 duration-200 hover:opacity-100;
+  }
+
+  /* Checkbox */
+  .form-check {
+    @apply cursor-pointer appearance-none duration-200;
+    @apply bg-darwin ring-edison size-5 ring;
+    @apply indeterminate:ring-accent checked:ring-accent not-disabled:shadow;
+    @apply disabled:bg-edison/20 disabled:not-checked:ring-edison disabled:cursor-not-allowed;
+
+    @apply [&~svg]:text-accent;
+
+    &[type='radio'] {
+      @apply rounded-full;
+    }
+
+    &[type='checkbox'] {
+      @apply rounded-md;
+    }
+
+    &[aria-label='switch'] {
+      @apply checked:bg-accent h-6 w-11 rounded-full;
+    }
+  }
+
+  .form-switch {
+    @apply absolute inset-0.5 size-5;
+    @apply bg-edison rounded-full duration-200;
+    @apply peer-checked:bg-darwin peer-checked:translate-x-full;
+  }
 }

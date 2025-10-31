@@ -15,6 +15,22 @@
             :options="options"
           />
 
+          <FormSelect
+            v-model="formData.country"
+            key-name="name"
+            key-value="id"
+            placeholder="Select a country"
+            :options="options"
+          >
+            <template #left>
+              <span class="mx-2 my-auto">Left Slot</span>
+            </template>
+
+            <template #right>
+              <span class="mx-2 my-auto">Right Slot</span>
+            </template>
+          </FormSelect>
+
           <code class="bg-edison ml-auto rounded-md p-2 text-xs">{{ formData.country }}</code>
         </div>
       </fieldset>

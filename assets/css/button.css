@@ -1,36 +1,90 @@
-@utility btn {
-  @apply inline-flex items-center justify-center;
-  @apply min-h-10 shrink-0 gap-2 px-4 py-2;
-  @apply relative whitespace-nowrap;
-  @apply isolate overflow-clip rounded-xl text-sm font-medium;
-  @apply outline-0 duration-300;
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2;
+    @apply min-h-8 px-3 py-2 duration-200 outline-none;
+    @apply relative isolate whitespace-nowrap;
+    @apply rounded-xl text-sm font-medium ring ring-transparent;
 
-  @apply disabled:bg-surface/10 disabled:text-surface/50 disabled:cursor-not-allowed;
+    &:not(.btn-pending) {
+      @apply disabled:cursor-not-allowed disabled:opacity-50;
+    }
 
-  @apply not-disabled:hover:bg-surface/4 not-disabled:active:bg-surface/8;
-  @apply dark:hover:bg-surface/5 dark:active:bg-surface/10;
+    &:not(:disabled) {
+      @apply hover:bg-surface/5 active:bg-surface/10;
+    }
+  }
 }
 
 @utility btn-sm {
-  @apply min-h-7 rounded-lg px-2 py-1 text-xs;
+  @apply min-h-6 px-2 py-1 text-xs;
+  @apply rounded-lg;
+}
+
+@utility btn-md {
+  @apply min-h-10;
 }
 
 @utility btn-lg {
   @apply min-h-12 px-6 py-3;
+  @apply rounded-2xl;
 }
 
 @utility btn-default {
   @apply bg-darwin shadow;
-  @apply ring-edison hover:ring-surface/20 ring;
+  @apply ring-edison;
+
+  &:not(:disabled) {
+    @apply hover:bg-surface/5 active:bg-darwin;
+  }
 }
 
 @utility btn-main {
-  @apply text-white shadow shadow-black/5;
-  @apply bg-accent not-disabled:hover:bg-accent/80 not-disabled:active:bg-accent;
+  @apply text-newton shadow;
+  @apply bg-surface ring-surface;
+
+  &:not(:disabled) {
+    @apply hover:bg-surface hover:opacity-90 active:scale-98 active:opacity-100;
+  }
+}
+
+@utility btn-accent {
+  @apply text-white shadow text-shadow-xs;
+  @apply bg-accent ring-accent;
+  @apply inset-ring inset-ring-white/20;
+
+  &:not(:disabled) {
+    @apply hover:bg-tint-accent/20 active:bg-accent active:scale-98;
+  }
 }
 
 @utility btn-danger {
-  @apply from-red-400 to-red-500 ring-red-500;
+  @apply text-white shadow text-shadow-xs;
+  @apply bg-red-500 ring-red-500;
+  @apply inset-ring inset-ring-white/20;
+
+  &:not(:disabled) {
+    @apply hover:bg-red-600 active:scale-98 active:bg-red-500;
+  }
+}
+
+@utility btn-pending {
+  cursor: progress;
+  background-size: 20px 100%;
+  background-position: 0 0;
+  animation: btn-pending 2s infinite linear forwards;
+  background-image: repeating-linear-gradient(
+    -75deg,
+    --alpha(currentColor / 10%),
+    --alpha(currentColor / 10%) 10px,
+    transparent 10px,
+    transparent 20px
+  );
+}
+
+@keyframes btn-pending {
+  100% {
+    background-position: 20px 0;
+  }
 }
 
 @utility btn-group {
@@ -43,19 +97,11 @@
     @apply rounded-lg;
   }
 
-  .btn {
-    @apply flex-1 rounded-none shadow-none;
+  &:has(.btn-xl) {
+    @apply rounded-2xl;
   }
-}
 
-.btn:is(.btn-accent, .btn-danger) {
-  @apply bg-radial-[ellipse_at_top] text-white;
-  @apply inset-ring inset-ring-white/20;
-  @apply bg-[size:100%_200%] bg-[bottom_center];
-  @apply hover:bg-[size:100%_100%] active:bg-[size:100%_200%];
-  text-shadow: 0 1px 1px rgb(0 0 0 / 0.1);
-}
-
-button:not(:disabled) {
-  @apply cursor-pointer;
+  & > .btn {
+    @apply flex-1 rounded-none shadow-none ring-0 not-disabled:active:scale-100;
+  }
 }

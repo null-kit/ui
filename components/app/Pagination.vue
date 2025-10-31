@@ -1,13 +1,7 @@
 <template>
   <div class="flex gap-3">
     <nav v-if="totalPages >= 2" class="btn-group w-fit">
-      <button
-        v-if="currentPage >= 2"
-        type="button"
-        class="btn min-w-10 px-1.5 py-2"
-        title="Previous Page"
-        @click.prevent="currentPage--"
-      >
+      <button v-if="currentPage >= 2" type="button" class="btn" title="Previous Page" @click.prevent="currentPage--">
         <svg xmlns="http://www.w3.org/2000/svg" class="m-auto size-3" viewBox="0 0 32 32">
           <polyline points="20 28 8 16 20 4" fill="none" stroke="currentColor" stroke-width="3" />
         </svg>
@@ -17,20 +11,20 @@
         v-for="page in pages"
         :key="page"
         type="button"
-        class="btn hidden min-w-10 px-1.5 md:grid"
+        class="btn hidden md:flex"
         :class="{
           'text-surface/50 pointer-events-none': page === '...',
           'text-accent bg-surface/3 pointer-events-none font-medium': page === currentPage
         }"
         @click.prevent="currentPage = Number(page)"
       >
-        <span class="m-auto">{{ page }}</span>
+        <span class="m-auto block min-w-4">{{ page }}</span>
       </button>
 
       <button
         v-if="totalPages > currentPage"
         type="button"
-        class="btn min-w-10 px-1.5 py-2"
+        class="btn"
         title="Next Page"
         @click.prevent="currentPage++"
       >

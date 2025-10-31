@@ -29,6 +29,8 @@
     </aside>
 
     <main class="min-w-0 space-y-8 p-4">
+      <DemoButton />
+
       <fieldset id="utils">
         <legend>Utils</legend>
 
@@ -267,76 +269,7 @@
 
       <DemoSelect />
 
-      <fieldset id="control">
-        <legend>Form Control</legend>
-
-        <div class="grid grid-cols-3 gap-4">
-          <FormControl label="Text Input" name="username" placeholder="Enter your username" required />
-
-          <FormControl type="number" label="Number Input" name="age" placeholder="Enter your age" step="1" />
-
-          <FormControl
-            v-model="formData.country"
-            type="select"
-            label="Select"
-            name="country"
-            placeholder="Select a country"
-          >
-            <option value="United States">United States</option>
-            <option value="Canada">Canada</option>
-            <option value="United Kingdom">United Kingdom</option>
-          </FormControl>
-
-          <FormControl type="email" label="Email with Left Slot" name="email" placeholder="Enter your email">
-            <template #left>
-              <div class="p-2.5">Left Slot</div>
-            </template>
-          </FormControl>
-
-          <FormControl
-            type="password"
-            label="Password with Slot and Custom Help"
-            name="password"
-            placeholder="Enter your password"
-          >
-            <template #right>
-              <svg class="m-3 size-4" viewBox="0 0 24 24">
-                <path
-                  fill="currentColor"
-                  d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm9-.45S19.75 20 12.02 20C4.84 20 0 11.55 0 11.55S4.45 4 12.02 4C19.7 4 24 11.55 24 11.55zM17 12a5 5 0 1 0-10.01.01A5 5 0 0 0 17 12z"
-                />
-              </svg>
-            </template>
-
-            <template #help>
-              <div class="text-blue-700">
-                <p>Password must be at least 8 characters long</p>
-                <p>Password must contain at least one special character</p>
-              </div>
-            </template>
-          </FormControl>
-
-          <FormControl
-            type="textarea"
-            label="Textarea"
-            name="description"
-            placeholder="Enter description..."
-            help="Maximum 500 characters"
-          />
-        </div>
-
-        <div class="flex gap-4">
-          <button
-            type="button"
-            class="btn btn-default"
-            @click="setErrors({ username: 'Username is required', email: 'Please enter a valid email address' })"
-          >
-            Validate
-          </button>
-
-          <button type="button" class="btn btn-default" @click="clearErrors">Clear Errors</button>
-        </div>
-      </fieldset>
+      <DemoControl />
 
       <fieldset id="tree-select">
         <legend>Tree Select</legend>
@@ -378,7 +311,6 @@
 </template>
 
 <script setup lang="ts">
-const { setErrors, clearErrors } = useValidate();
 const { setToast } = useToast();
 const { copy, statusText } = useClipboard();
 
@@ -408,7 +340,6 @@ const bigData = Array.from({ length: 100 }, (_, i) => ({
 }));
 
 const formData = reactive({
-  country: '',
   color: 'blue',
   status: false,
   darkMode: true,

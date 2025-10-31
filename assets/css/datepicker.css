@@ -1,28 +1,30 @@
-.datepicker {
-  @apply ring-edison rounded-md ring;
-  @apply dark:shadow dark:shadow-black;
-}
-
-.datepicker-day {
-  @apply bg-darwin ring-edison p-1 ring;
-  @apply disabled:text-surface/40 disabled:cursor-not-allowed;
-  @apply not-disabled:hover:text-accent;
-
-  span {
-    @apply mx-auto size-8 rounded-full duration-200;
-    @apply grid place-items-center;
-    @apply hover:bg-current/20;
+@layer components {
+  .datepicker {
+    @apply ring-edison rounded-md ring;
+    @apply dark:shadow dark:shadow-black;
   }
 
-  &.day-selected span {
-    @apply bg-accent text-newton;
-  }
+  .datepicker-day {
+    @apply bg-darwin ring-edison p-1 ring;
+    @apply disabled:text-surface/40 disabled:cursor-not-allowed;
+    @apply not-disabled:hover:text-accent;
 
-  &.day-in-range span {
-    @apply bg-accent/20 text-accent;
-  }
+    span {
+      @apply mx-auto size-8 rounded-full duration-200;
+      @apply grid place-items-center;
+      @apply hover:bg-current/20;
+    }
 
-  &.day-outside span {
-    @apply opacity-40;
+    &.day-selected span {
+      @apply bg-accent text-newton;
+    }
+
+    &.day-in-range span {
+      @apply bg-accent/20 text-accent;
+    }
+
+    &.day-outside span {
+      @apply opacity-40;
+    }
   }
 }

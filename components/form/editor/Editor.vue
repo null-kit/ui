@@ -2,7 +2,7 @@
   <div>
     <div v-if="label" class="form-label mb-2">
       {{ label }}
-      <span v-if="required" title="Required field" class="form-required">*</span>
+      <span v-if="required" title="Required field" class="form-required" />
     </div>
 
     <div

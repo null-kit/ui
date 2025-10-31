@@ -1,9 +1,0 @@
-@utility scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-edison) transparent;
-  overscroll-behavior: none auto;
-
-  &::-webkit-scrollbar {
-    @apply size-2;
-  }
-}

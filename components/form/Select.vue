@@ -5,7 +5,7 @@
 
       {{ label }}
 
-      <span v-if="required" title="Required" class="form-required">*</span>
+      <span v-if="required" title="Required" class="form-required" />
 
       <slot name="label-right" />
     </span>
@@ -13,7 +13,7 @@
     <AppDropdown :autoclose :placement :order dropdown-inner-class="p-0">
       <template #trigger="{ isOpen }">
         <div class="flex">
-          <div v-if="$slots.left" class="select-slot shrink-0 overflow-clip rounded-r-none">
+          <div v-if="$slots.left" class="form-slot rounded-r-none">
             <slot name="left" />
           </div>
 
@@ -21,15 +21,12 @@
             <button
               type="button"
               :class="[
-                'select-input flex gap-2 text-ellipsis',
+                'select-input',
                 inputClass,
                 { 'ring-accent': isOpen, 'rounded-l-none': $slots.left, 'rounded-r-none': $slots.right }
               ]"
             >
-              <span
-                v-if="multiple && selected.length > 0"
-                class="select-multiple flex flex-wrap items-center gap-2 font-medium"
-              >
+              <span v-if="multiple && selected.length > 0" class="select-multiple">
                 <span v-for="(option, index) in selected" :key="index" class="btn btn-sm btn-default min-h-auto">
                   {{ getKeyName(option) }}
 
@@ -53,7 +50,7 @@
               <span class="sticky top-0 ml-auto flex items-center gap-1">
                 <span
                   v-if="multiple && selected.length > 1"
-                  class="btn btn-sm btn-default min-h-6 text-current/50 hover:text-red-500"
+                  class="btn btn-sm btn-default size-6 text-current/50 hover:text-red-500"
                   title="Remove all"
                   @click.stop="model = null"
                 >
@@ -76,11 +73,11 @@
             <FormValidate v-if="name" :name />
           </div>
 
-          <div v-if="$slots.right" class="select-slot shrink-0 overflow-clip rounded-l-none">
+          <div v-if="$slots.right" class="form-slot rounded-l-none">
             <slot name="right" />
           </div>
 
-          <span v-if="!label && required" title="Required" class="form-required absolute -top-2 -right-1.5">*</span>
+          <span v-if="!label && required" title="Required" class="form-required-floating" />
         </div>
       </template>
 

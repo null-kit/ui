@@ -1,11 +1,11 @@
 <template>
-  <div class="flex flex-col space-y-2 text-left">
+  <div class="flex flex-col text-left">
     <label v-if="label" :for="id" class="form-label">
       <slot name="label-left" />
 
       {{ label }}
 
-      <span v-if="required" title="Required field" class="form-required">*</span>
+      <span v-if="required" title="Required field" class="form-required" />
 
       <slot name="label-right" />
     </label>

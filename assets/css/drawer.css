@@ -1,8 +1,10 @@
-@utility drawer-content {
-  @apply bg-newton ring-edison ring;
-  @apply rounded-t-4xl px-4;
-}
+@layer components {
+  .drawer-content {
+    @apply bg-newton ring-edison ring;
+    @apply rounded-t-4xl px-4;
+  }
 
-@utility drawer-overflow {
-  @apply text-newton h-8;
+  .drawer-overflow {
+    @apply text-newton h-8;
+  }
 }

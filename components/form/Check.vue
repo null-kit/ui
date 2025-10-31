@@ -50,7 +50,7 @@
 
     <FormValidate v-if="name" :name />
 
-    <div v-if="help || $slots.help" class="form-help mt-1 w-full">
+    <div v-if="help || $slots.help" class="form-help w-full">
       <slot name="help">{{ help }}</slot>
     </div>
   </label>

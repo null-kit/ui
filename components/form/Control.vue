@@ -1,17 +1,17 @@
 <template>
-  <div class="flex flex-col space-y-2 text-left">
+  <div class="flex flex-col text-left">
     <label v-if="label" :for="id" class="form-label">
       <slot name="label-left" />
 
       {{ label }}
 
-      <span v-if="required" title="Required" class="form-required">*</span>
+      <span v-if="required" title="Required" class="form-required" />
 
       <slot name="label-right" />
     </label>
 
-    <div class="flex">
-      <div v-if="slots.left" class="form-slot shrink-0 overflow-clip rounded-r-none">
+    <div class="relative flex">
+      <div v-if="slots.left" class="form-slot rounded-r-none">
         <slot name="left" />
       </div>
 
@@ -71,11 +71,11 @@
         <FormValidate v-if="name" :name />
       </div>
 
-      <div v-if="slots.right" class="form-slot shrink-0 overflow-clip rounded-l-none">
+      <div v-if="slots.right" class="form-slot rounded-l-none">
         <slot name="right" />
       </div>
 
-      <span v-if="!label && required" title="Required" class="form-required absolute -top-2 -right-1.5">*</span>
+      <span v-if="!label && required" title="Required" class="form-required-floating" />
     </div>
 
     <div v-if="help || $slots.help" class="form-help">
