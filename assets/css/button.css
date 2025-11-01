@@ -28,12 +28,7 @@
 }
 
 @utility btn-default {
-  @apply bg-darwin shadow;
-  @apply ring-edison;
-
-  &:not(:disabled) {
-    @apply hover:bg-surface/5 active:bg-darwin;
-  }
+  @apply ring-edison shadow;
 }
 
 @utility btn-main {

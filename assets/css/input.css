@@ -1,7 +1,7 @@
 /* Input */
 @utility form-input {
   @apply w-full appearance-none transition duration-200 outline-none;
-  @apply max-h-80 min-h-8 px-3 py-2;
+  @apply h-full max-h-80 min-h-8.5 px-3 py-1;
   @apply rounded-lg text-sm font-medium;
   @apply ring-edison bg-darwin shadow ring;
   @apply placeholder:text-surface/30 disabled:cursor-not-allowed;
@@ -10,7 +10,7 @@
 }
 
 @utility form-slot {
-  @apply bg-darwin ring-edison min-h-8 ring;
+  @apply bg-darwin ring-edison min-h-full ring;
   @apply flex shrink-0 overflow-clip rounded-lg text-sm shadow;
   @apply disabled:cursor-not-allowed;
   @apply disabled:bg-surface/5 disabled:text-surface/50;
