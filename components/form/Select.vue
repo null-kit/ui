@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex flex-col space-y-2">
+  <div class="relative flex flex-col">
     <span v-if="label" class="form-label">
       <slot name="label-left" />
 

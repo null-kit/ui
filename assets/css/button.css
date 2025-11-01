@@ -28,40 +28,30 @@
 }
 
 @utility btn-default {
-  @apply bg-darwin shadow;
-  @apply ring-edison;
+  @apply bg-darwin ring-edison shadow;
 
   &:not(:disabled) {
-    @apply hover:bg-edison/40 active:bg-darwin;
+    @apply hover:ring-surface/20 hover:bg-surface/5 active:bg-darwin;
   }
 }
 
 @utility btn-main {
-  @apply text-newton shadow;
-  @apply bg-surface ring-surface;
-
-  &:not(:disabled) {
-    @apply hover:bg-surface hover:opacity-90 active:scale-98 active:opacity-100;
-  }
+  @apply text-newton bg-surface ring-surface;
 }
 
 @utility btn-accent {
-  @apply text-white shadow text-shadow-xs;
-  @apply bg-accent ring-accent;
-  @apply inset-ring inset-ring-white/20;
-
-  &:not(:disabled) {
-    @apply hover:bg-tint-accent/20 active:bg-accent active:scale-98;
-  }
+  @apply bg-accent ring-accent text-white;
 }
 
 @utility btn-danger {
-  @apply text-white shadow text-shadow-xs;
-  @apply bg-red-500 ring-red-500;
-  @apply inset-ring inset-ring-white/20;
+  @apply bg-red-500 text-white ring-red-500;
+}
+
+:is(.btn-main, .btn-accent, .btn-danger) {
+  @apply shadow inset-shadow-xs inset-shadow-white/20;
 
   &:not(:disabled) {
-    @apply hover:bg-red-600 active:scale-98 active:bg-red-500;
+    @apply hover:opacity-80 active:scale-98 active:opacity-100;
   }
 }
 
