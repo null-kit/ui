@@ -28,7 +28,7 @@
 }
 
 @utility btn-default {
-  @apply ring-edison shadow;
+  @apply ring-edison bg-darwin shadow;
 }
 
 @utility btn-main {
