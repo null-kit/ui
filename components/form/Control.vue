@@ -21,7 +21,7 @@
             :id
             v-model="model"
             class="form-input"
-            :class="[inputClass, 'pr-7', 'cursor-pointer', hasSlotStyle($slots)]"
+            :class="[inputClass, 'pr-7', hasSlotStyle($slots)]"
             :name
             :disabled
           >

@@ -16,7 +16,7 @@
 }
 
 @utility btn-sm {
-  @apply min-h-6 rounded-md px-2 py-1 text-xs;
+  @apply min-h-6 rounded-md px-2 py-1 text-[0.8125rem];
 }
 
 @utility btn-md {
@@ -28,7 +28,12 @@
 }
 
 @utility btn-default {
-  @apply ring-edison bg-darwin shadow;
+  @apply bg-darwin shadow;
+  @apply ring-edison;
+
+  &:not(:disabled) {
+    @apply hover:bg-edison/40 active:bg-darwin;
+  }
 }
 
 @utility btn-main {

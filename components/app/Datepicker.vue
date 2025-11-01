@@ -41,22 +41,14 @@
           </slot>
         </button>
 
-        <div class="flex w-full justify-center gap-2 font-medium">
-          <select
-            v-model="currentMonth"
-            class="cursor-pointer appearance-none bg-transparent text-center outline-none"
-            @change="setYearMonth"
-          >
+        <div class="flex w-full justify-center font-medium">
+          <select v-model="currentMonth" class="btn btn-sm appearance-none" @change="setYearMonth">
             <option v-for="(month, index) in months" :key="index" :value="index">
               {{ month }}
             </option>
           </select>
 
-          <select
-            v-model="currentYear"
-            class="cursor-pointer appearance-none bg-transparent text-center outline-none"
-            @change="setYearMonth"
-          >
+          <select v-model="currentYear" class="btn btn-sm appearance-none" @change="setYearMonth">
             <option v-for="year in years" :key="year" :value="year">
               {{ year }}
             </option>
