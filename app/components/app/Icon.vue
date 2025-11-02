@@ -17,7 +17,7 @@ const iconInline = shallowRef();
 
 onMounted(async () => {
   if (props.inline) {
-    const iconRaw = await import(`~/assets/img/svg/${props.name}.svg?raw`);
+    const iconRaw = await import(`assets/img/svg/${props.name}.svg?raw`);
 
     iconInline.value = iconRaw.default
       .replace(/\n/g, '')
