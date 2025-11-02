@@ -42,14 +42,14 @@
     "@tiptap/extension-youtube": "^2.14.0",
     "@tiptap/pm": "^2.14.0",
     "@tiptap/vue-3": "^2.14.0",
-    "@unovis/vue": "^1.5.2",
-    "@unovis/ts": "^1.5.2"
+    "@unovis/ts": "^1.5.2",
+    "@unovis/vue": "^1.5.2"
   },
   "devDependencies": {
     "@nuxt/eslint": "latest",
     "@tailwindcss/postcss": "^4.1.8",
     "eslint": "^9.28.0",
-    "nuxt": "^3.17.5",
+    "nuxt": "^4.2.0",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.12",
     "tailwindcss": "^4.1.8",

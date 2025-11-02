@@ -10,7 +10,7 @@
     </div>
 
     <div ref="tableWrapper" class="scrollbar isolate w-full overflow-auto">
-      <table class="table-default w-full">
+      <table class="table-default w-full" :class="{ 'table-striped': striped }">
         <AppTableHead
           v-bind="{ meta, cells, slots, sortBy, sortByClient }"
           :class="{ 'pointer-events-none invisible': stickyHead }"
@@ -18,7 +18,7 @@
         />
 
         <tbody ref="tbody">
-          <tr v-if="virtual">
+          <tr v-if="virtual" aria-hidden>
             <td :colspan="cells.length" :style="{ padding: 0, border: 0, height: topPadding + 'px' }" />
           </tr>
 
@@ -33,7 +33,7 @@
               <button
                 v-if="!entry.isNested"
                 type="button"
-                class="btn btn-sm w-full"
+                class="btn btn-sm size-6"
                 @click="toggleRow(entry._rowIndex)"
               >
                 <AppIcon
@@ -72,7 +72,7 @@
             </td>
           </tr>
 
-          <tr v-if="virtual">
+          <tr v-if="virtual" aria-hidden>
             <td :colspan="cells.length" :style="{ padding: 0, border: 0, height: bottomPadding + 'px' }" />
           </tr>
         </tbody>
@@ -109,6 +109,8 @@ const props = withDefaults(
     dictionaryKey?: string;
     expandedKey?: string;
     virtual?: boolean;
+
+    striped?: boolean;
   }>(),
   {
     stickyLeft: () => [],

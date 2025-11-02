@@ -3,7 +3,7 @@
     <component :is="slots.thead" v-if="slots.thead" />
 
     <tr :class="meta.trClass">
-      <th v-if="meta.expandedKey" class="w-0" />
+      <th v-if="meta.expandedKey" class="w-0 min-w-10" />
 
       <th
         v-for="cell in cells"
@@ -12,10 +12,10 @@
           meta.thClass,
           { 'left-0 md:sticky': meta.stickyLeft.includes(cell) },
           { 'right-0 -left-px border-l md:sticky': meta.stickyRight.includes(cell) },
-          { 'hover:bg-surface/3 cursor-pointer duration-200': canSortBy(cell) },
           { 'text-accent': canSortBy(cell) && String($route.query.sortBy).startsWith(cell + ':') }
         ]"
         :aria-label="`th-${cell}`"
+        :aria-sort="canSortBy(cell) ? (isSorted(cell, 'desc') ? 'descending' : 'ascending') : undefined"
         @click="onSort(cell)"
       >
         <div class="flex w-full items-center gap-1">
