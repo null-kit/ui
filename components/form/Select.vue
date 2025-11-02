@@ -27,7 +27,7 @@
               ]"
             >
               <span v-if="multiple && selected.length > 0" class="select-multiple">
-                <span v-for="(option, index) in selected" :key="index" class="btn btn-sm btn-default min-h-auto">
+                <span v-for="(option, index) in selected" :key="index" class="btn btn-sm btn-default">
                   {{ getKeyName(option) }}
 
                   <svg

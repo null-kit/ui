@@ -61,9 +61,9 @@
           </div>
 
           <div class="btn-group">
-            <button class="btn btn-default">Default</button>
-            <button class="btn btn-accent">Default</button>
-            <button class="btn btn-danger">Default</button>
+            <button class="btn btn-main">Main</button>
+            <button class="btn btn-accent">Accent</button>
+            <button class="btn btn-danger">Danger</button>
           </div>
 
           <div class="btn-group">

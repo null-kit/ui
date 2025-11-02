@@ -10,7 +10,7 @@
     }
 
     &:hover td {
-      @apply bg-tint-edison/70;
+      @apply bg-tint-edison/50 dark:bg-shade-edison/10;
     }
   }
 
@@ -29,7 +29,7 @@
   th,
   td {
     @apply bg-darwin border-edison border-b px-4 py-2 transition-colors;
-    @apply aria-expanded:bg-tint-edison/70;
+    @apply aria-expanded:bg-tint-edison/50 dark:aria-expanded:bg-shade-edison/10;
 
     &[aria-expanded] {
       @apply w-13 px-2;
