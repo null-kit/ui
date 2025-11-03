@@ -15,7 +15,7 @@ export default defineNuxtConfig({
   app: {
     baseURL: '/ui/'
   },
-  css: ['@/assets/css/app.css'],
+  css: ['assets/css/app.css'],
   postcss: {
     plugins: {
       '@tailwindcss/postcss': {}
