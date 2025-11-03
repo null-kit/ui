@@ -5,6 +5,10 @@
   tr {
     @apply divide-edison divide-x;
 
+    &[aria-expanded='true'] td {
+      @apply bg-shade-darwin/4 dark:bg-shade-darwin/10;
+    }
+
     &:not([aria-hidden]):not(:has(+ tr:not([aria-hidden]))) > td {
       @apply border-b-0;
     }
