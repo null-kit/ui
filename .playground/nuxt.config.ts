@@ -1,4 +1,7 @@
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+const rootDir = fileURLToPath(new URL('..', import.meta.url));
 
 export default defineNuxtConfig({
   ssr: false,
@@ -6,11 +9,11 @@ export default defineNuxtConfig({
   modules: ['@nuxt/eslint'],
   eslint: {
     config: {
-      rootDir: fileURLToPath(new URL('..', import.meta.url))
+      rootDir
     }
   },
   alias: {
-    '@null-kit/ui': fileURLToPath(new URL('../app/assets/css', import.meta.url))
+    '@null-kit/ui': join(rootDir, 'app', 'assets', 'css')
   },
   css: ['@/assets/css/app.css'],
   postcss: {
