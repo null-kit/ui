@@ -1,6 +1,7 @@
 @source '../../components';
 @source '../../composables';
 
+/* Background tint/shade utils */
 @utility bg-tint-* {
   background-color: color-mix(in oklab, --value(--color-*, [*]), #fff calc(--modifier(integer) * 1%));
 }
@@ -9,6 +10,7 @@
   background-color: color-mix(in oklab, --value(--color-*, [*]), #000 calc(--modifier(integer) * 1%));
 }
 
+/* Scrollbar Utility */
 @utility scrollbar {
   scrollbar-width: thin;
   scrollbar-color: var(--color-edison) transparent;
@@ -17,4 +19,31 @@
   &::-webkit-scrollbar {
     @apply size-2;
   }
+}
+
+/* Background Patterns */
+@utility bg-polka {
+  background-image:
+    radial-gradient(--alpha(var(--color-surface) / 10%) 1px, transparent 1px),
+    radial-gradient(--alpha(var(--color-surface) / 10%) 1px, transparent 1px);
+  background-size: 18px 18px;
+  background-position:
+    0 0,
+    9px 9px;
+}
+
+@utility bg-dot {
+  background-image: radial-gradient(circle at 2px 2px, --alpha(var(--color-surface) / 10%) 1px, transparent 0);
+  background-size: 15px 15px;
+  background-position: 7px 7px;
+}
+
+@utility bg-diagonal {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    --alpha(var(--color-surface) / 10%),
+    --alpha(var(--color-surface) / 10%) 1px,
+    transparent 1px,
+    transparent 14px
+  );
 }
