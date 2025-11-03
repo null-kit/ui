@@ -1,18 +1,19 @@
 import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
+
+const playgroundDir = fileURLToPath(new URL('.', import.meta.url));
 
 export default defineNuxtConfig({
   ssr: false,
   extends: ['..'],
+  srcDir: join(playgroundDir, 'app'),
   modules: ['@nuxt/eslint'],
   eslint: {
     config: {
       rootDir: fileURLToPath(new URL('..', import.meta.url))
     }
   },
-  app: {
-    // baseURL: '/ui/'
-  },
-  css: [fileURLToPath(new URL('app/assets/css/app.css', import.meta.url))],
+  css: [join(playgroundDir, 'app', 'assets', 'css', 'app.css')],
   postcss: {
     plugins: {
       '@tailwindcss/postcss': {}
