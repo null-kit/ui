@@ -12,11 +12,11 @@ export default defineNuxtConfig({
       rootDir
     }
   },
-  srcDir: join(rootDir, 'app'),
+  srcDir: join(rootDir, '.playground', 'app'),
   alias: {
     '@null-kit/ui': join(rootDir, 'app', 'assets', 'css')
   },
-  css: ['~/assets/css/app.css'],
+  css: ['@/assets/css/app.css'],
   postcss: {
     plugins: {
       '@tailwindcss/postcss': {}
