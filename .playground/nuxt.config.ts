@@ -9,9 +9,6 @@ export default defineNuxtConfig({
       rootDir: fileURLToPath(new URL('..', import.meta.url))
     }
   },
-  alias: {
-    '@null-kit/ui': fileURLToPath(new URL('../app/assets/css', import.meta.url))
-  },
   app: {
     baseURL: '/ui/'
   },
