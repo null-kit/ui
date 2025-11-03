@@ -63,9 +63,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            dist
-            .nuxt
-          key: ${{ runner.os }}-nuxt-build-${{ hashFiles('dist') }}
+            .playground/dist
+            .playground/.nuxt
+          key: ${{ runner.os }}-nuxt-build-${{ hashFiles('.playground/dist') }}
           restore-keys: |
             ${{ runner.os }}-nuxt-build-
       - name: Install dependencies
