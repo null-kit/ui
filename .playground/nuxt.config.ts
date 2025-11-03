@@ -12,7 +12,7 @@ export default defineNuxtConfig({
   app: {
     // baseURL: '/ui/'
   },
-  css: ['~/assets/css/app.css'],
+  css: [fileURLToPath(new URL('app/assets/css/app.css', import.meta.url))],
   postcss: {
     plugins: {
       '@tailwindcss/postcss': {}
