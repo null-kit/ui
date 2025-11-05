@@ -4,7 +4,7 @@
       v-if="reference && stepInfo"
       ref="floating"
       :style="floatingStyles"
-      class="bg-surface text-newton z-19 max-w-xs rounded-xl p-3 duration-500"
+      class="bg-newton inverted z-19 max-w-xs rounded-xl p-3 duration-500"
       :class="{ 'pointer-events-none opacity-0': middlewareData.hide?.referenceHidden }"
     >
       <slot :name="`step-${tour.currentStep}`" />
@@ -13,20 +13,15 @@
       <p class="text-sm" v-html="stepInfo.text" />
 
       <div class="mt-3 flex gap-2">
-        <button
-          v-if="!stepInfo.isEnd"
-          type="button"
-          class="btn btn-sm hover:bg-newton/10 bg-newton/5 mr-auto"
-          @click="onTourEnd"
-        >
+        <button v-if="!stepInfo.isEnd" type="button" class="btn btn-sm btn-default mr-auto" @click="onTourEnd">
           Skip
         </button>
 
         <button
           v-if="stepInfo.prevButton !== false && !stepInfo.isEnd"
           type="button"
-          class="btn hover:bg-newton/10 bg-newton/5 btn-sm"
-          @click="tour.currentStep--"
+          class="btn btn-sm"
+          @click="onPrevStep"
         >
           <AppIcon name="chevron-left" />
         </button>
@@ -34,7 +29,7 @@
         <button
           v-if="stepInfo.nextButton !== false && !stepInfo.isEnd"
           type="button"
-          class="btn btn-main btn-sm"
+          class="btn btn-accent btn-sm"
           @click="onNextStep"
         >
           <AppIcon name="chevron-right" />
@@ -45,26 +40,13 @@
         </button>
       </div>
 
-      <div ref="floatingArrow" class="bg-surface absolute size-2 rotate-45" />
+      <div ref="floatingArrow" class="bg-newton absolute size-2 rotate-45" />
     </div>
   </Teleport>
 </template>
 
 <script setup lang="ts">
 import { offset, shift, autoPlacement, useFloating, autoUpdate, arrow, hide } from '@floating-ui/vue';
-import type { Placement } from '@floating-ui/vue';
-
-type TourStep = {
-  title: string;
-  text: string;
-  placement?: Placement;
-  prevButton?: boolean;
-  nextButton?: boolean;
-  isEnd?: boolean;
-  step?: number;
-  onEnter?: () => void;
-  onNext?: () => void;
-};
 
 const { steps, target } = defineProps<{ steps: TourStep[]; target: string }>();
 
@@ -89,10 +71,20 @@ const { floatingStyles, middlewareData, placement } = useFloating(reference, flo
   }
 });
 
+const onPrevStep = () => {
+  if (stepInfo.value?.onPrev) stepInfo.value.onPrev();
+
+  tour.value.currentStep--;
+
+  if (stepInfo.value?.ignore) tour.value.currentStep--;
+};
+
 const onNextStep = async () => {
   if (stepInfo.value?.onNext) stepInfo.value.onNext();
 
   tour.value.currentStep++;
+
+  if (stepInfo.value?.ignore) tour.value.currentStep++;
 };
 
 const onUpdateReference = async () => {

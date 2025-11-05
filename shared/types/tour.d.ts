@@ -8,6 +8,8 @@ export type TourStep = {
   nextButton?: boolean;
   isEnd?: boolean;
   step?: number;
+  ignore?: boolean;
   onEnter?: () => void;
+  onPrev?: () => void;
   onNext?: () => void;
 };
