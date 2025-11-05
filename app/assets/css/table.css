@@ -14,7 +14,7 @@
     }
 
     &:hover td {
-      @apply bg-shade-darwin/6 dark:bg-shade-darwin/12;
+      @apply bg-shade-darwin/4 dark:bg-shade-darwin/10;
     }
   }
 
