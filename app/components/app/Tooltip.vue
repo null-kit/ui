@@ -1,7 +1,7 @@
 <template>
   <span
     ref="reference"
-    :class="['min-w-0', hoverClass]"
+    :class="['inline-flex min-w-0', hoverClass]"
     @pointerleave="isActive = false"
     @pointermove="onPointerMove"
     @click="isActive = true"
