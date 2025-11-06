@@ -137,17 +137,7 @@
         </div>
       </fieldset>
 
-      <fieldset id="datepicker">
-        <legend>Datepicker</legend>
-
-        <div class="flex gap-4">
-          <AppDatepicker v-model="formData.signleDate" />
-
-          <AppDatepicker v-model="formData.rangeDates" range />
-
-          <AppDatepicker v-model="formData.signleDate" date-mode="short" />
-        </div>
-      </fieldset>
+      <DemoDatepicker />
 
       <fieldset id="table" class="min-w-0">
         <legend>Table</legend>
@@ -340,8 +330,6 @@ const formData = reactive({
   size: 'medium',
   drawerOpen: false,
   modalOpen: false,
-  signleDate: new Date(),
-  rangeDates: [new Date().setDate(new Date().getDate() - 7), new Date()] as Date[],
   treeSelect: [
     {
       name: 'Electronics',

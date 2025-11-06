@@ -5,7 +5,7 @@
   @apply rounded-lg text-sm font-medium;
   @apply ring-edison bg-darwin shadow ring;
   @apply placeholder:text-surface/30;
-  @apply focus:ring-accent hover:ring-surface/20;
+  @apply focus:ring-accent has-focus:ring-accent hover:ring-surface/20;
 
   &:disabled {
     @apply text-surface/40 cursor-not-allowed;
