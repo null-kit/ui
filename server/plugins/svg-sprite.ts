@@ -2,12 +2,15 @@ import fs from 'fs';
 import path from 'path';
 import chokidar from 'chokidar';
 import { consola } from 'consola';
+import { fileURLToPath } from 'node:url';
 
 export default defineNitroPlugin((nitro) => {
   const isDev = process.env.NODE_ENV === 'development';
 
-  const icons = path.resolve('app/assets/img/svg');
-  const spritePath = path.resolve('./.nuxt/generated/sprite.svg');
+  const rootDir = fileURLToPath(new URL('../..', import.meta.url));
+
+  const icons = path.resolve(rootDir, 'app/assets/img/svg');
+  const spritePath = path.resolve(rootDir, './.nuxt/generated/sprite.svg');
 
   const generateSprite = () => {
     if (!fs.existsSync(icons)) return;
