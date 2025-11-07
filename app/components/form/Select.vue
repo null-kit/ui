@@ -10,7 +10,7 @@
       <slot name="label-right" />
     </span>
 
-    <AppDropdown :autoclose :placement :order dropdown-inner-class="p-0">
+    <AppDropdown :autoclose :placement :order dropdown-class="p-0">
       <template #trigger="{ isOpen }">
         <div class="flex">
           <div v-if="$slots.left" class="form-slot rounded-r-none">

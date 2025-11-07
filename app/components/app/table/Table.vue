@@ -1,7 +1,7 @@
 <template>
   <AppTableRoot
-    v-bind="{ data, meta, pick, omit, columnsExtra }"
     v-slot="{ cells, startIndex, topPadding, bottomPadding, visibleRows, onSortByClient, isExpanded, toggleRow }"
+    v-bind="{ data, meta, pick, omit, columnsExtra }"
   >
     <div v-if="stickyHead" ref="theadVisible" class="sticky z-1 overflow-hidden" :class="stickyOffset">
       <table class="table-default w-full">

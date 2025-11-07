@@ -1,14 +1,12 @@
 <template>
-  <div class="relative">
-    <div ref="reference" @click="isOpen = !isOpen">
-      <slot name="trigger" :is-open="isOpen" />
-    </div>
+  <div ref="reference" @click="isOpen = !isOpen" @mouseenter="onTriggerEnter" @mouseleave="onTriggerLeave">
+    <slot name="trigger" :is-open="isOpen" />
 
     <Teleport to="#teleports">
       <Transition
         enter-from-class="opacity-0 translate-y-2"
-        enter-to-class="opacity-100 translate-y-0 duration-300"
-        leave-to-class="opacity-0 translate-y-2 duration-300"
+        enter-to-class="duration-200"
+        leave-to-class="opacity-0 translate-y-2 duration-200"
       >
         <div
           v-if="isOpen"
@@ -16,9 +14,10 @@
           :class="['dropdown-content', dropdownClass]"
           :style="floatingStyles"
           @click.stop
-          @mouseleave="isOpen = !autoclose"
+          @mouseenter="onDropdownEnter"
+          @mouseleave="onDropdownLeave"
         >
-          <div :class="['group dropdown-inner', dropdownInnerClass]">
+          <div :class="['group dropdown-inner', innerClass]">
             <slot />
           </div>
         </div>
@@ -37,7 +36,8 @@ const props = defineProps<{
   placement?: Extract<Placement, string>;
   autoclose?: boolean;
   dropdownClass?: string;
-  dropdownInnerClass?: string;
+  innerClass?: string;
+  hoverOpen?: boolean;
 }>();
 
 const reference = useTemplateRef<HTMLDivElement>('reference');
@@ -62,8 +62,44 @@ const { floatingStyles } = useFloating(reference, floating, {
 });
 
 const isOpen = useClickOutside(reference);
+const isHovering = ref(false);
+
+const onTriggerEnter = () => {
+  isOpen.value = props.hoverOpen;
+};
+
+const onTriggerLeave = () => {
+  if (!props.hoverOpen) return;
+
+  const debouncedToggle = debounce(() => {
+    if (isHovering.value) return;
+
+    if (props.hoverOpen) isOpen.value = false;
+  }, 50);
+
+  if (!isHovering.value) debouncedToggle();
+};
+
+const onDropdownEnter = () => {
+  if (props.hoverOpen) {
+    isHovering.value = true;
+    isOpen.value = true;
+  }
+};
+
+const onDropdownLeave = () => {
+  if (props.hoverOpen) {
+    isHovering.value = false;
+    isOpen.value = false;
+  } else {
+    isOpen.value = !props.autoclose;
+  }
+};
 
 watch(isOpen, (value) => {
-  if (!value) emit('close');
+  if (!value) {
+    isHovering.value = false;
+    emit('close');
+  }
 });
 </script>

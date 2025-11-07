@@ -13,13 +13,13 @@
         ]"
         :aria-label="`tf-${cell}`"
       >
-        <component :is="slots[`tf-${cell}`]" v-if="slots[`tf-${cell}`]" :values="data.map((d) => d[cell])" />
+        <component :is="slots[`tf-${cell}`]" :values="data.map((d) => d[cell])" />
       </td>
 
       <td v-if="slots.actions" :class="['w-0', meta.tdClass]" />
     </tr>
 
-    <component v-if="slots.tfoot" :is="slots.tfoot" />
+    <component :is="slots.tfoot" v-if="slots.tfoot" />
   </tfoot>
 </template>
 
