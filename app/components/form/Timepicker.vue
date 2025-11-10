@@ -4,7 +4,7 @@
       <AppIcon v-if="!noIcon" :name="icon" class="mr-2 size-4 shrink-0" />
 
       <template v-for="(segment, index) in timeSegments" :key="index">
-        <AppDropdown dropdown-class="-ml-1 -mt-1" no-toggle>
+        <AppDropdown dropdown-class="-ml-0.5 -mt-1" no-toggle>
           <template #trigger>
             <input
               v-model="time[segment].current"
@@ -71,7 +71,7 @@
           </div>
         </AppDropdown>
 
-        <span v-if="index < timeSegments.length - 1" class="cursor-default select-none">-&nbsp;</span>
+        <span v-if="index < timeSegments.length - 1" class="cursor-default select-none">&nbsp;-&nbsp;</span>
       </template>
     </div>
   </div>
