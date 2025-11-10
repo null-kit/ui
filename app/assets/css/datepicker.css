@@ -1,7 +1,6 @@
 @layer components {
   .datepicker {
     @apply ring-edison rounded-md ring;
-    @apply dark:shadow dark:shadow-black;
   }
 
   .datepicker-day {

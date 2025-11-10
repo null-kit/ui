@@ -1,5 +1,5 @@
 <template>
-  <div ref="reference" @click="isOpen = !isOpen" @mouseenter="onTriggerEnter" @mouseleave="onTriggerLeave">
+  <div ref="reference" @click="onTriggerClick" @mouseenter="onTriggerEnter" @mouseleave="onTriggerLeave">
     <slot name="trigger" :is-open="isOpen" />
 
     <Teleport to="#teleports">
@@ -38,6 +38,7 @@ const props = defineProps<{
   dropdownClass?: string;
   innerClass?: string;
   hoverOpen?: boolean;
+  noToggle?: boolean;
 }>();
 
 const reference = useTemplateRef<HTMLDivElement>('reference');
@@ -63,6 +64,12 @@ const { floatingStyles } = useFloating(reference, floating, {
 
 const isOpen = useClickOutside(reference);
 const isHovering = ref(false);
+
+const onTriggerClick = () => {
+  if (props.noToggle && isOpen.value) return;
+
+  isOpen.value = !isOpen.value;
+};
 
 const onTriggerEnter = () => {
   isOpen.value = props.hoverOpen;
