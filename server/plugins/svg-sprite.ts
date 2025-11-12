@@ -2,14 +2,15 @@ import fs from 'fs';
 import path from 'path';
 import chokidar from 'chokidar';
 import { consola } from 'consola';
+import { fileURLToPath } from 'url';
 
 export default defineNitroPlugin((nitro) => {
-  const isDev = process.env.NODE_ENV === 'development';
+  const rootDir = fileURLToPath(import.meta.url).split('/.nuxt')[0];
 
-  const rootDir = import.meta.url.includes('.playground') ? '.playground' : '';
+  if (!rootDir) throw new Error('Root directory not found');
 
   const icons = path.resolve(rootDir, 'app/assets/img/svg');
-  const spritePath = path.resolve(rootDir, './.nuxt/generated/sprite.svg');
+  const spritePath = path.resolve(rootDir, '.nuxt/generated/sprite.svg');
 
   const generateSprite = () => {
     if (!fs.existsSync(icons)) return;
@@ -46,7 +47,7 @@ export default defineNitroPlugin((nitro) => {
 
   generateSprite();
 
-  if (isDev) {
+  if (process.env.NODE_ENV === 'development') {
     const watcher = chokidar.watch(icons, { ignoreInitial: true });
 
     watcher.on('add', generateSprite);
