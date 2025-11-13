@@ -2,7 +2,10 @@
   <div>
     <div v-if="label" class="form-label mb-2">
       {{ label }}
-      <span v-if="required" title="Required field" class="form-required" />
+
+      <AppAppear v-if="required && !model">
+        <span title="Required" class="form-required" />
+      </AppAppear>
     </div>
 
     <div
@@ -122,8 +125,8 @@ const editor = useEditor({
 onBeforeUnmount(() => unref(editor)?.destroy());
 </script>
 
-<style lang="postcss">
-.tiptap {
+<style scoped>
+:deep(.tiptap) {
   :first-child {
     margin-top: 0;
   }

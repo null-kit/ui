@@ -271,7 +271,7 @@ const setPreset = (type: Preset) => {
       if (props.range) selectDate(new Date(today.setDate(today.getDate())));
       break;
     case 'last-week':
-      selectDate(new Date(today.setDate(today.getDate() - 7)));
+      selectDate(new Date(today.setDate(today.getDate() - 6)));
       selectDate(new Date());
       break;
     case 'this-month':

@@ -34,7 +34,7 @@
   }
 
   .form-required-floating {
-    @apply absolute top-1.5 left-1.5 size-1 rounded-full bg-red-600 shadow;
+    @apply absolute top-1.5 right-1.5 size-1 rounded-full bg-red-600 shadow;
   }
 
   .form-help {

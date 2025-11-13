@@ -8,6 +8,8 @@
 <script setup lang="ts">
 const model = defineModel<string>();
 
+const { setToast } = useToast();
+
 const onImport = async (event: Event) => {
   const target = event.target as HTMLInputElement;
   const file = target.files?.[0];
@@ -21,11 +23,11 @@ const onImport = async (event: Event) => {
 
         const rows = csv.split('\n').filter((row) => row.trim() !== '');
 
-        if (rows.length < 2) return useToast().setToast('Import Error!', 'CSV file is empty', 'error');
+        if (rows.length < 2) return setToast('Import Error!', 'CSV file is empty', 'error');
 
         model.value = rows.slice(1).join(', ');
       } catch (error) {
-        return useToast().setToast('Import Error!', 'Failed to parse CSV', 'error');
+        return setToast('Import Error!', 'Failed to parse CSV', 'error');
       }
     };
 

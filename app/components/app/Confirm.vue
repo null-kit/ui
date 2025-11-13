@@ -55,7 +55,7 @@ withDefaults(
     title: 'Confirm',
     message: 'Are you sure?',
     confirmText: 'Confirm',
-    confirmClass: 'btn-main'
+    confirmClass: 'btn-danger'
   }
 );
 

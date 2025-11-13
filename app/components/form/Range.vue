@@ -5,7 +5,9 @@
 
       {{ label }}
 
-      <span v-if="required" title="Required field" class="form-required" />
+      <AppAppear v-if="required && !model">
+        <span title="Required" class="form-required" />
+      </AppAppear>
 
       <slot name="label-right" />
     </label>

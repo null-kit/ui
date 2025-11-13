@@ -65,6 +65,8 @@ export default defineNuxtModule({
         if (fs.existsSync(iconsDir)) {
           const watcher = chokidar.watch(iconsDir, { ignoreInitial: true });
 
+          generateSprite();
+
           watcher.on('add', generateSprite);
           watcher.on('change', generateSprite);
           watcher.on('unlink', generateSprite);

@@ -5,7 +5,9 @@
 
       {{ label }}
 
-      <span v-if="required" title="Required" class="form-required" />
+      <AppAppear v-if="required && !model">
+        <span title="Required" class="form-required" />
+      </AppAppear>
 
       <slot name="label-right" />
     </label>
@@ -75,7 +77,9 @@
         <slot name="right" />
       </div>
 
-      <span v-if="!label && required" title="Required" class="form-required-floating" />
+      <AppAppear v-if="!label && required && !model">
+        <span title="Required" class="form-required-floating" />
+      </AppAppear>
     </div>
 
     <div v-if="help || $slots.help" class="form-help">

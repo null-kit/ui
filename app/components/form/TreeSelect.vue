@@ -2,7 +2,10 @@
   <div class="relative text-left text-sm" :class="{ 'mb-2': child }">
     <div v-if="label" class="form-label mb-2">
       {{ label }}
-      <span v-if="required" title="Required field" class="form-required" />
+
+      <AppAppear v-if="required && !model">
+        <span title="Required" class="form-required" />
+      </AppAppear>
     </div>
 
     <div :class="!child && 'form-input scrollbar isolate max-h-80 overflow-auto p-0'">
