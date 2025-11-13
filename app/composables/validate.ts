@@ -3,13 +3,11 @@ type ValidationErrors = Record<string, string | null>;
 export const useValidate = () => {
   const validate = useState<ValidationErrors>('validation', () => ({}));
 
-  const setErrors = (errors: ValidationErrors) => {
-    if (typeof errors === 'object') {
-      validate.value = { ...errors };
-    }
-
-    if (Array.isArray(errors)) {
-      validate.value = Object.fromEntries(errors.map((error) => [error.path, error.message]));
+  const setErrors = (errors: ValidationErrors | Record<string, string[] | string | null>) => {
+    if (typeof errors === 'object' && errors !== null) {
+      validate.value = Object.fromEntries(
+        Object.entries(errors).map(([key, value]) => [key, Array.isArray(value) ? value[0] || null : value])
+      );
     }
   };
 
