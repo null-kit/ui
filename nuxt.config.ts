@@ -1,9 +1,13 @@
-import { fileURLToPath } from 'node:url';
+import { createResolver } from 'nuxt/kit';
+
+const { resolve } = createResolver(import.meta.url);
 
 export default defineNuxtConfig({
   alias: {
-    '@null-kit/ui': fileURLToPath(new URL('./app/assets/css', import.meta.url))
+    '@null-kit/ui': resolve('./app/assets/css')
   },
+
+  modules: [resolve('modules/svg-sprite')],
 
   // fix unovis issues
   vite: {

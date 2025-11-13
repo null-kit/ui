@@ -2,7 +2,7 @@
   <span v-if="inline" :class="['flex', iconClass]" v-html="iconInline" />
 
   <svg v-else :class="iconClass" fill="none">
-    <use :href="`/_sprite.svg#${name}`" />
+    <use :href="`/sprite.svg#${name}`" />
   </svg>
 </template>
 
