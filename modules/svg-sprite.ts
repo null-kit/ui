@@ -27,7 +27,7 @@ export default defineNuxtModule({
 
     const generateSprite = () => {
       if (!fs.existsSync(iconsDir)) {
-        consola.warn(`Svg Icons folder not found: ${iconsDir}`);
+        consola.withTag('svg-sprite').warn(`Icons folder not found: ${iconsDir}`);
         return;
       }
 
@@ -55,7 +55,7 @@ export default defineNuxtModule({
       fs.mkdirSync(path.dirname(spritePath), { recursive: true });
       fs.writeFileSync(spritePath, sprite, 'utf8');
 
-      consola.success(`SVG Sprite Generated with ${files.length} icons`);
+      consola.withTag('svg-sprite').success(`Generated sprite with ${files.length} icons`);
     };
 
     nuxt.hook('nitro:build:public-assets', generateSprite);
@@ -68,6 +68,8 @@ export default defineNuxtModule({
           watcher.on('add', generateSprite);
           watcher.on('change', generateSprite);
           watcher.on('unlink', generateSprite);
+
+          consola.withTag('svg-sprite').info('Watching for icons');
         }
       });
 
