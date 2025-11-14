@@ -11,10 +11,8 @@
   },
   "scripts": {
     "dev": "nuxi dev .playground",
-    "dev:prepare": "nuxt prepare .playground",
-    "build": "nuxt build .playground",
+    "prepare": "nuxt prepare .playground",
     "generate": "nuxt generate .playground",
-    "preview": "nuxt preview .playground",
     "lint": "eslint ."
   },
   "dependencies": {

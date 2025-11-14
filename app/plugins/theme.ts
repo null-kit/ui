@@ -37,6 +37,8 @@ export default defineNuxtPlugin((nuxtApp) => {
   };
 
   const toggleTheme = () => {
+    if (document.startViewTransition) document.startViewTransition();
+
     settings.theme = settings.theme === 'dark' ? 'light' : 'dark';
     current.value = settings.theme;
     setItem(settings.key, settings);

@@ -43,4 +43,27 @@
   :is(:root, body) {
     @apply bg-darwin text-surface overscroll-none antialiased;
   }
+
+  :root {
+    view-transition-name: theme;
+  }
+
+  @keyframes move-out {
+    from {
+      clip-path: circle(200% at 100% 100%);
+    }
+
+    to {
+      clip-path: circle(0% at 0% 100%);
+    }
+  }
+
+  ::view-transition-old(theme) {
+    animation: 1s linear both move-out;
+    z-index: 10;
+  }
+
+  ::view-transition-new(theme) {
+    z-index: 9;
+  }
 }
