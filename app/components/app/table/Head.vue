@@ -19,6 +19,8 @@
         @click="onSort(cell)"
       >
         <div class="flex w-full items-center gap-1">
+          <component :is="slots[`th-${cell}-left`]" v-if="slots[`th-${cell}-left`]" />
+
           <component :is="slots[`th-${cell}`]" v-if="slots[`th-${cell}`]" />
 
           <template v-else>

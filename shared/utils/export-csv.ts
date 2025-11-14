@@ -22,8 +22,18 @@ export const formatCsv = (headers: string[], rows: Record<string, unknown>[] | (
   return new Blob([content], { type: 'text/csv;charset=utf-8;' });
 };
 
-export const useDownload = (content: Blob, filename: string) => {
-  const url = window.URL.createObjectURL(content);
+export const useDownload = (content: Blob | unknown, filename: string) => {
+  let blob: Blob;
+
+  if (content instanceof Blob) {
+    blob = content;
+  } else {
+    const bytes = new TextEncoder().encode(JSON.stringify(content, null, 2));
+
+    blob = new Blob([bytes], { type: 'application/json;charset=utf-8' });
+  }
+
+  const url = window.URL.createObjectURL(blob);
   const link = document.createElement('a');
 
   link.href = url;

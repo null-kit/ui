@@ -28,7 +28,7 @@
 }
 
 @utility btn-default {
-  @apply bg-darwin ring-edison shadow;
+  @apply bg-darwin text-surface ring-edison shadow;
 
   &:not(:disabled):not(:active) {
     @apply hover:ring-surface/20;

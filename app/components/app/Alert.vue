@@ -5,7 +5,7 @@
         <AppIcon v-if="icon" :name="icon" class="relative top-0.5 size-3.5 shrink-0" />
       </slot>
 
-      <div class="flex flex-col gap-1">
+      <div class="flex w-full flex-col gap-1">
         <slot name="label">
           <span v-if="label" class="font-semibold">{{ label }}</span>
         </slot>

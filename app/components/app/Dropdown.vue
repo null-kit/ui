@@ -13,7 +13,6 @@
           ref="floating"
           :class="['dropdown-content', dropdownClass]"
           :style="floatingStyles"
-          @click.stop
           @mouseenter="onDropdownEnter"
           @mouseleave="onDropdownLeave"
         >
@@ -41,6 +40,8 @@ const props = defineProps<{
   noToggle?: boolean;
 }>();
 
+defineExpose({ onClose: () => (isOpen.value = false) });
+
 const reference = useTemplateRef<HTMLDivElement>('reference');
 const floating = useTemplateRef<HTMLDivElement>('floating');
 
@@ -62,7 +63,7 @@ const { floatingStyles } = useFloating(reference, floating, {
   whileElementsMounted: autoUpdate
 });
 
-const isOpen = useClickOutside(reference);
+const isOpen = useClickOutside(reference, floating);
 const isHovering = ref(false);
 
 const onTriggerClick = () => {
@@ -72,7 +73,9 @@ const onTriggerClick = () => {
 };
 
 const onTriggerEnter = () => {
-  isOpen.value = props.hoverOpen;
+  if (props.hoverOpen) {
+    isOpen.value = props.hoverOpen;
+  }
 };
 
 const onTriggerLeave = () => {
@@ -82,7 +85,7 @@ const onTriggerLeave = () => {
     if (isHovering.value) return;
 
     if (props.hoverOpen) isOpen.value = false;
-  }, 50);
+  }, 100);
 
   if (!isHovering.value) debouncedToggle();
 };
@@ -96,7 +99,6 @@ const onDropdownEnter = () => {
 
 const onDropdownLeave = () => {
   if (props.hoverOpen) {
-    isHovering.value = false;
     isOpen.value = false;
   } else {
     isOpen.value = !props.autoclose;
