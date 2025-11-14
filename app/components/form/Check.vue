@@ -67,15 +67,15 @@ const props = withDefaults(
     indeterminate?: boolean;
     disabled?: boolean;
     help?: string;
-    trueValue?: string | number;
-    falseValue?: string | number;
+    trueValue?: string | number | null;
+    falseValue?: string | number | null;
   }>(),
   {
     type: 'checkbox'
   }
 );
 
-const model = defineModel<boolean | string | number | string[] | number[]>();
+const model = defineModel<boolean | string | number | string[] | number[] | null>();
 
 onMounted(() => {
   if (!model.value && props.value) model.value = Boolean(props.value);
