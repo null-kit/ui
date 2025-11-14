@@ -13,6 +13,7 @@
           ref="floating"
           :class="['dropdown-content', dropdownClass]"
           :style="floatingStyles"
+          @click.stop
           @mouseenter="onDropdownEnter"
           @mouseleave="onDropdownLeave"
         >
