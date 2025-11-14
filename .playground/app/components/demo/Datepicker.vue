@@ -15,9 +15,15 @@
 </template>
 
 <script setup lang="ts">
+const today = new Date();
+
+const hours = today.getHours().toString().padStart(2, '0');
+const minutes = today.getMinutes().toString().padStart(2, '0');
+const seconds = today.getSeconds().toString().padStart(2, '0');
+
 const formData = reactive({
-  singleDate: new Date(),
-  rangeDates: [new Date().setDate(new Date().getDate() - 7), new Date()] as Date[],
-  time: new Date().getHours() + ':' + new Date().getMinutes().toString().padStart(2, '0').padEnd(2, '0')
+  singleDate: today,
+  rangeDates: [today.setDate(today.getDate() - 7), today] as Date[],
+  time: `${hours}:${minutes}:${seconds}`
 });
 </script>

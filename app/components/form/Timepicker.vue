@@ -12,11 +12,11 @@
               type="time"
               :name
               step="2"
-              @change="onScrollTo"
+              @change="onScrollTo()"
             />
           </template>
 
-          <div class="flex mask-y-from-60%" @vue:mounted="onScrollTo">
+          <div :id="`${segment}-time`" class="flex mask-y-from-60%" @vue:mounted="onScrollTo(true)">
             <div
               class="flex max-h-20 flex-1 snap-y flex-col items-center overflow-auto py-8 [scrollbar-width:none]"
               @scrollend="onScrollEnd($event, 'hour', segment)"
@@ -117,6 +117,8 @@ const time = reactive({
   }
 });
 
+const isScrollProgrammatic = ref(false);
+
 const onSetTime = (value: string, type: TimeType, segment: TimeSegment) => {
   const target = document.getElementById(`${segment}-${type}-${value}`);
 
@@ -128,6 +130,8 @@ const onSetTime = (value: string, type: TimeType, segment: TimeSegment) => {
 };
 
 const onScrollEnd = (event: Event, type: TimeType, segment: TimeSegment) => {
+  if (isScrollProgrammatic.value) return;
+
   const target = (event.currentTarget || event.target) as HTMLElement | null;
 
   if (!target) return;
@@ -162,7 +166,9 @@ const onScrollEnd = (event: Event, type: TimeType, segment: TimeSegment) => {
   onSetTime(value, type, segment);
 };
 
-const onScrollTo = () => {
+const onScrollTo = (programmatic = false) => {
+  isScrollProgrammatic.value = programmatic;
+
   for (const segment of timeSegments) {
     const [hour, minute, second] = time[segment].current.split(':');
 
@@ -172,13 +178,19 @@ const onScrollTo = () => {
 
     for (const type of ['hour', 'minute', 'second']) {
       const value = time[segment][type as TimeType];
-      const target = document.getElementById(`${segment}-${type}-${value}`);
+      const container = document.getElementById(`${segment}-time`);
+      const target = container?.querySelector(`#${segment}-${type}-${value}`);
 
       if (!target) continue;
 
-      target?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      // @ts-ignore conainer property exists
+      target.scrollIntoView({ block: 'center', behavior: 'smooth', container: 'nearest' });
     }
   }
+
+  setTimeout(() => {
+    isScrollProgrammatic.value = false;
+  }, 50);
 };
 
 onMounted(() => {
@@ -195,6 +207,10 @@ onMounted(() => {
 
   if (typeof model.value === 'string') {
     time.start.current = model.value || defaultTime;
+
+    time.start.hour = model.value.split(':')[0] || '00';
+    time.start.minute = model.value.split(':')[1] || '00';
+    time.start.second = model.value.split(':')[2] || '00';
   }
 });
 </script>
