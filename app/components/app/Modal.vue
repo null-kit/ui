@@ -17,15 +17,20 @@
         role="dialog"
         class="fixed inset-0 z-10 flex overflow-auto p-4 outline-0 md:p-10"
         tabindex="0"
-        @keydown.esc="onClose"
-        @click.self="onClose"
+        @keydown.esc="!preventClose && onClose"
+        @click.self="!preventClose && onClose"
       >
         <div class="modal-content m-auto w-full" :class="modalClass">
           <slot v-if="$slots.header || $slots.title" name="header">
             <div class="flex items-center p-4">
               <slot v-if="$slots.title" name="title" />
 
-              <button type="button" class="ml-auto opacity-50 duration-200 hover:opacity-100" @click="onClose">
+              <button
+                v-if="!preventClose"
+                type="button"
+                class="ml-auto opacity-50 duration-200 hover:opacity-100"
+                @click="onClose"
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="size-6">
                   <path d="M25 7L7 25 M25 25L7 7" stroke="currentColor" stroke-width="2" />
                 </svg>
@@ -51,8 +56,6 @@ defineEmits<{ close: [] }>();
 const isActive = ref(false);
 
 const onClose = () => {
-  if (preventClose) return;
-
   isActive.value = false;
   document.body.removeAttribute('style');
 };
