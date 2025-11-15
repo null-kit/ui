@@ -41,13 +41,18 @@
 </template>
 
 <script setup lang="ts">
-const { modalClass = 'max-w-xl' } = defineProps<{ modalClass?: string }>();
+const { modalClass = 'max-w-xl', preventClose = false } = defineProps<{
+  modalClass?: string;
+  preventClose?: boolean;
+}>();
 
 defineEmits<{ close: [] }>();
 
 const isActive = ref(false);
 
 const onClose = () => {
+  if (preventClose) return;
+
   isActive.value = false;
   document.body.removeAttribute('style');
 };
