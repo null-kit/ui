@@ -41,7 +41,7 @@
       <slot name="right" />
     </div>
 
-    <AppAppear v-if="!label && required && !Boolean(model)">
+    <AppAppear v-if="!label && required && !model">
       <span title="Required" class="form-required-floating" />
     </AppAppear>
 
