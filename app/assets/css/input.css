@@ -23,6 +23,11 @@
   }
 }
 
+@utility form-validate {
+  @apply bg-surface text-newton pointer-events-none rounded-md text-xs font-medium shadow;
+  @apply absolute top-full left-2.5 -mt-2 px-2 py-0.5;
+}
+
 @layer components {
   .form-label {
     @apply inline-flex items-center gap-1 text-[0.8125rem] font-medium opacity-80;
