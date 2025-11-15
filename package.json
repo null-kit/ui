@@ -11,7 +11,7 @@
   },
   "scripts": {
     "dev": "nuxi dev .playground",
-    "prepare": "nuxt prepare .playground",
+    "dev:prepare": "nuxt prepare .playground",
     "generate": "nuxt generate .playground",
     "lint": "eslint ."
   },
