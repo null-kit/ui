@@ -39,11 +39,11 @@
       </label>
 
       <slot name="right" />
-
-      <AppAppear v-if="!label && required && !model">
-        <span title="Required" class="form-required-floating" />
-      </AppAppear>
     </div>
+
+    <AppAppear v-if="!label && required && !model">
+      <span title="Required" class="form-required-floating" />
+    </AppAppear>
 
     <FormValidate v-if="name" :name />
 
