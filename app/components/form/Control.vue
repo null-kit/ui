@@ -70,7 +70,7 @@
           @input="onInput"
         />
 
-        <FormValidate v-if="name" :name />
+        <FormValidate v-if="name" :name :class="validateClass" />
       </div>
 
       <div v-if="slots.right" class="form-slot rounded-l-none">
@@ -104,7 +104,6 @@ const {
   type?: 'text' | 'password' | 'email' | 'number' | 'textarea' | 'select';
   name?: string;
   placeholder?: string;
-  inputClass?: string;
   help?: string;
   disabled?: boolean;
   required?: boolean;
@@ -112,6 +111,8 @@ const {
   pattern?: string;
   step?: string;
   value?: string | number | null;
+  inputClass?: string;
+  validateClass?: string;
 }>();
 
 const onInput = (event: Event) => {

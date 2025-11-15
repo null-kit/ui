@@ -72,7 +72,7 @@
               </span>
             </button>
 
-            <FormValidate v-if="name" :name />
+            <FormValidate v-if="name" :name :class="validateClass" />
           </div>
 
           <div v-if="$slots.right" class="form-slot rounded-l-none">
@@ -183,7 +183,6 @@ const props = defineProps<{
   search?: boolean;
   order?: boolean;
   placement?: Placement;
-  inputClass?: string;
   autoclose?: boolean;
   required?: boolean;
   help?: string;
@@ -191,6 +190,8 @@ const props = defineProps<{
     name: string;
     list: string[];
   }[];
+  inputClass?: string;
+  validateClass?: string;
 }>();
 
 const searchInput = ref('');
