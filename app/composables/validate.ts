@@ -1,9 +1,9 @@
-type ValidationErrors = Record<string, string | null>;
+type ValidationErrors = Record<string, string | string[] | null>;
 
 export const useValidate = () => {
   const validate = useState<ValidationErrors>('validation', () => ({}));
 
-  const setErrors = (errors: ValidationErrors) => {
+  const setErrors = <T extends ValidationErrors>(errors: T) => {
     if (Array.isArray(errors)) {
       validate.value = Object.fromEntries(errors.map((error) => [error.path, error.message]));
       return;
