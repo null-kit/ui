@@ -20,12 +20,10 @@
       <div class="relative w-full">
         <template v-if="type === 'select'">
           <select
-            :id
             v-model="model"
             class="form-input"
             :class="[inputClass, 'pr-7', hasSlotStyle($slots)]"
-            :name
-            :disabled
+            v-bind="{ id, name, disabled }"
           >
             <option selected disabled value>{{ placeholder }}</option>
 
@@ -43,31 +41,22 @@
 
         <textarea
           v-else-if="type === 'textarea'"
-          :id
           v-model="model"
           class="form-input flex"
           :class="[inputClass, hasSlotStyle($slots)]"
           rows="3"
-          :name
-          :placeholder
-          :disabled
-          :pattern
+          v-bind="{ id, name, placeholder, disabled, pattern }"
         />
 
         <input
           v-else
-          :id
           v-model="model"
           class="form-input"
           :class="[inputClass, hasSlotStyle($slots)]"
-          :name
           :type="type === 'number' ? 'text' : type"
-          :placeholder
-          :disabled
-          :accept
-          :pattern
-          :step
+          v-bind="{ id, name, placeholder, disabled, accept, pattern, step, min, max }"
           @input="onInput"
+          @focusout="onFocusOut"
         />
 
         <FormValidate v-if="name" :name :class="validateClass" />
@@ -98,7 +87,9 @@ const {
   type = 'text',
   name,
   inputClass,
-  value
+  value,
+  min,
+  max
 } = defineProps<{
   label?: string;
   type?: 'text' | 'password' | 'email' | 'number' | 'textarea' | 'select';
@@ -110,6 +101,8 @@ const {
   accept?: string;
   pattern?: string;
   step?: string;
+  min?: string;
+  max?: string;
   value?: string | number | null;
   inputClass?: string;
   validateClass?: string;
@@ -122,6 +115,20 @@ const onInput = (event: Event) => {
 
     model.value = value || undefined;
     input.value = value;
+  }
+};
+
+const onFocusOut = () => {
+  if (type === 'number') {
+    const value = Number(model.value);
+
+    if (min && value < Number(min)) {
+      model.value = min;
+    }
+
+    if (max && value > Number(max)) {
+      model.value = max;
+    }
   }
 };
 
