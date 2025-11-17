@@ -12,13 +12,13 @@
       <slot name="label-right" />
     </span>
 
-    <AppDropdown :autoclose :placement :order dropdown-class="p-0">
-      <template #trigger="{ isOpen }">
-        <div class="flex">
-          <div v-if="$slots.left" class="form-slot rounded-r-none">
-            <slot name="left" />
-          </div>
+    <div class="flex">
+      <div v-if="$slots.left" class="form-slot rounded-r-none">
+        <slot name="left" />
+      </div>
 
+      <AppDropdown :autoclose :placement :order dropdown-class="p-0">
+        <template #trigger="{ isOpen }">
           <div class="relative w-full">
             <button
               type="button"
@@ -73,92 +73,92 @@
             </button>
 
             <FormValidate v-if="name" :name :class="validateClass" />
+
+            <AppAppear v-if="!label && required && !selected.length">
+              <span title="Required" class="form-required-floating" />
+            </AppAppear>
           </div>
+        </template>
 
-          <div v-if="$slots.right" class="form-slot rounded-l-none">
-            <slot name="right" />
-          </div>
+        <input v-if="search" v-model="searchInput" class="form-input rounded-none" placeholder="Search" />
 
-          <AppAppear v-if="!label && required && !selected.length">
-            <span title="Required" class="form-required-floating" />
-          </AppAppear>
-        </div>
-      </template>
+        <div v-if="hasOptions" class="select-options">
+          <template v-if="presets && presets.length > 0">
+            <div class="select-group-label">Presets</div>
 
-      <input v-if="search" v-model="searchInput" class="form-input rounded-none" placeholder="Search" />
-
-      <div v-if="hasOptions" class="select-options">
-        <template v-if="presets && presets.length > 0">
-          <div class="select-group-label">Presets</div>
-
-          <div v-for="(preset, index) in presets" :key="index" class="flex items-center gap-1">
-            <button
-              type="button"
-              class="btn flex-1 justify-start"
-              :class="{ 'bg-current/5 font-medium': hasPreset(preset.list) }"
-              @click="addPreset(preset.list, true)"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 32 32"
-                class="hover:bg-surface/5 -mx-1 size-6 shrink-0 rounded-md p-1 duration-300"
-                @click.stop="addPreset(preset.list)"
+            <div v-for="(preset, index) in presets" :key="index" class="flex items-center gap-1">
+              <button
+                type="button"
+                class="btn flex-1 justify-start"
+                :class="{ 'bg-current/5 font-medium': hasPreset(preset.list) }"
+                @click="addPreset(preset.list, true)"
               >
-                <path
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="3"
-                  :d="hasPreset(preset.list) ? 'm5 18 6 6L26 9' : 'M16 7v18M7 16h18'"
-                />
-              </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 32 32"
+                  class="hover:bg-surface/5 -mx-1 size-6 shrink-0 rounded-md p-1 duration-300"
+                  @click.stop="addPreset(preset.list)"
+                >
+                  <path
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    :d="hasPreset(preset.list) ? 'm5 18 6 6L26 9' : 'M16 7v18M7 16h18'"
+                  />
+                </svg>
 
-              {{ preset.name }}
-            </button>
-          </div>
+                {{ preset.name }}
+              </button>
+            </div>
 
-          <div class="select-group-label">All</div>
-        </template>
-
-        <template v-for="(optionGroup, indexParent) in filteredOptions" :key="indexParent">
-          <div v-if="typeof optionGroup === 'object' && optionGroup.group" class="select-group-label">
-            {{ optionGroup.group }}
-          </div>
-
-          <template v-for="(option, index) in optionGroup.list" :key="index">
-            <button
-              v-if="!(typeof option === 'object' && option.excluded)"
-              type="button"
-              class="btn justify-start"
-              :class="{ 'bg-current/5 font-medium': isSelected(option), '-order-1': isSelected(option) && order }"
-              @click="toggleOption(option)"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="size-4 shrink-0">
-                <path
-                  fill="none"
-                  stroke-width="3"
-                  d="m5 18 7 7L27 9"
-                  class="duration-300"
-                  stroke="currentColor"
-                  stroke-dasharray="32"
-                  :style="`stroke-dashoffset:${isSelected(option) ? 0 : 32}`"
-                />
-              </svg>
-
-              <slot name="option" :value="option">{{ getKeyName(option) }}</slot>
-            </button>
+            <div class="select-group-label">All</div>
           </template>
-        </template>
-      </div>
 
-      <div v-else class="p-4 text-center opacity-40">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="mb-2 inline-block size-5">
-          <circle cx="14" cy="14" r="10" fill="none" stroke="currentColor" stroke-width="3" />
-          <line x1="21" y1="21" x2="28" y2="28" stroke="currentColor" stroke-width="3" />
-        </svg>
+          <template v-for="(optionGroup, indexParent) in filteredOptions" :key="indexParent">
+            <div v-if="typeof optionGroup === 'object' && optionGroup.group" class="select-group-label">
+              {{ optionGroup.group }}
+            </div>
 
-        <div class="font-medium whitespace-nowrap">No Results</div>
+            <template v-for="(option, index) in optionGroup.list" :key="index">
+              <button
+                v-if="!(typeof option === 'object' && option.excluded)"
+                type="button"
+                class="btn justify-start"
+                :class="{ 'bg-current/5 font-medium': isSelected(option), '-order-1': isSelected(option) && order }"
+                @click="toggleOption(option)"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="size-4 shrink-0">
+                  <path
+                    fill="none"
+                    stroke-width="3"
+                    d="m5 18 7 7L27 9"
+                    class="duration-300"
+                    stroke="currentColor"
+                    stroke-dasharray="32"
+                    :style="`stroke-dashoffset:${isSelected(option) ? 0 : 32}`"
+                  />
+                </svg>
+
+                <slot name="option" :value="option">{{ getKeyName(option) }}</slot>
+              </button>
+            </template>
+          </template>
+        </div>
+
+        <div v-else class="p-4 text-center opacity-40">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="mb-2 inline-block size-5">
+            <circle cx="14" cy="14" r="10" fill="none" stroke="currentColor" stroke-width="3" />
+            <line x1="21" y1="21" x2="28" y2="28" stroke="currentColor" stroke-width="3" />
+          </svg>
+
+          <div class="font-medium whitespace-nowrap">No Results</div>
+        </div>
+      </AppDropdown>
+
+      <div v-if="$slots.right" class="form-slot rounded-l-none">
+        <slot name="right" />
       </div>
-    </AppDropdown>
+    </div>
 
     <div v-if="help || $slots.help" class="form-help">
       <slot name="help">{{ help }}</slot>
