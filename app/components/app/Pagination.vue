@@ -39,13 +39,13 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{ totalPages: number; scrollTo?: string }>();
+const props = defineProps<{ totalPages: number; perPage?: number; scrollTo?: string }>();
 
 const route = useRoute();
 const routePage = Number(route.query.page);
 const currentPage = ref(routePage || 1);
 
-const perPage = ref(Number(route.query.perPage) || 25);
+const perPage = ref(Number(route.query.perPage) || props.perPage || 25);
 
 const pages = computed(() => {
   const show = 5;

@@ -31,7 +31,7 @@ const props = withDefaults(
     meta: {
       dictionaryKey?: string;
       expandedKey?: string;
-      virtual?: boolean;
+      virtualScroll?: boolean;
     };
 
     omit?: (keyof T)[];
@@ -126,7 +126,7 @@ const cells = computed(() => {
 });
 
 // Rows virtualization
-const { startIndex, endIndex, visibleRows, topPadding, bottomPadding } = useVirtualRows(rows, props.meta.virtual);
+const { startIndex, endIndex, visibleRows, topPadding, bottomPadding } = useVirtualRows(rows, props.meta.virtualScroll);
 
 // Client side sorting
 const onSortByClient = () => {

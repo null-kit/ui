@@ -17,8 +17,8 @@
         role="dialog"
         class="fixed inset-0 z-10 flex overflow-auto p-4 outline-0 md:p-10"
         tabindex="0"
-        @keydown.esc="!preventClose && onClose"
-        @click.self="!preventClose && onClose"
+        @keydown.esc="onPreventClose"
+        @click.self="onPreventClose"
       >
         <div class="modal-content m-auto w-full" :class="modalClass">
           <slot v-if="$slots.header || $slots.title" name="header">
@@ -58,6 +58,12 @@ const isActive = ref(false);
 const onClose = () => {
   isActive.value = false;
   document.body.removeAttribute('style');
+};
+
+const onPreventClose = () => {
+  if (preventClose) return;
+
+  onClose();
 };
 
 defineExpose({ onClose });

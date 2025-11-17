@@ -19,7 +19,7 @@ export type TableProps<T> = {
 
   dictionaryKey?: string;
   expandedKey?: string;
-  virtual?: boolean;
+  virtualScroll?: boolean;
 };
 
 export type TableDataSlots<T> = {

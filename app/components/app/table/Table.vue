@@ -18,7 +18,7 @@
         />
 
         <tbody ref="tbody">
-          <tr v-if="virtual" aria-hidden>
+          <tr v-if="virtualScroll" aria-hidden>
             <td :colspan="cells.length" :style="{ padding: 0, border: 0, height: topPadding + 'px' }" />
           </tr>
 
@@ -72,7 +72,7 @@
             </td>
           </tr>
 
-          <tr v-if="virtual" aria-hidden>
+          <tr v-if="virtualScroll" aria-hidden>
             <td :colspan="cells.length" :style="{ padding: 0, border: 0, height: bottomPadding + 'px' }" />
           </tr>
         </tbody>
@@ -108,7 +108,7 @@ const props = withDefaults(
 
     dictionaryKey?: string;
     expandedKey?: string;
-    virtual?: boolean;
+    virtualScroll?: boolean;
 
     striped?: boolean;
   }>(),
@@ -130,7 +130,7 @@ const meta = reactive({
   stickyLeft: props.stickyLeft,
   stickyRight: props.stickyRight,
 
-  virtual: props.virtual
+  virtualScroll: props.virtualScroll
 });
 
 const getEntry = (entry: Record<string, unknown>, index: number) => {
