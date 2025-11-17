@@ -12,72 +12,70 @@
       <slot name="label-right" />
     </span>
 
-    <div class="flex">
+    <div class="flex w-full">
       <div v-if="$slots.left" class="form-slot rounded-r-none">
         <slot name="left" />
       </div>
 
-      <AppDropdown :autoclose :placement :order dropdown-class="p-0">
+      <AppDropdown :autoclose :placement class="w-full" dropdown-class="p-0">
         <template #trigger="{ isOpen }">
-          <div class="relative w-full">
-            <button
-              type="button"
-              :class="[
-                'select-input',
-                inputClass,
-                { 'ring-accent': isOpen, 'rounded-l-none': $slots.left, 'rounded-r-none': $slots.right }
-              ]"
-            >
-              <span v-if="multiple && selected.length > 0" class="select-multiple">
-                <span v-for="(option, index) in selected" :key="index" class="btn btn-sm btn-default">
-                  {{ getKeyName(option) }}
-
-                  <svg
-                    viewBox="0 0 32 32"
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="size-3 shrink-0 cursor-pointer text-current/50 hover:text-red-500"
-                    @click.stop="toggleOption(option)"
-                  >
-                    <path stroke-width="3" stroke="currentColor" d="M25 7 7 25m18 0L7 7" />
-                  </svg>
-                </span>
-              </span>
-
-              <span v-for="(option, index) in selected" v-else :key="index" class="self-center font-medium">
+          <button
+            type="button"
+            :class="[
+              'select-input',
+              inputClass,
+              { 'ring-accent': isOpen, 'rounded-l-none': $slots.left, 'rounded-r-none': $slots.right }
+            ]"
+          >
+            <span v-if="multiple && selected.length > 0" class="select-multiple">
+              <span v-for="(option, index) in selected" :key="index" class="btn btn-sm btn-default">
                 {{ getKeyName(option) }}
-              </span>
-
-              <span v-if="!selected.length" class="self-center whitespace-nowrap">{{ placeholder }}</span>
-
-              <span class="sticky top-0 ml-auto flex items-center gap-1">
-                <span
-                  v-if="multiple && selected.length > 1"
-                  class="btn btn-sm btn-default size-5 text-current/50 hover:text-red-500"
-                  title="Remove all"
-                  @click.stop="model = null"
-                >
-                  <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="size-3 shrink-0">
-                    <path stroke-width="3" stroke="currentColor" d="M25 7 7 25m18 0L7 7" />
-                  </svg>
-                </span>
 
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 32 32"
-                  class="pointer-events-none size-4 h-full shrink-0 opacity-50"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="size-3 shrink-0 cursor-pointer text-current/50 hover:text-red-500"
+                  @click.stop="toggleOption(option)"
                 >
-                  <polyline points="10 22 16 28 22 22" fill="none" stroke="currentColor" stroke-width="3" />
-                  <polyline points="10 10 16 4 22 10" fill="none" stroke="currentColor" stroke-width="3" />
+                  <path stroke-width="3" stroke="currentColor" d="M25 7 7 25m18 0L7 7" />
                 </svg>
               </span>
-            </button>
+            </span>
 
-            <FormValidate v-if="name" :name :class="validateClass" />
+            <span v-for="(option, index) in selected" v-else :key="index" class="self-center font-medium">
+              {{ getKeyName(option) }}
+            </span>
 
-            <AppAppear v-if="!label && required && !selected.length">
-              <span title="Required" class="form-required-floating" />
-            </AppAppear>
-          </div>
+            <span v-if="!selected.length" class="self-center whitespace-nowrap">{{ placeholder }}</span>
+
+            <span class="sticky top-0 ml-auto flex items-center gap-1">
+              <span
+                v-if="multiple && selected.length > 1"
+                class="btn btn-sm btn-default size-5 text-current/50 hover:text-red-500"
+                title="Remove all"
+                @click.stop="model = null"
+              >
+                <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="size-3 shrink-0">
+                  <path stroke-width="3" stroke="currentColor" d="M25 7 7 25m18 0L7 7" />
+                </svg>
+              </span>
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 32 32"
+                class="pointer-events-none size-4 h-full shrink-0 opacity-50"
+              >
+                <polyline points="10 22 16 28 22 22" fill="none" stroke="currentColor" stroke-width="3" />
+                <polyline points="10 10 16 4 22 10" fill="none" stroke="currentColor" stroke-width="3" />
+              </svg>
+            </span>
+          </button>
+
+          <FormValidate v-if="name" :name :class="validateClass" />
+
+          <AppAppear v-if="!label && required && !selected.length">
+            <span title="Required" class="form-required-floating" />
+          </AppAppear>
         </template>
 
         <input v-if="search" v-model="searchInput" class="form-input rounded-none" placeholder="Search" />
