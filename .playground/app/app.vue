@@ -158,7 +158,7 @@
         <div class="mt-10 mb-2 text-sm font-bold">Table with Virtual Rows and Expanded Rows</div>
         <AppTable
           :data="bigData"
-          virtualScroll
+          virtual-scroll
           :sort-by-client="['name', 'id', 'qsi']"
           :omit="['wpi']"
           sticky-head

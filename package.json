@@ -13,7 +13,7 @@
     "dev": "nuxi dev .playground",
     "dev:prepare": "nuxt prepare .playground",
     "generate": "nuxt generate .playground",
-    "lint": "eslint ."
+    "lint": "eslint . --fix"
   },
   "dependencies": {
     "@floating-ui/vue": "^1.1.6",

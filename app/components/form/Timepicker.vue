@@ -23,8 +23,8 @@
             >
               <button
                 v-for="hour in time23"
-                :key="hour"
                 :id="`${segment}-hour-${hour}`"
+                :key="hour"
                 type="button"
                 class="snap-center"
                 @click="onSetTime(hour, 'hour', segment)"
@@ -41,8 +41,8 @@
             >
               <button
                 v-for="minute in time59"
-                :key="minute"
                 :id="`${segment}-minute-${minute}`"
+                :key="minute"
                 type="button"
                 class="snap-center"
                 @click="onSetTime(minute, 'minute', segment)"
@@ -59,8 +59,8 @@
             >
               <button
                 v-for="second in time59"
-                :key="second"
                 :id="`${segment}-second-${second}`"
+                :key="second"
                 type="button"
                 class="snap-center"
                 @click="onSetTime(second, 'second', segment)"
@@ -183,7 +183,7 @@ const onScrollTo = (programmatic = false) => {
 
       if (!target) continue;
 
-      // @ts-ignore conainer property exists
+      // @ts-expect-error conainer property exists
       target.scrollIntoView({ block: 'center', behavior: 'smooth', container: 'nearest' });
     }
   }

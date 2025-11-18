@@ -167,7 +167,7 @@
 <script setup lang="ts" generic="T extends Record<string, unknown> | string | number">
 import type { Placement } from '@floating-ui/vue';
 
-const model = defineModel(); // <T | T[] | keyof T | T[keyof T] | null>
+const model = defineModel<unknown>(); // <T | T[] | keyof T | T[keyof T] | null>
 
 const props = defineProps<{
   options: T[];

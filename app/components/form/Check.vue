@@ -80,6 +80,6 @@ const model = defineModel<boolean | string | number | string[] | number[] | null
 onMounted(() => {
   if (!model.value && props.value) model.value = Boolean(props.value);
   if (props.trueValue !== undefined && Boolean(model.value)) model.value = props.trueValue;
-  if (props.falseValue !== undefined && !Boolean(model.value)) model.value = props.falseValue;
+  if (props.falseValue !== undefined && !model.value) model.value = props.falseValue;
 });
 </script>

@@ -14,15 +14,15 @@
 
     <div class="form-input flex gap-2">
       <input
-        type="range"
         v-model="model"
+        type="range"
         :min
         :max
         :step
         class="ring-edison my-auto h-2 w-full appearance-none rounded ring outline-none"
       />
 
-      <input type="number" v-model="model" class="w-10 appearance-none text-center outline-none" @input="onInput" />
+      <input v-model="model" type="number" class="w-10 appearance-none text-center outline-none" @input="onInput" />
     </div>
 
     <FormValidate v-if="name" :name />

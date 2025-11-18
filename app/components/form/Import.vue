@@ -27,7 +27,7 @@ const onImport = async (event: Event) => {
 
         model.value = rows.slice(1).join(', ');
       } catch (error) {
-        return setToast('Import Error!', 'Failed to parse CSV', 'error');
+        return setToast('Import Error!', `Failed to parse CSV: ${error}`, 'error');
       }
     };
 
