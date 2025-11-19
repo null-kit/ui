@@ -54,7 +54,12 @@
   @apply not-disabled:not-active:hover:bg-red-400;
 }
 
-:is(.btn-main, .btn-accent, .btn-danger) {
+@utility btn-success {
+  @apply bg-green-600 text-white ring-green-600;
+  @apply not-disabled:not-active:hover:bg-green-500;
+}
+
+:is(.btn-main, .btn-accent, .btn-danger, .btn-success) {
   @apply shadow inset-shadow-xs inset-shadow-white/20;
   @apply not-disabled:active:scale-98;
 }
