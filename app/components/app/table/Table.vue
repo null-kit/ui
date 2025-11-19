@@ -59,6 +59,7 @@
                 v-if="slots[cell]"
                 :entry="getEntry(entry, startIndex + index)"
                 :value="getEntry(entry, startIndex + index)?.[cell]"
+                :isNested="entry.isNested"
               />
 
               <template v-else>{{ entry[cell] }}</template>
@@ -68,7 +69,7 @@
               v-if="slots.actions"
               :class="[{ 'right-0 -left-px border-l md:sticky': stickyRight.includes('actions') }, tdClass]"
             >
-              <component :is="slots.actions" :entry="getEntry(entry, startIndex + index)" />
+              <component :is="slots.actions" :entry="getEntry(entry, startIndex + index)" :isNested="entry.isNested" />
             </td>
           </tr>
 

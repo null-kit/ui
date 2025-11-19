@@ -56,4 +56,9 @@ const isOpen = ref(props.open);
 const onToggle = () => {
   isOpen.value = !isOpen.value;
 };
+
+watch(
+  () => props.open,
+  (value) => (isOpen.value = value)
+);
 </script>
