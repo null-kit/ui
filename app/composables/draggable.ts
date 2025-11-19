@@ -1,4 +1,4 @@
-export const useDraggable = <T extends string | number>(list: T[], preserveKey?: string | Record<string, unknown>) => {
+export const useDraggable = <T extends string | number>(list: T[], preserveKey?: string | string[]) => {
   const { setItem } = useLocalStorage();
   const { settings } = useAppConfig();
 
