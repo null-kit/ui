@@ -1,10 +1,10 @@
-export const useDraggable = <T extends string | number>(list: T[], preserveKey?: string) => {
+export const useDraggable = <T extends string | number>(list: T[], preserveKey?: string | Record<string, unknown>) => {
   const { setItem } = useLocalStorage();
   const { settings } = useAppConfig();
 
   const dragIndex = ref<number | null>(null);
 
-  const preservedList = preserveKey ? (settings[preserveKey] as T[]) : null;
+  const preservedList = typeof preserveKey === 'object' ? preserveKey : settings[preserveKey];
 
   const orderedList = ref<T[]>(preservedList || list);
 
@@ -39,7 +39,7 @@ export const useDraggable = <T extends string | number>(list: T[], preserveKey?:
       orderedList.value.splice(index, 0, draggedItem);
     }
 
-    if (preserveKey) setItem(settings.key, { ...settings, [preserveKey]: orderedList.value });
+    if (preserveKey) setItem(settings.key, settings);
 
     onDragEnd();
   };
