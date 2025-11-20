@@ -131,7 +131,8 @@ const meta = reactive({
   stickyLeft: props.stickyLeft,
   stickyRight: props.stickyRight,
 
-  virtualScroll: props.virtualScroll
+  virtualScroll: props.virtualScroll,
+  sortByClient: props.sortByClient
 });
 
 const getEntry = (entry: Record<string, unknown>, index: number) => {

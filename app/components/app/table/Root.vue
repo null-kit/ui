@@ -32,6 +32,7 @@ const props = withDefaults(
       dictionaryKey?: string;
       expandedKey?: string;
       virtualScroll?: boolean;
+      sortByClient?: string[];
     };
 
     omit?: (keyof T)[];
@@ -41,7 +42,8 @@ const props = withDefaults(
   {
     pick: () => [],
     omit: () => [],
-    columnsExtra: () => []
+    columnsExtra: () => [],
+    sortByClient: () => []
   }
 );
 
@@ -144,4 +146,12 @@ const onSortByClient = () => {
     }
   }
 };
+
+onUpdated(() => {
+  if (route.query.sortBy && props.meta.sortByClient?.length) onSortByClient();
+});
+
+onMounted(() => {
+  if (route.query.sortBy && props.meta.sortByClient?.length) onSortByClient();
+});
 </script>
