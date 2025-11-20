@@ -3,6 +3,7 @@
     <template #trigger="{ isOpen }">
       <div :class="{ 'flex gap-px': dateMode }">
         <button
+          type="button"
           :class="[
             'form-input flex items-center gap-2 hover:z-1',
             { 'ring-accent z-1': isOpen, 'rounded-r-none': dateMode }
