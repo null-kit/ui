@@ -1,42 +1,42 @@
 <template>
   <div ref="reference" class="w-fit" @click="isOpen = !isOpen">
     <slot />
-  </div>
 
-  <Teleport to="#teleports">
-    <Transition name="confirm" :duration="400">
-      <div v-if="isOpen" ref="floating" class="z-10" :style="floatingStyles" @click.stop>
-        <div
-          role="dialog"
-          class="bg-darwin text-surface inverted flex gap-4 rounded-2xl p-4 shadow-lg"
-          :class="hasPlacement(['bottom-start', 'bottom-end']) ? 'flex-col-reverse' : 'flex-col'"
-        >
-          <div>
-            <div class="mb-1 flex items-center gap-2">
-              <AppIcon name="confirm" class="size-5" />
+    <Teleport to="#teleports">
+      <Transition name="confirm" :duration="400">
+        <div v-if="isOpen" ref="floating" class="z-10" :style="floatingStyles" @click.stop>
+          <div
+            role="dialog"
+            class="bg-darwin text-surface inverted flex gap-4 rounded-2xl p-4 shadow-lg"
+            :class="hasPlacement(['bottom-start', 'bottom-end']) ? 'flex-col-reverse' : 'flex-col'"
+          >
+            <div>
+              <div class="mb-1 flex items-center gap-2">
+                <AppIcon name="confirm" class="size-5" />
 
-              <div class="text-lg font-semibold">{{ title }}</div>
+                <div class="text-lg font-semibold">{{ title }}</div>
+              </div>
+
+              <slot name="message">
+                <p class="whitespace-break-spaces">{{ message }}</p>
+              </slot>
             </div>
 
-            <slot name="message">
-              <p class="whitespace-break-spaces">{{ message }}</p>
-            </slot>
-          </div>
+            <div
+              class="flex items-center gap-3 *:flex-1"
+              :class="{ 'flex-row-reverse': hasPlacement(['top-end', 'bottom-end']) }"
+            >
+              <button type="button" class="btn" :class="confirmClass" @click="onConfirm">
+                {{ confirmText }}
+              </button>
 
-          <div
-            class="flex items-center gap-3 *:flex-1"
-            :class="{ 'flex-row-reverse': hasPlacement(['top-end', 'bottom-end']) }"
-          >
-            <button type="button" class="btn" :class="confirmClass" @click="onConfirm">
-              {{ confirmText }}
-            </button>
-
-            <button type="button" class="btn btn-default" @click="isOpen = false">Cancel</button>
+              <button type="button" class="btn btn-default" @click="isOpen = false">Cancel</button>
+            </div>
           </div>
         </div>
-      </div>
-    </Transition>
-  </Teleport>
+      </Transition>
+    </Teleport>
+  </div>
 </template>
 
 <script setup lang="ts">
