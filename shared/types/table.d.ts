@@ -23,11 +23,11 @@ export type TableProps<T> = {
 };
 
 export type TableDataSlots<T> = {
-  [K in keyof T]?: (props: { entry: T; value: T[K]; values: T[] }) => void;
+  [K in keyof T]?: (props: { entry: T; value: T[K]; values: T[]; isNested: boolean }) => void;
 };
 
 export type TableExtraSlots<T> = {
-  [key: string]: (props: { entry: T; value: T[keyof T]; values: T[] }) => void;
+  [key: string]: (props: { entry: T; value: T[keyof T]; values: T[]; isNested: boolean }) => void;
 };
 
 export type TableSlots<T> = TableDataSlots<T> & TableExtraSlots<T>;
