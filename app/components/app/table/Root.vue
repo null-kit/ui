@@ -2,7 +2,7 @@
   <div ref="tbody">
     <slot
       v-bind="{
-        data,
+        data: sortedData,
 
         rows,
         cells,
@@ -15,9 +15,7 @@
 
         expandedRows,
         isExpanded,
-        toggleRow,
-
-        onSortByClient
+        toggleRow
       }"
     />
   </div>
@@ -111,12 +109,36 @@ const createRows = (data: T[]) => {
   return mergedRows;
 };
 
-const rows = ref(createRows(props.data));
+const sortedData = computed(() => {
+  if (!route.query.sortBy || !props.meta.sortByClient?.length) {
+    return props.data;
+  }
+
+  const [column, direction] = String(route.query.sortBy).split(':') as [string, 'asc' | 'desc'];
+
+  return props.data
+    .map((row) => {
+      const item = { ...row } as Record<string, any>;
+
+      if (props.meta.expandedKey) {
+        const nested = item[props.meta.expandedKey];
+
+        if (Array.isArray(nested)) {
+          item[props.meta.expandedKey] = [...nested].sort((a, b) => compareValues(a[column], b[column], direction));
+        }
+      }
+
+      return item as T;
+    })
+    .sort((a, b) => compareValues(a[column], b[column], direction));
+});
+
+const rows = ref(createRows(sortedData.value));
 
 watch(
-  () => [props.data, expandedRows.value, route.query.sortBy],
+  () => [sortedData.value, expandedRows.value],
   () => {
-    rows.value = createRows(props.data);
+    rows.value = createRows(sortedData.value);
   }
 );
 
@@ -129,29 +151,4 @@ const cells = computed(() => {
 
 // Rows virtualization
 const { startIndex, endIndex, visibleRows, topPadding, bottomPadding } = useVirtualRows(rows, props.meta.virtualScroll);
-
-// Client side sorting
-const onSortByClient = () => {
-  const [column, direction] = String(route.query.sortBy).split(':') as [string, 'asc' | 'desc'];
-
-  rows.value = props.data.sort((a, b) => compareValues(a[column], b[column], direction));
-
-  if (props.meta.expandedKey && rows.value.length > 0) {
-    for (const item of rows.value) {
-      const nested = item[props.meta.expandedKey];
-
-      if (!Array.isArray(nested)) continue;
-
-      nested.sort((a, b) => compareValues(a[column], b[column], direction));
-    }
-  }
-};
-
-onUpdated(() => {
-  if (route.query.sortBy && props.meta.sortByClient?.length) onSortByClient();
-});
-
-onMounted(() => {
-  if (route.query.sortBy && props.meta.sortByClient?.length) onSortByClient();
-});
 </script>

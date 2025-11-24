@@ -1,11 +1,11 @@
 <template>
   <AppTableRoot
-    v-slot="{ cells, startIndex, topPadding, bottomPadding, visibleRows, onSortByClient, isExpanded, toggleRow }"
+    v-slot="{ cells, startIndex, topPadding, bottomPadding, visibleRows, isExpanded, toggleRow, data: slotData }"
     v-bind="{ data, meta, pick, omit, columnsExtra }"
   >
     <div v-if="stickyHead" ref="theadVisible" class="sticky z-1 overflow-hidden" :class="stickyOffset">
       <table class="table-default w-full">
-        <AppTableHead v-bind="{ meta, cells, slots, sortBy, sortByClient }" @sort="onSortByClient" />
+        <AppTableHead v-bind="{ meta, cells, slots, sortBy, sortByClient }" />
       </table>
     </div>
 
@@ -14,7 +14,6 @@
         <AppTableHead
           v-bind="{ meta, cells, slots, sortBy, sortByClient }"
           :class="{ 'pointer-events-none invisible': stickyHead }"
-          @sort="onSortByClient"
         />
 
         <tbody ref="tbody">
@@ -57,8 +56,8 @@
               <component
                 :is="slots[cell]"
                 v-if="slots[cell]"
-                :entry="getEntry(entry, startIndex + index)"
-                :value="getEntry(entry, startIndex + index)?.[cell]"
+                :entry="getEntry(entry, startIndex + index, slotData)"
+                :value="getEntry(entry, startIndex + index, slotData)?.[cell]"
                 :isNested="entry.isNested"
               />
 
@@ -69,7 +68,11 @@
               v-if="slots.actions"
               :class="[{ 'right-0 -left-px border-l md:sticky': stickyRight.includes('actions') }, tdClass]"
             >
-              <component :is="slots.actions" :entry="getEntry(entry, startIndex + index)" :isNested="entry.isNested" />
+              <component
+                :is="slots.actions"
+                :entry="getEntry(entry, startIndex + index, slotData)"
+                :isNested="entry.isNested"
+              />
             </td>
           </tr>
 
@@ -135,10 +138,10 @@ const meta = reactive({
   sortByClient: props.sortByClient
 });
 
-const getEntry = (entry: Record<string, unknown>, index: number) => {
+const getEntry = (entry: Record<string, unknown>, index: number, data: T[] = props.data) => {
   if (entry.isNested) return entry;
 
-  return props.data[index] || props.data[Number(entry._rowIndex)];
+  return data[index] || data[Number(entry._rowIndex)];
 };
 
 useStickyHead();

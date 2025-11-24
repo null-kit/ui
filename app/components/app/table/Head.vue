@@ -52,8 +52,6 @@
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits<{ sort: [column: string] }>();
-
 const props = withDefaults(
   defineProps<{
     cells: string[];
@@ -98,9 +96,5 @@ const onSort = (column: string) => {
   const direction = String(route.query.sortBy).endsWith(':desc') ? 'asc' : 'desc';
 
   navigateTo({ query: { ...route.query, sortBy: `${column}:${direction}` } });
-
-  if (props.sortByClient && props.sortByClient.includes(column)) {
-    emit('sort', column);
-  }
 };
 </script>
