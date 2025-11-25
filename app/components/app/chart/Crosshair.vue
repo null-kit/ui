@@ -23,8 +23,8 @@
 
           <div>{{ useDictionary(category) }}</div>
 
-          <div v-if="currentData[category]" class="ml-auto pl-4 font-semibold">
-            {{ yFormat ? yFormat(currentData[category]) : formatNumber(currentData[category]) }}
+          <div class="ml-auto font-semibold">
+            {{ yFormat ? yFormat(currentData[category] || 0) : formatNumber(currentData[category] || 0) }}
           </div>
         </div>
       </div>
