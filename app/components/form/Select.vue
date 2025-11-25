@@ -53,7 +53,7 @@
                 v-if="multiple && selected.length > 1"
                 class="btn btn-sm btn-default size-5 text-current/50 hover:text-red-500"
                 title="Remove all"
-                @click.stop="model = null"
+                @click.stop="onClear"
               >
                 <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="size-3 shrink-0">
                   <path stroke-width="3" stroke="currentColor" d="M25 7 7 25m18 0L7 7" />
@@ -288,6 +288,11 @@ const hasPreset = (preset: string[]) => {
   }
 
   return false;
+};
+
+const onClear = () => {
+  model.value = props.multiple ? [] : null;
+  searchInput.value = '';
 };
 
 onMounted(() => {
