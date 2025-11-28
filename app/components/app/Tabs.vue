@@ -8,7 +8,7 @@
         type="button"
         @click="toggleTab(tab)"
       >
-        <slot :name="`tab-${normalizeTab(tab)}`" :is-active="isActive(tab)">
+        <slot :name="`tab-${formatTab(tab)}`" :is-active="isActive(tab)">
           <span :class="tabInnerClass">
             {{ tab }}
           </span>
@@ -16,7 +16,7 @@
       </button>
     </div>
 
-    <slot :name="selectedTab" />
+    <slot :name="activeTab" />
   </div>
 </template>
 
@@ -28,6 +28,7 @@ const props = withDefaults(
     tabClass?: string;
     tabInnerClass?: string;
     activeClass?: string;
+    defaultTab?: string;
     noQuery?: boolean;
   }>(),
   {
@@ -35,30 +36,37 @@ const props = withDefaults(
     tabClass: 'btn w-full',
     tabInnerClass: undefined,
     activeClass: 'btn-default text-accent',
-    noQuery: false
+    noQuery: false,
+    defaultTab: undefined
   }
 );
 
 const route = useRoute();
 
-const normalizeTab = (tab: string) => tab.trim().toLowerCase().replace(/[.\s]/g, '-');
+const formatTab = (tab: string) => tab.trim().toLowerCase().replace(/[.\s]/g, '-');
 
-const activeTab = ref();
+const activeTab = ref(formatTab(String(route.query.tab || props.defaultTab || props.tabs[0])));
 
-const selectedTab = computed(() => normalizeTab(String(activeTab.value || route.query.tab || props.tabs[0])));
-
-const isActive = (tab: string) => normalizeTab(tab) === selectedTab.value;
+const isActive = (tab: string) => formatTab(tab) === activeTab.value;
 
 const toggleTab = (tab: string) => {
-  const formattedTab = normalizeTab(tab);
+  const formattedTab = formatTab(tab);
 
   activeTab.value = formattedTab;
 
-  if (!props.noQuery) navigateTo({ query: { ...route.query, tab: formattedTab, page: undefined } });
+  if (!props.noQuery) {
+    navigateTo({
+      query: {
+        ...route.query,
+        tab: props.defaultTab === formattedTab ? undefined : formattedTab,
+        page: undefined
+      }
+    });
+  }
 };
 
 onMounted(() => {
-  if (!props.tabs.map(normalizeTab).includes(selectedTab.value)) {
+  if (!props.tabs.map(formatTab).includes(activeTab.value)) {
     navigateTo({ query: { ...route.query, tab: undefined } });
   }
 });

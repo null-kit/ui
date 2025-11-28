@@ -98,7 +98,7 @@
     @apply rounded-xl;
   }
 
-  & > .btn {
+  & .btn {
     @apply flex-1 rounded-none shadow-none ring-0;
     @apply active:!scale-100;
   }
