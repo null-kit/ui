@@ -45,7 +45,9 @@ const route = useRoute();
 
 const formatTab = (tab: string) => tab.trim().toLowerCase().replace(/[.\s]/g, '-');
 
-const activeTab = ref(formatTab(String(route.query.tab || props.defaultTab || props.tabs[0])));
+const defaultTab = computed(() => formatTab(String(props.defaultTab ?? props.tabs[0])));
+
+const activeTab = ref((route.query.tab as string) ?? defaultTab.value);
 
 const isActive = (tab: string) => formatTab(tab) === activeTab.value;
 
@@ -58,7 +60,7 @@ const toggleTab = (tab: string) => {
     navigateTo({
       query: {
         ...route.query,
-        tab: props.defaultTab === formattedTab ? undefined : formattedTab,
+        tab: defaultTab.value === formattedTab ? undefined : formattedTab,
         page: undefined
       }
     });
