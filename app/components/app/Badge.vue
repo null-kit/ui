@@ -2,6 +2,7 @@
   <span
     class="inline-flex items-center justify-center gap-1.5 font-medium ring ring-inset"
     :class="[type && styles[type], size && sizes[size]]"
+    :aria-label="`badge-${type}`"
   >
     <slot>
       <slot name="icon">
@@ -29,7 +30,7 @@ const {
 }>();
 
 const styles = {
-  default: 'bg-darwin ring-edison shadow-xs dark:shadow-black/20',
+  default: 'bg-darwin ring-edison shadow-xs text-surface dark:shadow-black/20',
   success: 'bg-green-500/10 ring-green-500/20 text-green-600',
   warning: 'bg-yellow-500/10 ring-yellow-500/20 text-yellow-600',
   danger: 'bg-red-500/10 ring-red-500/20 text-red-500',
