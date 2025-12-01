@@ -72,4 +72,9 @@ onMounted(() => {
   isActive.value = true;
   document.body.style.overflow = 'hidden';
 });
+
+onUnmounted(() => {
+  isActive.value = false;
+  document.body.removeAttribute('style');
+});
 </script>

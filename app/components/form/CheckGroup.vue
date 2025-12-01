@@ -45,7 +45,7 @@
       <span title="Required" class="form-required-floating" />
     </AppAppear>
 
-    <FormValidate v-if="name" :name />
+    <FormValidate v-if="name" :name :class="validateClass" />
 
     <div v-if="help || $slots.help" class="form-help">
       <slot name="help">{{ help }} </slot>
@@ -64,11 +64,12 @@ const props = withDefaults(
     keyName?: keyof T;
     keyValue?: keyof T;
     required?: boolean;
-    groupClass?: string;
     disabled?: boolean;
     help?: string;
     readonly?: boolean;
     noToggle?: boolean;
+    groupClass?: string;
+    validateClass?: string;
   }>(),
   {
     type: 'radio'

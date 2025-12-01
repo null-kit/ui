@@ -167,6 +167,8 @@
 <script setup lang="ts" generic="T extends Record<string, unknown> | string | number">
 import type { Placement } from '@floating-ui/vue';
 
+const emit = defineEmits<{ change: [value: T] }>();
+
 const model = defineModel<unknown>(); // <T | T[] | keyof T | T[keyof T] | null>
 
 const props = defineProps<{
@@ -261,6 +263,8 @@ const toggleOption = (option: T) => {
   } else {
     model.value = selected.value[0] === option ? null : getKeyValue(option);
   }
+
+  emit('change', model.value);
 };
 
 const filteredOptions = computed(() => {
