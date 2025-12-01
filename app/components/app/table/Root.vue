@@ -29,7 +29,7 @@ const props = withDefaults(
     meta: {
       dictionaryKey?: string;
       expandedKey?: string;
-      virtualScroll?: boolean;
+      virtualScroll?: boolean | number;
       sortByClient?: string[];
     };
 

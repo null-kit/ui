@@ -37,7 +37,7 @@ const props = defineProps<{
 
     dictionaryKey?: string;
     expandedKey?: string;
-    virtualScroll?: boolean;
+    virtualScroll?: boolean | number;
   };
 
   slots: {

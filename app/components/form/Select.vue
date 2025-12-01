@@ -264,7 +264,7 @@ const toggleOption = (option: T) => {
     model.value = selected.value[0] === option ? null : getKeyValue(option);
   }
 
-  emit('change', model.value);
+  emit('change', model.value as T);
 };
 
 const filteredOptions = computed(() => {

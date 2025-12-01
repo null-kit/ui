@@ -112,7 +112,7 @@ const props = withDefaults(
 
     dictionaryKey?: string;
     expandedKey?: string;
-    virtualScroll?: boolean;
+    virtualScroll?: boolean | number;
 
     striped?: boolean;
   }>(),

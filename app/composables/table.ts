@@ -45,7 +45,7 @@ export const useStickyHead = () => {
 };
 
 // Virtualization Composable
-export const useVirtualRows = <T extends Record<string, unknown>>(rows: Ref<T[]>, hasVirtual?: boolean) => {
+export const useVirtualRows = <T extends Record<string, unknown>>(rows: Ref<T[]>, hasVirtual?: boolean | number) => {
   if (!hasVirtual) {
     return {
       startIndex: 0,
@@ -54,7 +54,7 @@ export const useVirtualRows = <T extends Record<string, unknown>>(rows: Ref<T[]>
     };
   }
 
-  const rowHeight = 40;
+  const rowHeight = typeof hasVirtual === 'number' ? hasVirtual : 40;
   const buffer = 5;
 
   const tableRef = useTemplateRef<HTMLElement>('tbody');
