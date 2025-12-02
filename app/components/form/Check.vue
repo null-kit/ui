@@ -1,7 +1,7 @@
 <template>
   <label class="relative inline-flex flex-wrap whitespace-break-spaces">
-    <span class="inline-flex items-center gap-2 text-sm">
-      <span :class="['relative flex shrink-0', disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer']">
+    <span class="inline-flex items-center gap-2 text-sm" :class="{ 'cursor-not-allowed opacity-50': disabled }">
+      <span class="relative flex shrink-0">
         <input
           v-model="model"
           v-bind="{

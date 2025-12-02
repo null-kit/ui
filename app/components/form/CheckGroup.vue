@@ -19,12 +19,8 @@
         <input
           v-model="model"
           class="peer checked:bg-accent/5 absolute inset-0 appearance-none disabled:cursor-not-allowed"
-          :class="readonly ? 'cursor-default' : 'cursor-pointer'"
           :value="toLowerCase(option)"
-          :type="type"
-          :name="name"
-          :disabled="disabled"
-          :readonly="readonly"
+          v-bind="{ type, name, disabled, readonly }"
           @click="onClick($event, option)"
         />
 
@@ -82,7 +78,6 @@ const [model, modifiers] = defineModel<unknown, 'lowercase' | 'number'>({
     if (value && modifiers.lowercase) {
       return Array.isArray(value) ? value.map(toLowerCase) : toLowerCase(value as T);
     }
-
     return value;
   }
 });
@@ -105,7 +100,7 @@ const onClick = (event: Event, option: T) => {
   if (props.readonly) return event.preventDefault();
 
   if (toLowerCase(model.value as T) === toLowerCase(option) && !props.noToggle) {
-    model.value = undefined;
+    model.value = props.type === 'checkbox' ? [] : undefined;
   }
 };
 
