@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex shrink-0 flex-col" :title="props.readonly ? 'Readonly' : undefined">
+  <div class="relative flex shrink-0 flex-col" :title="readonly ? 'Readonly' : undefined">
     <div v-if="label" class="form-label">
       <slot name="label-left" />
 
@@ -19,12 +19,12 @@
         <input
           v-model="model"
           class="peer checked:bg-accent/5 absolute inset-0 appearance-none disabled:cursor-not-allowed"
-          :class="props.readonly ? 'cursor-default' : 'cursor-pointer'"
+          :class="readonly ? 'cursor-default' : 'cursor-pointer'"
           :value="toLowerCase(option)"
           :type="type"
           :name="name"
           :disabled="disabled"
-          :readonly="props.readonly"
+          :readonly="readonly"
           @click="onClick($event, option)"
         />
 
@@ -72,7 +72,8 @@ const props = withDefaults(
     validateClass?: string;
   }>(),
   {
-    type: 'radio'
+    type: 'radio',
+    readonly: false
   }
 );
 
