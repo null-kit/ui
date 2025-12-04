@@ -2,6 +2,7 @@ import type { SearchParameters } from 'ofetch';
 import type { AsyncDataRequestStatus } from '#app';
 
 type Options = {
+  dataKey?: string;
   query?: MaybeRefOrGetter<SearchParameters>;
 };
 
@@ -15,25 +16,27 @@ export const useInfinityFetch = <T>(url: string, options: Options) => {
 
     status.value = 'pending';
 
-    try {
-      const response = await $fetch<T[]>(url, {
-        method: 'GET',
-        query: {
-          ...toValue(options.query),
-          page: page.value
-        }
-      });
+    const query = computed(() => toValue(options.query));
 
-      if (response.length === 0) {
-        status.value = 'end';
-        return;
+    const response = await $fetch<T[]>(url, {
+      method: 'GET',
+      query: {
+        ...query.value,
+        page: page.value
       }
+    });
 
-      data.value = [...data.value, ...response] as T[];
-      page.value++;
-    } finally {
-      status.value = 'idle';
+    const responseData = (options.dataKey ? response[options.dataKey as keyof typeof response] : response) as T[];
+
+    if (responseData && responseData.length === 0) {
+      status.value = 'end';
+      return;
     }
+
+    data.value = [...data.value, ...responseData] as T[];
+    page.value++;
+
+    status.value = 'idle';
   };
 
   const refresh = () => {
