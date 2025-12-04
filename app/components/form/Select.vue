@@ -188,7 +188,7 @@ const props = defineProps<{
   help?: string;
   presets?: {
     name: string;
-    list: string[];
+    list: string[] | number[];
   }[];
   inputClass?: string;
   validateClass?: string;
