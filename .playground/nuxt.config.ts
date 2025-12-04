@@ -17,9 +17,9 @@ export default defineNuxtConfig({
   alias: {
     '@null-kit/ui': join(rootDir, 'app', 'assets', 'css')
   },
-  app: {
-    baseURL: '/ui/'
-  },
+  // app: {
+  //   baseURL: '/ui/'
+  // },
   css: ['@/assets/css/app.css'],
   postcss: {
     plugins: {
