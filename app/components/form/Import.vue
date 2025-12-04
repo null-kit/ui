@@ -1,12 +1,18 @@
 <template>
-  <label class="btn cursor-pointer rounded-none">
+  <label class="btn cursor-pointer">
     <input type="file" accept=".csv" class="absolute hidden" @change="onImport" />
     <AppIcon name="file-csv" />
+    {{ label }}
   </label>
 </template>
 
 <script setup lang="ts">
-const model = defineModel<string>();
+const { join = ',' } = defineProps<{
+  label?: string;
+  join?: ',' | '\n';
+}>();
+
+const model = defineModel<string | string[]>();
 
 const { setToast } = useToast();
 
@@ -25,7 +31,7 @@ const onImport = async (event: Event) => {
 
         if (rows.length < 2) return setToast('Import Error!', 'CSV file is empty', 'error');
 
-        model.value = rows.slice(1).join(', ');
+        model.value = rows.slice(1).join(join);
       } catch (error) {
         return setToast('Import Error!', `Failed to parse CSV: ${error}`, 'error');
       }
