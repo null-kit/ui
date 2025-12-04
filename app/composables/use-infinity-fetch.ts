@@ -11,12 +11,12 @@ export const useInfinityFetch = <T>(url: string, options: Options) => {
   const page = ref(1);
   const status = ref<AsyncDataRequestStatus | 'end'>('idle');
 
+  const query = computed(() => toValue(options.query));
+
   const fetchData = async () => {
     if (['pending', 'end'].includes(status.value)) return;
 
     status.value = 'pending';
-
-    const query = computed(() => toValue(options.query));
 
     const response = await $fetch<T[]>(url, {
       method: 'GET',
@@ -42,13 +42,11 @@ export const useInfinityFetch = <T>(url: string, options: Options) => {
   const refresh = () => {
     page.value = 1;
     data.value = [];
+    status.value = 'idle';
     fetchData();
   };
 
-  watch(
-    () => toValue(options.query),
-    () => refresh()
-  );
+  watch(query, () => refresh());
 
   let observer: IntersectionObserver | null = null;
 

@@ -1,5 +1,5 @@
 <template>
-  <AppDropdown class="w-fit" dropdown-class="min-w-max">
+  <AppDropdown class="w-fit" dropdown-class="min-w-max" @close="onClose">
     <template #trigger="{ isOpen }">
       <div :class="{ 'flex gap-px': dateMode }">
         <button
@@ -259,6 +259,12 @@ const isDisabled = (date: Date) => {
   return false;
 };
 
+const onClose = () => {
+  if (props.range && selectedDates.value[0] && !selectedDates.value[1]) {
+    selectDate(selectedDates.value[0]);
+  }
+};
+
 const setPreset = (type: Preset) => {
   const today = new Date();
 
@@ -277,7 +283,7 @@ const setPreset = (type: Preset) => {
       break;
     case 'this-month':
       selectDate(new Date(today.getFullYear(), today.getMonth(), 1));
-      selectDate(today);
+      selectDate(new Date(today.getFullYear(), today.getMonth() + 1, 0));
       break;
     case 'this-month-today':
       selectDate(new Date(today.getFullYear(), today.getMonth(), 1));

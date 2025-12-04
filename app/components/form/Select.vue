@@ -286,11 +286,11 @@ const filteredPresets = computed(() => {
 
 const hasOptions = computed(() => filteredOptions.value.some((group) => group.list?.length > 0));
 
-const addPreset = (preset: string[] | number[], replace = false) => {
+const addPreset = (preset: (string | number)[], replace = false) => {
   model.value = replace ? [...new Set(preset as string[])] : [...new Set([...preset, ...(model.value as T[])])];
 };
 
-const hasPreset = (preset: string[] | number[]) => {
+const hasPreset = (preset: (string | number)[]) => {
   if (preset.every((value) => Array.isArray(model.value) && model.value.includes(value))) {
     return true;
   }
