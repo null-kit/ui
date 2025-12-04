@@ -121,7 +121,7 @@ const {
   noIcon?: boolean;
 }>();
 
-const [model, modifiers] = defineModel<Date | Date[] | string | string[] | undefined>({
+const [model, modifiers] = defineModel<Date | string | (Date | string)[] | undefined>({
   required: true,
   set(value) {
     if (value && modifiers.iso) {
