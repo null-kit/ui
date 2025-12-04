@@ -18,7 +18,7 @@ export default defineNuxtModule({
   },
 
   setup(options, nuxt) {
-    const rootDir = path.join(nuxt.options.rootDir, nuxt.options.app.baseURL);
+    const rootDir = nuxt.options.rootDir;
     const iconsDir = path.resolve(rootDir, options.inputDir);
 
     const outputPath = nuxt.options.dev ? '.nuxt/generated' : options.outputDir;
