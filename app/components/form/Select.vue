@@ -84,7 +84,7 @@
           <template v-if="presets && presets.length > 0">
             <div class="select-group-label">Presets</div>
 
-            <div v-for="(preset, index) in presets" :key="index" class="flex items-center gap-1">
+            <div v-for="(preset, index) in filteredPresets" :key="index" class="flex items-center gap-1">
               <button
                 type="button"
                 class="btn flex-1 justify-start"
@@ -280,13 +280,17 @@ const filteredOptions = computed(() => {
   });
 });
 
+const filteredPresets = computed(() => {
+  return props.presets?.filter((preset) => preset.name.toLowerCase().includes(searchInput.value.toLowerCase()));
+});
+
 const hasOptions = computed(() => filteredOptions.value.some((group) => group.list?.length > 0));
 
-const addPreset = (preset: string[], replace = false) => {
-  model.value = replace ? [...new Set(preset)] : [...new Set([...preset, ...(model.value as T[])])];
+const addPreset = (preset: string[] | number[], replace = false) => {
+  model.value = replace ? [...new Set(preset as string[])] : [...new Set([...preset, ...(model.value as T[])])];
 };
 
-const hasPreset = (preset: string[]) => {
+const hasPreset = (preset: string[] | number[]) => {
   if (preset.every((value) => Array.isArray(model.value) && model.value.includes(value))) {
     return true;
   }
