@@ -8,8 +8,8 @@
         :key="cell"
         :class="[
           meta.tdClass,
-          { 'left-0 md:sticky': meta.stickyLeft?.includes(cell) },
-          { 'right-0 -left-px border-l md:sticky': meta.stickyRight?.includes(cell) }
+          { 'left-0 z-1 md:sticky': meta.stickyLeft?.includes(cell) },
+          { 'right-0 -left-px z-1 border-l md:sticky': meta.stickyRight?.includes(cell) }
         ]"
         :aria-label="`tf-${cell}`"
       >

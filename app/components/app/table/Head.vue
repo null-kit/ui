@@ -10,8 +10,8 @@
         :key="cell"
         :class="[
           meta.thClass,
-          { 'left-0 md:sticky': meta.stickyLeft.includes(cell) },
-          { 'right-0 -left-px border-l md:sticky': meta.stickyRight.includes(cell) },
+          { 'left-0 z-1 md:sticky': meta.stickyLeft.includes(cell) },
+          { 'right-0 -left-px z-1 border-l md:sticky': meta.stickyRight.includes(cell) },
           { 'text-accent': canSortBy(cell) && String($route.query.sortBy).startsWith(cell + ':') }
         ]"
         :aria-label="`th-${cell}`"

@@ -283,7 +283,7 @@ const setPreset = (type: Preset) => {
       break;
     case 'this-month':
       selectDate(new Date(today.getFullYear(), today.getMonth(), 1));
-      selectDate(new Date(today.getFullYear(), today.getMonth() + 1, 0));
+      props.maxToday ? selectDate(today) : selectDate(new Date(today.getFullYear(), today.getMonth() + 1, 0));
       break;
     case 'this-month-today':
       selectDate(new Date(today.getFullYear(), today.getMonth(), 1));
