@@ -78,7 +78,7 @@
           </AppAppear>
         </template>
 
-        <input v-if="search" v-model="searchInput" class="form-input rounded-none" placeholder="Search" />
+        <input v-if="search" v-model.trim="searchInput" class="form-input rounded-none" placeholder="Search" />
 
         <div v-if="hasOptions" class="select-options">
           <template v-if="presets && presets.length > 0">
