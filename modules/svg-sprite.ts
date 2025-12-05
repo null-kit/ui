@@ -7,8 +7,8 @@ import { consola } from 'consola';
 
 export default defineNuxtModule({
   meta: {
-    name: 'null-kit-svg-sprite',
-    configKey: 'nullKit'
+    name: 'nullkit-svg-sprite',
+    configKey: 'nullkitSvgSprite'
   },
 
   defaults: {
