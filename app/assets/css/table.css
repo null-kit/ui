@@ -23,7 +23,7 @@
   }
 
   tfoot {
-    @apply font-semibold select-none;
+    @apply font-semibold;
 
     tr td {
       @apply border-edison border-t;
