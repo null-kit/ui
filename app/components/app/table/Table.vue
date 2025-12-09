@@ -163,7 +163,11 @@ const meta = reactive({
 const getEntry = (entry: Record<string, unknown>, index: number, data: T[] = props.data) => {
   if (entry.isNested) return entry;
 
-  return data[index] || data[Number(entry._rowIndex)];
+  if (typeof entry._rowIndex === 'number') {
+    return data[entry._rowIndex];
+  }
+
+  return data[index];
 };
 
 useStickyHead();
