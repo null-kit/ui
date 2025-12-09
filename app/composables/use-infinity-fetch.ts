@@ -74,6 +74,7 @@ export const useInfinityFetch = <T>(url: string, options: Options) => {
   return {
     data,
     status,
-    refresh
+    refresh,
+    currentPage: page
   };
 };

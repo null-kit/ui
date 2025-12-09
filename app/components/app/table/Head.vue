@@ -3,7 +3,7 @@
     <component :is="slots.thead" v-if="slots.thead" />
 
     <tr :class="meta.trClass">
-      <th v-if="meta.expandedKey" class="w-0 min-w-10" />
+      <th v-if="meta.expandedKey" class="left-0 z-1 w-0 min-w-10 md:sticky" />
 
       <th
         v-for="cell in cells"
@@ -14,6 +14,9 @@
           { 'right-0 -left-px z-1 border-l md:sticky': meta.stickyRight.includes(cell) },
           { 'text-accent': canSortBy(cell) && String($route.query.sortBy).startsWith(cell + ':') }
         ]"
+        :style="{
+          left: meta.expandedKey && meta.stickyLeft.includes(cell) ? `${meta.expandedCellWidth}px` : undefined
+        }"
         :aria-label="`th-${cell}`"
         :aria-sort="canSortBy(cell) ? (isSorted(cell, 'desc') ? 'descending' : 'ascending') : undefined"
         @click="onSort(cell)"
@@ -58,6 +61,7 @@ const props = withDefaults(
 
     meta: {
       expandedKey?: string;
+      expandedCellWidth?: number;
       dictionaryKey?: string;
 
       trClass?: string;

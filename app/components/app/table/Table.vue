@@ -28,7 +28,12 @@
             :aria-rowindex="startIndex + index"
             :aria-expanded="(expandedKey && isExpanded(entry._rowIndex)) || undefined"
           >
-            <td v-if="expandedKey" :aria-expanded="Boolean(entry.isNested) || isExpanded(entry._rowIndex)">
+            <td
+              v-if="expandedKey"
+              ref="expandedCell"
+              :aria-expanded="Boolean(entry.isNested) || isExpanded(entry._rowIndex)"
+              class="left-0 z-1 md:sticky"
+            >
               <button
                 v-if="!entry.isNested"
                 type="button"
@@ -41,6 +46,13 @@
                   :class="{ 'rotate-90': isExpanded(entry._rowIndex) }"
                 />
               </button>
+
+              <component
+                :is="slots['td-expanded']"
+                v-else="slots['td-expanded']"
+                :entry="getEntry(entry, startIndex + index, slotData)"
+                :isNested="entry.isNested"
+              />
             </td>
 
             <td
@@ -52,6 +64,7 @@
                 { 'left-0 z-1 md:sticky': stickyLeft.includes(cell) },
                 { 'right-0 -left-px z-1 border-l md:sticky': stickyRight.includes(cell) }
               ]"
+              :style="{ left: expandedKey && stickyLeft.includes(cell) ? `${expandedCellWidth}px` : undefined }"
             >
               <component
                 :is="slots[cell]"
@@ -123,8 +136,17 @@ const props = withDefaults(
   }
 );
 
+const expandedCell = useTemplateRef<HTMLElement | null>('expandedCell');
+
+const expandedCellWidth = computed(() => {
+  if (!Array.isArray(expandedCell.value)) return 0;
+
+  return expandedCell.value[0].getBoundingClientRect().width;
+});
+
 const meta = reactive({
   expandedKey: props.expandedKey,
+  expandedCellWidth: computed(() => expandedCellWidth.value),
   dictionaryKey: props.dictionaryKey,
 
   trClass: props.trClass,
