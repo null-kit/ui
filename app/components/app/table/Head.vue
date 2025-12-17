@@ -12,7 +12,7 @@
           meta.thClass,
           { 'left-0 z-1 md:sticky': meta.stickyLeft.includes(cell) },
           { 'right-0 -left-px z-1 border-l md:sticky': meta.stickyRight.includes(cell) },
-          { 'text-accent': canSortBy(cell) && String($route.query.sortBy).startsWith(cell + ':') }
+          { 'text-accent': canSortBy(cell) && sortByQuery.startsWith(cell + ':') }
         ]"
         :style="{
           left: meta.expandedKey && meta.stickyLeft.includes(cell) ? `${meta.expandedCellWidth}px` : undefined
@@ -69,6 +69,8 @@ const props = withDefaults(
 
       stickyLeft: string[];
       stickyRight: string[];
+
+      sortByKey: string;
     };
 
     sortBy?: string[];
@@ -87,18 +89,27 @@ const props = withDefaults(
 );
 
 const route = useRoute();
+const sortByQuery = computed(() => String(route.query[props.meta.sortByKey]));
 
 const canSortBy = (column: string) => [...props.sortBy, ...props.sortByClient].includes(column);
 
 const isSorted = (cell: string, direction: string) => {
-  return String(route.query.sortBy).startsWith(`${cell}:${direction}`);
+  return sortByQuery.value.startsWith(`${cell}:${direction}`);
 };
 
 const onSort = (column: string) => {
   if (!canSortBy(column)) return;
 
-  const direction = String(route.query.sortBy).endsWith(':desc') ? 'asc' : 'desc';
+  const query = { ...route.query };
 
-  navigateTo({ query: { ...route.query, sortBy: `${column}:${direction}` } });
+  if (sortByQuery.value === `${column}:asc`) {
+    query[props.meta.sortByKey] = `${column}:desc`;
+  } else if (sortByQuery.value === `${column}:desc`) {
+    delete query[props.meta.sortByKey];
+  } else {
+    query[props.meta.sortByKey] = `${column}:asc`;
+  }
+
+  navigateTo({ query });
 };
 </script>

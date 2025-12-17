@@ -31,6 +31,7 @@ const props = withDefaults(
       expandedKey?: string;
       virtualScroll?: boolean | number;
       sortByClient?: string[];
+      sortByKey: string;
     };
 
     omit?: (keyof T)[];
@@ -110,15 +111,17 @@ const createRows = (data: T[]) => {
 };
 
 const sortedData = computed(() => {
-  if (!route.query.sortBy || !props.meta.sortByClient?.length) {
+  const sortByQuery = String(route.query[props.meta.sortByKey]);
+
+  if (!sortByQuery || !props.meta.sortByClient?.length) {
     return props.data;
   }
 
-  const [column, direction] = String(route.query.sortBy).split(':') as [string, 'asc' | 'desc'];
+  const [column, direction] = sortByQuery.split(':') as [string, 'asc' | 'desc'];
 
   return props.data
     .map((row) => {
-      const item = { ...row } as Record<string, any>;
+      const item = { ...row } as Record<string, unknown>;
 
       if (props.meta.expandedKey) {
         const nested = item[props.meta.expandedKey];

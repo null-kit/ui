@@ -114,6 +114,7 @@ const props = withDefaults(
 
     sortBy?: string[];
     sortByClient?: string[];
+    name?: string;
 
     trClass?: string;
     thClass?: string;
@@ -157,7 +158,9 @@ const meta = reactive({
   stickyRight: props.stickyRight,
 
   virtualScroll: props.virtualScroll,
-  sortByClient: props.sortByClient
+
+  sortByClient: props.sortByClient,
+  sortByKey: props.name ? `sortBy:${props.name}` : 'sortBy'
 });
 
 const getEntry = (entry: Record<string, unknown>, index: number, data: T[] = props.data) => {
