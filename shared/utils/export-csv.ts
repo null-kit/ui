@@ -1,4 +1,4 @@
-const escapeCsvValue = (value: unknown): string => {
+export const escapeCsvValue = (value: unknown): string => {
   if (value == null) return '';
 
   let str = String(value);
@@ -13,10 +13,7 @@ const escapeCsvValue = (value: unknown): string => {
 export const formatCsv = (headers: string[], rows: Record<string, unknown>[] | (string | number | Date)[][]) => {
   const content = [
     headers.join(','),
-    ...rows.map((row) => {
-      const values = Object.values(row);
-      return headers.map((_, index) => escapeCsvValue(values[index])).join(',');
-    })
+    ...rows.map((row) => headers.map((_, index) => escapeCsvValue(Object.values(row)[index])).join(','))
   ].join('\n');
 
   return new Blob([content], { type: 'text/csv;charset=utf-8;' });
