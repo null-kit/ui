@@ -15,7 +15,7 @@
     <div v-if="options && options.length > 0" class="btn-group" :class="groupClass">
       <slot name="left" />
 
-      <label v-for="(option, index) in options" :key="index" class="btn">
+      <label v-for="(option, index) in options" :key="index" class="btn" :class="btnClass">
         <input
           v-model="model"
           class="peer checked:bg-accent/5 absolute inset-0 appearance-none disabled:cursor-not-allowed"
@@ -65,6 +65,7 @@ const props = withDefaults(
     readonly?: boolean;
     noToggle?: boolean;
     groupClass?: string;
+    btnClass?: string;
     validateClass?: string;
   }>(),
   {
