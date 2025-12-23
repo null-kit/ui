@@ -36,11 +36,13 @@ const props = withDefaults(
 
     omit?: (keyof T)[];
     pick?: (keyof T)[];
+    columnsOrder?: (keyof T)[];
     columnsExtra?: string[];
   }>(),
   {
     pick: () => [],
     omit: () => [],
+    columnsOrder: () => [],
     columnsExtra: () => [],
     sortByClient: () => []
   }
@@ -69,16 +71,34 @@ const createRows = (data: T[]) => {
   const mergedRows = data.map((row) => {
     let entries: Record<string, unknown> = { ...row };
 
+    if (props.columnsExtra.length > 0) {
+      Object.assign(entries, Object.fromEntries(props.columnsExtra.map((key) => [key, null])));
+    }
+
+    if (props.columnsOrder.length > 0) {
+      const orderedEntries: Record<string, unknown> = {};
+
+      for (const key of props.columnsOrder) {
+        if (key in entries) {
+          orderedEntries[key as string] = entries[key as string];
+        }
+      }
+
+      for (const key in entries) {
+        if (!(key in orderedEntries)) {
+          orderedEntries[key] = entries[key];
+        }
+      }
+
+      entries = orderedEntries;
+    }
+
     if (props.pick.length > 0) {
-      entries = Object.fromEntries(Object.entries(row).filter(([key]) => props.pick.includes(key)));
+      entries = Object.fromEntries(Object.entries(entries).filter(([key]) => props.pick.includes(key)));
     }
 
     if (props.omit.length > 0) {
-      entries = Object.fromEntries(Object.entries(row).filter(([key]) => !props.omit.includes(key)));
-    }
-
-    if (props.columnsExtra.length > 0) {
-      Object.assign(entries, Object.fromEntries(props.columnsExtra.map((key) => [key, null])));
+      entries = Object.fromEntries(Object.entries(entries).filter(([key]) => !props.omit.includes(key)));
     }
 
     return entries;

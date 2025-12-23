@@ -1,7 +1,7 @@
 <template>
   <AppTableRoot
     v-slot="{ cells, startIndex, topPadding, bottomPadding, visibleRows, isExpanded, toggleRow, data: slotData }"
-    v-bind="{ data, meta, pick, omit, columnsExtra }"
+    v-bind="{ data, meta, pick, omit, columnsOrder, columnsExtra }"
   >
     <div v-if="stickyHead" ref="theadVisible" class="sticky z-1 overflow-hidden" :class="stickyOffset">
       <table class="table-default w-full">
@@ -122,6 +122,7 @@ const props = withDefaults(
 
     omit?: (keyof T)[];
     pick?: (keyof T)[];
+    columnsOrder?: (keyof T)[];
     columnsExtra?: string[];
 
     dictionaryKey?: string;
