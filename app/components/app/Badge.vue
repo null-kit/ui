@@ -9,9 +9,11 @@
         <AppIcon v-if="icon" :name="icon" class="size-3 shrink-0" />
       </slot>
 
-      <slot name="label">
-        {{ label }}
-      </slot>
+      <span v-if="$slots.label">
+        <slot name="label" />
+      </span>
+
+      <template v-else>{{ label }}</template>
     </slot>
   </span>
 </template>
