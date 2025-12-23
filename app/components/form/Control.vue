@@ -60,15 +60,15 @@
         />
 
         <FormValidate v-if="name" :name :class="validateClass" />
+
+        <AppAppear v-if="!label && required && !model">
+          <span title="Required" class="form-required-floating" />
+        </AppAppear>
       </div>
 
       <div v-if="slots.right" class="form-slot rounded-l-none">
         <slot name="right" />
       </div>
-
-      <AppAppear v-if="!label && required && !model">
-        <span title="Required" class="form-required-floating" />
-      </AppAppear>
     </div>
 
     <div v-if="help || $slots.help" class="form-help">
