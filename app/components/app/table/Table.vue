@@ -114,6 +114,7 @@ const props = withDefaults(
 
     sortBy?: string[];
     sortByClient?: string[];
+    sortByInitial?: `${Extract<keyof T, string>}:${'asc' | 'desc'}`;
     name?: string;
 
     trClass?: string;
@@ -161,6 +162,7 @@ const meta = reactive({
   virtualScroll: props.virtualScroll,
 
   sortByClient: props.sortByClient,
+  sortByInitial: props.sortByInitial,
   sortByKey: props.name ? `sortBy:${props.name}` : 'sortBy'
 });
 

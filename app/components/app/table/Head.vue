@@ -70,6 +70,7 @@ const props = withDefaults(
       stickyLeft: string[];
       stickyRight: string[];
 
+      sortByInitial?: string;
       sortByKey: string;
     };
 
@@ -89,7 +90,7 @@ const props = withDefaults(
 );
 
 const route = useRoute();
-const sortByQuery = computed(() => String(route.query[props.meta.sortByKey]));
+const sortByQuery = computed(() => (route.query[props.meta.sortByKey] as string) || props.meta.sortByInitial || '');
 
 const canSortBy = (column: string) => [...props.sortBy, ...props.sortByClient].includes(column);
 

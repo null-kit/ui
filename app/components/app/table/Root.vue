@@ -31,6 +31,7 @@ const props = withDefaults(
       expandedKey?: string;
       virtualScroll?: boolean | number;
       sortByClient?: string[];
+      sortByInitial?: string;
       sortByKey: string;
     };
 
@@ -131,7 +132,7 @@ const createRows = (data: T[]) => {
 };
 
 const sortedData = computed(() => {
-  const sortByQuery = String(route.query[props.meta.sortByKey]);
+  const sortByQuery = (route.query[props.meta.sortByKey] as string) || props.meta.sortByInitial;
 
   if (!sortByQuery || !props.meta.sortByClient?.length) {
     return props.data;
