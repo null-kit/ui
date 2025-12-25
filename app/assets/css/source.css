@@ -12,13 +12,17 @@
 
 /* Scrollbar Utility */
 @utility scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-edison) transparent;
+  scrollbar-width: var(--scrollbar-width, auto);
+  scrollbar-color: --alpha(var(--color-surface) / 30%) --alpha(var(--color-surface) / 5%);
   overscroll-behavior: none auto;
 
-  &::-webkit-scrollbar {
-    @apply size-2;
+  &:hover {
+    scrollbar-color: --alpha(var(--color-surface) / 50%) --alpha(var(--color-surface) / 5%);
   }
+}
+
+@utility scrollbar-thin {
+  --scrollbar-width: thin;
 }
 
 /* Background Patterns */

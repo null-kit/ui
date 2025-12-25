@@ -1,7 +1,7 @@
 @utility select-input {
   @apply form-input;
   @apply flex gap-1.5 text-ellipsis;
-  @apply relative overflow-auto;
+  @apply scrollbar relative overflow-auto;
 
   &:has(.select-multiple) {
     @apply p-1 pr-2.5;
@@ -19,7 +19,7 @@
 }
 
 @utility select-options {
-  @apply max-h-96 min-w-40 shrink-0 p-1;
-  @apply scrollbar flex flex-col gap-0.5;
-  @apply overflow-auto whitespace-nowrap;
+  @apply min-w-40 shrink-0 p-1;
+  @apply flex flex-col gap-0.5;
+  @apply whitespace-nowrap;
 }

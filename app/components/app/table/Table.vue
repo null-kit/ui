@@ -1,20 +1,21 @@
 <template>
   <AppTableRoot
     v-slot="{ cells, startIndex, topPadding, bottomPadding, visibleRows, isExpanded, toggleRow, data: slotData }"
-    v-bind="{ data, meta, pick, omit, columnsOrder, columnsExtra }"
+    v-bind="{ data, meta, pick, omit, columnsOrder, columnsExtra, sort }"
   >
     <div v-if="stickyHead" ref="theadVisible" class="sticky z-1 overflow-hidden" :class="stickyOffset">
       <table class="table-default w-full">
-        <AppTableHead v-bind="{ meta, cells, slots, sortBy, sortByClient }" />
+        <AppTableHead v-bind="{ meta, cells, slots, sort }" />
       </table>
     </div>
 
-    <div ref="tableWrapper" class="scrollbar isolate w-full overflow-auto">
+    <div
+      ref="tableWrapper"
+      class="scrollbar isolate w-full overflow-auto"
+      :style="{ scrollbarWidth: stickyScrollbar ? 'none' : 'auto' }"
+    >
       <table class="table-default w-full" :class="{ 'table-striped': striped }">
-        <AppTableHead
-          v-bind="{ meta, cells, slots, sortBy, sortByClient }"
-          :class="{ 'pointer-events-none invisible': stickyHead }"
-        />
+        <AppTableHead v-bind="{ meta, cells, slots, sort }" :class="{ 'pointer-events-none invisible': stickyHead }" />
 
         <tbody ref="tbody">
           <tr v-if="virtualScroll" aria-hidden>
@@ -97,6 +98,14 @@
         <AppTableFooter v-bind="{ data, cells, meta, slots }" />
       </table>
     </div>
+
+    <div
+      v-if="stickyScrollbar"
+      ref="tableScrollbar"
+      class="scrollbar sticky bottom-0 z-1 w-full overflow-x-auto overflow-y-hidden"
+    >
+      <div ref="tableScrollbarThumb" class="h-px" />
+    </div>
   </AppTableRoot>
 </template>
 
@@ -111,6 +120,7 @@ const props = withDefaults(
     stickyOffset?: string;
     stickyLeft?: string[];
     stickyRight?: string[];
+    stickyScrollbar?: boolean;
 
     sortBy?: string[];
     sortByClient?: string[];
@@ -161,9 +171,7 @@ const meta = reactive({
 
   virtualScroll: props.virtualScroll,
 
-  sortByClient: props.sortByClient,
-  sortByInitial: props.sortByInitial,
-  sortByKey: props.name ? `sortBy:${props.name}` : 'sortBy'
+  sortByClient: props.sortByClient
 });
 
 const getEntry = (entry: Record<string, unknown>, index: number, data: T[] = props.data) => {
@@ -176,5 +184,10 @@ const getEntry = (entry: Record<string, unknown>, index: number, data: T[] = pro
   return data[index];
 };
 
-useStickyHead();
+const tableWrapper = useTemplateRef<HTMLElement>('tableWrapper');
+
+if (props.stickyScrollbar) useTableStickyScrollbar(tableWrapper);
+if (props.stickyHead) useTableStickyHead(tableWrapper);
+
+const sort = useTableSort(props);
 </script>

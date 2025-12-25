@@ -12,14 +12,14 @@
           meta.thClass,
           { 'left-0 z-1 md:sticky': meta.stickyLeft.includes(cell) },
           { 'right-0 -left-px z-1 border-l md:sticky': meta.stickyRight.includes(cell) },
-          { 'text-accent': canSortBy(cell) && sortByQuery.startsWith(cell + ':') }
+          { 'text-accent': (sort.canSortBy(cell) && sort.isSorted(cell, 'desc')) || sort.isSorted(cell, 'asc') }
         ]"
         :style="{
           left: meta.expandedKey && meta.stickyLeft.includes(cell) ? `${meta.expandedCellWidth}px` : undefined
         }"
         :aria-label="`th-${cell}`"
-        :aria-sort="canSortBy(cell) ? (isSorted(cell, 'desc') ? 'descending' : 'ascending') : undefined"
-        @click="onSort(cell)"
+        :aria-sort="sort.canSortBy(cell) ? (sort.isSorted(cell, 'desc') ? 'descending' : 'ascending') : undefined"
+        @click="sort.onSort(cell)"
       >
         <div class="flex w-full items-center gap-1">
           <component :is="slots[`th-${cell}-left`]" v-if="slots[`th-${cell}-left`]" />
@@ -32,17 +32,19 @@
 
           <component :is="slots[`th-${cell}-right`]" v-if="slots[`th-${cell}-right`]" />
 
-          <svg
-            v-if="canSortBy(cell)"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 32 32"
-            class="text-surface/50 ml-auto size-3 shrink-0"
-            stroke="currentColor"
-            stroke-width="4"
-          >
-            <polyline points="10 22 16 28 22 22" fill="none" :class="{ 'text-accent': isSorted(cell, 'desc') }" />
-            <polyline points="10 10 16 4 22 10" fill="none" :class="{ 'text-accent': isSorted(cell, 'asc') }" />
-          </svg>
+          <div class="bg-surface/5 ml-auto shrink-0 rounded-full p-0.5">
+            <svg
+              v-if="sort.canSortBy(cell)"
+              class="text-surface/50 h-3 w-1.5"
+              viewBox="0 0 16 30"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="4"
+            >
+              <path d="M2 21L8 27L14 21" :class="{ 'text-accent': sort.isSorted(cell, 'desc') }" />
+              <path d="M2 9L8 3L14 9" :class="{ 'text-accent': sort.isSorted(cell, 'asc') }" />
+            </svg>
+          </div>
         </div>
       </th>
 
@@ -55,62 +57,31 @@
 </template>
 
 <script setup lang="ts">
-const props = withDefaults(
-  defineProps<{
-    cells: string[];
+defineProps<{
+  cells: string[];
 
-    meta: {
-      expandedKey?: string;
-      expandedCellWidth?: number;
-      dictionaryKey?: string;
+  sort: {
+    canSortBy: (cell: string) => boolean;
+    isSorted: (cell: string, direction: string) => boolean;
+    onSort: (cell: string) => void;
+  };
 
-      trClass?: string;
-      thClass?: string;
+  meta: {
+    expandedKey?: string;
+    expandedCellWidth?: number;
+    dictionaryKey?: string;
 
-      stickyLeft: string[];
-      stickyRight: string[];
+    trClass?: string;
+    thClass?: string;
 
-      sortByInitial?: string;
-      sortByKey: string;
-    };
+    stickyLeft: string[];
+    stickyRight: string[];
+  };
 
-    sortBy?: string[];
-    sortByClient?: string[];
-
-    slots: {
-      thead?: object;
-      actions?: object;
-      [key: string]: object | undefined;
-    };
-  }>(),
-  {
-    sortBy: () => [],
-    sortByClient: () => []
-  }
-);
-
-const route = useRoute();
-const sortByQuery = computed(() => (route.query[props.meta.sortByKey] as string) || props.meta.sortByInitial || '');
-
-const canSortBy = (column: string) => [...props.sortBy, ...props.sortByClient].includes(column);
-
-const isSorted = (cell: string, direction: string) => {
-  return sortByQuery.value.startsWith(`${cell}:${direction}`);
-};
-
-const onSort = (column: string) => {
-  if (!canSortBy(column)) return;
-
-  const query = { ...route.query };
-
-  if (sortByQuery.value === `${column}:asc`) {
-    query[props.meta.sortByKey] = `${column}:desc`;
-  } else if (sortByQuery.value === `${column}:desc`) {
-    delete query[props.meta.sortByKey];
-  } else {
-    query[props.meta.sortByKey] = `${column}:asc`;
-  }
-
-  navigateTo({ query });
-};
+  slots: {
+    thead?: object;
+    actions?: object;
+    [key: string]: object | undefined;
+  };
+}>();
 </script>

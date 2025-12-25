@@ -1,15 +1,11 @@
 // Sticky Head Composable
-export const useStickyHead = () => {
-  const tableWrapper = useTemplateRef<HTMLElement>('tableWrapper');
+export const useTableStickyHead = (tableWrapper: Readonly<Ref<HTMLElement | null>>) => {
   const theadVisible = useTemplateRef<HTMLElement>('theadVisible');
-
-  let onScroll: () => void;
-  let resizeObserver: ResizeObserver | undefined;
 
   onMounted(() => {
     if (!tableWrapper.value || !theadVisible.value) return;
 
-    resizeObserver = new ResizeObserver(() => {
+    const resizeObserver = new ResizeObserver(() => {
       const hiddenList = tableWrapper.value!.querySelectorAll('th');
       const visibleList = theadVisible.value!.querySelectorAll('th');
 
@@ -25,39 +21,31 @@ export const useStickyHead = () => {
       });
     });
 
-    if (tableWrapper.value) {
-      resizeObserver.observe(tableWrapper.value);
+    resizeObserver.observe(tableWrapper.value);
 
-      const hiddenList = tableWrapper.value.querySelectorAll('th');
+    const hiddenList = tableWrapper.value.querySelectorAll('th');
 
-      for (const cell of hiddenList) resizeObserver.observe(cell);
-    }
+    for (const cell of hiddenList) resizeObserver.observe(cell);
 
-    onScroll = () => theadVisible.value!.scrollTo({ left: tableWrapper.value!.scrollLeft });
+    const onScroll = () => (theadVisible.value!.scrollLeft = tableWrapper.value!.scrollLeft);
 
     tableWrapper.value!.addEventListener('scroll', onScroll);
-  });
 
-  onUnmounted(() => {
-    if (onScroll) tableWrapper.value?.removeEventListener('scroll', onScroll);
-    if (resizeObserver) resizeObserver.disconnect();
+    onUnmounted(() => {
+      tableWrapper.value?.removeEventListener('scroll', onScroll);
+      resizeObserver.disconnect();
+    });
   });
 };
 
 // Virtualization Composable
-export const useVirtualRows = <T extends Record<string, unknown>>(rows: Ref<T[]>, hasVirtual?: boolean | number) => {
-  if (!hasVirtual) {
-    return {
-      startIndex: 0,
-      endIndex: 0,
-      visibleRows: rows
-    };
-  }
+export const useTableVirtualRows = <T>(rows: Ref<T[]>, hasVirtual?: boolean | number) => {
+  if (!hasVirtual) return { startIndex: 0, endIndex: 0, visibleRows: rows };
 
   const rowHeight = typeof hasVirtual === 'number' ? hasVirtual : 40;
   const buffer = 5;
 
-  const tableRef = useTemplateRef<HTMLElement>('tbody');
+  const tableBody = useTemplateRef<HTMLElement>('tbody');
   const scrollY = ref(0);
   const viewportHeight = ref(window.innerHeight);
   const tableTop = ref(0);
@@ -93,21 +81,19 @@ export const useVirtualRows = <T extends Record<string, unknown>>(rows: Ref<T[]>
     return Math.max(padding, 0);
   });
 
-  function onScroll() {
-    scrollY.value = window.scrollY;
-  }
+  const onScroll = () => (scrollY.value = window.scrollY);
 
-  function onResize() {
+  const onResize = () => {
     viewportHeight.value = window.innerHeight;
     updateTableTop();
-  }
+  };
 
   // TODO: Check if this function is needed
-  function updateTableTop() {
-    if (tableRef.value) {
-      tableTop.value = tableRef.value.getBoundingClientRect().top + window.scrollY;
+  const updateTableTop = () => {
+    if (tableBody.value) {
+      tableTop.value = tableBody.value.getBoundingClientRect().top + window.scrollY;
     }
-  }
+  };
 
   onMounted(() => {
     updateTableTop();
@@ -129,4 +115,83 @@ export const useVirtualRows = <T extends Record<string, unknown>>(rows: Ref<T[]>
     topPadding,
     bottomPadding
   };
+};
+
+export const useTableSort = (props: {
+  name?: string;
+  sortByInitial?: string;
+  sortBy?: string[];
+  sortByClient?: string[];
+}) => {
+  const sortByList = computed(() => [...(props.sortBy || []), ...(props.sortByClient || [])]);
+
+  if (!sortByList.value.length)
+    return {
+      sortByQuery: ref(''),
+      canSortBy: () => false,
+      isSorted: () => false,
+      onSort: () => {}
+    };
+
+  const route = useRoute();
+  const sortByKey = computed(() => (props.name ? `sortBy:${props.name}` : 'sortBy'));
+  const sortByQuery = computed<string>(() => (route.query[sortByKey.value] as string) || props.sortByInitial || '');
+
+  const canSortBy = (column: string) => sortByList.value.includes(column);
+
+  const isSorted = (cell: string, direction: string) => sortByQuery.value.startsWith(`${cell}:${direction}`);
+
+  const onSort = (column: string) => {
+    if (!canSortBy(column)) return;
+
+    const query = { ...route.query };
+
+    if (sortByQuery.value === `${column}:asc`) {
+      query[sortByKey.value] = `${column}:desc`;
+    } else if (sortByQuery.value === `${column}:desc`) {
+      query[sortByKey.value] = route.query[sortByKey.value] ? (undefined as unknown as null) : `${column}:asc`;
+    } else {
+      query[sortByKey.value] = `${column}:asc`;
+    }
+
+    navigateTo({ query });
+  };
+
+  return {
+    sortByQuery,
+    canSortBy,
+    isSorted,
+    onSort
+  };
+};
+
+export const useTableStickyScrollbar = (tableWrapper: Readonly<Ref<HTMLElement | null>>) => {
+  const tableScrollbarThumb = useTemplateRef<HTMLElement>('tableScrollbarThumb');
+  const tableScrollbar = useTemplateRef<HTMLElement>('tableScrollbar');
+
+  onMounted(() => {
+    if (!tableWrapper.value || !tableScrollbar.value) return;
+
+    const table = tableWrapper.value.querySelector('table');
+
+    if (!table) return;
+
+    const resizeObserver = new ResizeObserver(() => {
+      tableScrollbarThumb.value!.style.width = `${table.scrollWidth}px`;
+    });
+
+    resizeObserver.observe(table);
+
+    const onScrollTable = () => (tableWrapper.value!.scrollLeft = tableScrollbar.value!.scrollLeft);
+    const onScrollThumb = () => (tableScrollbar.value!.scrollLeft = tableWrapper.value!.scrollLeft);
+
+    tableScrollbar.value.addEventListener('scroll', onScrollTable);
+    tableWrapper.value.addEventListener('scroll', onScrollThumb);
+
+    onUnmounted(() => {
+      resizeObserver.disconnect();
+      tableScrollbar.value?.removeEventListener('scroll', onScrollTable);
+      tableWrapper.value?.removeEventListener('scroll', onScrollThumb);
+    });
+  });
 };

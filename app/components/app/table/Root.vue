@@ -26,13 +26,18 @@ const props = withDefaults(
   defineProps<{
     data: T[];
 
+    sort: {
+      sortByQuery: Ref<string>;
+      canSortBy: (cell: string) => boolean;
+      isSorted: (cell: string, direction: string) => boolean;
+      onSort: (cell: string) => void;
+    };
+
     meta: {
       dictionaryKey?: string;
       expandedKey?: string;
       virtualScroll?: boolean | number;
       sortByClient?: string[];
-      sortByInitial?: string;
-      sortByKey: string;
     };
 
     omit?: (keyof T)[];
@@ -48,8 +53,6 @@ const props = withDefaults(
     sortByClient: () => []
   }
 );
-
-const route = useRoute();
 
 const expandedRows = ref(new Set());
 
@@ -132,13 +135,13 @@ const createRows = (data: T[]) => {
 };
 
 const sortedData = computed(() => {
-  const sortByQuery = (route.query[props.meta.sortByKey] as string) || props.meta.sortByInitial;
+  const sortByQuery = props.sort.sortByQuery.value;
 
-  if (!sortByQuery || !props.meta.sortByClient?.length) {
-    return props.data;
-  }
+  if (!sortByQuery) return props.data;
 
-  const [column, direction] = sortByQuery.split(':') as [string, 'asc' | 'desc'];
+  const [column, direction = 'asc'] = sortByQuery.split(':') as [string, 'asc' | 'desc'];
+
+  if (!props.meta.sortByClient?.includes(column)) return props.data;
 
   return props.data
     .map((row) => {
@@ -174,5 +177,8 @@ const cells = computed(() => {
 });
 
 // Rows virtualization
-const { startIndex, endIndex, visibleRows, topPadding, bottomPadding } = useVirtualRows(rows, props.meta.virtualScroll);
+const { startIndex, endIndex, visibleRows, topPadding, bottomPadding } = useTableVirtualRows(
+  rows,
+  props.meta.virtualScroll
+);
 </script>
