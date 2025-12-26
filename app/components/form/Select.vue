@@ -17,7 +17,14 @@
         <slot name="left" />
       </div>
 
-      <AppDropdown :autoclose :placement class="w-full" dropdown-class="p-0">
+      <AppDropdown
+        :autoclose
+        :placement
+        class="w-full"
+        dropdown-class="p-0"
+        :max-height="448"
+        @close="searchInput = ''"
+      >
         <template #trigger="{ isOpen }">
           <button
             type="button"
@@ -78,30 +85,38 @@
           </AppAppear>
         </template>
 
-        <input
-          v-if="search"
-          v-model.trim="searchInput"
-          type="search"
-          name="search"
-          class="form-input sticky top-0 z-1 rounded-none"
-          placeholder="Search"
-        />
+        <div v-if="search" class="border-edison border-b p-0">
+          <input
+            v-model.trim="searchInput"
+            type="search"
+            name="dropdown-search"
+            class="form-input focus:bg-edison/30 rounded-none shadow-none ring-0"
+            placeholder="Search"
+          />
+        </div>
 
-        <div v-if="hasOptions" class="select-options">
-          <template v-if="presets && presets.length > 0">
+        <div
+          v-if="hasOptions"
+          class="scrollbar scrollbar-thin overflow-auto"
+          :style="{ maxHeight: search ? `calc(var(--floating-height) - 42px)` : 'auto' }"
+        >
+          <div v-if="presets && presets.length > 0 && filteredPresets && filteredPresets.length > 0" class="-order-1">
             <div class="select-group-label">Presets</div>
 
-            <div v-for="(preset, index) in filteredPresets" :key="index" class="flex items-center gap-1">
+            <div class="grid grid-cols-2 gap-0.5 p-1">
               <button
                 type="button"
-                class="btn flex-1 justify-start"
-                :class="{ 'bg-current/5 font-medium': hasPreset(preset.list) }"
+                v-for="(preset, index) in filteredPresets"
+                :key="index"
+                class="btn btn-sm justify-start pl-1"
+                :class="{ 'bg-accent/5 text-accent font-medium': hasPreset(preset.list) }"
                 @click="addPreset(preset.list, true)"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 32 32"
-                  class="hover:bg-surface/5 -mx-1 size-6 shrink-0 rounded-md p-1 duration-300"
+                  class="hover:text-accent size-4 rounded bg-current/10 p-px duration-200"
+                  :class="hasPreset(preset.list) ? 'text-current' : 'text-surface/50 hover:text-accent'"
                   @click.stop="addPreset(preset.list)"
                 >
                   <path
@@ -115,38 +130,40 @@
                 {{ preset.name }}
               </button>
             </div>
+          </div>
 
-            <div class="select-group-label">All</div>
-          </template>
+          <div v-if="presets && presets.length > 0" class="select-group-label">All</div>
 
           <template v-for="(optionGroup, indexParent) in filteredOptions" :key="indexParent">
             <div v-if="typeof optionGroup === 'object' && optionGroup.group" class="select-group-label">
               {{ optionGroup.group }}
             </div>
 
-            <template v-for="(option, index) in optionGroup.list" :key="index">
-              <button
-                v-if="!(typeof option === 'object' && option.excluded)"
-                type="button"
-                class="btn justify-start"
-                :class="{ 'bg-current/5 font-medium': isSelected(option), '-order-1': isSelected(option) && order }"
-                @click="toggleOption(option)"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="size-4 shrink-0">
-                  <path
-                    fill="none"
-                    stroke-width="3"
-                    d="m5 18 7 7L27 9"
-                    class="duration-300"
-                    stroke="currentColor"
-                    stroke-dasharray="32"
-                    :style="`stroke-dashoffset:${isSelected(option) ? 0 : 32}`"
-                  />
-                </svg>
+            <div v-if="optionGroup.list.length > 0" class="select-options">
+              <template v-for="(option, index) in optionGroup.list" :key="index">
+                <button
+                  v-if="!(typeof option === 'object' && option.excluded)"
+                  type="button"
+                  class="btn justify-start"
+                  :class="{ 'bg-current/5 font-medium': isSelected(option), '-order-1': isSelected(option) && order }"
+                  @click="toggleOption(option)"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="size-4 shrink-0">
+                    <path
+                      fill="none"
+                      stroke-width="3"
+                      d="m5 18 7 7L27 9"
+                      class="duration-300"
+                      stroke="currentColor"
+                      stroke-dasharray="32"
+                      :style="`stroke-dashoffset:${isSelected(option) ? 0 : 32}`"
+                    />
+                  </svg>
 
-                <slot name="option" :value="option">{{ getKeyName(option) }}</slot>
-              </button>
-            </template>
+                  <slot name="option" :value="option">{{ getKeyName(option) }}</slot>
+                </button>
+              </template>
+            </div>
           </template>
         </div>
 
@@ -294,7 +311,9 @@ const filteredPresets = computed(() => {
 const hasOptions = computed(() => filteredOptions.value.some((group) => group.list?.length > 0));
 
 const addPreset = (preset: (string | number)[], replace = false) => {
-  model.value = replace ? [...new Set(preset as string[])] : [...new Set([...preset, ...(model.value as T[])])];
+  model.value = replace
+    ? [...new Set(preset)]
+    : [...new Set([...preset, ...(Array.isArray(model.value) ? model.value : [model.value])])];
 };
 
 const hasPreset = (preset: (string | number)[]) => {

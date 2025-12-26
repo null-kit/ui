@@ -39,6 +39,7 @@ const props = defineProps<{
   innerClass?: string;
   hoverOpen?: boolean;
   noToggle?: boolean;
+  maxHeight?: number;
 }>();
 
 defineExpose({ onClose: () => (isOpen.value = false) });
@@ -54,9 +55,13 @@ const { floatingStyles } = useFloating(reference, floating, {
     size({
       padding: 8,
       apply({ availableWidth, availableHeight, elements }) {
+        const height = Math.max(100, Math.min(availableHeight, props.maxHeight || availableHeight));
+
+        elements.floating.style.setProperty('--floating-height', `${height}px`);
+
         Object.assign(elements.floating.style, {
           maxWidth: `${Math.max(100, availableWidth)}px`,
-          maxHeight: `${Math.max(100, availableHeight)}px`
+          maxHeight: `${height}px`
         });
       }
     })
