@@ -2,7 +2,7 @@
   <div ref="reference" class="w-fit" @click="isOpen = !isOpen">
     <slot />
 
-    <Teleport to="#teleports">
+    <Teleport to="#teleports" :disabled="!isOpen">
       <Transition name="confirm" :duration="400">
         <div v-if="isOpen" ref="floating" class="z-10" :style="floatingStyles" @click.stop>
           <div
@@ -62,6 +62,8 @@ withDefaults(
 const reference = useTemplateRef<HTMLElement>('reference');
 const floating = useTemplateRef<HTMLElement>('floating');
 
+const isOpen = useClickOutside(reference);
+
 const { floatingStyles, middlewareData } = useFloating(reference, floating, {
   placement: 'top-start',
   middleware: [
@@ -74,10 +76,8 @@ const { floatingStyles, middlewareData } = useFloating(reference, floating, {
       }
     })
   ],
-  whileElementsMounted: autoUpdate
+  whileElementsMounted: isOpen.value ? autoUpdate : undefined
 });
-
-const isOpen = useClickOutside(reference);
 
 const hasPlacement = (placements: string[]) => placements.includes(middlewareData.value.offset?.placement ?? '');
 

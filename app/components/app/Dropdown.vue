@@ -2,7 +2,7 @@
   <div ref="reference" @click="onTriggerClick" @mouseenter="onTriggerEnter" @mouseleave="onTriggerLeave">
     <slot name="trigger" :is-open="isOpen" />
 
-    <Teleport to="#teleports">
+    <Teleport to="#teleports" :disabled="!isOpen">
       <Transition
         enter-from-class="opacity-0 translate-y-2"
         enter-to-class="duration-200"
@@ -18,7 +18,7 @@
           @mouseleave="onDropdownLeave"
         >
           <div :class="['group dropdown-inner', innerClass]">
-            <slot />
+            <slot :is-open="isOpen" />
           </div>
         </div>
       </Transition>
@@ -47,6 +47,9 @@ defineExpose({ onClose: () => (isOpen.value = false) });
 const reference = useTemplateRef<HTMLDivElement>('reference');
 const floating = useTemplateRef<HTMLDivElement>('floating');
 
+const isOpen = useClickOutside(reference, floating);
+const isHovering = ref(false);
+
 const { floatingStyles } = useFloating(reference, floating, {
   placement: props.placement || 'bottom-start',
   middleware: [
@@ -66,34 +69,26 @@ const { floatingStyles } = useFloating(reference, floating, {
       }
     })
   ],
-  whileElementsMounted: autoUpdate
+  whileElementsMounted: isOpen.value ? autoUpdate : undefined
 });
-
-const isOpen = useClickOutside(reference, floating);
-const isHovering = ref(false);
 
 const onTriggerClick = () => {
   if (props.noToggle && isOpen.value) return;
-
   isOpen.value = !isOpen.value;
 };
 
 const onTriggerEnter = () => {
-  if (props.hoverOpen) {
-    isOpen.value = props.hoverOpen;
-  }
+  if (props.hoverOpen) isOpen.value = true;
 };
 
 const onTriggerLeave = () => {
   if (!props.hoverOpen) return;
 
-  const debouncedToggle = debounce(() => {
-    if (isHovering.value) return;
-
-    if (props.hoverOpen) isOpen.value = false;
+  const debounced = debounce(() => {
+    if (!isHovering.value) isOpen.value = false;
   }, 100);
 
-  if (!isHovering.value) debouncedToggle();
+  debounced();
 };
 
 const onDropdownEnter = () => {

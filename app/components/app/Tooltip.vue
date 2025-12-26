@@ -11,9 +11,14 @@
       {{ trigger }}
     </slot>
 
-    <Teleport to="#teleports">
+    <Teleport to="#teleports" :disabled="!isActive">
       <Transition enter-from-class="opacity-0" enter-to-class="opacity-100" leave-to-class="opacity-0">
-        <div v-if="isActive" ref="floating" :style="floatingStyles" class="z-10 transition-opacity">
+        <div
+          ref="floating"
+          v-show="isActive"
+          :style="floatingStyles"
+          class="pointer-events-none z-10 transition-opacity"
+        >
           <div class="tooltip-content" :class="$attrs.class">
             <slot name="message">
               {{ message }}
@@ -26,7 +31,8 @@
 </template>
 
 <script setup lang="ts">
-import { autoPlacement, offset, shift, useFloating } from '@floating-ui/vue';
+import { autoPlacement, offset, shift, useFloating, autoUpdate } from '@floating-ui/vue';
+import type { VirtualElement } from '@floating-ui/vue';
 
 defineOptions({ inheritAttrs: false });
 
@@ -38,35 +44,49 @@ defineProps<{
   iconClass?: string;
 }>();
 
-const reference = useTemplateRef<HTMLDivElement>('reference');
 const floating = useTemplateRef<HTMLDivElement>('floating');
 
 const isActive = ref(false);
 
-const { floatingStyles, update } = useFloating(reference, floating, {
+const virtualReference = ref<VirtualElement>({
+  getBoundingClientRect: () => ({
+    width: 0,
+    height: 0,
+    x: 0,
+    y: 0,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0
+  })
+});
+
+const { floatingStyles, update } = useFloating(virtualReference, floating, {
   middleware: [offset(20), autoPlacement({ padding: 10 }), shift({ padding: 10 })]
 });
 
+let frame = 0;
+
 const onPointerMove = (event: PointerEvent) => {
-  if (!reference.value) return;
+  if (frame) return;
 
-  isActive.value = true;
+  frame = requestAnimationFrame(() => {
+    frame = 0;
 
-  Object.assign(reference.value, {
-    getBoundingClientRect() {
-      return {
-        width: 0,
-        height: 0,
-        x: event.clientX,
-        y: event.clientY,
-        top: event.clientY,
-        left: event.clientX,
-        right: event.clientX,
-        bottom: event.clientY
-      };
-    }
+    isActive.value = true;
+
+    virtualReference.value.getBoundingClientRect = () => ({
+      width: 0,
+      height: 0,
+      x: event.clientX,
+      y: event.clientY,
+      top: event.clientY,
+      left: event.clientX,
+      right: event.clientX,
+      bottom: event.clientY
+    });
+
+    if (isActive.value) update();
   });
-
-  update();
 };
 </script>
