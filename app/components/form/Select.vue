@@ -49,7 +49,12 @@
               </span>
             </span>
 
-            <span v-for="(option, index) in selected" v-else :key="index" class="self-center font-medium">
+            <span
+              v-for="(option, index) in selected"
+              v-else
+              :key="index"
+              class="w-full self-center truncate text-left font-medium"
+            >
               {{ getKeyName(option) }}
             </span>
 
@@ -85,103 +90,97 @@
           </AppAppear>
         </template>
 
-        <template #default="{ isOpen }">
-          <div v-if="search" class="border-edison border-b p-0">
-            <input
-              v-model.trim="searchInput"
-              type="search"
-              name="dropdown-search"
-              class="form-input focus:bg-edison/30 rounded-none shadow-none ring-0"
-              placeholder="Search"
-            />
+        <div v-if="search" class="border-edison border-b p-0">
+          <input
+            v-model.trim="searchInput"
+            type="search"
+            name="dropdown-search"
+            class="form-input focus:bg-edison/30 rounded-none shadow-none ring-0"
+            placeholder="Search"
+          />
+        </div>
+
+        <div
+          v-if="hasOptions"
+          class="scrollbar scrollbar-thin overflow-auto"
+          :style="{ maxHeight: search ? 'calc(var(--floating-height) - 42px)' : 'auto' }"
+        >
+          <div v-if="presets && presets.length > 0 && filteredPresets && filteredPresets.length > 0" class="-order-1">
+            <div class="select-group-label">Presets</div>
+
+            <div class="grid grid-cols-2 gap-0.5 p-1">
+              <button
+                type="button"
+                v-for="(preset, index) in filteredPresets"
+                :key="index"
+                class="btn btn-sm justify-start pl-1"
+                :class="{ 'bg-accent/5 text-accent font-medium': hasPreset(preset.list) }"
+                @click="addPreset(preset.list, true)"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 32 32"
+                  class="hover:text-accent size-4 rounded bg-current/10 p-px duration-200"
+                  :class="hasPreset(preset.list) ? 'text-current' : 'text-surface/50 hover:text-accent'"
+                  @click.stop="addPreset(preset.list)"
+                >
+                  <path
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    :d="hasPreset(preset.list) ? 'm5 18 6 6L26 9' : 'M16 7v18M7 16h18'"
+                  />
+                </svg>
+                {{ preset.name }}
+              </button>
+            </div>
           </div>
 
-          <div
-            v-if="isOpen && hasOptions"
-            class="scrollbar scrollbar-thin overflow-auto"
-            :style="{ maxHeight: search ? `calc(var(--floating-height) - 42px)` : 'auto' }"
-          >
-            <div v-if="presets && presets.length > 0 && filteredPresets && filteredPresets.length > 0" class="-order-1">
-              <div class="select-group-label">Presets</div>
+          <div v-if="presets && presets.length > 0" class="select-group-label">All</div>
 
-              <div class="grid grid-cols-2 gap-0.5 p-1">
-                <button
-                  type="button"
-                  v-for="(preset, index) in filteredPresets"
-                  :key="index"
-                  class="btn btn-sm justify-start pl-1"
-                  :class="{ 'bg-accent/5 text-accent font-medium': hasPreset(preset.list) }"
-                  @click="addPreset(preset.list, true)"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 32 32"
-                    class="hover:text-accent size-4 rounded bg-current/10 p-px duration-200"
-                    :class="hasPreset(preset.list) ? 'text-current' : 'text-surface/50 hover:text-accent'"
-                    @click.stop="addPreset(preset.list)"
-                  >
-                    <path
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="3"
-                      :d="hasPreset(preset.list) ? 'm5 18 6 6L26 9' : 'M16 7v18M7 16h18'"
-                    />
-                  </svg>
-
-                  {{ preset.name }}
-                </button>
-              </div>
+          <template v-for="(optionGroup, indexParent) in filteredOptions" :key="indexParent">
+            <div v-if="typeof optionGroup === 'object' && optionGroup.group" class="select-group-label">
+              {{ optionGroup.group }}
             </div>
 
-            <div v-if="presets && presets.length > 0" class="select-group-label">All</div>
+            <div v-if="optionGroup.list.length > 0" class="select-options">
+              <template v-for="(option, index) in optionGroup.list" :key="index">
+                <button
+                  v-if="!(typeof option === 'object' && option.excluded)"
+                  type="button"
+                  class="btn justify-start"
+                  :class="{ 'bg-current/5 font-medium': isSelected(option), '-order-1': isSelected(option) && order }"
+                  @click="toggleOption(option)"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="size-4 shrink-0">
+                    <path
+                      fill="none"
+                      stroke-width="3"
+                      d="m5 18 7 7L27 9"
+                      class="duration-300"
+                      stroke="currentColor"
+                      stroke-dasharray="32"
+                      :style="{ strokeDashoffset: isSelected(option) ? 0 : 32 }"
+                    />
+                  </svg>
+                  <slot name="option" :value="option">{{ getKeyName(option) }}</slot>
+                </button>
+              </template>
+            </div>
+          </template>
+        </div>
 
-            <template v-for="(optionGroup, indexParent) in filteredOptions" :key="indexParent">
-              <div v-if="typeof optionGroup === 'object' && optionGroup.group" class="select-group-label">
-                {{ optionGroup.group }}
-              </div>
+        <div v-else class="p-4 text-center opacity-40">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="mb-2 inline-block size-5">
+            <circle cx="14" cy="14" r="10" fill="none" stroke="currentColor" stroke-width="3" />
+            <line x1="21" y1="21" x2="28" y2="28" stroke="currentColor" stroke-width="3" />
+          </svg>
 
-              <div v-if="optionGroup.list.length > 0" class="select-options">
-                <template v-for="(option, index) in optionGroup.list" :key="index">
-                  <button
-                    v-if="!(typeof option === 'object' && option.excluded)"
-                    type="button"
-                    class="btn justify-start"
-                    :class="{ 'bg-current/5 font-medium': isSelected(option), '-order-1': isSelected(option) && order }"
-                    @click="toggleOption(option)"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="size-4 shrink-0">
-                      <path
-                        fill="none"
-                        stroke-width="3"
-                        d="m5 18 7 7L27 9"
-                        class="duration-300"
-                        stroke="currentColor"
-                        stroke-dasharray="32"
-                        :style="`stroke-dashoffset:${isSelected(option) ? 0 : 32}`"
-                      />
-                    </svg>
-
-                    <slot name="option" :value="option">{{ getKeyName(option) }}</slot>
-                  </button>
-                </template>
-              </div>
-            </template>
-          </div>
-
-          <div v-else class="p-4 text-center opacity-40">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="mb-2 inline-block size-5">
-              <circle cx="14" cy="14" r="10" fill="none" stroke="currentColor" stroke-width="3" />
-              <line x1="21" y1="21" x2="28" y2="28" stroke="currentColor" stroke-width="3" />
-            </svg>
-
-            <div class="font-medium whitespace-nowrap">No Results</div>
-          </div>
-        </template>
+          <div class="font-medium whitespace-nowrap">No Results</div>
+        </div>
       </AppDropdown>
 
-      <div v-if="$slots.right" class="form-slot rounded-l-none">
-        <slot name="right" />
-      </div>
+      <div v-if="$slots.right" class="form-slot rounded-l-none"><slot name="right" /></div>
     </div>
 
     <div v-if="help || $slots.help" class="form-help">
@@ -193,7 +192,8 @@
 <script setup lang="ts" generic="T extends Record<string, unknown> | string | number">
 import type { Placement } from '@floating-ui/vue';
 
-const emit = defineEmits<{ change: [value: T | T[] | null] }>();
+const emit = defineEmits<{ change: [value: T] }>();
+
 const model = defineModel<unknown>();
 
 const props = defineProps<{
@@ -211,155 +211,117 @@ const props = defineProps<{
   autoclose?: boolean;
   required?: boolean;
   help?: string;
-  presets?: {
-    name: string;
-    list: (string | number)[];
-  }[];
+  presets?: { name: string; list: (string | number)[] }[];
   inputClass?: string;
   validateClass?: string;
 }>();
 
-/* ---------------------------------- utils --------------------------------- */
+const searchInput = ref('');
 
 const getKeyValue = (option: T) => {
-  return props.keyValue && typeof option === 'object' ? (option[props.keyValue] as unknown) : option;
+  return props.keyValue && typeof option === 'object' ? (option[props.keyValue] as T) : option;
 };
 
 const getKeyName = (option: T) => {
   return props.keyName && typeof option === 'object' ? option[props.keyName] : option;
 };
 
-/* ---------------------------------- search -------------------------------- */
-
-const searchInput = ref('');
-const debouncedSearch = ref('');
-
-watch(
-  searchInput,
-  debounce((v: string) => {
-    debouncedSearch.value = v.toLowerCase();
-  }, 150)
-);
-
-/* --------------------------------- options -------------------------------- */
-
 const normalizedOptions = computed(() => {
-  const hasGroup = props.options?.some((option) => typeof option === 'object' && 'group' in option);
+  const hasGroup = props.options?.some((option) => typeof option === 'object' && option.group);
 
-  if (hasGroup) {
-    return props.options as unknown as Array<{ group?: string; list: T[] }>;
-  }
+  if (hasGroup) return props.options as unknown as Array<{ group?: string; list: T[] }>;
 
   return [{ list: props.options }];
 });
 
 const allOptions = computed(() => normalizedOptions.value.flatMap((group) => group.list));
 
-/* -------------------------------- selection -------------------------------- */
-
-const modelSet = computed<Set<string>>(() => {
-  if (model.value === null || model.value === undefined) return new Set();
-
-  const values = Array.isArray(model.value) ? model.value : [model.value];
-
-  return new Set(
-    values.map((value) => {
-      if (props.keyValue && typeof value === 'object') {
-        return String((value as any)[props.keyValue]);
-      }
-      return String(value);
-    })
-  );
-});
-
 const selected = computed<T[]>(() => {
-  if (!modelSet.value.size) return [];
+  if (model.value === null || model.value === undefined) return [];
 
-  if (!props.keyName) {
-    return Array.isArray(model.value) ? (model.value as T[]) : [model.value as T];
+  if (props.keyName) {
+    return allOptions.value.filter((item): item is T => {
+      if (Array.isArray(model.value) && typeof item === 'object') {
+        if (props.keyValue) return model.value.includes(item[props.keyValue] as T);
+
+        return model.value.some((value) => getKeyName(value) === getKeyName(item));
+      }
+
+      if (!Array.isArray(model.value) && typeof model.value === 'object') {
+        const modelValue = model.value as T;
+
+        if (props.keyValue && typeof item === 'object') {
+          return String(modelValue[props.keyValue]) === String(item[props.keyValue]);
+        }
+
+        return getKeyName(modelValue) === getKeyName(item);
+      }
+      if (props.keyValue && typeof item === 'object') {
+        return String(model.value) === String(item[props.keyValue]);
+      }
+
+      return false;
+    });
   }
 
-  return allOptions.value.filter((item): item is T => {
-    if (typeof item !== 'object') return false;
-
-    if (props.keyValue) {
-      return modelSet.value.has(String((item as any)[props.keyValue]));
-    }
-
-    return modelSet.value.has(String(getKeyName(item)));
-  });
+  return Array.isArray(model.value) ? model.value : [model.value as T];
 });
 
-const isSelected = (option: T) => {
-  if (props.keyValue && typeof option === 'object') {
-    return modelSet.value.has(String((option as any)[props.keyValue]));
-  }
-
-  return modelSet.value.has(String(option));
-};
-
-/* --------------------------------- actions -------------------------------- */
+const isSelected = (option: T): boolean => selected.value.includes(option);
 
 const toggleOption = (option: T) => {
   if (props.multiple) {
-    const values = Array.isArray(model.value) ? [...model.value] : [];
+    const selectOptions = [...selected.value];
 
-    const value = getKeyValue(option);
-    const index = values.findIndex((v) => String(v) === String(value));
+    const index = selectOptions.findIndex((item) => item === option);
 
     if (index === -1) {
-      values.push(value);
+      selectOptions.push(option);
     } else {
-      values.splice(index, 1);
+      selectOptions.splice(index, 1);
     }
 
-    model.value = values;
+    model.value = props.keyValue ? selectOptions.map((item) => getKeyValue(item)) : selectOptions;
   } else {
-    model.value = isSelected(option) ? null : getKeyValue(option);
+    model.value = selected.value[0] === option ? null : getKeyValue(option);
   }
 
-  emit('change', model.value as T | T[] | null);
+  emit('change', model.value as T);
+};
+
+const filteredOptions = computed(() => {
+  return normalizedOptions.value.map((optionGroup) => {
+    const filteredList = optionGroup.list?.filter((option: T) => {
+      return String(getKeyName(option)).toLowerCase().includes(searchInput.value.toLowerCase());
+    });
+
+    return { group: filteredList?.length ? optionGroup.group : undefined, list: filteredList };
+  });
+});
+
+const filteredPresets = computed(() => {
+  return props.presets?.filter((preset) => preset.name.toLowerCase().includes(searchInput.value.toLowerCase()));
+});
+
+const hasOptions = computed(() => filteredOptions.value.some((group) => group.list?.length > 0));
+
+const addPreset = (preset: (string | number)[], replace = false) => {
+  model.value = replace
+    ? [...new Set(preset)]
+    : [...new Set([...preset, ...(Array.isArray(model.value) ? model.value : [model.value])])];
+};
+
+const hasPreset = (preset: (string | number)[]) => {
+  if (preset.every((value) => Array.isArray(model.value) && model.value.includes(value))) {
+    return true;
+  }
+  return false;
 };
 
 const onClear = () => {
   model.value = props.multiple ? [] : null;
   searchInput.value = '';
 };
-
-/* -------------------------------- filtering -------------------------------- */
-
-const filteredOptions = computed(() => {
-  return normalizedOptions.value.map((group) => {
-    const list = group.list?.filter((option: T) =>
-      String(getKeyName(option)).toLowerCase().includes(debouncedSearch.value)
-    );
-
-    return {
-      group: list?.length ? group.group : undefined,
-      list
-    };
-  });
-});
-
-const filteredPresets = computed(() =>
-  props.presets?.filter((preset) => preset.name.toLowerCase().includes(debouncedSearch.value))
-);
-
-const hasOptions = computed(() => filteredOptions.value.some((group) => group.list?.length));
-
-/* -------------------------------- presets --------------------------------- */
-
-const addPreset = (preset: (string | number)[], replace = false) => {
-  model.value = replace
-    ? [...new Set(preset)]
-    : [...new Set([...preset, ...(Array.isArray(model.value) ? model.value : [])])];
-};
-
-const hasPreset = (preset: (string | number)[]) => {
-  return preset.every((value) => Array.isArray(model.value) && model.value.includes(value));
-};
-
-/* -------------------------------- lifecycle -------------------------------- */
 
 onMounted(() => {
   if (!model.value && props.value) {
