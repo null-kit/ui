@@ -1,6 +1,5 @@
 @utility select-input {
-  @apply form-input;
-  @apply flex gap-1.5 text-ellipsis;
+  @apply form-input flex gap-1.5;
   @apply scrollbar relative overflow-auto;
 
   &:has(.select-multiple) {
