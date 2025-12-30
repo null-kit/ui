@@ -33,3 +33,14 @@ export type TableExtraSlots<T> = {
 };
 
 export type TableSlots<T> = TableDataSlots<T> & TableExtraSlots<T>;
+
+// TanStack Table Slots
+export type TableTanDataSlots<TData> = {
+  [TValue in keyof TData]?: (props: { row: TData; cell: NoInfer<TData[TValue]>; isNested: boolean }) => void;
+};
+
+export type TableTanExtraSlots<TData> = {
+  [key: string]: (props: { row: TData; cell: TData[keyof TData]; isNested: boolean }) => void;
+};
+
+export type TableTanSlots<TData> = TableTanDataSlots<TData> & TableTanExtraSlots<TData>;

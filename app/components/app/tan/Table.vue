@@ -91,6 +91,8 @@ import {
   type SortingState
 } from '@tanstack/vue-table';
 
+defineSlots<TableTanSlots<TData>>();
+
 const props = defineProps<{
   data: TData[];
   columns: ColumnDef<TData>[] | ((columnHelper: ColumnHelper<TData>) => ColumnDef<TData>[]);
