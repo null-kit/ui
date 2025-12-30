@@ -3,7 +3,7 @@
     <slot />
 
     <Teleport to="#teleports" :disabled="!isOpen">
-      <Transition name="confirm" :duration="400">
+      <Transition name="confirm" :duration="400" @after-leave="isOpen = false">
         <div v-if="isOpen" ref="floating" class="z-10" :style="floatingStyles" @click.stop>
           <div
             role="dialog"

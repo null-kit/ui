@@ -1,3 +1,5 @@
+export type { ColumnHelper, ColumnDef } from '@tanstack/vue-table';
+
 export type TableProps<T> = {
   data: T[];
 

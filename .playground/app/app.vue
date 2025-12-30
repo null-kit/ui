@@ -29,6 +29,8 @@
     </aside>
 
     <main class="min-w-0 space-y-8 p-4">
+      <DemoTan />
+
       <DemoButton />
 
       <fieldset id="utils">

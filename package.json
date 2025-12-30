@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@floating-ui/vue": "^1.1.6",
+    "@tanstack/vue-table": "^8.21.3",
     "@tiptap/extension-blockquote": "^2.14.0",
     "@tiptap/extension-bold": "^2.14.0",
     "@tiptap/extension-bullet-list": "^2.14.0",

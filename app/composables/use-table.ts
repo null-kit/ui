@@ -39,10 +39,10 @@ export const useTableStickyHead = (tableWrapper: Readonly<Ref<HTMLElement | null
 };
 
 // Virtualization Composable
-export const useTableVirtualRows = <T>(rows: Ref<T[]>, hasVirtual?: boolean | number) => {
-  if (!hasVirtual) return { startIndex: 0, endIndex: 0, visibleRows: rows };
+export const useTableVirtualRows = <T>(rows: Ref<T[]>, enabled?: boolean | number) => {
+  if (!enabled) return { startIndex: 0, endIndex: 0, visibleRows: rows };
 
-  const rowHeight = typeof hasVirtual === 'number' ? hasVirtual : 40;
+  const rowHeight = typeof enabled === 'number' ? enabled : 37;
   const buffer = 5;
 
   const tableBody = useTemplateRef<HTMLElement>('tbody');
@@ -88,7 +88,6 @@ export const useTableVirtualRows = <T>(rows: Ref<T[]>, hasVirtual?: boolean | nu
     updateTableTop();
   };
 
-  // TODO: Check if this function is needed
   const updateTableTop = () => {
     if (tableBody.value) {
       tableTop.value = tableBody.value.getBoundingClientRect().top + window.scrollY;

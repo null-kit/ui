@@ -69,7 +69,7 @@ const { floatingStyles } = useFloating(reference, floating, {
       }
     })
   ],
-  whileElementsMounted: isOpen.value ? autoUpdate : undefined
+  whileElementsMounted: autoUpdate
 });
 
 const onTriggerClick = () => {

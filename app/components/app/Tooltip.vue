@@ -86,7 +86,7 @@ const onPointerMove = (event: PointerEvent) => {
       bottom: event.clientY
     });
 
-    if (isActive.value) update();
+    update();
   });
 };
 </script>

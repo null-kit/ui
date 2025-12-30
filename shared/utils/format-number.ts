@@ -6,3 +6,9 @@ export const formatNumber = (value?: number | string, props?: Intl.NumberFormatO
     ...props
   }).format(Number(value));
 };
+
+export const formatCurrency = (value?: number | string, currency?: Intl.NumberFormatOptionsStyle, locale = 'en-US') => {
+  if (value === undefined) return 'N/A';
+
+  return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(Number(value));
+};

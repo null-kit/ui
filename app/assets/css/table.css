@@ -9,6 +9,16 @@
       @apply bg-shade-darwin/4 dark:bg-shade-darwin/10;
     }
 
+    &[aria-label='even'] {
+      td {
+        @apply bg-shade-darwin/4 dark:bg-shade-darwin/10;
+      }
+
+      &:hover td {
+        @apply bg-shade-darwin/6 dark:bg-shade-darwin/20;
+      }
+    }
+
     &:not([aria-hidden]):not(:has(+ tr:not([aria-hidden]))) > td {
       @apply border-b-0;
     }
@@ -35,8 +45,8 @@
     @apply bg-darwin border-edison border-b px-3 py-2 transition-colors;
     @apply aria-expanded:bg-shade-darwin/4 dark:aria-expanded:bg-shade-darwin/10;
 
-    &[aria-expanded] {
-      @apply px-2;
+    &[aria-label='td-expander'] {
+      @apply px-1.5 py-0;
     }
   }
 

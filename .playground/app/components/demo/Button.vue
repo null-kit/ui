@@ -15,29 +15,31 @@
         </div>
       </fieldset>
 
-      <fieldset>
-        <legend>Disabled</legend>
+      <div class="grid gap-3 md:grid-cols-2">
+        <fieldset>
+          <legend>Disabled</legend>
 
-        <div class="flex gap-2">
-          <button class="btn" disabled>Clear</button>
-          <button class="btn btn-default" disabled>Default</button>
-          <button class="btn btn-main" disabled>Main</button>
-          <button class="btn btn-accent" disabled>Accent</button>
-          <button class="btn btn-danger" disabled>Danger</button>
-        </div>
-      </fieldset>
+          <div class="flex gap-2">
+            <button class="btn" disabled>Clear</button>
+            <button class="btn btn-default" disabled>Default</button>
+            <button class="btn btn-main" disabled>Main</button>
+            <button class="btn btn-accent" disabled>Accent</button>
+            <button class="btn btn-danger" disabled>Danger</button>
+          </div>
+        </fieldset>
 
-      <fieldset>
-        <legend>Pending</legend>
+        <fieldset>
+          <legend>Pending</legend>
 
-        <div class="flex gap-2">
-          <button class="btn btn-pending" disabled>Clear</button>
-          <button class="btn btn-default btn-pending" disabled>Default</button>
-          <button class="btn btn-main btn-pending" disabled>Main</button>
-          <button class="btn btn-accent btn-pending" disabled>Accent</button>
-          <button class="btn btn-danger btn-pending" disabled>Danger</button>
-        </div>
-      </fieldset>
+          <div class="flex gap-2">
+            <button class="btn btn-pending" disabled>Clear</button>
+            <button class="btn btn-default btn-pending" disabled>Default</button>
+            <button class="btn btn-main btn-pending" disabled>Main</button>
+            <button class="btn btn-accent btn-pending" disabled>Accent</button>
+            <button class="btn btn-danger btn-pending" disabled>Danger</button>
+          </div>
+        </fieldset>
+      </div>
 
       <fieldset>
         <legend>Sizes</legend>
