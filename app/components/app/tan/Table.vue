@@ -1,22 +1,22 @@
 <template>
-  <div class="isolate" :style="columnSizeVars">
-    <div v-if="stickyHead" ref="theadVisible" class="sticky top-0 z-2 overflow-hidden">
+  <div class="isolate">
+    <div v-if="stickyHead" ref="theadVisible" class="sticky top-0 z-1 overflow-hidden">
       <table class="table-default w-full">
-        <AppTanHead :table :sticky-head />
+        <AppTanHead :table />
       </table>
     </div>
 
     <div
       ref="tableWrapper"
       class="scrollbar w-full overflow-auto"
-      :style="{ scrollbarWidth: stickyScrollbar ? 'none' : 'auto' }"
+      :style="{ scrollbarWidth: stickyScrollbar ? 'none' : undefined }"
     >
       <table class="table-default w-full">
-        <AppTanHead :table :sticky-head />
+        <AppTanHead :table :column-styles :is-hidden="stickyHead" />
 
         <tbody ref="tbody" class="isolate">
-          <tr aria-hidden>
-            <td :colspan="1" :style="{ padding: 0, border: 0, height: topPadding + 'px' }" />
+          <tr v-if="virtualScroll" aria-hidden>
+            <td :style="{ padding: 0, border: 0, height: topPadding + 'px' }" />
           </tr>
 
           <template v-for="(row, index) in visibleRows" :key="row.id">
@@ -27,10 +27,10 @@
               <td
                 v-for="cell in row.getVisibleCells()"
                 :key="cell.id"
-                :style="getCommonPinningStyles(cell.column)"
-                :class="cell.column.columnDef.meta?.class"
                 :aria-label="`td-${cell.column.id}`"
                 :aria-expanded="(cell.column.id === 'expander' && row.depth > 0) || undefined"
+                :class="cell.column.columnDef.meta?.class"
+                :style="columnStyles(cell.column)"
               >
                 <slot
                   v-if="!cell.getIsPlaceholder()"
@@ -45,25 +45,12 @@
             </tr>
           </template>
 
-          <tr aria-hidden>
-            <td :colspan="1" :style="{ padding: 0, border: 0, height: bottomPadding + 'px' }" />
+          <tr v-if="virtualScroll" aria-hidden>
+            <td :style="{ padding: 0, border: 0, height: bottomPadding + 'px' }" />
           </tr>
         </tbody>
 
-        <!-- <AppTanFoot :table /> -->
-        <tfoot v-if="hasFooter">
-          <template v-for="footerGroup in table.getFooterGroups()" :key="footerGroup.id">
-            <tr v-if="footerGroup.depth > 0">
-              <td v-for="cell in footerGroup.headers" :key="cell.id" :colSpan="cell.colSpan">
-                <FlexRender
-                  v-if="!cell.isPlaceholder"
-                  :render="cell.column.columnDef.footer"
-                  :props="cell.getContext()"
-                />
-              </td>
-            </tr>
-          </template>
-        </tfoot>
+        <AppTanFoot :table />
       </table>
     </div>
 
@@ -170,7 +157,8 @@ const table = useVueTable({
     ...(typeof props.columns === 'function' ? props.columns(createColumnHelper<TData>()) : props.columns)
   ],
   defaultColumn: {
-    enableResizing: false
+    enableResizing: false,
+    size: undefined
   },
   initialState: {
     columnPinning: {
@@ -198,11 +186,7 @@ const table = useVueTable({
   }
 });
 
-const rows = computed(() => table.getRowModel().rows);
-
-const { startIndex, visibleRows, topPadding, bottomPadding } = useTableVirtualRows(rows, props.virtualScroll);
-
-const getCommonPinningStyles = (column: Column<TData>): CSSProperties => {
+const columnStyles = (column: Column<TData>): CSSProperties => {
   const isPinned = column.getIsPinned();
   // const isLastLeftPinnedColumn = isPinned === 'left' && column.getIsLastColumn('left');
   // const isFirstRightPinnedColumn = isPinned === 'right' && column.getIsFirstColumn('right');
@@ -216,40 +200,19 @@ const getCommonPinningStyles = (column: Column<TData>): CSSProperties => {
     left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
     right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
     position: isPinned ? 'sticky' : undefined,
-    minWidth: column.getCanResize() ? `calc(var(--cell-${column.id}-size) * 1px)` : undefined,
-    maxWidth: column.getCanResize() ? `calc(var(--cell-${column.id}-size) * 1px)` : undefined,
-    zIndex: isPinned ? 1 : undefined
+    zIndex: isPinned ? 1 : undefined,
+    [`--size`]: column.getCanResize() || column.columnDef.size ? `${column.getSize()}px` : undefined,
+    minWidth: column.getCanResize() || column.columnDef.size ? `var(--size)` : undefined,
+    maxWidth: column.getCanResize() || column.columnDef.size ? `var(--size)` : undefined
   };
 };
 
-const hasFooter =
-  table
-    .getFooterGroups()
-    .flatMap(({ headers }) => headers.map(({ column }) => column.columnDef.footer))
-    .filter(Boolean).length > 0;
-
 const tableWrapper = useTemplateRef<HTMLElement>('tableWrapper');
 
+const rows = computed(() => table.getRowModel().rows);
+
+const { startIndex, visibleRows, topPadding, bottomPadding } = useTableVirtualRows(rows, props.virtualScroll);
+
 if (props.stickyScrollbar) useTableStickyScrollbar(tableWrapper);
-// if (props.stickyHead) useTableStickyHead(tableWrapper);
-
-const columnSizeVars = computed(() => {
-  const headers = table.getFlatHeaders();
-  const colSizes: { [key: string]: number } = {};
-
-  for (let i = 0; i < headers.length; i++) {
-    const header = headers[i]!;
-
-    colSizes[`--cell-${header.id}-size`] = header.getSize();
-    // colSizes[`--col-${header.column.id}-size`] = header.column.getSize();
-  }
-
-  return colSizes;
-});
-
-// {{ header.column.getSize() }}
-//         {{ columnSizeVars }}
-//         <!-- {{ style: {
-//                         width: `calc(var(--header-${header?.id}-size) * 1px)`,
-//                       }, }} -->
+if (props.stickyHead) useTableStickyHead(tableWrapper);
 </script>

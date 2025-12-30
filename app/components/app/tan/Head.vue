@@ -1,20 +1,14 @@
 <template>
-  <thead :class="{ 'sticky top-0 z-1': stickyHead }">
+  <thead :aria-hidden="isHidden || undefined" :class="{ 'pointer-events-none invisible': isHidden }">
     <tr v-for="headerGroup in table.getHeaderGroups()" :key="headerGroup.id">
       <th
         v-for="header in headerGroup.headers"
         :key="header.id"
         :colSpan="header.colSpan"
-        class="relative"
-        :style="getCommonPinningStyles(header.column)"
-        :class="header.column.columnDef.meta?.class"
-        :aria-sort="
-          !header.isPlaceholder && header.column.getCanSort()
-            ? header.column.getIsSorted() === 'desc'
-              ? 'descending'
-              : 'ascending'
-            : undefined
-        "
+        :data-resizable="header.column.getCanResize()"
+        :aria-sort="getSortDirection(header)"
+        :class="['relative', header.column.columnDef.meta?.class]"
+        :style="columnStyles ? columnStyles(header.column) : undefined"
       >
         <template v-if="!header.isPlaceholder">
           <div v-if="header.column.getCanSort()" class="flex items-center gap-1">
@@ -39,7 +33,8 @@
               </div>
             </div>
 
-            <!-- <label v-if="header.column.getCanPin()" class="btn btn-sm relative ml-auto">
+            <DevOnly>
+              <!-- <label v-if="header.column.getCanPin()" class="btn btn-sm relative ml-auto">
                   <select
                     name="pin"
                     class="absolute inset-0 z-1 appearance-none opacity-0"
@@ -68,6 +63,7 @@
                     />
                   </svg>
                 </label> -->
+            </DevOnly>
           </div>
 
           <FlexRender v-else :render="header.column.columnDef.header" :props="header.getContext()" />
@@ -78,7 +74,7 @@
             :class="{ 'opacity-5 hover:opacity-50': !header.column.getIsResizing() }"
             @touchstart="header.getResizeHandler()($event)"
             @mousedown="header.getResizeHandler()($event)"
-            @dblclick="header.column.resetSize()"
+            @dblclick="onResetSize(header.column)"
           />
         </template>
       </th>
@@ -89,33 +85,21 @@
 <script setup lang="ts" generic="TData">
 import { FlexRender } from '@tanstack/vue-table';
 import type { CSSProperties } from 'vue';
-import type { Column, Table } from '@tanstack/vue-table';
+import type { Column, Table, Header } from '@tanstack/vue-table';
 
-defineProps<{
+const props = defineProps<{
   table: Table<TData>;
-  stickyHead?: boolean;
+  columnStyles?: (column: Column<TData>) => CSSProperties;
+  isHidden?: boolean;
 }>();
 
-const getCommonPinningStyles = (column: Column<TData>): CSSProperties => {
-  const isPinned = column.getIsPinned();
-  // const isLastLeftPinnedColumn = isPinned === 'left' && column.getIsLastColumn('left');
-  // const isFirstRightPinnedColumn = isPinned === 'right' && column.getIsFirstColumn('right');
+const getSortDirection = (header: Header<TData, unknown>) => {
+  if (!header.column.getCanSort() || header.isPlaceholder) return undefined;
 
-  return {
-    // boxShadow: isLastLeftPinnedColumn
-    //   ? '-4px 0 4px -4px gray inset'
-    //   : isFirstRightPinnedColumn
-    //     ? '4px 0 4px -4px gray inset'
-    //     : undefined,
-    left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
-    right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
-    position: isPinned ? 'sticky' : undefined,
-    // minWidth: column.getCanResize() ? `${column.getSize()}px` : undefined,
-    // maxWidth: column.getCanResize() ? `${column.getSize()}px` : undefined,
-    minWidth: column.getCanResize() ? `calc(var(--cell-${column.id}-size) * 1px)` : undefined,
-    maxWidth: column.getCanResize() ? `calc(var(--cell-${column.id}-size) * 1px)` : undefined,
-    // width: column.getCanResize() ? `${column.getSize()}px` : undefined,
-    zIndex: isPinned ? 1 : undefined
-  };
+  return header.column.getIsSorted() === 'desc' ? 'descending' : 'ascending';
+};
+
+const onResetSize = (column: Column<TData>) => {
+  props.table.getState().columnSizing[column.id] = column.columnDef.size ?? 0;
 };
 </script>

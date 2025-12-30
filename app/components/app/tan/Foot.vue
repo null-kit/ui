@@ -1,21 +1,19 @@
 <template>
   <tfoot v-if="hasFooter">
-    <tr v-for="footerGroup in table.getFooterGroups()" :key="footerGroup.id">
-      <th v-for="header in footerGroup.headers" :key="header.id" :colSpan="header.colSpan">
-        <FlexRender
-          v-if="!header.isPlaceholder"
-          :render="header.column.columnDef.footer"
-          :props="header.getContext()"
-        />
-      </th>
-    </tr>
+    <template v-for="footerGroup in table.getFooterGroups()" :key="footerGroup.id">
+      <tr v-if="footerGroup.depth > 0">
+        <td v-for="cell in footerGroup.headers" :key="cell.id" :colSpan="cell.colSpan">
+          <FlexRender v-if="!cell.isPlaceholder" :render="cell.column.columnDef.footer" :props="cell.getContext()" />
+        </td>
+      </tr>
+    </template>
   </tfoot>
 </template>
 
-<script setup lang="ts" generic="T">
+<script setup lang="ts" generic="TData">
 import { FlexRender, type Table } from '@tanstack/vue-table';
 
-const props = defineProps<{ table: Table<T> }>();
+const props = defineProps<{ table: Table<TData> }>();
 
 const hasFooter =
   props.table

@@ -52,7 +52,7 @@
 
   th[aria-sort] {
     @apply cursor-pointer duration-200;
-    @apply hover:text-accent hover:bg-shade-darwin/4 dark:hover:bg-shade-darwin/10;
+    @apply hover:bg-shade-darwin/4 dark:hover:bg-shade-darwin/10;
   }
 }
 

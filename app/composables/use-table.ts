@@ -5,27 +5,33 @@ export const useTableStickyHead = (tableWrapper: Readonly<Ref<HTMLElement | null
   onMounted(() => {
     if (!tableWrapper.value || !theadVisible.value) return;
 
+    theadVisible.value!.style.marginBottom = `-${theadVisible.value!.offsetHeight}px`;
+
     const resizeObserver = new ResizeObserver(() => {
-      const hiddenList = tableWrapper.value!.querySelectorAll('th');
-      const visibleList = theadVisible.value!.querySelectorAll('th');
+      const stickyHead = tableWrapper.value!.querySelectorAll('th');
+      const mainHead = theadVisible.value!.querySelectorAll('th');
 
-      if (!hiddenList || !visibleList) return;
+      if (!stickyHead || !mainHead) return;
 
-      theadVisible.value!.style.marginBottom = `-${theadVisible.value!.offsetHeight}px`;
-
-      hiddenList.forEach((cell, index) => {
-        const visibleCell = visibleList[index];
+      stickyHead.forEach((cell, index) => {
+        const visibleCell = mainHead[index];
         const { width } = cell.getBoundingClientRect();
 
         if (visibleCell) visibleCell.style.minWidth = `${width}px`;
       });
+
+      // const innerWidth = tableWrapper.value!.querySelector('table > tbody').getBoundingClientRect().width;
+
+      // console.log(theadVisible.value!.getBoundingClientRect().width, innerWidth);
+
+      theadVisible.value!.style.width = tableWrapper.value!.getBoundingClientRect().width + 'px';
     });
 
     resizeObserver.observe(tableWrapper.value);
 
-    const hiddenList = tableWrapper.value.querySelectorAll('th');
+    const stickyHead = tableWrapper.value.querySelectorAll('th[data-resizable="true"]');
 
-    for (const cell of hiddenList) resizeObserver.observe(cell);
+    for (const cell of stickyHead) resizeObserver.observe(cell);
 
     const onScroll = () => (theadVisible.value!.scrollLeft = tableWrapper.value!.scrollLeft);
 
@@ -116,6 +122,38 @@ export const useTableVirtualRows = <T>(rows: Ref<T[]>, enabled?: boolean | numbe
   };
 };
 
+// Sticky Scrollbar Composable
+export const useTableStickyScrollbar = (tableWrapper: Readonly<Ref<HTMLElement | null>>) => {
+  const tableScrollbarThumb = useTemplateRef<HTMLElement>('tableScrollbarThumb');
+  const tableScrollbar = useTemplateRef<HTMLElement>('tableScrollbar');
+
+  onMounted(() => {
+    if (!tableWrapper.value || !tableScrollbar.value) return;
+
+    const table = tableWrapper.value.querySelector('table');
+
+    if (!table) return;
+
+    const resizeObserver = new ResizeObserver(() => {
+      tableScrollbarThumb.value!.style.width = `${table.scrollWidth}px`;
+    });
+
+    resizeObserver.observe(table);
+
+    const onScrollTable = () => (tableWrapper.value!.scrollLeft = tableScrollbar.value!.scrollLeft);
+    const onScrollThumb = () => (tableScrollbar.value!.scrollLeft = tableWrapper.value!.scrollLeft);
+
+    tableScrollbar.value.addEventListener('scroll', onScrollTable);
+    tableWrapper.value.addEventListener('scroll', onScrollThumb);
+
+    onUnmounted(() => {
+      resizeObserver.disconnect();
+      tableScrollbar.value?.removeEventListener('scroll', onScrollTable);
+      tableWrapper.value?.removeEventListener('scroll', onScrollThumb);
+    });
+  });
+};
+
 export const useTableSort = (props: {
   name?: string;
   sortByInitial?: string;
@@ -162,35 +200,4 @@ export const useTableSort = (props: {
     isSorted,
     onSort
   };
-};
-
-export const useTableStickyScrollbar = (tableWrapper: Readonly<Ref<HTMLElement | null>>) => {
-  const tableScrollbarThumb = useTemplateRef<HTMLElement>('tableScrollbarThumb');
-  const tableScrollbar = useTemplateRef<HTMLElement>('tableScrollbar');
-
-  onMounted(() => {
-    if (!tableWrapper.value || !tableScrollbar.value) return;
-
-    const table = tableWrapper.value.querySelector('table');
-
-    if (!table) return;
-
-    const resizeObserver = new ResizeObserver(() => {
-      tableScrollbarThumb.value!.style.width = `${table.scrollWidth}px`;
-    });
-
-    resizeObserver.observe(table);
-
-    const onScrollTable = () => (tableWrapper.value!.scrollLeft = tableScrollbar.value!.scrollLeft);
-    const onScrollThumb = () => (tableScrollbar.value!.scrollLeft = tableWrapper.value!.scrollLeft);
-
-    tableScrollbar.value.addEventListener('scroll', onScrollTable);
-    tableWrapper.value.addEventListener('scroll', onScrollThumb);
-
-    onUnmounted(() => {
-      resizeObserver.disconnect();
-      tableScrollbar.value?.removeEventListener('scroll', onScrollTable);
-      tableWrapper.value?.removeEventListener('scroll', onScrollThumb);
-    });
-  });
 };
