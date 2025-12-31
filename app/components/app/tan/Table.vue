@@ -11,7 +11,7 @@
       class="scrollbar w-full overflow-auto"
       :style="{ scrollbarWidth: stickyScrollbar ? 'none' : undefined }"
     >
-      <table class="table-default w-full">
+      <table class="table-default w-full" :class="{ 'table-striped': striped && !virtualScroll }">
         <AppTanHead :table :column-styles :is-hidden="stickyHead" />
 
         <tbody ref="tbody" class="isolate">
@@ -22,12 +22,12 @@
           <template v-for="(row, index) in visibleRows" :key="row.id">
             <tr
               :aria-expanded="row.getIsExpanded() || undefined"
-              :aria-label="striped && (startIndex + index) % 2 === 0 ? 'even' : undefined"
+              :data-tr="striped && virtualScroll && (startIndex + index) % 2 !== 0 ? 'odd' : undefined"
             >
               <td
                 v-for="cell in row.getVisibleCells()"
                 :key="cell.id"
-                :aria-label="`td-${cell.column.id}`"
+                :data-td="cell.column.id"
                 :aria-expanded="(cell.column.id === 'expander' && row.depth > 0) || undefined"
                 :class="cell.column.columnDef.meta?.class"
                 :style="columnStyles(cell.column)"
@@ -97,7 +97,8 @@ const props = defineProps<{
   data: TData[];
   columns: ColumnDef<TData>[] | ((columnHelper: ColumnHelper<TData>) => ColumnDef<TData>[]);
   nestedKey?: keyof TData;
-  defaultSort?: `${Extract<keyof TData, string>}:${'asc' | 'desc'}`;
+  sortDefault?: `${Extract<keyof TData, string>}:${'asc' | 'desc'}`;
+  sort?: 'server' | 'client';
   virtualScroll?: boolean | number;
   stickyHead?: boolean;
   stickyScrollbar?: boolean;
@@ -105,6 +106,8 @@ const props = defineProps<{
 }>();
 
 if (!props.columns) throw new Error('columns prop is required');
+
+const route = useRoute();
 
 const createColumnExpander = () => {
   if (!props.nestedKey) return [];
@@ -137,18 +140,18 @@ const createColumnExpander = () => {
   ];
 };
 
-const defaultSorting = computed<SortingState>(() => {
-  if (!props.defaultSort) return [];
+const initialSorting = computed<SortingState>(() => {
+  const sortBy = (route.query.sortBy as string) || props.sortDefault;
+  if (!sortBy) return [];
 
-  const [column, direction] = props.defaultSort.split(':');
-
+  const [column, direction] = sortBy.split(':');
   if (!column) return [];
 
   return [{ id: column, desc: direction === 'desc' }];
 });
 
 const expanded = ref<ExpandedState>({});
-const sorting = ref<SortingState>(defaultSorting.value);
+const sorting = ref<SortingState>(initialSorting.value);
 
 const table = useVueTable({
   get data() {
@@ -167,6 +170,7 @@ const table = useVueTable({
       left: ['expander']
     }
   },
+  manualSorting: props.sort === 'server',
   columnResizeMode: 'onChange',
   getSubRows: (row) => (row && props.nestedKey ? (row[props.nestedKey] as TData[]) : undefined),
   getCoreRowModel: getCoreRowModel(),
@@ -182,6 +186,20 @@ const table = useVueTable({
   },
   onSortingChange: (updaterOrValue) => {
     sorting.value = typeof updaterOrValue === 'function' ? updaterOrValue(sorting.value) : updaterOrValue;
+
+    if (props.sort) {
+      const query: Record<string, string | undefined> = {};
+
+      for (const item of sorting.value) {
+        if (item) {
+          query[`sortBy`] = `${item.id}:${item.desc ? 'desc' : 'asc'}`;
+        } else {
+          query.sortBy = undefined;
+        }
+      }
+
+      navigateTo({ query });
+    }
   },
   onExpandedChange: (updaterOrValue) => {
     expanded.value = typeof updaterOrValue === 'function' ? updaterOrValue(expanded.value) : updaterOrValue;
@@ -190,22 +208,16 @@ const table = useVueTable({
 
 const columnStyles = (column: Column<TData>): CSSProperties => {
   const isPinned = column.getIsPinned();
-  // const isLastLeftPinnedColumn = isPinned === 'left' && column.getIsLastColumn('left');
-  // const isFirstRightPinnedColumn = isPinned === 'right' && column.getIsFirstColumn('right');
+  const canResize = column.getCanResize() || column.columnDef.size;
 
   return {
-    // boxShadow: isLastLeftPinnedColumn
-    //   ? '-4px 0 4px -4px gray inset'
-    //   : isFirstRightPinnedColumn
-    //     ? '4px 0 4px -4px gray inset'
-    //     : undefined,
     left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
     right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
     position: isPinned ? 'sticky' : undefined,
     zIndex: isPinned ? 1 : undefined,
-    [`--size`]: column.getCanResize() || column.columnDef.size ? `${column.getSize()}px` : undefined,
-    minWidth: column.getCanResize() || column.columnDef.size ? `var(--size)` : undefined,
-    maxWidth: column.getCanResize() || column.columnDef.size ? `var(--size)` : undefined
+    [`--size`]: canResize ? `${column.getSize()}px` : undefined,
+    minWidth: canResize ? `var(--size)` : undefined,
+    maxWidth: canResize ? `var(--size)` : undefined
   };
 };
 

@@ -9,7 +9,7 @@
       @apply bg-shade-darwin/4 dark:bg-shade-darwin/10;
     }
 
-    &[aria-label='even'] {
+    &[data-tr='odd'] {
       td {
         @apply bg-shade-darwin/4 dark:bg-shade-darwin/10;
       }
@@ -45,7 +45,7 @@
     @apply bg-darwin border-edison border-b px-3 py-2 transition-colors;
     @apply aria-expanded:bg-shade-darwin/4 dark:aria-expanded:bg-shade-darwin/10;
 
-    &[aria-label='td-expander'] {
+    &[data-td='expander'] {
       @apply px-1.5 py-0;
     }
   }

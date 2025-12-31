@@ -6,6 +6,7 @@
         :key="header.id"
         :colSpan="header.colSpan"
         :data-resizable="header.column.getCanResize()"
+        :data-th="header.column.id"
         :aria-sort="getSortDirection(header)"
         :class="['relative', header.column.columnDef.meta?.class]"
         :style="columnStyles ? columnStyles(header.column) : undefined"

@@ -11,14 +11,9 @@
       {{ trigger }}
     </slot>
 
-    <Teleport to="#teleports" :disabled="!isActive">
+    <Teleport to="#teleports">
       <Transition enter-from-class="opacity-0" enter-to-class="opacity-100" leave-to-class="opacity-0">
-        <div
-          ref="floating"
-          v-show="isActive"
-          :style="floatingStyles"
-          class="pointer-events-none z-10 transition-opacity"
-        >
+        <div ref="floating" v-if="isActive" :style="floatingStyles" class="pointer-events-none z-10 transition-opacity">
           <div class="tooltip-content" :class="$attrs.class">
             <slot name="message">
               {{ message }}
@@ -31,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { autoPlacement, offset, shift, useFloating, autoUpdate } from '@floating-ui/vue';
+import { autoPlacement, offset, shift, useFloating } from '@floating-ui/vue';
 import type { VirtualElement } from '@floating-ui/vue';
 
 defineOptions({ inheritAttrs: false });
@@ -86,7 +81,7 @@ const onPointerMove = (event: PointerEvent) => {
       bottom: event.clientY
     });
 
-    update();
+    if (isActive.value) update();
   });
 };
 </script>
