@@ -9,7 +9,7 @@
         :data-th="header.column.id"
         :aria-sort="getSortDirection(header)"
         :class="['relative', header.column.columnDef.meta?.class]"
-        :style="columnStyles ? columnStyles(header.column) : undefined"
+        :style="getPinStyles(header.column)"
       >
         <template v-if="!header.isPlaceholder">
           <div v-if="header.column.getCanSort()" class="flex items-center gap-1">
@@ -18,7 +18,13 @@
               :class="{ 'text-accent': header.column.getIsSorted() }"
               @click="header.column.toggleSorting()"
             >
-              <FlexRender :render="header.column.columnDef.header" :props="header.getContext()" />
+              <slot :name="`th-${header.column.id}-left`" />
+
+              <slot :name="`th-${header.column.id}`">
+                <FlexRender :render="header.column.columnDef.header" :props="header.getContext()" />
+              </slot>
+
+              <slot :name="`th-${header.column.id}-right`" />
 
               <div v-if="header.column.getCanSort()" class="bg-surface/5 ml-auto shrink-0 rounded-full p-0.5">
                 <svg
@@ -98,6 +104,18 @@ const getSortDirection = (header: Header<TData, unknown>) => {
   if (!header.column.getCanSort() || header.isPlaceholder) return undefined;
 
   return header.column.getIsSorted() === 'desc' ? 'descending' : 'ascending';
+};
+
+const getPinStyles = (column: Column<TData>): CSSProperties => {
+  const isPinned = column.getIsPinned();
+
+  return {
+    left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
+    right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
+    position: isPinned ? 'sticky' : undefined,
+    zIndex: isPinned ? 1 : undefined,
+    ...(props.columnStyles ? props.columnStyles(column) : undefined)
+  };
 };
 
 const onResetSize = (column: Column<TData>) => {

@@ -2,7 +2,11 @@
   <div class="isolate">
     <div v-if="stickyHead" ref="theadVisible" class="sticky top-0 z-1 overflow-hidden">
       <table class="table-default w-full">
-        <AppTanHead :table />
+        <AppTanHead :table>
+          <template v-for="(_, name) in $slots" #[name]="scope">
+            <slot :name v-bind="scope" />
+          </template>
+        </AppTanHead>
       </table>
     </div>
 
@@ -12,7 +16,11 @@
       :style="{ scrollbarWidth: stickyScrollbar ? 'none' : undefined }"
     >
       <table class="table-default w-full" :class="{ 'table-striped': striped && !virtualScroll }">
-        <AppTanHead :table :column-styles :is-hidden="stickyHead" />
+        <AppTanHead :table :column-styles :is-hidden="stickyHead">
+          <template v-for="(_, name) in $slots" #[name]="scope">
+            <slot :name v-bind="scope" />
+          </template>
+        </AppTanHead>
 
         <tbody ref="tbody" class="isolate">
           <tr v-if="virtualScroll" aria-hidden>
@@ -50,7 +58,23 @@
           </tr>
         </tbody>
 
-        <AppTanFoot :table />
+        <tfoot v-if="hasFooter">
+          <template v-for="footerGroup in table.getFooterGroups()" :key="footerGroup.id">
+            <tr>
+              <td v-for="cell in footerGroup.headers" :key="cell.id" :colSpan="cell.colSpan">
+                <slot
+                  v-if="!cell.isPlaceholder"
+                  :name="`tf-${cell.id}`"
+                  :values="table.getRowModel().rows.map((row) => row.original[cell.id as keyof TData])"
+                >
+                  <FlexRender :render="cell.column.columnDef.footer" :props="cell.getContext()" />
+                </slot>
+              </td>
+            </tr>
+          </template>
+        </tfoot>
+
+        <!-- <AppTanFoot :table /> -->
       </table>
     </div>
 
@@ -68,7 +92,7 @@
 declare module '@tanstack/vue-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
     class?: string;
-    // sorting?: 'asc' | 'desc';
+    show?: boolean;
   }
 }
 </script>
@@ -91,19 +115,25 @@ import {
   type SortingState
 } from '@tanstack/vue-table';
 
-defineSlots<TableTanSlots<TData>>();
+const slots = defineSlots<TableTanSlots<TData>>();
 
-const props = defineProps<{
-  data: TData[];
-  columns: ColumnDef<TData>[] | ((columnHelper: ColumnHelper<TData>) => ColumnDef<TData>[]);
-  nestedKey?: keyof TData;
-  sortDefault?: `${Extract<keyof TData, string>}:${'asc' | 'desc'}`;
-  sort?: 'server' | 'client';
-  virtualScroll?: boolean | number;
-  stickyHead?: boolean;
-  stickyScrollbar?: boolean;
-  striped?: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    data: TData[];
+    columns: ColumnDef<TData>[] | ((columnHelper: ColumnHelper<TData>) => ColumnDef<TData>[]);
+    nestedKey?: keyof TData;
+    sortDefault?: `${Extract<keyof TData, string>}:${'asc' | 'desc'}`;
+    sort?: 'server' | 'client';
+    enableSorting?: boolean;
+    virtualScroll?: boolean | number;
+    stickyHead?: boolean;
+    stickyScrollbar?: boolean;
+    striped?: boolean;
+  }>(),
+  {
+    enableSorting: undefined
+  }
+);
 
 if (!props.columns) throw new Error('columns prop is required');
 
@@ -116,9 +146,7 @@ const createColumnExpander = () => {
     {
       id: 'expander',
       enablePinning: false,
-      meta: {
-        class: 'w-9'
-      },
+      meta: { class: 'w-9' },
       cell: ({ row }: { row: Row<TData> }) => {
         if (!row.getCanExpand()) return;
 
@@ -157,12 +185,15 @@ const table = useVueTable({
   get data() {
     return props.data;
   },
-  columns: [
-    ...createColumnExpander(),
-    ...(typeof props.columns === 'function' ? props.columns(createColumnHelper<TData>()) : props.columns)
-  ],
+  get columns() {
+    const columns = typeof props.columns === 'function' ? props.columns(createColumnHelper<TData>()) : props.columns;
+    const visibleColumns = columns.filter(({ meta }) => meta?.show === undefined || meta?.show);
+
+    return [...createColumnExpander(), ...visibleColumns];
+  },
   defaultColumn: {
     enableResizing: false,
+    enableSorting: props.enableSorting,
     size: undefined
   },
   initialState: {
@@ -188,13 +219,13 @@ const table = useVueTable({
     sorting.value = typeof updaterOrValue === 'function' ? updaterOrValue(sorting.value) : updaterOrValue;
 
     if (props.sort) {
-      const query: Record<string, string | undefined> = {};
+      const query: Record<string, string | undefined> = { ...route.query, sortBy: undefined };
 
       for (const item of sorting.value) {
-        if (item) {
+        if (Object.keys(item).length > 0) {
           query[`sortBy`] = `${item.id}:${item.desc ? 'desc' : 'asc'}`;
         } else {
-          query.sortBy = undefined;
+          query[`sortBy`] = undefined;
         }
       }
 
@@ -218,8 +249,15 @@ const columnStyles = (column: Column<TData>): CSSProperties => {
     [`--size`]: canResize ? `${column.getSize()}px` : undefined,
     minWidth: canResize ? `var(--size)` : undefined,
     maxWidth: canResize ? `var(--size)` : undefined
+    // width: canResize ? `var(--size)` : undefined
   };
 };
+
+const hasFooter =
+  table
+    .getFooterGroups()
+    .flatMap(({ headers }) => headers.map(({ column }) => column.columnDef.footer))
+    .filter(Boolean).length > 0;
 
 const tableWrapper = useTemplateRef<HTMLElement>('tableWrapper');
 

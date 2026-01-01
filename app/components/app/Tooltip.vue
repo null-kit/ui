@@ -1,24 +1,28 @@
 <template>
-  <span
-    ref="reference"
-    :class="['inline-flex min-w-0', hoverClass]"
-    @pointerleave="isActive = false"
-    @pointermove="onPointerMove"
-    @click="isActive = true"
-  >
+  <span :class="['inline-flex min-w-0', hoverClass]" @pointerleave="isActive = false" @pointermove="onPointerMove">
     <slot>
       <AppIcon v-if="icon" :name="icon" :class="iconClass" />
       {{ trigger }}
     </slot>
 
-    <Teleport to="#teleports">
-      <Transition enter-from-class="opacity-0" enter-to-class="opacity-100" leave-to-class="opacity-0">
-        <div ref="floating" v-if="isActive" :style="floatingStyles" class="pointer-events-none z-10 transition-opacity">
-          <div class="tooltip-content" :class="$attrs.class">
-            <slot name="message">
-              {{ message }}
-            </slot>
-          </div>
+    <Teleport to="#teleports" :disabled="!isMounted">
+      <Transition
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-to-class="opacity-0"
+        :duration="400"
+        @after-leave="isMounted = false"
+      >
+        <div
+          v-if="isActive"
+          ref="floating"
+          :style="floatingStyles"
+          class="tooltip-content pointer-events-none z-10 transition-opacity"
+          :class="$attrs.class"
+        >
+          <slot name="message">
+            {{ message }}
+          </slot>
         </div>
       </Transition>
     </Teleport>
@@ -42,8 +46,9 @@ defineProps<{
 const floating = useTemplateRef<HTMLDivElement>('floating');
 
 const isActive = ref(false);
+const isMounted = ref(false);
 
-const virtualReference = ref<VirtualElement>({
+const virtualReference = shallowRef<VirtualElement>({
   getBoundingClientRect: () => ({
     width: 0,
     height: 0,
@@ -63,12 +68,13 @@ const { floatingStyles, update } = useFloating(virtualReference, floating, {
 let frame = 0;
 
 const onPointerMove = (event: PointerEvent) => {
-  if (frame) return;
+  if (frame && !isMounted.value) return;
 
   frame = requestAnimationFrame(() => {
     frame = 0;
 
     isActive.value = true;
+    isMounted.value = true;
 
     virtualReference.value.getBoundingClientRect = () => ({
       width: 0,
@@ -81,7 +87,7 @@ const onPointerMove = (event: PointerEvent) => {
       bottom: event.clientY
     });
 
-    if (isActive.value) update();
+    if (isMounted.value) update();
   });
 };
 </script>

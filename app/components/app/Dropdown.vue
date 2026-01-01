@@ -2,11 +2,13 @@
   <div ref="reference" @click="onTriggerClick" @mouseenter="onTriggerEnter" @mouseleave="onTriggerLeave">
     <slot name="trigger" :is-open="isOpen" />
 
-    <Teleport to="#teleports" :disabled="!isOpen">
+    <Teleport to="#teleports" :disabled="!isMounted">
       <Transition
         enter-from-class="opacity-0 translate-y-2"
         enter-to-class="duration-200"
         leave-to-class="opacity-0 translate-y-2 duration-200"
+        :duration="200"
+        @after-leave="isOpen = false"
       >
         <div
           v-if="isOpen"
@@ -48,6 +50,7 @@ const reference = useTemplateRef<HTMLDivElement>('reference');
 const floating = useTemplateRef<HTMLDivElement>('floating');
 
 const isOpen = useClickOutside(reference, floating);
+const isMounted = ref(false);
 const isHovering = ref(false);
 
 const { floatingStyles } = useFloating(reference, floating, {
@@ -69,7 +72,7 @@ const { floatingStyles } = useFloating(reference, floating, {
       }
     })
   ],
-  whileElementsMounted: autoUpdate
+  whileElementsMounted: isOpen.value ? autoUpdate : undefined
 });
 
 const onTriggerClick = () => {

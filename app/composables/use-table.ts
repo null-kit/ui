@@ -5,33 +5,54 @@ export const useTableStickyHead = (tableWrapper: Readonly<Ref<HTMLElement | null
   onMounted(() => {
     if (!tableWrapper.value || !theadVisible.value) return;
 
-    theadVisible.value!.style.marginBottom = `-${theadVisible.value!.offsetHeight}px`;
+    const syncWidths = () => {
+      window.requestAnimationFrame(() => {
+        if (!tableWrapper.value || !theadVisible.value) return;
 
-    const resizeObserver = new ResizeObserver(() => {
-      const stickyHead = tableWrapper.value!.querySelectorAll('th');
-      const mainHead = theadVisible.value!.querySelectorAll('th');
+        const stickyHead = tableWrapper.value.querySelectorAll('th');
+        const mainHead = theadVisible.value.querySelectorAll('th');
 
-      if (!stickyHead || !mainHead) return;
+        if (!stickyHead || !mainHead) return;
 
-      stickyHead.forEach((cell, index) => {
-        const visibleCell = mainHead[index];
-        const { width } = cell.getBoundingClientRect();
+        const widths: number[] = [];
 
-        if (visibleCell) visibleCell.style.minWidth = `${width}px`;
+        stickyHead.forEach((cell, index) => {
+          widths.push(cell.getBoundingClientRect().width);
+
+          const visibleCell = mainHead[index];
+
+          if (visibleCell) visibleCell.style.minWidth = `${widths[index]}px`;
+        });
+
+        theadVisible.value.style.width = `${tableWrapper.value.getBoundingClientRect().width}px`;
+        theadVisible.value.style.marginBottom = `-${theadVisible.value.offsetHeight}px`;
       });
+    };
 
-      // const innerWidth = tableWrapper.value!.querySelector('table > tbody').getBoundingClientRect().width;
+    const resizeObserver = new ResizeObserver(syncWidths);
 
-      // console.log(theadVisible.value!.getBoundingClientRect().width, innerWidth);
+    const observeCells = () => {
+      if (!tableWrapper.value) return;
 
-      theadVisible.value!.style.width = tableWrapper.value!.getBoundingClientRect().width + 'px';
-    });
+      resizeObserver.disconnect();
+      resizeObserver.observe(tableWrapper.value);
 
-    resizeObserver.observe(tableWrapper.value);
+      const stickyHead = tableWrapper.value.querySelectorAll('th');
 
-    const stickyHead = tableWrapper.value.querySelectorAll('th[data-resizable="true"]');
+      for (const cell of stickyHead) resizeObserver.observe(cell);
 
-    for (const cell of stickyHead) resizeObserver.observe(cell);
+      syncWidths();
+    };
+
+    observeCells();
+
+    const mutationObserver = new MutationObserver(observeCells);
+    const table = tableWrapper.value.querySelector('table');
+
+    if (table) {
+      const thead = table.querySelector('thead');
+      mutationObserver.observe(thead || table, { childList: true, subtree: true });
+    }
 
     const onScroll = () => (theadVisible.value!.scrollLeft = tableWrapper.value!.scrollLeft);
 
@@ -40,6 +61,7 @@ export const useTableStickyHead = (tableWrapper: Readonly<Ref<HTMLElement | null
     onUnmounted(() => {
       tableWrapper.value?.removeEventListener('scroll', onScroll);
       resizeObserver.disconnect();
+      mutationObserver.disconnect();
     });
   });
 };

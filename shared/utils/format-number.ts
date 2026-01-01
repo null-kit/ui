@@ -1,4 +1,8 @@
-export const formatNumber = (value?: number | string, props?: Intl.NumberFormatOptions, locale = 'en-US') => {
+export const formatNumber = (
+  value: number | string | undefined,
+  props?: Intl.NumberFormatOptions,
+  locale: Intl.LocalesArgument = 'en-US'
+) => {
   if (value === undefined) return 'N/A';
 
   return new Intl.NumberFormat(locale, {
@@ -7,8 +11,10 @@ export const formatNumber = (value?: number | string, props?: Intl.NumberFormatO
   }).format(Number(value));
 };
 
-export const formatCurrency = (value?: number | string, currency?: Intl.NumberFormatOptionsStyle, locale = 'en-US') => {
-  if (value === undefined) return 'N/A';
-
-  return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(Number(value));
+export const formatCurrency = (
+  value: number | string | undefined,
+  currency: Intl.NumberFormatOptions['currency'] = 'USD',
+  locale: Intl.LocalesArgument = 'en-US'
+) => {
+  return formatNumber(value, { style: 'currency', currency }, locale);
 };
