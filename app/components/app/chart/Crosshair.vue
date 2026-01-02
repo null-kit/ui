@@ -21,7 +21,7 @@
         <div v-for="(category, index) in categories" :key="category" class="flex items-center gap-2">
           <div v-if="colors" class="h-3 w-1 rounded-full" :style="{ backgroundColor: colors[index] }" />
 
-          <div>{{ useDictionary(category) }}</div>
+          <div>{{ category }}</div>
 
           <div class="ml-auto font-semibold">
             {{ yFormat ? yFormat(currentData[category] || 0) : formatNumber(currentData[category] || 0) }}

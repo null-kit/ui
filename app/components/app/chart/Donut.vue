@@ -15,7 +15,7 @@
       :triggers="{
         [Donut.selectors.segment]: ({ data }: ChartData, i: number) => {
           return `<div class='text-sm px-3 py-2 flex items-center gap-2'>
-            <div>${useDictionary(data.category)}</div>
+            <div>${data.category}</div>
             <div class='ml-3 font-semibold'>${valueFormat ? valueFormat(data.value) : formatNumber(data.value)}</div>
           </div>`;
         }

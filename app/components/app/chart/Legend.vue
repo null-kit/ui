@@ -18,7 +18,7 @@ const props = defineProps<{
 }>();
 
 let items = props.categories.map((item, index) => ({
-  name: useDictionary(item) as BulletLegendItemInterface['name'],
+  name: item,
   inactive: false,
   color: props.colors[index]
 }));
