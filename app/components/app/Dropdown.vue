@@ -8,7 +8,7 @@
         enter-to-class="duration-200"
         leave-to-class="opacity-0 translate-y-2 duration-200"
         :duration="200"
-        @after-leave="isOpen = false"
+        @after-leave="isMounted = false"
       >
         <div
           v-if="isOpen"
@@ -78,10 +78,14 @@ const { floatingStyles } = useFloating(reference, floating, {
 const onTriggerClick = () => {
   if (props.noToggle && isOpen.value) return;
   isOpen.value = !isOpen.value;
+  isMounted.value = true;
 };
 
 const onTriggerEnter = () => {
-  if (props.hoverOpen) isOpen.value = true;
+  if (props.hoverOpen) {
+    isOpen.value = true;
+    isMounted.value = true;
+  }
 };
 
 const onTriggerLeave = () => {

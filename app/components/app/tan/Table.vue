@@ -58,23 +58,11 @@
           </tr>
         </tbody>
 
-        <tfoot v-if="hasFooter">
-          <template v-for="footerGroup in table.getFooterGroups()" :key="footerGroup.id">
-            <tr>
-              <td v-for="cell in footerGroup.headers" :key="cell.id" :colSpan="cell.colSpan">
-                <slot
-                  v-if="!cell.isPlaceholder"
-                  :name="`tf-${cell.id}`"
-                  :values="table.getRowModel().rows.map((row) => row.original[cell.id as keyof TData])"
-                >
-                  <FlexRender :render="cell.column.columnDef.footer" :props="cell.getContext()" />
-                </slot>
-              </td>
-            </tr>
+        <AppTanFoot :table>
+          <template v-for="(_, name) in $slots" #[name]="scope">
+            <slot :name v-bind="scope" />
           </template>
-        </tfoot>
-
-        <!-- <AppTanFoot :table /> -->
+        </AppTanFoot>
       </table>
     </div>
 
@@ -92,6 +80,7 @@
 declare module '@tanstack/vue-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
     class?: string;
+    thClass?: string;
     show?: boolean;
   }
 }
@@ -112,7 +101,8 @@ import {
   type ColumnHelper,
   type Column,
   type ExpandedState,
-  type SortingState
+  type SortingState,
+  type VisibilityState
 } from '@tanstack/vue-table';
 
 const slots = defineSlots<TableTanSlots<TData>>();
@@ -180,6 +170,7 @@ const initialSorting = computed<SortingState>(() => {
 
 const expanded = ref<ExpandedState>({});
 const sorting = ref<SortingState>(initialSorting.value);
+const columnVisibility = ref<VisibilityState>({});
 
 const table = useVueTable({
   get data() {
@@ -187,9 +178,8 @@ const table = useVueTable({
   },
   get columns() {
     const columns = typeof props.columns === 'function' ? props.columns(createColumnHelper<TData>()) : props.columns;
-    const visibleColumns = columns.filter(({ meta }) => meta?.show === undefined || meta?.show);
 
-    return [...createColumnExpander(), ...visibleColumns];
+    return [...createColumnExpander(), ...columns];
   },
   defaultColumn: {
     enableResizing: false,
@@ -213,6 +203,9 @@ const table = useVueTable({
     },
     get sorting() {
       return sorting.value;
+    },
+    get columnVisibility() {
+      return columnVisibility.value;
     }
   },
   onSortingChange: (updaterOrValue) => {
@@ -253,12 +246,6 @@ const columnStyles = (column: Column<TData>): CSSProperties => {
   };
 };
 
-const hasFooter =
-  table
-    .getFooterGroups()
-    .flatMap(({ headers }) => headers.map(({ column }) => column.columnDef.footer))
-    .filter(Boolean).length > 0;
-
 const tableWrapper = useTemplateRef<HTMLElement>('tableWrapper');
 
 const rows = computed(() => table.getRowModel().rows);
@@ -267,4 +254,16 @@ const { startIndex, visibleRows, topPadding, bottomPadding } = useTableVirtualRo
 
 if (props.stickyScrollbar) useTableStickyScrollbar(tableWrapper);
 if (props.stickyHead) useTableStickyHead(tableWrapper);
+
+watch(
+  () => table.getAllLeafColumns(),
+  (columns) => {
+    for (const col of columns) {
+      if (col.columnDef.meta?.show === undefined) continue;
+
+      columnVisibility.value[col.id] = col.columnDef.meta?.show;
+    }
+  },
+  { immediate: true }
+);
 </script>

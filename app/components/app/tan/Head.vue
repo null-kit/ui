@@ -8,7 +8,7 @@
         :data-resizable="header.column.getCanResize()"
         :data-th="header.column.id"
         :aria-sort="getSortDirection(header)"
-        :class="['relative', header.column.columnDef.meta?.class]"
+        :class="['relative', header.column.columnDef.meta?.class, header.column.columnDef.meta?.thClass]"
         :style="getPinStyles(header.column)"
       >
         <template v-if="!header.isPlaceholder">
