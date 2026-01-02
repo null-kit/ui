@@ -60,7 +60,7 @@
 
             <span v-if="!selected.length" class="self-center whitespace-nowrap">{{ placeholder }}</span>
 
-            <span class="sticky top-0 ml-auto flex items-center gap-1">
+            <span class="sticky top-0 right-0 ml-auto flex items-center gap-1">
               <span
                 v-if="multiple && selected.length > 1"
                 class="btn btn-sm btn-default size-5 text-current/50 hover:text-red-500"

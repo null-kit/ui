@@ -34,18 +34,27 @@
       </button>
     </nav>
 
-    <FormSelect v-model="perPage" :options="[25, 50, 100, 500, 1000]" autoclose />
+    <FormSelect v-if="perPage !== 0" v-model="perPage" :options="[25, 50, 100, 250, 500, 1000]" autoclose />
   </div>
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{ totalPages: number; perPage?: number; scrollTo?: string }>();
+const props = withDefaults(
+  defineProps<{
+    totalPages: number;
+    perPage?: number;
+    scrollTo?: string;
+  }>(),
+  {
+    perPage: 25
+  }
+);
 
 const route = useRoute();
 const routePage = Number(route.query.page);
 const currentPage = ref(routePage || 1);
 
-const perPage = ref(Number(route.query.perPage) || props.perPage || 25);
+const perPage = ref(Number(route.query.perPage) || props.perPage);
 
 const pages = computed(() => {
   const show = 5;
@@ -67,7 +76,6 @@ const pages = computed(() => {
 });
 
 if (routePage <= 1 || isNaN(routePage)) {
-  // navigateTo({ query: { ...route.query, page: undefined } });
   currentPage.value = 1;
 }
 
@@ -75,7 +83,7 @@ watch(perPage, () => {
   navigateTo({
     query: {
       ...route.query,
-      perPage: perPage.value === 25 ? undefined : perPage.value,
+      perPage: perPage.value === props.perPage ? undefined : perPage.value,
       page: undefined
     }
   });
