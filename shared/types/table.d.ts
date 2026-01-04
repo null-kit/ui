@@ -35,13 +35,10 @@ export type TableExtraSlots<T> = {
 export type TableSlots<T> = TableDataSlots<T> & TableExtraSlots<T>;
 
 // TanStack Table Slots
+export type TableSortType = `${Extract<keyof TData, string>}:${'asc' | 'desc'}` | undefined;
+
 export type TableTanDataSlots<TData> = {
-  [TValue in keyof TData]?: (props: {
-    row: TData;
-    cell: NoInfer<TData[TValue]>;
-    values: TData[];
-    isNested: boolean;
-  }) => void;
+  [TValue in keyof TData]?: (props: { row: TData; cell: NoInfer<TData[TValue]>; isNested: boolean }) => void;
 };
 
 export type TableTanExtraSlots<TData> = {

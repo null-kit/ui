@@ -2,7 +2,7 @@
   <div class="isolate">
     <div v-if="stickyHead" ref="theadVisible" class="sticky top-0 z-1 overflow-hidden">
       <table class="table-default w-full">
-        <AppTanHead :table>
+        <AppTanHead :table @sort="$emit('sort', $event)">
           <template v-for="(_, name) in $slots" #[name]="scope">
             <slot :name v-bind="scope" />
           </template>
@@ -16,7 +16,7 @@
       :style="{ scrollbarWidth: stickyScrollbar ? 'none' : undefined }"
     >
       <table class="table-default w-full" :class="{ 'table-striped': striped && !virtualScroll }">
-        <AppTanHead :table :column-styles :is-hidden="stickyHead">
+        <AppTanHead :table :column-styles :is-hidden="stickyHead" @sort="$emit('sort', $event)">
           <template v-for="(_, name) in $slots" #[name]="scope">
             <slot :name v-bind="scope" />
           </template>
@@ -30,14 +30,14 @@
           <template v-for="(row, index) in visibleRows" :key="row.id">
             <tr
               :aria-expanded="row.getIsExpanded() || undefined"
-              :data-tr="striped && virtualScroll && (startIndex + index) % 2 !== 0 ? 'odd' : undefined"
+              :data-row="striped && virtualScroll && (startIndex + index) % 2 !== 0 ? 'odd' : undefined"
             >
               <td
                 v-for="cell in row.getVisibleCells()"
                 :key="cell.id"
-                :data-td="cell.column.id"
+                :data-cell="cell.column.id"
                 :aria-expanded="(cell.column.id === 'expander' && row.depth > 0) || undefined"
-                :class="cell.column.columnDef.meta?.class"
+                :class="[cell.column.columnDef.meta?.class, cell.column.columnDef.meta?.tdClass]"
                 :style="columnStyles(cell.column)"
               >
                 <slot
@@ -81,7 +81,9 @@ declare module '@tanstack/vue-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
     class?: string;
     thClass?: string;
+    tdClass?: string;
     show?: boolean;
+    pin?: 'left' | 'right';
   }
 }
 </script>
@@ -102,17 +104,20 @@ import {
   type Column,
   type ExpandedState,
   type SortingState,
-  type VisibilityState
+  type VisibilityState,
+  type ColumnPinningState
 } from '@tanstack/vue-table';
 
 const slots = defineSlots<TableTanSlots<TData>>();
+
+defineEmits<{ sort: [TableSortType] }>();
 
 const props = withDefaults(
   defineProps<{
     data: TData[];
     columns: ColumnDef<TData>[] | ((columnHelper: ColumnHelper<TData>) => ColumnDef<TData>[]);
     nestedKey?: keyof TData;
-    sortDefault?: `${Extract<keyof TData, string>}:${'asc' | 'desc'}`;
+    sortDefault?: MaybeRef<TableSortType | string>;
     sort?: 'server' | 'client';
     enableSorting?: boolean;
     virtualScroll?: boolean | number;
@@ -136,7 +141,7 @@ const createColumnExpander = () => {
     {
       id: 'expander',
       enablePinning: false,
-      meta: { class: 'w-9' },
+      size: 38,
       cell: ({ row }: { row: Row<TData> }) => {
         if (!row.getCanExpand()) return;
 
@@ -159,7 +164,7 @@ const createColumnExpander = () => {
 };
 
 const initialSorting = computed<SortingState>(() => {
-  const sortBy = (route.query.sortBy as string) || props.sortDefault;
+  const sortBy = (route.query.sortBy as string) || unref(props.sortDefault);
   if (!sortBy) return [];
 
   const [column, direction] = sortBy.split(':');
@@ -171,6 +176,9 @@ const initialSorting = computed<SortingState>(() => {
 const expanded = ref<ExpandedState>({});
 const sorting = ref<SortingState>(initialSorting.value);
 const columnVisibility = ref<VisibilityState>({});
+const columnPinning = ref<ColumnPinningState>({
+  left: ['expander']
+});
 
 const table = useVueTable({
   get data() {
@@ -185,11 +193,6 @@ const table = useVueTable({
     enableResizing: false,
     enableSorting: props.enableSorting,
     size: undefined
-  },
-  initialState: {
-    columnPinning: {
-      left: ['expander']
-    }
   },
   manualSorting: props.sort === 'server',
   columnResizeMode: 'onChange',
@@ -206,6 +209,9 @@ const table = useVueTable({
     },
     get columnVisibility() {
       return columnVisibility.value;
+    },
+    get columnPinning() {
+      return columnPinning.value;
     }
   },
   onSortingChange: (updaterOrValue) => {
@@ -227,6 +233,9 @@ const table = useVueTable({
   },
   onExpandedChange: (updaterOrValue) => {
     expanded.value = typeof updaterOrValue === 'function' ? updaterOrValue(expanded.value) : updaterOrValue;
+  },
+  onColumnPinningChange: (updaterOrValue) => {
+    columnPinning.value = typeof updaterOrValue === 'function' ? updaterOrValue(columnPinning.value) : updaterOrValue;
   }
 });
 
@@ -249,19 +258,30 @@ const columnStyles = (column: Column<TData>): CSSProperties => {
 const tableWrapper = useTemplateRef<HTMLElement>('tableWrapper');
 
 const rows = computed(() => table.getRowModel().rows);
+const leafColumns = computed(() => table.getAllLeafColumns());
 
 const { startIndex, visibleRows, topPadding, bottomPadding } = useTableVirtualRows(rows, props.virtualScroll);
 
 if (props.stickyScrollbar) useTableStickyScrollbar(tableWrapper);
 if (props.stickyHead) useTableStickyHead(tableWrapper);
 
-watch(
-  () => table.getAllLeafColumns(),
-  (columns) => {
-    for (const col of columns) {
-      if (col.columnDef.meta?.show === undefined) continue;
+for (const column of leafColumns.value) {
+  if (column.columnDef.meta?.pin === 'left') {
+    columnPinning.value.left?.push(column.id);
+  }
 
-      columnVisibility.value[col.id] = col.columnDef.meta?.show;
+  if (column.columnDef.meta?.pin === 'right') {
+    columnPinning.value.right?.push(column.id);
+  }
+}
+
+watch(
+  leafColumns,
+  (columns) => {
+    for (const column of columns) {
+      if (column.columnDef.meta?.show !== undefined) {
+        columnVisibility.value[column.id] = column.columnDef.meta?.show;
+      }
     }
   },
   { immediate: true }

@@ -108,7 +108,7 @@
           <div v-if="presets && presets.length > 0 && filteredPresets && filteredPresets.length > 0" class="-order-1">
             <div class="select-group-label">Presets</div>
 
-            <div class="grid grid-cols-2 gap-0.5 p-1">
+            <div class="grid gap-0.5 p-1 md:grid-cols-3">
               <button
                 type="button"
                 v-for="(preset, index) in filteredPresets"

@@ -1,5 +1,5 @@
 export const formatNumber = (
-  value: number | string | undefined,
+  value: number | string | undefined | null,
   props?: Intl.NumberFormatOptions,
   locale: Intl.LocalesArgument = 'en-US'
 ) => {
@@ -12,9 +12,9 @@ export const formatNumber = (
 };
 
 export const formatCurrency = (
-  value: number | string | undefined,
-  currency: Intl.NumberFormatOptions['currency'] = 'USD',
+  value: number | string | undefined | null,
+  props?: Intl.NumberFormatOptions,
   locale: Intl.LocalesArgument = 'en-US'
 ) => {
-  return formatNumber(value, { style: 'currency', currency }, locale);
+  return formatNumber(value, { style: 'currency', currency: props?.currency ?? 'USD', ...props }, locale);
 };

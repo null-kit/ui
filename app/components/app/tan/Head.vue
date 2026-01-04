@@ -5,18 +5,20 @@
         v-for="header in headerGroup.headers"
         :key="header.id"
         :colSpan="header.colSpan"
-        :data-resizable="header.column.getCanResize()"
-        :data-th="header.column.id"
+        :data-cell="header.column.id"
         :aria-sort="getSortDirection(header)"
         :class="['relative', header.column.columnDef.meta?.class, header.column.columnDef.meta?.thClass]"
         :style="getPinStyles(header.column)"
       >
         <template v-if="!header.isPlaceholder">
-          <div v-if="header.column.getCanSort()" class="flex items-center gap-1">
+          <div
+            v-if="header.column.getCanSort()"
+            class="flex items-center gap-1 after:absolute after:inset-0"
+            @click="onSort(header.column)"
+          >
             <div
-              class="flex w-full items-center gap-1 text-left duration-200"
+              class="z-1 flex w-full items-center gap-1 text-left duration-200"
               :class="{ 'text-accent': header.column.getIsSorted() }"
-              @click="header.column.toggleSorting()"
             >
               <slot :name="`th-${header.column.id}-left`" />
 
@@ -26,7 +28,7 @@
 
               <slot :name="`th-${header.column.id}-right`" />
 
-              <div v-if="header.column.getCanSort()" class="bg-surface/5 ml-auto shrink-0 rounded-full p-0.5">
+              <div class="bg-surface/5 ml-auto shrink-0 rounded-full p-0.5">
                 <svg
                   class="text-surface/50 h-3 w-1.5"
                   viewBox="0 0 16 30"
@@ -73,7 +75,15 @@
             </DevOnly>
           </div>
 
-          <FlexRender v-else :render="header.column.columnDef.header" :props="header.getContext()" />
+          <template v-else>
+            <slot :name="`th-${header.column.id}-left`" />
+
+            <slot :name="`th-${header.column.id}`">
+              <FlexRender :render="header.column.columnDef.header" :props="header.getContext()" />
+            </slot>
+
+            <slot :name="`th-${header.column.id}-right`" />
+          </template>
 
           <div
             v-if="header.column.getCanResize()"
@@ -89,10 +99,12 @@
   </thead>
 </template>
 
-<script setup lang="ts" generic="TData">
+<script setup lang="ts" generic="TData, TValue">
 import { FlexRender } from '@tanstack/vue-table';
 import type { CSSProperties } from 'vue';
 import type { Column, Table, Header } from '@tanstack/vue-table';
+
+const emit = defineEmits<{ sort: [TableSortType] }>();
 
 const props = defineProps<{
   table: Table<TData>;
@@ -116,6 +128,14 @@ const getPinStyles = (column: Column<TData>): CSSProperties => {
     zIndex: isPinned ? 1 : undefined,
     ...(props.columnStyles ? props.columnStyles(column) : undefined)
   };
+};
+
+const onSort = (column: Column<TData>) => {
+  column.toggleSorting();
+
+  const dir = column.getIsSorted();
+
+  emit('sort', dir ? `${column.id}:${dir}` : undefined);
 };
 
 const onResetSize = (column: Column<TData>) => {

@@ -4,7 +4,7 @@
       role="summary"
       class="flex items-center gap-2"
       :class="[
-        noToggle ? 'cursor-default' : isOpen ? 'cursor-n-resize' : 'cursor-s-resize',
+        noToggle ? 'cursor-default' : isOpen ? 'cursor-s-resize' : 'cursor-n-resize',
         !summaryClass && 'border-b px-4 py-2',
         isOpen && !summaryClass ? 'border-edison' : 'border-transparent',
         summaryClass
