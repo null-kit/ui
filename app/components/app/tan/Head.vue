@@ -125,7 +125,7 @@ const getPinStyles = (column: Column<TData>): CSSProperties => {
     left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
     right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
     position: isPinned ? 'sticky' : undefined,
-    zIndex: isPinned ? 1 : undefined,
+    zIndex: isPinned ? 2 : undefined,
     ...(props.columnStyles ? props.columnStyles(column) : undefined)
   };
 };
