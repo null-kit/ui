@@ -10,7 +10,7 @@
         enter-from-class="opacity-0"
         enter-to-class="opacity-100"
         leave-to-class="opacity-0"
-        :duration="150"
+        :duration="200"
         @after-leave="isMounted = false"
       >
         <div
