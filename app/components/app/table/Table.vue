@@ -1,101 +1,68 @@
 <template>
-  <AppTableRoot
-    v-slot="{ cells, startIndex, topPadding, bottomPadding, visibleRows, isExpanded, toggleRow, data: slotData }"
-    v-bind="{ data, meta, pick, omit, columnsOrder, columnsExtra, sort }"
-  >
-    <div v-if="stickyHead" ref="theadVisible" class="sticky z-1 overflow-hidden" :class="stickyOffset">
+  <div class="isolate">
+    <div v-if="stickyHead" ref="theadVisible" class="sticky top-0 z-1 overflow-hidden">
       <table class="table-default w-full">
-        <AppTableHead v-bind="{ meta, cells, slots, sort }" />
+        <AppTableHead :table @sort="$emit('sort', $event)">
+          <template v-for="(_, name) in $slots" #[name]="scope">
+            <slot :name v-bind="scope" />
+          </template>
+        </AppTableHead>
       </table>
     </div>
 
     <div
       ref="tableWrapper"
-      class="scrollbar isolate w-full overflow-auto"
-      :style="{ scrollbarWidth: stickyScrollbar ? 'none' : 'auto' }"
+      class="scrollbar w-full overflow-auto"
+      :style="{ scrollbarWidth: stickyScrollbar ? 'none' : undefined }"
     >
-      <table class="table-default w-full" :class="{ 'table-striped': striped }">
-        <AppTableHead v-bind="{ meta, cells, slots, sort }" :class="{ 'pointer-events-none invisible': stickyHead }" />
+      <table class="table-default w-full" :class="{ 'table-striped': striped && !virtualScroll }">
+        <AppTableHead :table :column-styles :is-hidden="stickyHead" @sort="$emit('sort', $event)">
+          <template v-for="(_, name) in $slots" #[name]="scope">
+            <slot :name v-bind="scope" />
+          </template>
+        </AppTableHead>
 
-        <tbody ref="tbody">
+        <tbody ref="tbody" class="isolate">
           <tr v-if="virtualScroll" aria-hidden>
-            <td :colspan="cells.length" :style="{ padding: 0, border: 0, height: topPadding + 'px' }" />
+            <td :style="{ padding: 0, border: 0, height: topPadding + 'px' }" />
           </tr>
 
-          <tr
-            v-for="(entry, index) in visibleRows"
-            :key="startIndex + index"
-            :class="trClass"
-            :aria-rowindex="startIndex + index"
-            :aria-expanded="(expandedKey && isExpanded(entry._rowIndex)) || undefined"
-          >
-            <td
-              v-if="expandedKey"
-              ref="expandedCell"
-              :aria-expanded="Boolean(entry.isNested) || isExpanded(entry._rowIndex)"
-              class="left-0 z-1 md:sticky"
+          <template v-for="(row, index) in visibleRows" :key="row.id">
+            <tr
+              :aria-expanded="row.getIsExpanded() || undefined"
+              :data-row="striped && virtualScroll && (startIndex + index) % 2 !== 0 ? 'odd' : undefined"
             >
-              <button
-                v-if="!entry.isNested"
-                type="button"
-                class="btn btn-sm size-6"
-                @click="toggleRow(entry._rowIndex)"
+              <td
+                v-for="cell in row.getVisibleCells()"
+                :key="cell.id"
+                :data-cell="cell.column.id"
+                :aria-expanded="(cell.column.id === 'expander' && row.depth > 0) || undefined"
+                :class="[cell.column.columnDef.meta?.class, cell.column.columnDef.meta?.tdClass]"
+                :style="columnStyles(cell.column)"
               >
-                <AppIcon
-                  name="chevron-right"
-                  class="duration-200"
-                  :class="{ 'rotate-90': isExpanded(entry._rowIndex) }"
-                />
-              </button>
-
-              <component
-                :is="slots['td-expanded']"
-                v-else="slots['td-expanded']"
-                :entry="getEntry(entry, startIndex + index, slotData)"
-                :isNested="entry.isNested"
-              />
-            </td>
-
-            <td
-              v-for="cell in cells"
-              :key="cell"
-              :aria-label="`td-${cell}`"
-              :class="[
-                tdClass,
-                { 'left-0 z-1 md:sticky': stickyLeft.includes(cell) },
-                { 'right-0 -left-px z-1 border-l md:sticky': stickyRight.includes(cell) }
-              ]"
-              :style="{ left: expandedKey && stickyLeft.includes(cell) ? `${expandedCellWidth}px` : undefined }"
-            >
-              <component
-                :is="slots[cell]"
-                v-if="slots[cell]"
-                :entry="getEntry(entry, startIndex + index, slotData)"
-                :value="getEntry(entry, startIndex + index, slotData)?.[cell]"
-                :isNested="entry.isNested"
-              />
-
-              <template v-else>{{ entry[cell] }}</template>
-            </td>
-
-            <td
-              v-if="slots.actions"
-              :class="[{ 'right-0 -left-px border-l md:sticky': stickyRight.includes('actions') }, tdClass]"
-            >
-              <component
-                :is="slots.actions"
-                :entry="getEntry(entry, startIndex + index, slotData)"
-                :isNested="entry.isNested"
-              />
-            </td>
-          </tr>
+                <slot
+                  v-if="!cell.getIsPlaceholder()"
+                  :name="cell.column.id"
+                  :cell="cell.getValue()"
+                  :row="row.original"
+                  :isNested="row.depth > 0"
+                >
+                  <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
+                </slot>
+              </td>
+            </tr>
+          </template>
 
           <tr v-if="virtualScroll" aria-hidden>
-            <td :colspan="cells.length" :style="{ padding: 0, border: 0, height: bottomPadding + 'px' }" />
+            <td :style="{ padding: 0, border: 0, height: bottomPadding + 'px' }" />
           </tr>
         </tbody>
 
-        <AppTableFooter v-bind="{ data, cells, meta, slots }" />
+        <AppTableFoot :table>
+          <template v-for="(_, name) in $slots" #[name]="scope">
+            <slot :name v-bind="scope" />
+          </template>
+        </AppTableFoot>
       </table>
     </div>
 
@@ -106,88 +73,217 @@
     >
       <div ref="tableScrollbarThumb" class="h-px" />
     </div>
-  </AppTableRoot>
+  </div>
 </template>
 
-<script setup lang="ts" generic="T extends Record<string, unknown>">
-const slots = defineSlots<TableSlots<T>>();
+<script lang="ts">
+declare module '@tanstack/vue-table' {
+  interface ColumnMeta<TData extends RowData, TValue> {
+    class?: string;
+    thClass?: string;
+    tdClass?: string;
+    show?: boolean;
+    pin?: 'left' | 'right';
+  }
+}
+</script>
+
+<script setup lang="ts" generic="TData">
+import type { CSSProperties } from 'vue';
+import {
+  useVueTable,
+  FlexRender,
+  createColumnHelper,
+  getCoreRowModel,
+  getExpandedRowModel,
+  getSortedRowModel,
+  type RowData,
+  type Row,
+  type ColumnDef,
+  type ColumnHelper,
+  type Column,
+  type ExpandedState,
+  type SortingState,
+  type VisibilityState,
+  type ColumnPinningState
+} from '@tanstack/vue-table';
+
+const slots = defineSlots<TableTanSlots<TData>>();
+
+defineEmits<{ sort: [TableSortType] }>();
 
 const props = withDefaults(
   defineProps<{
-    data: T[];
-
-    stickyHead?: boolean;
-    stickyOffset?: string;
-    stickyLeft?: string[];
-    stickyRight?: string[];
-    stickyScrollbar?: boolean;
-
-    sortBy?: string[];
-    sortByClient?: string[];
-    sortByInitial?: `${Extract<keyof T, string>}:${'asc' | 'desc'}`;
-    name?: string;
-
-    trClass?: string;
-    thClass?: string;
-    tdClass?: string;
-
-    omit?: (keyof T)[];
-    pick?: (keyof T)[];
-    columnsOrder?: (keyof T)[];
-    columnsExtra?: string[];
-
-    dictionaryKey?: string;
-    expandedKey?: string;
+    data: TData[];
+    columns: ColumnDef<TData>[] | ((columnHelper: ColumnHelper<TData>) => ColumnDef<TData>[]);
+    nestedKey?: keyof TData;
+    sortDefault?: MaybeRef<TableSortType | string>;
+    sort?: 'server' | 'client';
+    enableSorting?: boolean;
     virtualScroll?: boolean | number;
-
+    stickyHead?: boolean;
+    stickyScrollbar?: boolean;
     striped?: boolean;
   }>(),
   {
-    stickyLeft: () => [],
-    stickyRight: () => [],
-    stickyOffset: 'top-0'
+    enableSorting: undefined
   }
 );
 
-const expandedCell = useTemplateRef<HTMLElement | null>('expandedCell');
+if (!props.columns) throw new Error('columns prop is required');
 
-const expandedCellWidth = computed(() => {
-  if (!Array.isArray(expandedCell.value)) return 0;
+const route = useRoute();
 
-  return expandedCell.value[0].getBoundingClientRect().width;
+const createColumnExpander = () => {
+  if (!props.nestedKey) return [];
+
+  return [
+    {
+      id: 'expander',
+      enablePinning: false,
+      size: 38,
+      cell: ({ row }: { row: Row<TData> }) => {
+        if (!row.getCanExpand()) return;
+
+        return h(
+          'button',
+          { type: 'button', onClick: row.getToggleExpandedHandler(), class: 'btn btn-sm size-6' },
+          h(
+            'svg',
+            {
+              viewBox: '0 0 24 24',
+              fill: 'none',
+              class: `size-fit shrink-0 duration-200 ${row.getIsExpanded() ? 'rotate-90' : ''}`
+            },
+            [h('path', { d: 'M7 2L17 12L7 22', stroke: 'currentColor', 'stroke-width': '3.5' })]
+          )
+        );
+      }
+    }
+  ];
+};
+
+const initialSorting = computed<SortingState>(() => {
+  const sortBy = (route.query.sortBy as string) || unref(props.sortDefault);
+  if (!sortBy) return [];
+
+  const [column, direction] = sortBy.split(':');
+  if (!column) return [];
+
+  return [{ id: column, desc: direction === 'desc' }];
 });
 
-const meta = reactive({
-  expandedKey: props.expandedKey,
-  expandedCellWidth: computed(() => expandedCellWidth.value),
-  dictionaryKey: props.dictionaryKey,
-
-  trClass: props.trClass,
-  thClass: props.thClass,
-  tdClass: props.tdClass,
-
-  stickyLeft: props.stickyLeft,
-  stickyRight: props.stickyRight,
-
-  virtualScroll: props.virtualScroll,
-
-  sortByClient: props.sortByClient
+const expanded = ref<ExpandedState>({});
+const sorting = ref<SortingState>(initialSorting.value);
+const columnVisibility = ref<VisibilityState>({});
+const columnPinning = ref<ColumnPinningState>({
+  left: ['expander']
 });
 
-const getEntry = (entry: Record<string, unknown>, index: number, data: T[] = props.data) => {
-  if (entry.isNested) return entry;
+const table = useVueTable({
+  get data() {
+    return props.data;
+  },
+  get columns() {
+    const columns = typeof props.columns === 'function' ? props.columns(createColumnHelper<TData>()) : props.columns;
 
-  if (typeof entry._rowIndex === 'number') {
-    return data[entry._rowIndex];
+    return [...createColumnExpander(), ...columns];
+  },
+  defaultColumn: {
+    enableResizing: false,
+    enableSorting: props.enableSorting,
+    size: undefined
+  },
+  manualSorting: props.sort === 'server',
+  columnResizeMode: 'onChange',
+  getSubRows: (row) => (row && props.nestedKey ? (row[props.nestedKey] as TData[]) : undefined),
+  getCoreRowModel: getCoreRowModel(),
+  getExpandedRowModel: getExpandedRowModel(),
+  getSortedRowModel: getSortedRowModel(),
+  state: {
+    get expanded() {
+      return expanded.value;
+    },
+    get sorting() {
+      return sorting.value;
+    },
+    get columnVisibility() {
+      return columnVisibility.value;
+    },
+    get columnPinning() {
+      return columnPinning.value;
+    }
+  },
+  onSortingChange: (updaterOrValue) => {
+    sorting.value = typeof updaterOrValue === 'function' ? updaterOrValue(sorting.value) : updaterOrValue;
+
+    if (props.sort) {
+      const query: Record<string, string | undefined> = { ...route.query, sortBy: undefined };
+
+      for (const item of sorting.value) {
+        if (Object.keys(item).length > 0) {
+          query[`sortBy`] = `${item.id}:${item.desc ? 'desc' : 'asc'}`;
+        } else {
+          query[`sortBy`] = undefined;
+        }
+      }
+
+      navigateTo({ query });
+    }
+  },
+  onExpandedChange: (updaterOrValue) => {
+    expanded.value = typeof updaterOrValue === 'function' ? updaterOrValue(expanded.value) : updaterOrValue;
+  },
+  onColumnPinningChange: (updaterOrValue) => {
+    columnPinning.value = typeof updaterOrValue === 'function' ? updaterOrValue(columnPinning.value) : updaterOrValue;
   }
+});
 
-  return data[index];
+const columnStyles = (column: Column<TData>): CSSProperties => {
+  const isPinned = column.getIsPinned();
+  const canResize = column.getCanResize() || column.columnDef.size;
+
+  return {
+    left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
+    right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
+    position: isPinned ? 'sticky' : undefined,
+    zIndex: isPinned ? 2 : undefined,
+    [`--size`]: canResize ? `${column.getSize()}px` : undefined,
+    minWidth: canResize ? `var(--size)` : undefined,
+    maxWidth: canResize ? `var(--size)` : undefined,
+    width: canResize ? `var(--size)` : undefined
+  };
 };
 
 const tableWrapper = useTemplateRef<HTMLElement>('tableWrapper');
 
+const rows = computed(() => table.getRowModel().rows);
+const leafColumns = computed(() => table.getAllLeafColumns());
+
+const { startIndex, visibleRows, topPadding, bottomPadding } = useTableVirtualRows(rows, props.virtualScroll);
+
 if (props.stickyScrollbar) useTableStickyScrollbar(tableWrapper);
 if (props.stickyHead) useTableStickyHead(tableWrapper);
 
-const sort = useTableSort(props);
+for (const column of leafColumns.value) {
+  if (column.columnDef.meta?.pin === 'left') {
+    columnPinning.value.left?.push(column.id);
+  }
+
+  if (column.columnDef.meta?.pin === 'right') {
+    columnPinning.value.right?.push(column.id);
+  }
+}
+
+watch(
+  leafColumns,
+  (columns) => {
+    for (const column of columns) {
+      if (column.columnDef.meta?.show !== undefined) {
+        columnVisibility.value[column.id] = column.columnDef.meta?.show;
+      }
+    }
+  },
+  { immediate: true }
+);
 </script>
