@@ -2,7 +2,7 @@
   <div ref="reference" @click="onTriggerClick" @mouseenter="onTriggerEnter" @mouseleave="onTriggerLeave">
     <slot name="trigger" :is-open="isOpen" />
 
-    <Teleport to="#teleports" :disabled="!isMounted">
+    <Teleport to="#teleports" :disabled="!isMounted || inline">
       <Transition
         enter-from-class="opacity-0 translate-y-2"
         enter-to-class="duration-200"
@@ -42,6 +42,7 @@ const props = defineProps<{
   hoverOpen?: boolean;
   noToggle?: boolean;
   maxHeight?: number;
+  inline?: boolean;
 }>();
 
 defineExpose({ onClose: () => (isOpen.value = false) });
