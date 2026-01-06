@@ -1,15 +1,16 @@
 <template>
-  <label class="btn cursor-pointer">
+  <label class="btn rounded-none">
     <input type="file" accept=".csv" class="absolute hidden" @change="onImport" />
-    <AppIcon name="file-csv" />
+    <AppIcon :name="icon" />
     {{ label }}
   </label>
 </template>
 
 <script setup lang="ts">
-const { join = ',' } = defineProps<{
+const { join = ',', icon = 'file-paste' } = defineProps<{
   label?: string;
   join?: ',' | '\n';
+  icon?: string;
 }>();
 
 const model = defineModel<string | string[]>();
