@@ -21,8 +21,6 @@
 </template>
 
 <script setup lang="ts">
-import { useSlots } from 'vue';
-
 const slots = useSlots();
 
 const props = defineProps<{ name: string }>();

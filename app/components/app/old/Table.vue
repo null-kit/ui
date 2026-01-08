@@ -1,5 +1,5 @@
 <template>
-  <AppOldTableRoot
+  <AppOldRoot
     v-slot="{ cells, startIndex, topPadding, bottomPadding, visibleRows, isExpanded, toggleRow, data: slotData }"
     v-bind="{ data, meta, pick, omit, columnsOrder, columnsExtra, sort }"
   >
@@ -109,7 +109,7 @@
     >
       <div ref="tableScrollbarThumb" class="h-px" />
     </div>
-  </AppOldTableRoot>
+  </AppOldRoot>
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, unknown>">
