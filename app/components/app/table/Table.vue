@@ -31,6 +31,7 @@
             <tr
               :aria-expanded="row.getIsExpanded() || undefined"
               :data-row="striped && virtualScroll && (startIndex + index) % 2 !== 0 ? 'odd' : undefined"
+              :height="typeof virtualScroll === 'number' ? virtualScroll : undefined"
             >
               <td
                 v-for="cell in row.getVisibleCells()"

@@ -59,7 +59,7 @@ export const useInfinityFetch = <T>(url: string, options: Options) => {
 
         if (entry && entry.isIntersecting) fetchData();
       },
-      { rootMargin: '0px 0px 40px 0px' }
+      { rootMargin: '0px 0px 0px 0px' }
     );
 
     const target = document.querySelector('#infinity-fetch-trigger');

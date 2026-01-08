@@ -29,7 +29,7 @@ import { useFloating, offset, flip, size, autoUpdate } from '@floating-ui/vue';
 const emit = defineEmits<{ close: [] }>();
 
 const props = defineProps<{
-  reference: Ref<HTMLElement>;
+  reference: HTMLElement | null;
 
   placement?: Placement;
   dropdownClass?: string;

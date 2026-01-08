@@ -5,7 +5,7 @@
     <AppDropdownContent
       v-if="isOpen"
       ref="floating"
-      v-bind="{ placement, dropdownClass, innerClass, maxHeight, inline, reference: $refs.reference }"
+      v-bind="{ placement, dropdownClass, innerClass, maxHeight, inline, reference }"
       :autoclose="autoclose || hoverOpen"
       @close="isOpen = false"
     >
@@ -33,6 +33,7 @@ const props = defineProps<{
 
 const isOpen = ref(false);
 
+const reference = useTemplateRef('reference');
 const floating = useTemplateRef('floating');
 
 const onTriggerClick = () => {
