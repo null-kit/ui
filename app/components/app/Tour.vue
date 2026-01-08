@@ -4,7 +4,7 @@
       v-if="reference && stepInfo"
       ref="floating"
       :style="floatingStyles"
-      class="bg-newton inverted z-19 max-w-xs rounded-xl p-3 duration-500"
+      class="bg-newton text-surface inverted z-19 max-w-xs rounded-xl p-3 duration-500"
       :class="{ 'pointer-events-none opacity-0': middlewareData.hide?.referenceHidden }"
     >
       <slot :name="`step-${tour.currentStep}`" />
