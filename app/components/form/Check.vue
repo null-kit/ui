@@ -1,5 +1,17 @@
 <template>
-  <label class="relative inline-flex flex-wrap whitespace-break-spaces">
+  <span
+    v-if="isLazy"
+    class="form-check rounded-md"
+    :class="{ 'text-accent ring-accent': model }"
+    @mouseenter="isLazy = false"
+  >
+    <svg v-if="model" viewBox="0 0 32 32" class="size-full p-1">
+      <circle v-if="type === 'radio'" fill="currentColor" cx="16" cy="16" r="12" />
+      <path v-else fill="none" stroke-width="4" d="m5 18 7 7L28 9" stroke="currentColor" stroke-linecap="round" />
+    </svg>
+  </span>
+
+  <label v-else class="relative inline-flex flex-wrap whitespace-break-spaces">
     <span class="inline-flex items-center gap-2 text-sm" :class="{ 'cursor-not-allowed opacity-50': disabled }">
       <span class="relative flex shrink-0">
         <input
@@ -69,11 +81,14 @@ const props = withDefaults(
     help?: string;
     trueValue?: string | number | null;
     falseValue?: string | number | null;
+    lazy?: boolean;
   }>(),
   {
     type: 'checkbox'
   }
 );
+
+const isLazy = ref(props.lazy ?? false);
 
 const model = defineModel<boolean | string | number | string[] | number[] | null>();
 

@@ -1,14 +1,6 @@
+@import 'tint-shade';
 @source '../../components';
 @source '../../composables';
-
-/* Background tint/shade utils */
-@utility bg-tint-* {
-  background-color: color-mix(in oklab, --value(--color-*, [*]), #fff calc(--modifier(integer) * 1%));
-}
-
-@utility bg-shade-* {
-  background-color: color-mix(in oklab, --value(--color-*, [*]), #000 calc(--modifier(integer) * 1%));
-}
 
 /* Scrollbar Utility */
 @utility scrollbar {

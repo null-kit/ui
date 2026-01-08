@@ -3,34 +3,44 @@
     @apply text-sm whitespace-nowrap;
     @apply border-separate border-spacing-0;
 
+    thead {
+      @apply bg-darwin text-left font-semibold select-none;
+    }
+
+    th[aria-sort] {
+      @apply cursor-pointer duration-200;
+      @apply hover:bg-shade-darwin/4 dark:hover:bg-shade-darwin/10;
+    }
+
     tr {
       @apply divide-edison divide-x;
 
-      &[aria-expanded='true'] td {
-        @apply bg-shade-darwin/4 dark:bg-shade-darwin/10;
+      &:hover td {
+        @apply bg-tint-edison/30 dark:bg-shade-edison/40;
       }
 
-      &[data-row='odd'] {
-        td {
-          @apply bg-shade-darwin/4 dark:bg-shade-darwin/10;
-        }
+      &[aria-expanded] td,
+      [aria-expanded] {
+        @apply bg-tint-edison/35 dark:bg-shade-edison/40;
+      }
 
-        &:hover td {
-          @apply bg-shade-darwin/6 dark:bg-shade-darwin/20;
+      &[data-row='odd']:not(:hover):not([aria-expanded]) {
+        td:not([aria-expanded]) {
+          @apply bg-tint-edison/70 dark:bg-shade-edison/35;
         }
       }
 
       &:not([aria-hidden]):not(:has(+ tr:not([aria-hidden]))) > td {
         @apply border-b-0;
       }
-
-      &:hover td {
-        @apply bg-shade-darwin/4 dark:bg-shade-darwin/10;
-      }
     }
 
-    thead {
-      @apply bg-darwin text-left font-semibold select-none;
+    :is(th, td) {
+      @apply bg-darwin border-edison border-b px-3 py-2;
+
+      &[data-cell='expander'] {
+        @apply px-1.5 py-0;
+      }
     }
 
     tfoot {
@@ -39,21 +49,6 @@
       tr td {
         @apply border-edison border-t;
       }
-    }
-
-    th,
-    td {
-      @apply bg-darwin border-edison border-b px-3 py-2 transition-colors;
-      @apply aria-expanded:bg-shade-darwin/4 dark:aria-expanded:bg-shade-darwin/10;
-
-      &[data-cell='expander'] {
-        @apply px-1.5 py-0;
-      }
-    }
-
-    th[aria-sort] {
-      @apply cursor-pointer duration-200;
-      @apply hover:bg-shade-darwin/4 dark:hover:bg-shade-darwin/10;
     }
   }
 }
