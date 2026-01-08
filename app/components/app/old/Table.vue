@@ -5,7 +5,7 @@
   >
     <div v-if="stickyHead" ref="theadVisible" class="sticky z-1 overflow-hidden" :class="stickyOffset">
       <table class="table-default w-full">
-        <AppOldTableHead v-bind="{ meta, cells, slots, sort }" />
+        <AppOldHead v-bind="{ meta, cells, slots, sort }" />
       </table>
     </div>
 
@@ -15,10 +15,7 @@
       :style="{ scrollbarWidth: stickyScrollbar ? 'none' : 'auto' }"
     >
       <table class="table-default w-full" :class="{ 'table-striped': striped }">
-        <AppOldTableHead
-          v-bind="{ meta, cells, slots, sort }"
-          :class="{ 'pointer-events-none invisible': stickyHead }"
-        />
+        <AppOldHead v-bind="{ meta, cells, slots, sort }" :class="{ 'pointer-events-none invisible': stickyHead }" />
 
         <tbody ref="tbody">
           <tr v-if="virtualScroll" aria-hidden>
