@@ -13,6 +13,7 @@
         :class="['dropdown-content', dropdownClass]"
         :style="floatingStyles"
         @pointerleave="autoclose && (isActive = false)"
+        @click.stop
       >
         <div :class="['group dropdown-inner', innerClass]">
           <slot />
