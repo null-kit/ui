@@ -60,7 +60,7 @@
           <div
             v-if="header.column.getCanResize()"
             class="bg-surface absolute inset-y-1 right-1 w-1 cursor-col-resize rounded-full duration-200"
-            :class="{ 'opacity-5 hover:opacity-50': !header.column.getIsResizing() }"
+            :class="{ 'opacity-40 hover:opacity-70': !header.column.getIsResizing() }"
             @touchstart="header.getResizeHandler()($event)"
             @mousedown="header.getResizeHandler()($event)"
             @dblclick="onResetSize(header.column)"
