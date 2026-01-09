@@ -38,7 +38,10 @@
                 :key="cell.id"
                 :data-cell="cell.column.id"
                 :aria-expanded="(cell.column.id === 'expander' && row.depth > 0) || undefined"
-                :class="[cell.column.columnDef.meta?.class, cell.column.columnDef.meta?.tdClass]"
+                :class="[
+                  getMetaClass(cell.column.columnDef.meta?.class, cell),
+                  getMetaClass(cell.column.columnDef.meta?.tdClass, cell)
+                ]"
                 :style="columnStyles(cell.column)"
               >
                 <slot
@@ -78,11 +81,14 @@
 </template>
 
 <script lang="ts">
+import type { RowData, Cell, Header } from '@tanstack/vue-table';
+
 declare module '@tanstack/vue-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
-    class?: string;
-    thClass?: string;
-    tdClass?: string;
+    class?: string | ((arg: any) => string | undefined);
+    thClass?: string | ((header: Header<TData, TValue>) => string | undefined);
+    tdClass?: string | ((cell: Cell<TData, TValue>) => string | undefined);
+    tfClass?: string | ((header: Header<TData, TValue>) => string | undefined);
     show?: boolean;
     pin?: 'left' | 'right';
   }
@@ -98,7 +104,6 @@ import {
   getCoreRowModel,
   getExpandedRowModel,
   getSortedRowModel,
-  type RowData,
   type Row,
   type ColumnDef,
   type ColumnHelper,
@@ -108,6 +113,7 @@ import {
   type VisibilityState,
   type ColumnPinningState
 } from '@tanstack/vue-table';
+import { getMetaClass } from './utils';
 
 const slots = defineSlots<TableTanSlots<TData>>();
 
