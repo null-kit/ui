@@ -25,8 +25,8 @@
 import { useFloating, offset, shift, autoPlacement } from '@floating-ui/vue';
 import type { VirtualElement } from '@floating-ui/vue';
 
+defineOptions({ inheritAttrs: false });
 defineEmits<{ close: [] }>();
-
 defineProps<{ contentClass?: string }>();
 
 const isActive = ref(false);

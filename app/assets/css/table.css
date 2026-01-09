@@ -4,7 +4,7 @@
     @apply border-separate border-spacing-0;
 
     thead {
-      @apply bg-darwin text-left font-semibold select-none;
+      @apply bg-darwin text-surface text-left font-semibold select-none;
     }
 
     th[aria-sort] {
@@ -53,13 +53,9 @@
   }
 }
 @utility table-striped {
-  tr:nth-child(even) {
-    td {
-      @apply bg-shade-darwin/4 dark:bg-shade-darwin/10;
-    }
-
-    &:hover td {
-      @apply bg-shade-darwin/6 dark:bg-shade-darwin/20;
+  tr:nth-child(even):not(:hover):not([aria-expanded]) {
+    td:not([aria-expanded]) {
+      @apply bg-tint-edison/60 dark:bg-shade-edison/40;
     }
   }
 }

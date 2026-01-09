@@ -20,7 +20,7 @@ export const calcTotal = <T extends Record<string, unknown> | number | string>(d
  *
  * If no `key` is provided, each item is coerced to a number and averaged.
  */
-export const calcAvg = <T extends Record<string, unknown> | number>(data: T[], key?: string) => {
+export const calcAvg = <T extends Record<string, unknown> | number | string>(data: T[], key?: string) => {
   return calcTotal(data, key) / data.length;
 };
 

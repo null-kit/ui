@@ -45,7 +45,7 @@ export type TableTanExtraSlots<TData> = {
   [key: string]: (props: {
     row: TData;
     cell: TData[keyof TData];
-    values: TData[keyof TData][];
+    values: (number | string)[];
     isNested: boolean;
   }) => void;
 };

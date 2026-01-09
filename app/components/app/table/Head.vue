@@ -7,11 +7,7 @@
         :colSpan="header.colSpan"
         :data-cell="header.column.id"
         :aria-sort="getSortDirection(header)"
-        :class="[
-          'relative',
-          getMetaClass(header.column.columnDef.meta?.class, header),
-          getMetaClass(header.column.columnDef.meta?.thClass, header)
-        ]"
+        :class="['relative', header.column.columnDef.meta?.class, header.column.columnDef.meta?.thClass]"
         :style="getPinStyles(header.column)"
       >
         <template v-if="!header.isPlaceholder">
@@ -75,7 +71,6 @@
 import { FlexRender } from '@tanstack/vue-table';
 import type { CSSProperties } from 'vue';
 import type { Column, Table, Header } from '@tanstack/vue-table';
-import { getMetaClass } from './utils';
 
 const emit = defineEmits<{ sort: [TableSortType] }>();
 

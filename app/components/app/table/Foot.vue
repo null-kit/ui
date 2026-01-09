@@ -6,10 +6,7 @@
           v-for="header in footerGroup.headers"
           :key="header.id"
           :data-tf="header.id"
-          :class="[
-            getMetaClass(header.column.columnDef.meta?.class, header),
-            getMetaClass(header.column.columnDef.meta?.tfClass, header)
-          ]"
+          :class="[header.column.columnDef.meta?.class, header.column.columnDef.meta?.tfClass]"
           :colSpan="header.colSpan"
         >
           <slot v-if="!header.isPlaceholder" :name="`tf-${header.id}`" :values="getValues(header.id)">
@@ -23,7 +20,6 @@
 
 <script setup lang="ts" generic="TData">
 import { FlexRender, type Table } from '@tanstack/vue-table';
-import { getMetaClass } from './utils';
 
 const props = defineProps<{ table: Table<TData> }>();
 
@@ -34,6 +30,6 @@ const hasFooter =
     .filter(Boolean).length > 0;
 
 const getValues = (column: string) => {
-  return props.table.getCoreRowModel().rows.map((row) => row.original[column as keyof TData]);
+  return props.table.getRowModel().rows.map((row) => row.original[column as keyof TData]);
 };
 </script>

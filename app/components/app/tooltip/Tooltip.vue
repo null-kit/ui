@@ -17,6 +17,8 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ inheritAttrs: false });
+
 defineProps<{
   trigger?: string;
   message?: string;
