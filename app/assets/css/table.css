@@ -5,11 +5,21 @@
 
     thead {
       @apply bg-darwin text-surface text-left font-semibold select-none;
-    }
 
-    th[aria-sort] {
-      @apply cursor-pointer transition-colors;
-      @apply hover:bg-shade-darwin/5 dark:hover:bg-shade-darwin/10;
+      th {
+        &[aria-sort] {
+          @apply cursor-pointer transition-colors;
+          @apply hover:bg-shade-darwin/5 dark:hover:bg-shade-darwin/10;
+        }
+
+        &:where([aria-sort='ascending'], [aria-sort='descending']) {
+          @apply bg-tint-accent/90;
+
+          :not([data-resizer]) {
+            @apply text-accent;
+          }
+        }
+      }
     }
 
     tr {
@@ -52,6 +62,7 @@
     }
   }
 }
+
 @utility table-striped {
   tr:nth-child(even):not(:hover):not([aria-expanded]) {
     td:not([aria-expanded]) {

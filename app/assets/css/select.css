@@ -1,25 +1,27 @@
-@utility select-input {
-  @apply form-input flex gap-1.5;
-  @apply scrollbar relative overflow-auto;
+@layer components {
+  .select-input {
+    @apply form-input flex gap-1.5;
+    @apply scrollbar relative overflow-auto;
 
-  &:has(.select-multiple) {
-    @apply p-1 pr-2.5;
-    --radius-md: var(--radius-sm);
+    &:has(.select-multiple) {
+      @apply p-1 pr-2.5;
+      --radius-md: var(--radius-sm);
+    }
   }
-}
 
-@utility select-group-label {
-  @apply sticky top-0 z-1 px-2 py-px;
-  @apply cursor-default text-xs font-semibold;
-  @apply text-surface/40 bg-darwin ring-edison ring;
-}
+  .select-group-label {
+    @apply sticky top-0 z-1 px-2 py-px;
+    @apply cursor-default text-xs font-semibold;
+    @apply text-surface/40 bg-darwin ring-edison ring;
+  }
 
-@utility select-multiple {
-  @apply flex flex-wrap items-center gap-1.5;
-}
+  .select-multiple {
+    @apply flex flex-wrap items-center gap-1.5;
+  }
 
-@utility select-options {
-  @apply min-w-40 p-1;
-  @apply flex flex-col gap-0.5;
-  @apply whitespace-nowrap;
+  .select-options {
+    @apply min-w-40 p-1;
+    @apply flex flex-col gap-0.5;
+    @apply whitespace-nowrap;
+  }
 }

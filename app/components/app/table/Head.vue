@@ -16,10 +16,7 @@
             class="flex items-center gap-1 after:absolute after:inset-0"
             @click="onSort(header.column)"
           >
-            <div
-              class="z-1 flex w-full items-center gap-1 text-left duration-200"
-              :class="{ 'text-accent': header.column.getIsSorted() }"
-            >
+            <div class="flex w-full items-center gap-1">
               <slot :name="`th-${header.column.id}-left`" />
 
               <slot :name="`th-${header.column.id}`">
@@ -28,21 +25,18 @@
 
               <slot :name="`th-${header.column.id}-right`" />
 
-              <div
-                class="ml-auto shrink-0 rounded-full p-0.5"
-                :class="header.column.getIsSorted() ? 'bg-current/20' : 'bg-current/10'"
+              <svg
+                width="7"
+                height="14"
+                class="ml-auto shrink-0"
+                viewBox="0 0 16 30"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="4"
               >
-                <svg
-                  class="h-3 w-1.5 text-current/40"
-                  viewBox="0 0 16 30"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="4"
-                >
-                  <path d="M2 21L8 27L14 21" :class="{ 'text-accent': header.column.getIsSorted() === 'desc' }" />
-                  <path d="M2 9L8 3L14 9" :class="{ 'text-accent': header.column.getIsSorted() === 'asc' }" />
-                </svg>
-              </div>
+                <path d="M2 21L8 27L14 21" :opacity="header.column.getIsSorted() === 'desc' ? 1 : 0.5" />
+                <path d="M2 9L8 3L14 9" :opacity="header.column.getIsSorted() === 'asc' ? 1 : 0.5" />
+              </svg>
             </div>
           </div>
 
@@ -58,8 +52,9 @@
 
           <div
             v-if="header.column.getCanResize()"
-            class="bg-surface absolute inset-y-1 right-1 w-1 cursor-col-resize rounded-full duration-200"
-            :class="{ 'opacity-40 hover:opacity-70': !header.column.getIsResizing() }"
+            class="absolute inset-y-1 right-1 w-1 cursor-col-resize rounded-full bg-current duration-200"
+            :class="{ 'opacity-30 hover:opacity-70': !header.column.getIsResizing() }"
+            data-resizer
             @touchstart="header.getResizeHandler()($event)"
             @mousedown="header.getResizeHandler()($event)"
             @dblclick="onResetSize(header.column)"

@@ -1,3 +1,18 @@
+@layer base {
+  input:is(:-webkit-autofill, :autofill) {
+    @apply inset-shadow-darwin inset-shadow-[0_20rem_0];
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    @apply m-0 appearance-none;
+  }
+
+  input[type='number'] {
+    appearance: textfield;
+  }
+}
+
 /* Input */
 @utility form-input {
   @apply appearance-none transition duration-200 outline-none;
@@ -14,22 +29,22 @@
   }
 }
 
-@utility form-slot {
-  @apply bg-darwin ring-edison min-h-full ring;
-  @apply flex shrink-0 overflow-clip rounded-lg text-sm shadow;
-
-  &:disabled {
-    @apply text-surface/40 cursor-not-allowed;
-    @apply bg-tint-edison/50 dark:bg-shade-edison/15;
-  }
-}
-
-@utility form-validate {
-  @apply bg-surface text-newton pointer-events-none rounded-md text-xs font-medium shadow;
-  @apply absolute top-full left-1 -mt-2 px-2 py-0.5;
-}
-
 @layer components {
+  .form-slot {
+    @apply bg-darwin ring-edison min-h-full ring;
+    @apply flex shrink-0 overflow-clip rounded-lg text-sm shadow;
+
+    &:disabled {
+      @apply text-surface/40 cursor-not-allowed;
+      @apply bg-tint-edison/50 dark:bg-shade-edison/15;
+    }
+  }
+
+  .form-validate {
+    @apply bg-surface text-newton pointer-events-none rounded-md text-xs font-medium shadow;
+    @apply absolute top-full left-1 -mt-2 px-2 py-0.5;
+  }
+
   .form-label {
     @apply inline-flex items-center gap-1 text-[0.8125rem] font-medium opacity-80;
     @apply mb-1.5 cursor-default select-none;
@@ -73,20 +88,5 @@
     @apply absolute inset-0.5 size-5;
     @apply bg-edison rounded-full duration-200;
     @apply peer-checked:bg-darwin peer-checked:translate-x-full;
-  }
-}
-
-@layer base {
-  input:is(:-webkit-autofill, :autofill) {
-    @apply inset-shadow-darwin inset-shadow-[0_20rem_0];
-  }
-
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-    @apply m-0 appearance-none;
-  }
-
-  input[type='number'] {
-    appearance: textfield;
   }
 }
