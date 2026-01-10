@@ -9,7 +9,7 @@
 
     th[aria-sort] {
       @apply cursor-pointer transition-colors;
-      @apply hover:bg-shade-darwin/4 dark:hover:bg-shade-darwin/10;
+      @apply hover:bg-shade-darwin/5 dark:hover:bg-shade-darwin/10;
     }
 
     tr {

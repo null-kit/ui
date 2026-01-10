@@ -28,9 +28,12 @@
 
               <slot :name="`th-${header.column.id}-right`" />
 
-              <div class="bg-surface/5 ml-auto shrink-0 rounded-full p-0.5">
+              <div
+                class="ml-auto shrink-0 rounded-full p-0.5"
+                :class="header.column.getIsSorted() ? 'bg-current/20' : 'bg-current/10'"
+              >
                 <svg
-                  class="text-surface/50 h-3 w-1.5"
+                  class="h-3 w-1.5 text-current/40"
                   viewBox="0 0 16 30"
                   fill="none"
                   stroke="currentColor"
@@ -82,6 +85,8 @@ const props = defineProps<{
 
 const getSortDirection = (header: Header<TData, unknown>) => {
   if (!header.column.getCanSort() || header.isPlaceholder) return undefined;
+
+  if (!header.column.getIsSorted()) return 'none';
 
   return header.column.getIsSorted() === 'desc' ? 'descending' : 'ascending';
 };
