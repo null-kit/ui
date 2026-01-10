@@ -1,4 +1,4 @@
-@plugin "./utils/tint-shade.ts";
+@plugin "../../utils/tint-shade.ts";
 @source '../../components';
 @source '../../composables';
 
