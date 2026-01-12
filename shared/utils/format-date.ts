@@ -7,6 +7,8 @@ type DateOptions = {
   hourCycle?: Intl.DateTimeFormatOptions['hourCycle'];
 };
 
+type DateInput = Date | string | number | null;
+
 /**
  * Format a date to a string using the Intl.DateTimeFormat API
  * @param date - The date to format
@@ -14,7 +16,7 @@ type DateOptions = {
  * @returns The formatted date
  */
 export const formatDate = (
-  date: Date | string | number | null,
+  date: DateInput,
   { format = 'short', time = false, year = true, options, locale = 'en-US', hourCycle = 'h23' }: DateOptions = {}
 ) => {
   if (!date) return 'N/A';
@@ -47,8 +49,8 @@ export const formatDate = (
  * @param format - The format to return the date in
  * @returns The date with the offset set
  */
-export const setDate = (date: Date | string | number, offset: number = 0, format: 'iso' | 'date' = 'date') => {
-  const day = date instanceof Date ? date : new Date(date);
+export const setDate = (date: DateInput, offset: number = 0, format: 'iso' | 'date' = 'date') => {
+  const day = date instanceof Date ? date : date ? new Date(date) : new Date();
 
   const targetDate = new Date(day.setDate(day.getDate() + offset));
 
