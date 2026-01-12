@@ -7,7 +7,7 @@ type DateOptions = {
   hourCycle?: Intl.DateTimeFormatOptions['hourCycle'];
 };
 
-type DateInput = Date | string | number | null;
+type DateInput = Date | string | number | null | undefined;
 
 /**
  * Format a date to a string using the Intl.DateTimeFormat API
@@ -50,9 +50,9 @@ export const formatDate = (
  * @returns The date with the offset set
  */
 export const setDate = (date: DateInput, offset: number = 0, format: 'iso' | 'date' = 'date') => {
-  const day = date instanceof Date ? date : date ? new Date(date) : new Date();
+  const currentDate = date instanceof Date ? date : date ? new Date(date) : new Date();
 
-  const targetDate = new Date(day.setDate(day.getDate() + offset));
+  const targetDate = new Date(currentDate.setDate(currentDate.getDate() + offset));
 
   return format === 'iso' ? formatDate(targetDate, { format: 'iso' }) : targetDate;
 };

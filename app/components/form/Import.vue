@@ -13,7 +13,7 @@ const { join = ',', icon = 'file-paste' } = defineProps<{
   icon?: string;
 }>();
 
-const model = defineModel<string | string[]>();
+const model = defineModel<string | number | (string | number)[]>();
 
 const { setToast } = useToast();
 
