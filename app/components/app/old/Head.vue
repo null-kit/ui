@@ -11,14 +11,13 @@
         :class="[
           meta.thClass,
           { 'left-0 z-1 md:sticky': meta.stickyLeft.includes(cell) },
-          { 'right-0 -left-px z-1 border-l md:sticky': meta.stickyRight.includes(cell) },
-          { 'text-accent': (sort.canSortBy(cell) && sort.isSorted(cell, 'desc')) || sort.isSorted(cell, 'asc') }
+          { 'right-0 -left-px z-1 border-l md:sticky': meta.stickyRight.includes(cell) }
         ]"
         :style="{
           left: meta.expandedKey && meta.stickyLeft.includes(cell) ? `${meta.expandedCellWidth}px` : undefined
         }"
         :aria-label="`th-${cell}`"
-        :aria-sort="sort.canSortBy(cell) ? (sort.isSorted(cell, 'desc') ? 'descending' : 'ascending') : undefined"
+        :aria-sort="getSortDirection(cell)"
         @click="sort.onSort(cell)"
       >
         <div class="flex w-full items-center gap-1">
@@ -32,19 +31,19 @@
 
           <component :is="slots[`th-${cell}-right`]" v-if="slots[`th-${cell}-right`]" />
 
-          <div class="bg-surface/5 ml-auto shrink-0 rounded-full p-0.5">
-            <svg
-              v-if="sort.canSortBy(cell)"
-              class="text-surface/50 h-3 w-1.5"
-              viewBox="0 0 16 30"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="4"
-            >
-              <path d="M2 21L8 27L14 21" :class="{ 'text-accent': sort.isSorted(cell, 'desc') }" />
-              <path d="M2 9L8 3L14 9" :class="{ 'text-accent': sort.isSorted(cell, 'asc') }" />
-            </svg>
-          </div>
+          <svg
+            v-if="sort.canSortBy(cell)"
+            width="6"
+            height="12"
+            class="ml-auto shrink-0"
+            viewBox="0 0 16 30"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="4"
+          >
+            <path d="M2 21L8 27L14 21" :opacity="sort.isSorted(cell, 'desc') ? 1 : 0.5" />
+            <path d="M2 9L8 3L14 9" :opacity="sort.isSorted(cell, 'asc') ? 1 : 0.5" />
+          </svg>
         </div>
       </th>
 
@@ -57,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   cells: string[];
 
   sort: {
@@ -84,4 +83,11 @@ defineProps<{
     [key: string]: object | undefined;
   };
 }>();
+
+const getSortDirection = (cell: string) => {
+  if (props.sort.isSorted(cell, 'asc')) return 'ascending';
+  if (props.sort.isSorted(cell, 'desc')) return 'descending';
+
+  return 'none';
+};
 </script>
