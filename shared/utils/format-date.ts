@@ -7,6 +7,8 @@ type DateOptions = {
   hourCycle?: Intl.DateTimeFormatOptions['hourCycle'];
 };
 
+// type DateFormat = 'iso' | 'yyyy' | 'yyyy-mm' | 'yyyy-mm-dd';
+
 type DateInput = Date | string | number | null | undefined;
 
 /**
@@ -21,7 +23,7 @@ export const formatDate = (
 ) => {
   if (!date) return 'N/A';
 
-  const currentDate = normalizeDate(date);
+  const currentDate = new Date(date);
 
   if (format === 'iso') {
     const year = currentDate.getFullYear();
@@ -47,7 +49,7 @@ export const formatDate = (
  * @param date - The date to format
  * @returns The formatted date
  */
-export const formatISO = (date: DateInput) => formatDate(!date ? 'N/A' : normalizeDate(date), { format: 'iso' });
+export const formatISO = (date: DateInput) => formatDate(!date ? 'N/A' : new Date(date), { format: 'iso' });
 
 /**
  * Set the date of a date object
@@ -56,34 +58,44 @@ export const formatISO = (date: DateInput) => formatDate(!date ? 'N/A' : normali
  * @param format - The format to return the date in
  * @returns The date with the offset set
  */
-export const setDate = (date: DateInput, offset: number = 0, format: 'iso' | 'date' = 'date') => {
+export const setDate = (date: DateInput, offset: number = 0) => {
   if (!date) return 'N/A';
 
-  const currentDate = normalizeDate(date);
+  const currentDate = new Date(date);
 
-  const targetDate = new Date(currentDate.setDate(currentDate.getDate() + offset));
-
-  return format === 'iso' ? formatDate(targetDate, { format: 'iso' }) : targetDate;
+  return new Date(currentDate.setUTCDate(currentDate.getUTCDate() + offset));
 };
 
-export const setDateRange = (startDate: Date, endDate: Date, format: 'iso' | 'date' = 'date') => {
+export const setDateRange = (startDate: DateInput, endDate: DateInput) => {
   if (!startDate || !endDate) return [];
 
-  const start = normalizeDate(startDate);
-  const end = normalizeDate(endDate);
+  const start = new Date(startDate);
+  const end = new Date(endDate);
 
-  const dates: (Date | string)[] = [];
+  const dates = [];
 
-  for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
-    dates.push(format === 'iso' ? formatISO(d) : d);
+  for (let d = start; d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
+    dates.push(new Date(d));
   }
 
   return dates;
 };
 
-const normalizeDate = (date: Date | string | number) => {
-  if (date instanceof Date) return date;
-  if (typeof date === 'string' || typeof date === 'number') return new Date(date);
+// const formatDateTo = (date: Date, format?: DateFormat) => {
+//   const year = date.getFullYear();
+//   const month = String(date.getMonth() + 1).padStart(2, '0');
+//   const day = String(date.getDate()).padStart(2, '0');
 
-  return new Date();
-};
+//   switch (format) {
+//     case 'yyyy':
+//       return year;
+//     case 'yyyy-mm':
+//       return `${year}-${month}`;
+//     case 'iso':
+//       return `${year}-${month}-${day}`;
+//     case 'yyyy-mm-dd':
+//       return `${year}-${month}-${day}`;
+//     default:
+//       return date;
+//   }
+// };
