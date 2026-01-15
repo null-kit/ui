@@ -36,6 +36,11 @@ export const calcDiffPercentage = (a: number, b: number) => {
 };
 
 /**
+ * Calculates the percentage of a number relative to another number.
+ */
+export const calcPercentage = (a: number, b: number) => (a / b) * 100;
+
+/**
  * Converts a number to a fixed number with a given precision (default: 2).
  */
 export const toFixedNumber = (value: number, precision: number = 2) => Number(Number(value).toFixed(precision));
