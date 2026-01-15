@@ -21,12 +21,12 @@ export const formatDate = (
 ) => {
   if (!date) return 'N/A';
 
-  const dateObject = date instanceof Date ? date : new Date(date);
+  const currentDate = normalizeDate(date);
 
   if (format === 'iso') {
-    const year = dateObject.getFullYear();
-    const month = String(dateObject.getMonth() + 1).padStart(2, '0');
-    const day = String(dateObject.getDate()).padStart(2, '0');
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
 
     return `${year}-${month}-${day}`;
   }
@@ -39,8 +39,15 @@ export const formatDate = (
     ...(year ? { year: 'numeric' } : {})
   };
 
-  return new Intl.DateTimeFormat(locale, options || defaultOptions).format(dateObject);
+  return new Intl.DateTimeFormat(locale, options || defaultOptions).format(currentDate);
 };
+
+/**
+ * Format a date to an ISO string (YYYY-MM-DD)
+ * @param date - The date to format
+ * @returns The formatted date
+ */
+export const formatISO = (date: DateInput) => formatDate(!date ? 'N/A' : normalizeDate(date), { format: 'iso' });
 
 /**
  * Set the date of a date object
@@ -50,9 +57,33 @@ export const formatDate = (
  * @returns The date with the offset set
  */
 export const setDate = (date: DateInput, offset: number = 0, format: 'iso' | 'date' = 'date') => {
-  const currentDate = date instanceof Date ? date : date ? new Date(date) : new Date();
+  if (!date) return 'N/A';
+
+  const currentDate = normalizeDate(date);
 
   const targetDate = new Date(currentDate.setDate(currentDate.getDate() + offset));
 
   return format === 'iso' ? formatDate(targetDate, { format: 'iso' }) : targetDate;
+};
+
+export const setDateRange = (startDate: Date, endDate: Date, format: 'iso' | 'date' = 'date') => {
+  if (!startDate || !endDate) return [];
+
+  const start = normalizeDate(startDate);
+  const end = normalizeDate(endDate);
+
+  const dates: (Date | string)[] = [];
+
+  for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
+    dates.push(format === 'iso' ? formatISO(d) : d);
+  }
+
+  return dates;
+};
+
+const normalizeDate = (date: Date | string | number) => {
+  if (date instanceof Date) return date;
+  if (typeof date === 'string' || typeof date === 'number') return new Date(date);
+
+  return new Date();
 };
