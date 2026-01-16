@@ -95,7 +95,7 @@
           </tr>
         </tbody>
 
-        <AppOldTableFooter v-bind="{ data, cells, meta, slots }" />
+        <AppOldFooter v-bind="{ data, cells, meta, slots }" />
       </table>
     </div>
 
