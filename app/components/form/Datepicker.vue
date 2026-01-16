@@ -1,35 +1,14 @@
 <template>
   <AppDropdown class="w-fit" dropdown-class="min-w-max" @close="onClose">
     <template #trigger="{ isOpen }">
-      <div :class="{ 'flex gap-px': dateMode }">
-        <button
-          type="button"
-          :class="[
-            'form-input flex items-center gap-2 hover:z-1',
-            { 'ring-accent z-1': isOpen, 'rounded-r-none': dateMode }
-          ]"
-          :title="formatDateRange"
-        >
-          <AppIcon v-if="!noIcon" :name="icon" class="size-4 shrink-0" />
-          <span class="truncate">{{ formatDateRange }}</span>
-        </button>
-
-        <template v-if="dateMode">
-          <FormControl
-            v-model="modelMode"
-            type="select"
-            placeholder="Group by"
-            input-class="rounded-l-none"
-            class="shrink-0"
-            @click.stop
-          >
-            <option value="hour">by hour</option>
-            <option value="day">by day</option>
-            <option v-if="dateMode !== 'short'" value="week">by week</option>
-            <option v-if="dateMode !== 'short'" value="month">by month</option>
-          </FormControl>
-        </template>
-      </div>
+      <button
+        type="button"
+        :class="['form-input flex items-center gap-2 hover:z-1', { 'ring-accent z-1': isOpen }]"
+        :title="formatDateRange"
+      >
+        <AppIcon v-if="!noIcon" :name="icon" class="size-4 shrink-0" />
+        <span class="truncate">{{ formatDateRange }}</span>
+      </button>
     </template>
 
     <div class="space-y-2 p-1 text-center">
@@ -113,7 +92,6 @@ const {
 } = defineProps<{
   range?: boolean;
   disabledDates?: Date[];
-  dateMode?: boolean | 'short';
   iso?: boolean;
   preset?: Preset;
   maxToday?: boolean;
@@ -133,8 +111,6 @@ const [model, modifiers] = defineModel<Date | string | (Date | string)[] | undef
     return value;
   }
 });
-
-const modelMode = defineModel<'day' | 'hour' | 'week' | 'month'>('mode');
 
 const selectedDates = ref<Date[]>([]);
 
@@ -302,8 +278,6 @@ onMounted(() => {
   }
 
   if (props.preset) setPreset(props.preset);
-
-  if (props.dateMode && !modelMode.value) modelMode.value = 'day';
 });
 
 watch(model, (value) => {
