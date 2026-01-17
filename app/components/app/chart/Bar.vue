@@ -4,7 +4,7 @@
 
     <VisBar
       :x="(d: T, i: number) => i"
-      :y="categories.map((category) => (d: T) => d[category])"
+      :y="categories.map((category) => (d: T) => d[category as keyof T])"
       :color="(d: T, i: number) => `url(#vis-bar-g-${[i]})`"
       :rounded-corners="roundedCorners || 2"
       :bar-padding="0.1"
@@ -34,7 +34,7 @@
   </VisXYContainer>
 </template>
 
-<script setup lang="ts" generic="T extends Record<string, unknown>">
+<script setup lang="ts" generic="T">
 import { VisXYContainer, VisAxis, VisGroupedBar, VisStackedBar } from '@unovis/vue';
 import { Axis } from '@unovis/ts';
 
@@ -66,11 +66,11 @@ const toggleX = (index: number) => {
   if (!original || !toggled) return;
 
   for (const category of props.categories) {
-    if (!original[category]) continue;
+    if (!original[category as keyof T]) continue;
 
     if (isHidden) {
       xIndexes.value.delete(index);
-      toggled[category] = original[category];
+      toggled[category] = original[category as keyof T];
     } else {
       xIndexes.value.add(index);
       toggled[category] = 0;
