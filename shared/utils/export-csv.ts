@@ -42,7 +42,7 @@ export const useDownload = (content: Blob | unknown, filename: string) => {
   window.URL.revokeObjectURL(url);
 };
 
-export const useExportCSV = <T extends Record<string, unknown>>(data: T[], filename: string) => {
+export const useExportCSV = <T>(data: T[], filename: string) => {
   if (!data.length) return;
 
   const keys = Object.keys(data[0]!) as (keyof T)[];
