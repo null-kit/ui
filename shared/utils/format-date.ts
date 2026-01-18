@@ -59,9 +59,7 @@ export const formatISO = (date: DateInput) => formatDate(!date ? 'N/A' : new Dat
  * @returns The date with the offset set
  */
 export const setDate = (date: DateInput, offset: number = 0) => {
-  if (!date) return 'N/A';
-
-  const currentDate = new Date(date);
+  const currentDate = !date ? new Date() : new Date(date);
 
   return new Date(currentDate.setUTCDate(currentDate.getUTCDate() + offset));
 };
