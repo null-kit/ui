@@ -7,7 +7,10 @@
       ref="floating"
       v-bind="{ placement, dropdownClass, innerClass, maxHeight, inline, reference }"
       :autoclose="autoclose || hoverOpen"
-      @close="isOpen = false"
+      @close="
+        isOpen = false;
+        $emit('close');
+      "
     >
       <slot />
     </AppDropdownContent>
