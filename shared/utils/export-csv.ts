@@ -32,9 +32,10 @@ export const useDownload = (content: Blob | unknown, filename: string) => {
 
   const url = window.URL.createObjectURL(blob);
   const link = document.createElement('a');
+  const ext = blob.type === 'text/csv' && filename.toLowerCase().endsWith('.csv') ? '' : '.csv';
 
   link.href = url;
-  link.setAttribute('download', filename);
+  link.setAttribute('download', filename + ext);
   document.body.appendChild(link);
   link.click();
 
@@ -55,7 +56,5 @@ export const useExportCSV = <T>(data: T[], filename: string) => {
     return formatted;
   });
 
-  const ext = filename.toLowerCase().endsWith('.csv') ? '' : '.csv';
-
-  useDownload(formatCsv(keys.map(String), rows), filename + ext);
+  useDownload(formatCsv(keys.map(String), rows), filename);
 };
