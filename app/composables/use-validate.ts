@@ -1,11 +1,11 @@
 type ValidationErrors = Record<string, string | string[] | null>;
 
 export const useValidate = () => {
-  const validate = useState<ValidationErrors>('validation', () => ({}));
+  const validationErrors = useState<ValidationErrors>('validation', () => ({}));
 
   const setErrors = <T extends ValidationErrors>(errors: T) => {
     if (Array.isArray(errors)) {
-      validate.value = Object.fromEntries(errors.map((error) => [error.path, error.message]));
+      validationErrors.value = Object.fromEntries(errors.map((error) => [error.path, error.message]));
       return;
     }
 
@@ -15,24 +15,24 @@ export const useValidate = () => {
         Array.isArray(value) ? value[0] || null : value
       ]);
 
-      validate.value = Object.fromEntries(object);
+      validationErrors.value = Object.fromEntries(object);
 
       return;
     }
   };
 
-  const clearErrors = () => {
-    validate.value = {};
-  };
+  const clearErrors = (path?: string) => {
+    if (path) {
+      validationErrors.value = { ...validationErrors.value, [path]: null };
+      return;
+    }
 
-  const clearError = (path: string) => {
-    validate.value = { ...validate.value, [path]: null };
+    validationErrors.value = {};
   };
 
   return {
-    validate,
+    errors: validationErrors,
     setErrors,
-    clearErrors,
-    clearError
+    clearErrors
   };
 };
