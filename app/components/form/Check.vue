@@ -1,23 +1,14 @@
 <template>
-  <span
-    v-if="isLazy"
-    class="form-check rounded-md"
-    :class="{ 'text-accent ring-accent': model }"
-    @mouseenter="isLazy = false"
-  >
-    <svg v-if="model" viewBox="0 0 32 32" class="size-full p-1">
-      <circle v-if="type === 'radio'" fill="currentColor" cx="16" cy="16" r="12" />
-      <path v-else fill="none" stroke-width="4" d="m5 18 7 7L28 9" stroke="currentColor" stroke-linecap="round" />
-    </svg>
-
-    <slot name="label-left" />
-    <slot>{{ label }}</slot>
-    <slot name="label-right" />
-  </span>
-
-  <label v-else class="relative inline-flex flex-wrap whitespace-break-spaces">
+  <label class="relative inline-flex flex-wrap whitespace-break-spaces" @mouseenter.once="isLazy = false">
     <span class="inline-flex items-center gap-2 text-sm" :class="{ 'cursor-not-allowed opacity-50': disabled }">
-      <span class="relative flex shrink-0">
+      <span v-if="isLazy" class="form-check rounded-md" :class="{ 'text-accent ring-accent': model }">
+        <svg v-if="model" viewBox="0 0 32 32" class="size-full p-1">
+          <circle v-if="type === 'radio'" fill="currentColor" cx="16" cy="16" r="12" />
+          <path v-else fill="none" stroke-width="4" d="m5 18 7 7L28 9" stroke="currentColor" stroke-linecap="round" />
+        </svg>
+      </span>
+
+      <span v-else class="relative flex shrink-0">
         <input
           v-model="model"
           v-bind="{
