@@ -73,8 +73,8 @@
         <slot name="presets" :set-preset>
           <button type="button" class="btn btn-sm btn-default" @click="setPreset('today')">Today</button>
           <button type="button" class="btn btn-sm btn-default" @click="setPreset('yesterday')">Yesterday</button>
-          <button type="button" class="btn btn-sm btn-default" @click="setPreset('this-month')">This Month</button>
           <button type="button" class="btn btn-sm btn-default" @click="setPreset('last-week')">Last Week</button>
+          <button type="button" class="btn btn-sm btn-default" @click="setPreset('this-month')">This Month</button>
           <button type="button" class="btn btn-sm btn-default" @click="setPreset('last-month')">Last Month</button>
         </slot>
       </div>
