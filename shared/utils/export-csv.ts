@@ -55,5 +55,7 @@ export const useExportCSV = <T>(data: T[], filename: string) => {
     return formatted;
   });
 
-  useDownload(formatCsv(keys.map(String), rows), filename);
+  const ext = filename.toLowerCase().endsWith('.csv') ? '' : '.csv';
+
+  useDownload(formatCsv(keys.map(String), rows), filename + ext);
 };
