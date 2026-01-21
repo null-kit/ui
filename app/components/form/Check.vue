@@ -9,6 +9,10 @@
       <circle v-if="type === 'radio'" fill="currentColor" cx="16" cy="16" r="12" />
       <path v-else fill="none" stroke-width="4" d="m5 18 7 7L28 9" stroke="currentColor" stroke-linecap="round" />
     </svg>
+
+    <slot name="label-left" />
+    <slot>{{ label }}</slot>
+    <slot name="label-right" />
   </span>
 
   <label v-else class="relative inline-flex flex-wrap whitespace-break-spaces">
