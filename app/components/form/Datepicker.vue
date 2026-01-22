@@ -103,9 +103,9 @@ const [model, modifiers] = defineModel<Date | string | (Date | string)[] | undef
   required: true,
   set(value) {
     if (value && modifiers.iso) {
-      if (Array.isArray(value)) return value.map((date) => formatDate(date, { format: 'iso' }));
+      if (Array.isArray(value)) return value.map(formatISO);
 
-      return formatDate(value, { format: 'iso' });
+      return formatISO(value);
     }
 
     return value;

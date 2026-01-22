@@ -78,7 +78,13 @@
 </template>
 
 <script setup lang="ts">
-const model = defineModel<string | number | null>();
+const [model, modifiers] = defineModel<string | number | null>({
+  set(value) {
+    if (typeof value === 'string' && modifiers.spaceToComma) return value.replace(/ /g, ',');
+
+    return value;
+  }
+});
 
 const id = useId();
 const slots = useSlots();
