@@ -53,22 +53,44 @@ const formatString = (value: string, separator: string) => {
 };
 
 /**
+ * Converts a string to an array using a separator.
+ * @param value - The string to convert.
+ * @param separator - The separator to use.
+ * @param unique - Whether to return a unique array.
+ */
+export const toArrayFrom = (value: string, separator: string, unique: boolean = false) => {
+  if (!value || !separator) return [];
+
+  if (unique) return [...new Set(formatString(value, separator))];
+
+  return formatString(value, separator);
+};
+
+/**
  * Converts a comma-separated string to an array of strings.
+ *
+ * @deprecated Use toArrayFrom instead.
  */
 export const commaToArray = (value: string) => (value ? formatString(value, ',') : []);
 
 /**
  * Converts a comma-separated string to a unique array of strings.
+ *
+ * @deprecated Use toArrayFrom instead.
  */
 export const commaToUniqueArray = (value: string) => (value ? [...new Set(commaToArray(value))] : []);
 
 /**
  * Converts a new line-separated string to an array of strings.
+ *
+ * @deprecated Use toArrayFrom instead.
  */
 export const newLineToArray = (value: string) => (value ? formatString(value, '\n') : []);
 
 /**
  * Converts a new line-separated string to a unique array of strings.
+ *
+ * @deprecated Use toArrayFrom instead.
  */
 export const newLineToUniqueArray = (value: string) => (value ? [...new Set(newLineToArray(value))] : []);
 
