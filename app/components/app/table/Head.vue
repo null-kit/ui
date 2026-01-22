@@ -13,7 +13,7 @@
         <template v-if="!header.isPlaceholder">
           <div
             v-if="header.column.getCanSort()"
-            class="flex items-center gap-1 after:absolute after:inset-0"
+            class="isolate flex items-center gap-1 after:absolute after:inset-0 after:-z-1"
             @click="onSort(header.column)"
           >
             <div class="flex w-full items-center gap-1">
