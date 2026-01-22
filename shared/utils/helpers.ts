@@ -58,7 +58,7 @@ const formatString = (value: string, separator: string) => {
  * @param separator - The separator to use.
  * @param unique - Whether to return a unique array.
  */
-export const toArrayFrom = (value: string, separator: string, unique: boolean = false) => {
+export const toSeparatedArray = (value: string, separator: string, unique: boolean = false) => {
   if (!value || !separator) return [];
 
   if (unique) return [...new Set(formatString(value, separator))];
@@ -69,28 +69,28 @@ export const toArrayFrom = (value: string, separator: string, unique: boolean = 
 /**
  * Converts a comma-separated string to an array of strings.
  *
- * @deprecated Use toArrayFrom instead.
+ * @deprecated Use toSeparatedArray instead.
  */
 export const commaToArray = (value: string) => (value ? formatString(value, ',') : []);
 
 /**
  * Converts a comma-separated string to a unique array of strings.
  *
- * @deprecated Use toArrayFrom instead.
+ * @deprecated Use toSeparatedArray instead.
  */
 export const commaToUniqueArray = (value: string) => (value ? [...new Set(commaToArray(value))] : []);
 
 /**
  * Converts a new line-separated string to an array of strings.
  *
- * @deprecated Use toArrayFrom instead.
+ * @deprecated Use toSeparatedArray instead.
  */
 export const newLineToArray = (value: string) => (value ? formatString(value, '\n') : []);
 
 /**
  * Converts a new line-separated string to a unique array of strings.
  *
- * @deprecated Use toArrayFrom instead.
+ * @deprecated Use toSeparatedArray instead.
  */
 export const newLineToUniqueArray = (value: string) => (value ? [...new Set(newLineToArray(value))] : []);
 
