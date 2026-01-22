@@ -13,14 +13,14 @@
       @after-leave="$emit('close')"
     >
       <div v-if="isActive" class="fixed inset-x-2 bottom-0 z-10 outline-0" tabindex="0" @keydown.esc="onClose">
-        <div class="drawer-content max-h-[calc(100dvh-3rem)] overflow-y-auto">
-          <div class="drawer-overflow pointer-events-none sticky top-0 z-1 w-full bg-linear-0 to-current" />
+        <div class="drawer-content overflow-auto">
+          <div class="drawer-overflow pointer-events-none sticky top-0 left-0 z-1 w-full bg-linear-0 to-current" />
 
-          <div class="flex items-start justify-center gap-8">
+          <div class="flex items-start justify-center">
             <slot />
           </div>
 
-          <div class="drawer-overflow pointer-events-none sticky bottom-0 z-1 w-full bg-linear-0 from-current" />
+          <div class="drawer-overflow pointer-events-none sticky bottom-0 left-0 z-1 w-full bg-linear-0 from-current" />
         </div>
       </div>
     </Transition>

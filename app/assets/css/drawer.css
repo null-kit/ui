@@ -1,7 +1,7 @@
 @layer components {
   .drawer-content {
     @apply bg-newton ring-edison ring;
-    @apply rounded-t-4xl px-4;
+    @apply max-h-[calc(100dvh-3rem)] rounded-t-4xl px-4;
   }
 
   .drawer-overflow {
