@@ -5,6 +5,7 @@ import type { ShallowRef } from 'vue';
 type Options = {
   el: Readonly<ShallowRef<HTMLElement | null>>;
   dataKey?: string;
+  method?: 'GET' | 'POST';
   query?: MaybeRefOrGetter<SearchParameters>;
 };
 
@@ -21,8 +22,8 @@ export const useInfinityFetch = <T>(url: string, options: Options) => {
     status.value = 'pending';
 
     const response = await $fetch<T[]>(url, {
-      method: 'GET',
-      query: {
+      method: options.method || 'GET',
+      [options.method === 'POST' ? 'body' : 'query']: {
         ...query.value,
         page: page.value
       }
