@@ -73,7 +73,7 @@
     <div
       v-if="stickyScrollbar"
       ref="tableScrollbar"
-      class="scrollbar sticky bottom-0 z-1 w-full overflow-x-auto overflow-y-hidden"
+      class="scrollbar sticky bottom-0 z-1 -mt-px w-full overflow-x-auto overflow-y-hidden"
     >
       <div ref="tableScrollbarThumb" class="h-px" />
     </div>

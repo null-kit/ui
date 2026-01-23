@@ -1,7 +1,9 @@
 import type { SearchParameters } from 'ofetch';
 import type { AsyncDataRequestStatus } from '#app';
+import type { ShallowRef } from 'vue';
 
 type Options = {
+  el: Readonly<ShallowRef<HTMLElement | null>>;
   dataKey?: string;
   query?: MaybeRefOrGetter<SearchParameters>;
 };
@@ -48,27 +50,22 @@ export const useInfinityFetch = <T>(url: string, options: Options) => {
 
   watch(query, () => refresh());
 
-  let observer: IntersectionObserver | null = null;
-
   onMounted(() => {
     fetchData();
 
-    observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
+    const target = unref(options.el);
 
-        if (entry && entry.isIntersecting) fetchData();
-      },
-      { rootMargin: '0px 0px 0px 0px' }
-    );
+    if (!target) return;
 
-    const target = document.querySelector('#infinity-fetch-trigger');
+    const onScroll = () => {
+      if (target.getBoundingClientRect().bottom < window.innerHeight) fetchData();
+    };
 
-    if (target) observer.observe(target);
-  });
+    window.addEventListener('scroll', onScroll);
 
-  onBeforeUnmount(() => {
-    if (observer) observer.disconnect();
+    onUnmounted(() => {
+      window.removeEventListener('scroll', onScroll);
+    });
   });
 
   return {

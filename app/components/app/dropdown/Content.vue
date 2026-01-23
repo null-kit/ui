@@ -8,11 +8,11 @@
       @after-leave="$emit('close')"
     >
       <div
-        v-if="isActive"
+        v-if="isOpen"
         ref="floating"
         :class="['dropdown-content', dropdownClass]"
         :style="floatingStyles"
-        @pointerleave="autoclose && (isActive = false)"
+        @pointerleave="autoclose && (isOpen = false)"
         @click.stop
       >
         <div :class="['group dropdown-inner', innerClass]">
@@ -40,11 +40,12 @@ const props = defineProps<{
   inline?: boolean;
 }>();
 
+const reference = toRef(props, 'reference');
 const floating = useTemplateRef<HTMLDivElement>('floating');
 
-const isActive = useClickOutside(toRef(props, 'reference'), floating);
+const isOpen = useClickOutside(reference, floating);
 
-const { floatingStyles } = useFloating(toRef(props, 'reference'), floating, {
+const { floatingStyles } = useFloating(reference, floating, {
   whileElementsMounted: autoUpdate,
   placement: props.placement || 'bottom-start',
   middleware: [
@@ -66,8 +67,8 @@ const { floatingStyles } = useFloating(toRef(props, 'reference'), floating, {
   ]
 });
 
-defineExpose({ onClose: () => (isActive.value = false) });
+defineExpose({ onClose: () => (isOpen.value = false) });
 
-onMounted(() => (isActive.value = true));
-onUnmounted(() => (isActive.value = false));
+onMounted(() => (isOpen.value = true));
+onUnmounted(() => (isOpen.value = false));
 </script>
