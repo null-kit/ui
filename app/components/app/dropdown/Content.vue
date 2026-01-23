@@ -50,7 +50,7 @@ const { floatingStyles } = useFloating(reference, floating, {
   placement: props.placement || 'bottom-start',
   middleware: [
     offset(8),
-    flip({ padding: 8 }),
+    flip({ padding: 8, fallbackStrategy: 'initialPlacement' }),
     size({
       padding: 8,
       apply({ availableWidth, availableHeight, elements }) {

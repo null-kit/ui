@@ -95,6 +95,7 @@
             v-model.trim="searchInput"
             type="search"
             name="dropdown-search"
+            autocomplete="off"
             class="form-input focus:bg-edison/30 rounded-none shadow-none ring-0"
             placeholder="Search"
           />
