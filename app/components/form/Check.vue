@@ -7,13 +7,11 @@
           v-bind="{
             type,
             name,
-            value,
             disabled,
             indeterminate,
             ...(trueValue !== undefined && { 'true-value': trueValue }),
             ...(falseValue !== undefined && { 'false-value': falseValue })
           }"
-          :checked
           class="form-check peer"
           :aria-label="isSwitch ? 'switch' : undefined"
         />
@@ -57,13 +55,13 @@
   </label>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T">
 const props = withDefaults(
   defineProps<{
     label?: string;
     type?: 'checkbox' | 'radio';
     name?: string;
-    value?: string | number | boolean | null | Record<string, unknown>;
+    value?: T;
     isSwitch?: boolean;
     indeterminate?: boolean;
     disabled?: boolean;
@@ -77,14 +75,17 @@ const props = withDefaults(
   }
 );
 
-const model = defineModel<boolean | string | number | string[] | number[] | null>();
+const model = defineModel();
 
-const checked = computed(() => {
-  return Boolean(model.value) || model.value === props.trueValue;
-});
+watch(
+  () => props.value,
+  (value) => {
+    if (value !== undefined) model.value = Boolean(value);
+  },
+  { immediate: true }
+);
 
 onMounted(() => {
-  if (!model.value && props.value) model.value = Boolean(props.value);
   if (props.trueValue !== undefined && Boolean(model.value)) model.value = props.trueValue;
   if (props.falseValue !== undefined && !model.value) model.value = props.falseValue;
 });
