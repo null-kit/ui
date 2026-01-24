@@ -13,6 +13,7 @@
             ...(trueValue !== undefined && { 'true-value': trueValue }),
             ...(falseValue !== undefined && { 'false-value': falseValue })
           }"
+          :checked
           class="form-check peer"
           :aria-label="isSwitch ? 'switch' : undefined"
         />
@@ -77,6 +78,10 @@ const props = withDefaults(
 );
 
 const model = defineModel<boolean | string | number | string[] | number[] | null>();
+
+const checked = computed(() => {
+  return Boolean(model.value) || model.value === props.trueValue;
+});
 
 onMounted(() => {
   if (!model.value && props.value) model.value = Boolean(props.value);
