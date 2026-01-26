@@ -7,6 +7,7 @@
           v-bind="{
             type,
             name,
+            value,
             disabled,
             indeterminate,
             ...(trueValue !== undefined && { 'true-value': trueValue }),
@@ -80,12 +81,12 @@ const model = defineModel();
 watch(
   () => props.value,
   (value) => {
-    if (value !== undefined) model.value = Boolean(value);
-  },
-  { immediate: true }
+    model.value = Boolean(value);
+  }
 );
 
 onMounted(() => {
+  if (!model.value && props.value) model.value = Boolean(props.value);
   if (props.trueValue !== undefined && Boolean(model.value)) model.value = props.trueValue;
   if (props.falseValue !== undefined && !model.value) model.value = props.falseValue;
 });
