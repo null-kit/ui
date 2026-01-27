@@ -308,8 +308,8 @@ const hasOptions = computed(() => filteredOptions.value.some((group) => group.li
 
 const addPreset = (preset: (string | number)[], replace = false) => {
   model.value = replace
-    ? [...new Set(preset)]
-    : [...new Set([...preset, ...(Array.isArray(model.value) ? model.value : [model.value])])];
+    ? [...new Set(preset)].filter(Boolean)
+    : [...new Set([...preset, ...(Array.isArray(model.value) ? model.value : [model.value])])].filter(Boolean);
 };
 
 const hasPreset = (preset: (string | number)[]) => {
