@@ -67,6 +67,20 @@ export const toSeparatedArray = (value: string, separator: string, unique: boole
 };
 
 /**
+ * Converts a string to an array using a separator.
+ * @param value - The array of strings or numbers to convert.
+ * @param separator - The separator to use.
+ * @param unique - Whether to return a unique array.
+ */
+export const toSeparatedString = (value: (string | number)[], separator: string, unique: boolean = false) => {
+  if (!value || !separator) return [];
+
+  if (unique) return [...new Set(value)].join(separator);
+
+  return value.join(separator);
+};
+
+/**
  * Converts a comma-separated string to an array of strings.
  *
  * @deprecated Use toSeparatedArray instead.
