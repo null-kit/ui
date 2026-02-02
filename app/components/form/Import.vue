@@ -1,16 +1,23 @@
 <template>
-  <label class="btn rounded-none">
-    <input type="file" accept=".csv" class="absolute hidden" @change="onImport" />
-    <AppIcon :name="icon" />
-    {{ label }}
-  </label>
+  <AppTooltip message="Import CSV file">
+    <label class="btn" :class="buttonClass">
+      <input type="file" accept=".csv" class="absolute hidden" @change="onImport" />
+      <AppIcon :name="icon" />
+      {{ label }}
+    </label>
+  </AppTooltip>
 </template>
 
 <script setup lang="ts">
-const { join = ',', icon = 'file-paste' } = defineProps<{
+const {
+  join = ',',
+  icon = 'file-paste',
+  buttonClass = 'rounded-none'
+} = defineProps<{
   label?: string;
   join?: ',' | '\n';
   icon?: string;
+  buttonClass?: string;
 }>();
 
 const model = defineModel<string | number | (string | number)[]>();
