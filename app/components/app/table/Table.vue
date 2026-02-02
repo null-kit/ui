@@ -164,7 +164,7 @@ const createColumnExpander = () => {
             {
               viewBox: '0 0 24 24',
               fill: 'none',
-              class: `size-fit shrink-0 duration-200 ${row.getIsExpanded() ? 'rotate-90' : ''}`
+              class: `size-full shrink-0 duration-200 ${row.getIsExpanded() ? 'rotate-90' : ''}`
             },
             [h('path', { d: 'M7 2L17 12L7 22', stroke: 'currentColor', 'stroke-width': '3.5' })]
           )

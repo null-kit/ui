@@ -18,7 +18,7 @@
         class="fixed inset-0 z-10 flex overflow-auto p-4 outline-0 md:p-10"
         tabindex="0"
         @keydown.esc="onPreventClose"
-        @click.self="onPreventClose"
+        @click.self="onDismiss"
       >
         <div class="modal-content m-auto w-full" :class="modalClass">
           <slot v-if="$slots.header || $slots.title" name="header">
@@ -46,9 +46,14 @@
 </template>
 
 <script setup lang="ts">
-const { modalClass = 'max-w-xl', preventClose = false } = defineProps<{
+const {
+  modalClass = 'max-w-xl',
+  preventClose = false,
+  dismissible = false
+} = defineProps<{
   modalClass?: string;
   preventClose?: boolean;
+  dismissible?: boolean;
 }>();
 
 defineEmits<{ close: [] }>();
@@ -62,6 +67,12 @@ const onClose = () => {
 
 const onPreventClose = () => {
   if (preventClose) return;
+
+  onClose();
+};
+
+const onDismiss = () => {
+  if (!dismissible) return;
 
   onClose();
 };

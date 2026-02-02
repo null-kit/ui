@@ -18,7 +18,7 @@
       <label v-for="(option, index) in options" :key="index" class="btn" :class="btnClass">
         <input
           v-model="model"
-          class="peer checked:bg-accent/10 absolute inset-0 appearance-none disabled:cursor-not-allowed"
+          class="peer checked:bg-accent/10 absolute inset-0 size-full appearance-none disabled:cursor-not-allowed"
           :value="toLowerCase(option)"
           v-bind="{ type, name, disabled, readonly }"
           @click="onClick($event, option)"
