@@ -67,7 +67,7 @@ export const toSeparatedArray = (value: string, separator: string, unique: boole
 };
 
 /**
- * Converts a string to an array using a separator.
+ * Converts a array to a string using a separator.
  * @param value - The array of strings or numbers to convert.
  * @param separator - The separator to use.
  * @param unique - Whether to return a unique array.
