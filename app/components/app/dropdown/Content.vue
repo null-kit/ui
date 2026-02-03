@@ -24,14 +24,12 @@
 </template>
 
 <script setup lang="ts">
-import type { Placement } from '@floating-ui/vue';
-import { useFloating, offset, flip, size, autoUpdate } from '@floating-ui/vue';
+import { useFloating, offset, flip, size, autoUpdate, type Placement } from '@floating-ui/vue';
 
 const emit = defineEmits<{ close: [] }>();
 
 const props = defineProps<{
   reference: HTMLElement | null;
-
   placement?: Placement;
   dropdownClass?: string;
   innerClass?: string;
@@ -60,7 +58,7 @@ const { floatingStyles } = useFloating(reference, floating, {
 
         Object.assign(elements.floating.style, {
           maxWidth: `${Math.max(100, availableWidth)}px`,
-          maxHeight: `${height}px`
+          maxHeight: `var(--floating-height)`
         });
       }
     })

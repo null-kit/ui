@@ -6,7 +6,7 @@
   }
 
   .modal-motion {
-    transform: perspective(1000px) translateZ(-50px) rotateX(10deg) rotateY(10deg);
+    transform: perspective(1000px) translateZ(-40px) rotateX(6deg) rotateY(6deg);
     @apply blur-xs;
   }
 }

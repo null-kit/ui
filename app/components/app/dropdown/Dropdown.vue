@@ -7,10 +7,7 @@
       ref="floating"
       v-bind="{ placement, dropdownClass, innerClass, maxHeight, inline, reference }"
       :autoclose="autoclose || hoverOpen"
-      @close="
-        isOpen = false;
-        $emit('close');
-      "
+      @close="onClose"
     >
       <slot />
     </AppDropdownContent>
@@ -49,5 +46,10 @@ const onTriggerClick = () => {
   }
 };
 
-defineExpose({ onClose: () => floating.value?.onClose() });
+const onClose = () => {
+  isOpen.value = false;
+  emit('close');
+};
+
+defineExpose({ onClose: floating.value?.onClose });
 </script>
