@@ -13,6 +13,26 @@
       @apply hover:bg-surface/5 active:bg-surface/10;
     }
   }
+
+  .btn-group {
+    @apply isolate flex overflow-auto;
+    @apply rounded-lg shadow duration-300;
+    @apply ring-edison hover:ring-surface/20 bg-darwin ring;
+    @apply divide-edison divide-x;
+
+    &:has(.btn-sm, .btn-xs) {
+      @apply rounded-md;
+    }
+
+    &:has(.btn-lg) {
+      @apply rounded-xl;
+    }
+
+    & .btn {
+      @apply flex-1 rounded-none shadow-none ring-0;
+      @apply active:!scale-100;
+    }
+  }
 }
 
 @utility btn-xs {
@@ -85,25 +105,5 @@
 @keyframes btn-pending {
   100% {
     background-position: 20px 0;
-  }
-}
-
-.btn-group {
-  @apply isolate flex overflow-auto;
-  @apply rounded-lg shadow duration-300;
-  @apply ring-edison hover:ring-surface/20 bg-darwin ring;
-  @apply divide-edison divide-x;
-
-  &:has(.btn-sm, .btn-xs) {
-    @apply rounded-md;
-  }
-
-  &:has(.btn-lg) {
-    @apply rounded-xl;
-  }
-
-  & .btn {
-    @apply flex-1 rounded-none shadow-none ring-0;
-    @apply active:!scale-100;
   }
 }
