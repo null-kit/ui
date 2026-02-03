@@ -11,7 +11,7 @@
       </button>
     </template>
 
-    <div class="space-y-2 p-1 text-center">
+    <div class="space-y-2 p-2 text-center">
       <div class="flex justify-between gap-2">
         <button type="button" class="btn btn-sm px-2" @click="prevMonth">
           <slot name="prev-icon">

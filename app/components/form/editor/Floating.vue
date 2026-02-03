@@ -5,7 +5,7 @@
       <input type="file" class="hidden" accept="image/*" @change="onImageUpload" />
     </label>
 
-    <AppDropdown dropdown-content-class="!p-0 !rounded-lg" autoclose>
+    <AppDropdown dropdown-class="!rounded-lg" autoclose>
       <template #trigger>
         <button type="button" class="btn btn-sm">
           <AppIcon name="editor:video" />

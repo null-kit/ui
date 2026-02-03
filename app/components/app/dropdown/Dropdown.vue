@@ -51,5 +51,7 @@ const onClose = () => {
   emit('close');
 };
 
-defineExpose({ onClose: floating.value?.onClose });
+const onFloatingClose = () => floating.value?.onClose();
+
+defineExpose({ onClose: onFloatingClose });
 </script>

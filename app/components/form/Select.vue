@@ -17,14 +17,7 @@
         <slot name="left" />
       </div>
 
-      <AppDropdown
-        :autoclose
-        :placement
-        class="w-full"
-        dropdown-class="p-0"
-        :max-height="448"
-        @close="searchInput = ''"
-      >
+      <AppDropdown :autoclose :placement :dropdown-class :max-height="448" class="w-full" @close="searchInput = ''">
         <template #trigger="{ isOpen }">
           <button
             type="button"
@@ -215,6 +208,7 @@ const props = defineProps<{
   presets?: { name: string; list: (string | number)[] }[];
   inputClass?: string;
   validateClass?: string;
+  dropdownClass?: string;
 }>();
 
 const searchInput = ref('');

@@ -15,7 +15,7 @@ export const useClipboard = () => {
   const copyId = ref<number | null>(null);
 
   const copy = async (text: string, id?: number) => {
-    if (!text) return;
+    if (!text || status.value) return;
 
     try {
       await navigator.clipboard.writeText(text);
