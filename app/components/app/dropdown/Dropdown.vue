@@ -9,7 +9,7 @@
       :autoclose="autoclose || hoverOpen"
       @close="onClose"
     >
-      <slot />
+      <slot :on-close="onFloatingClose" />
     </AppDropdownContent>
   </div>
 </template>
