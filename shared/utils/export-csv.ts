@@ -32,7 +32,7 @@ export const useDownload = (content: Blob | unknown, filename: string) => {
 
   const url = window.URL.createObjectURL(blob);
   const link = document.createElement('a');
-  let ext;
+  let ext = '';
 
   if (blob.type === 'text/csv' && !filename.toLowerCase().endsWith('.csv')) ext = '.csv';
 
