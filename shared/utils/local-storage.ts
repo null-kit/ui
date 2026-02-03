@@ -16,8 +16,13 @@ export const useLocalStorage = () => {
     localStorage.setItem(key, JSON.stringify(data));
   };
 
+  const removeItem = (key: string) => {
+    localStorage.removeItem(key);
+  };
+
   return {
     getItem,
-    setItem
+    setItem,
+    removeItem
   };
 };
