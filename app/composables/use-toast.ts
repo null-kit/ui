@@ -3,24 +3,30 @@ import { AppIcon } from '#components';
 
 type Toast = {
   id?: number;
-  title: string;
-  message?: string;
-  type?: 'success' | 'error' | 'info';
+  title?: string;
+  text?: string;
+  type?: 'success' | 'error' | 'info' | 'default';
+  manualClose?: boolean;
+  slot?: () => VNode;
   timeoutId?: NodeJS.Timeout;
 };
 
 const meta = {
   success: {
     icon: 'toast-success',
-    color: 'text-green-600'
+    color: 'bg-green-600 text-white'
   },
   error: {
     icon: 'toast-error',
-    color: 'text-red-500'
+    color: 'bg-red-500 text-white'
   },
   info: {
     icon: 'toast-info',
-    color: 'text-blue-500'
+    color: 'bg-blue-500 text-white'
+  },
+  default: {
+    icon: 'toast-default',
+    color: 'bg-current/10 text-current'
   }
 };
 
@@ -36,25 +42,31 @@ export const useToast = () => {
         'div',
         {
           key: toast.id,
-          class: 'bg-darwin inverted text-surface items-start text-sm flex max-w-md gap-2 rounded-xl p-4 shadow-lg',
-          onMouseenter: () => holdToast(toast.id, true),
-          onMouseleave: () => holdToast(toast.id, false)
+          class: 'toast inverted',
+          onMouseenter: () => holdToast(toast, true),
+          onMouseleave: () => holdToast(toast, false)
         },
         [
-          toast.type && h(AppIcon, { name: meta[toast.type].icon, class: 'size-5 ' + meta[toast.type].color }),
-          h('div', { class: 'w-full' }, [
-            h('h3', { class: 'font-semibold' }, toast.title),
-            toast.message && h('p', { class: 'mt-0.5 whitespace-break-spaces' }, toast.message)
+          h('div', { class: 'w-full' + (toast.title || toast.text ? ' p-2' : '') }, [
+            toast.title ? h('h3', { class: 'font-semibold' }, toast.title) : null,
+            toast.text ? h('p', { class: 'whitespace-break-spaces' }, toast.text) : null
           ]),
-          h(
-            'svg',
-            {
-              class: 'size-3 opacity-30 shrink-0 cursor-pointer duration-200 hover:opacity-100 mt-0.5',
-              viewBox: '0 0 16 16',
-              onClick: () => removeToast(toast.id)
-            },
-            h('path', { stroke: 'currentColor', 'stroke-width': '2', d: 'M2 2l12 12M2 14L14 2' })
-          )
+
+          toast.slot ? h('div', { class: 'px-2 pb-2' }, toast.slot()) : null,
+
+          h('div', { class: 'toast-status ' + meta[toast.type || 'default'].color }, [
+            toast.type ? h(AppIcon, { name: meta[toast.type].icon, class: 'size-3.5' }) : null,
+            h(
+              'svg',
+              {
+                class: 'size-3 ml-auto opacity-40 shrink-0 duration-200 hover:opacity-100',
+                viewBox: '0 0 16 16',
+                onClick: () => removeToast(toast.id)
+              },
+              h('path', { stroke: 'currentColor', 'stroke-width': '2', d: 'M2 2l12 12M2 14L14 2' })
+            ),
+            toast.manualClose ? null : h('div', { class: 'toast-timer' })
+          ])
         ]
       );
     });
@@ -83,13 +95,14 @@ export const useToast = () => {
     toast.timeoutId = setTimeout(() => removeToast(toast.id), 3000);
   };
 
-  const setToast = (title: Toast['title'], message?: Toast['message'], type?: Toast['type']) => {
-    const toast: Toast = { id: Date.now(), title, message, type };
+  const setToast = (params: Toast) => {
+    const toast = { id: Date.now(), ...params };
 
     toasts.value.push(toast);
 
     renderToasts();
-    startTimer(toast);
+
+    if (!toast.manualClose) startTimer(toast);
   };
 
   const removeToast = (id: Toast['id']) => {
@@ -98,8 +111,8 @@ export const useToast = () => {
     renderToasts();
   };
 
-  const holdToast = (id: Toast['id'], hold: boolean) => {
-    const toast = toasts.value.find((toast) => toast.id === id);
+  const holdToast = (toast: Toast, hold: boolean) => {
+    if (toast.manualClose) return;
 
     if (toast && hold) clearTimeout(toast.timeoutId);
     if (toast && !hold) startTimer(toast);
