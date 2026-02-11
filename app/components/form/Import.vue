@@ -33,15 +33,17 @@ const onImport = async (event: Event) => {
 
     fileReader.onload = (event) => {
       try {
-        const csv = String(event.target?.result);
+        const csv = String(event.target?.result)
+          .replace(/\r/g, '')
+          .replace(/[^a-zA-Z0-9\n,]/g, '');
 
         const rows = csv.split('\n').filter((row) => row.trim() !== '');
 
-        if (rows.length < 2) return setToast('Import Error!', 'CSV file is empty', 'error');
+        if (rows.length < 2) return setToast({ title: 'Import Error!', text: 'CSV file is empty', type: 'error' });
 
         model.value = rows.slice(1).join(join);
       } catch (error) {
-        return setToast('Import Error!', `Failed to parse CSV: ${error}`, 'error');
+        return setToast({ title: 'Import Error!', text: `Failed to parse CSV: ${error}`, type: 'error' });
       }
     };
 
