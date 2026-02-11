@@ -1,5 +1,5 @@
 export const useLocalStorage = () => {
-  const getItem = (key: string) => {
+  const getItem = <T>(key: string): T | undefined => {
     try {
       const parsedItem = localStorage.getItem(key);
 
@@ -10,7 +10,7 @@ export const useLocalStorage = () => {
     }
   };
 
-  const setItem = (key: string, data: unknown) => {
+  const setItem = <T>(key: string, data: T) => {
     if (!data || (Array.isArray(data) && data.length === 0)) return localStorage.removeItem(key);
 
     localStorage.setItem(key, JSON.stringify(data));
