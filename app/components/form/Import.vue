@@ -35,7 +35,7 @@ const onImport = async (event: Event) => {
       try {
         const csv = String(event.target?.result)
           .replace(/\r/g, '')
-          .replace(/[^a-zA-Z0-9\n,]/g, '');
+          .replace(/[^a-zA-Z0-9\n,.]/g, '');
 
         const rows = csv.split('\n').filter((row) => row.trim() !== '');
 
