@@ -15,18 +15,21 @@
         @pointerleave="autoclose && (isOpen = false)"
         @click.stop
       >
-        <div :class="['group dropdown-inner', innerClass]">
+        <div :class="['group dropdown-inner overflow-auto', innerClass]">
           <slot />
         </div>
+
+        <div v-if="inline" class="absolute -inset-2 -z-1" />
       </div>
     </Transition>
   </Teleport>
 </template>
 
 <script setup lang="ts">
-import { useFloating, offset, flip, size, autoUpdate, type Placement } from '@floating-ui/vue';
+import { useFloating, offset, flip, size, autoUpdate } from '@floating-ui/vue';
+import type { Placement } from '@floating-ui/vue';
 
-const emit = defineEmits<{ close: [] }>();
+defineEmits<{ close: [] }>();
 
 const props = defineProps<{
   reference: HTMLElement | null;

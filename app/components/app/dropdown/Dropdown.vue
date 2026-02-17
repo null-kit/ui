@@ -1,5 +1,5 @@
 <template>
-  <div ref="reference" @click="onTriggerClick" @pointerenter="hoverOpen ? $el.click() : null">
+  <div ref="reference" @click="onTriggerClick" @pointerenter="onPointerEnter" @pointerleave="onPointerLeave">
     <slot name="trigger" :is-open />
 
     <AppDropdownContent
@@ -52,6 +52,14 @@ const onClose = () => {
 };
 
 const onFloatingClose = () => floating.value?.onClose();
+
+const onPointerEnter = () => {
+  if (props.hoverOpen) isOpen.value = true;
+};
+
+const onPointerLeave = () => {
+  if (props.hoverOpen && props.inline) onFloatingClose();
+};
 
 defineExpose({ onClose: onFloatingClose });
 </script>

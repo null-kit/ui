@@ -10,7 +10,7 @@ export const useLocalStorage = () => {
     }
   };
 
-  const setItem = <T>(key: string, data: T) => {
+  const setItem = (key: string, data: unknown) => {
     if (!data || (Array.isArray(data) && data.length === 0)) return localStorage.removeItem(key);
 
     localStorage.setItem(key, JSON.stringify(data));

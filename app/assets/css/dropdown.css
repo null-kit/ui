@@ -1,6 +1,6 @@
 @layer components {
   .dropdown-content {
-    @apply scrollbar scrollbar-thin z-10 overflow-auto rounded-xl;
+    @apply scrollbar scrollbar-thin z-10 rounded-xl;
     @apply ring-edison bg-darwin text-sm shadow-lg ring;
   }
 }
