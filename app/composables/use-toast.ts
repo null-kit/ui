@@ -20,6 +20,10 @@ const meta = {
     icon: 'toast-error',
     color: 'bg-red-500 text-white'
   },
+  warning: {
+    icon: 'toast-warning',
+    color: 'bg-yellow-500 text-white'
+  },
   info: {
     icon: 'toast-info',
     color: 'bg-blue-500 text-white'
