@@ -76,7 +76,7 @@ const props = withDefaults(
   }
 );
 
-const model = defineModel();
+const model = defineModel<boolean | string | number | null>();
 
 watch(
   () => props.value,

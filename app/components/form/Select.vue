@@ -17,7 +17,14 @@
         <slot name="left" />
       </div>
 
-      <AppDropdown :autoclose :placement :dropdown-class :max-height="448" class="w-full" @close="searchInput = ''">
+      <AppDropdown
+        :autoclose
+        :placement
+        :dropdown-class="[dropdownClass, 'overflow-clip'].join(' ')"
+        :max-height="448"
+        class="w-full"
+        @close="searchInput = ''"
+      >
         <template #trigger="{ isOpen }">
           <button
             type="button"
