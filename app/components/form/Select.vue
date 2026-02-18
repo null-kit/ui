@@ -104,9 +104,9 @@
 
             <div class="grid gap-0.5 p-1 md:grid-cols-3">
               <button
-                type="button"
                 v-for="(preset, index) in filteredPresets"
                 :key="index"
+                type="button"
                 class="btn btn-sm justify-start pl-1"
                 :class="{ 'bg-accent/5 text-accent font-medium': hasPreset(preset.list) }"
                 @click="addPreset(preset.list, true)"
