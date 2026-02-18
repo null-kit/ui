@@ -67,8 +67,8 @@ const props = withDefaults(
     indeterminate?: boolean;
     disabled?: boolean;
     help?: string;
-    trueValue?: string | number | null;
-    falseValue?: string | number | null;
+    trueValue?: boolean | string | number | null;
+    falseValue?: boolean | string | number | null;
     lazy?: boolean;
   }>(),
   {
