@@ -72,7 +72,9 @@ const props = withDefaults(
     lazy?: boolean;
   }>(),
   {
-    type: 'checkbox'
+    type: 'checkbox',
+    trueValue: undefined,
+    falseValue: undefined
   }
 );
 
