@@ -15,7 +15,7 @@
   }
 
   .btn-group {
-    @apply scrollbar isolate flex overflow-auto;
+    @apply scrollbar scrollbar-thin isolate flex overflow-auto;
     @apply rounded-lg shadow duration-300;
     @apply ring-edison hover:ring-surface/20 bg-darwin ring;
     @apply divide-edison divide-x;
