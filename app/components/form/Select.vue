@@ -20,7 +20,7 @@
       <AppDropdown
         :autoclose
         :placement
-        :dropdown-class="[dropdownClass, 'overflow-clip'].join(' ')"
+        :dropdown-class="[dropdownClass, 'overflow-clip flex flex-col'].join(' ')"
         :max-height="448"
         class="w-full"
         @close="searchInput = ''"
@@ -103,7 +103,7 @@
 
         <div
           v-if="hasOptions"
-          class="scrollbar scrollbar-thin overflow-auto"
+          class="scrollbar scrollbar-thin flex-1 overflow-auto"
           :style="{ maxHeight: search ? 'calc(var(--floating-height) - 42px)' : 'auto' }"
         >
           <div v-if="presets && presets.length > 0 && filteredPresets && filteredPresets.length > 0" class="-order-1">
