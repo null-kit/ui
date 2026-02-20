@@ -3,4 +3,8 @@
     @apply scrollbar scrollbar-thin z-10 rounded-xl;
     @apply ring-edison bg-darwin text-sm shadow-lg ring;
   }
+
+  .dropdown-inner {
+    @apply max-h-[inherit] overflow-auto;
+  }
 }

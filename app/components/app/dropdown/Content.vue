@@ -15,7 +15,7 @@
         @pointerleave="autoclose && (isOpen = false)"
         @click.stop
       >
-        <div :class="['group dropdown-inner overflow-auto', innerClass]">
+        <div :class="['group dropdown-inner', innerClass]">
           <slot />
         </div>
 
