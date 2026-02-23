@@ -4,7 +4,8 @@ const { resolve } = createResolver(import.meta.url);
 
 export default defineNuxtConfig({
   alias: {
-    '@null-kit/ui': resolve('./app/assets/css')
+    '@null-kit/ui': resolve('./app/assets/css'),
+    '@null-kit/utils': resolve('./shared/utils')
   },
 
   modules: [resolve('modules/svg-sprite')],
