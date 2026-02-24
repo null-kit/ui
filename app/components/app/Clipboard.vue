@@ -1,5 +1,9 @@
 <template>
   <component :is="slots.default()[0]" v-if="slots.default" @mouseenter="onMouseEnter" @mouseleave="canPaste = false">
+    <template #label-left>
+      <slot name="label-left" />
+    </template>
+
     <template #label-right>
       <slot name="label-right" />
 
