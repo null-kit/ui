@@ -1,6 +1,8 @@
 <template>
-  <component v-if="slots.default" :is="slots.default()[0]" @mouseenter="onMouseEnter" @mouseleave="canPaste = false">
+  <component :is="slots.default()[0]" v-if="slots.default" @mouseenter="onMouseEnter" @mouseleave="canPaste = false">
     <template #label-right>
+      <slot name="label-right" />
+
       <div class="-mb-px ml-auto flex gap-1">
         <AppAppear v-if="canPaste">
           <button type="button" class="btn btn-default btn-xs" @click="onPaste">
