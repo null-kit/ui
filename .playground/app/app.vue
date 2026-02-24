@@ -29,7 +29,7 @@
     </aside>
 
     <main class="min-w-0 space-y-8 p-4">
-      <DemoTan />
+      <DemoTable />
 
       <DemoButton />
 
@@ -76,7 +76,7 @@
             @click="
               useConfirm({
                 message: 'Are you sure you want to delete this user?',
-                onConfirm: async () => setToast('Success!', 'User deleted successfully!')
+                onConfirm: async () => setToast({ title: 'Success!', text: 'User deleted successfully!' })
               })
             "
           >
@@ -92,7 +92,7 @@
             title="Delete John Wick"
             confirm-text="Delete"
             confirm-class="btn-danger"
-            @confirm="setToast('Success!', 'John Wick deleted successfully!', 'success')"
+            @confirm="setToast({ title: 'Success!', text: 'John Wick deleted successfully!', type: 'success' })"
           >
             <button type="button" class="btn btn-default">Delete John Wick</button>
           </AppConfirm>
@@ -103,14 +103,18 @@
         <legend>Toasts</legend>
 
         <div class="flex gap-4">
-          <button type="button" class="btn btn-default" @click="setToast('Nice!', 'This is a default toast!')">
+          <button
+            type="button"
+            class="btn btn-default"
+            @click="setToast({ title: 'Nice!', text: 'This is a default toast!' })"
+          >
             Default Toast
           </button>
 
           <button
             type="button"
             class="btn btn-default"
-            @click="setToast('Success!', 'Your operation was successful!', 'success')"
+            @click="setToast({ title: 'Success!', text: 'Your operation was successful!', type: 'success' })"
           >
             Success Toast
           </button>
@@ -118,12 +122,16 @@
           <button
             type="button"
             class="btn btn-default"
-            @click="setToast('Error!', 'Your operation was failed!', 'error')"
+            @click="setToast({ title: 'Error!', text: 'Your operation was failed!', type: 'error' })"
           >
             Error Toast
           </button>
 
-          <button type="button" class="btn btn-default" @click="setToast('Info!', 'Your operation was okay!', 'info')">
+          <button
+            type="button"
+            class="btn btn-default"
+            @click="setToast({ title: 'Info!', text: 'Your operation was okay!', type: 'info' })"
+          >
             Info Toast
           </button>
         </div>
@@ -140,39 +148,6 @@
       </fieldset>
 
       <DemoDatepicker />
-
-      <fieldset id="table" class="min-w-0">
-        <legend>Table</legend>
-
-        <div class="mb-2 text-sm font-bold">Basic Table</div>
-        <AppTable :data="formData.table" sticky-head />
-
-        <div class="mt-10 mb-2 text-sm font-bold">Sticky Email Cell Table and Actions Slot</div>
-        <AppTable :data="formData.tableBig" :sticky-left="['email']" :sticky-right="['actions']">
-          <template #actions>
-            <div class="flex gap-2">
-              <button type="button" class="btn btn-default btn-sm">Edit</button>
-              <button type="button" class="btn btn-default btn-sm">Delete</button>
-            </div>
-          </template>
-        </AppTable>
-
-        <div class="mt-10 mb-2 text-sm font-bold">Table with Virtual Rows and Expanded Rows</div>
-        <AppTable
-          :data="bigData"
-          virtual-scroll
-          :sort-by-client="['name', 'id', 'qsi']"
-          :omit="['wpi']"
-          sticky-head
-          expanded-key="extra"
-        >
-          <template #name="{ value, entry }">
-            <div>{{ value }}</div>
-
-            <div class="text-xs opacity-50">qsi: {{ entry.qsi }} / msi: {{ entry.msi }} / wpi: {{ entry.wpi }}</div>
-          </template>
-        </AppTable>
-      </fieldset>
 
       <fieldset id="tabs">
         <legend>Tabs</legend>
@@ -297,31 +272,6 @@
 <script setup lang="ts">
 const { setToast } = useToast();
 const { copy, statusText } = useClipboard();
-
-const bigData = Array.from({ length: 100 }, (_, i) => ({
-  id: i + 1,
-  name: `Row ${i + 1}`,
-  value: Math.floor(Math.random() * 100),
-  bidFloor: Math.floor(Math.random() * 100),
-  qps: Math.floor(Math.random() * 100),
-  qsi: Math.floor(Math.random() * 100),
-  msi: Math.floor(Math.random() * 100),
-  wpi: Math.floor(Math.random() * 100),
-  qsiLimit: Math.floor(Math.random() * 100),
-  wpiLimit: Math.floor(Math.random() * 100),
-  extra: Array.from({ length: 100 }, (_, i) => ({
-    id: i + Math.floor(Math.random() * 100),
-    name: `Extra Row ${i + Math.floor(Math.random() * 100)}`,
-    value: Math.floor(Math.random() * 100),
-    bidFloor: Math.floor(Math.random() * 100),
-    qps: Math.floor(Math.random() * 100),
-    qsi: Math.floor(Math.random() * 100),
-    msi: Math.floor(Math.random() * 100),
-    wpi: Math.floor(Math.random() * 100),
-    qsiLimit: Math.floor(Math.random() * 100),
-    wpiLimit: Math.floor(Math.random() * 100)
-  }))
-}));
 
 const formData = reactive({
   color: 'blue',

@@ -1,12 +1,12 @@
 <template>
-  <fieldset id="tan" class="min-w-0">
-    <legend>Tan</legend>
+  <fieldset id="table" class="min-w-0">
+    <legend>Table</legend>
 
-    <AppTanTable :data :columns nested-key="children">
+    <AppTable :data :columns nested-key="children">
       <template #value="{ cell, row }">
         {{ cell }} - <b>{{ row.status.name }}</b>
       </template>
-    </AppTanTable>
+    </AppTable>
   </fieldset>
 </template>
 
@@ -128,7 +128,8 @@ const columns = (column: ColumnHelper<(typeof data)[number]>): ColumnDef<(typeof
         accessorKey: 'title',
         header: 'Title',
         enablePinning: false,
-        size: 137
+        size: 137,
+        meta: { class: 'truncate' }
       },
       {
         accessorKey: 'priority',

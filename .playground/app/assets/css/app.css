@@ -2,33 +2,38 @@
 @import '@null-kit/ui/all';
 
 @theme {
-  --color-newton: var(--color-slate-100);
-  --color-darwin: var(--color-white);
-  --color-edison: var(--color-slate-200);
-  --color-surface: var(--color-slate-700);
-  --color-accent: var(--color-violet-800);
+  --chroma: 0.007;
+  --hue: 280;
+
+  --color-newton: oklch(97% var(--chroma) var(--hue));
+  --color-darwin: oklch(100% 0 var(--hue));
+  --color-edison: oklch(88% var(--chroma) var(--hue));
+  --color-surface: oklch(5% var(--chroma) var(--hue));
+
+  --color-accent: var(--color-violet-700);
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer theme {
-  :is(.dark) .inverted {
-    --color-newton: var(--color-slate-100);
-    --color-darwin: var(--color-white);
-    --color-edison: var(--color-slate-200);
-    --color-surface: var(--color-slate-700);
-    --color-accent: var(--color-violet-800);
+  :is(.dark, .inverted) {
+    color: var(--color-surface);
+
+    --chroma: 0.02;
+
+    --color-newton: oklch(21% var(--chroma) var(--hue));
+    --color-darwin: oklch(24% var(--chroma) var(--hue));
+    --color-edison: oklch(32% var(--chroma) var(--hue));
+    --color-surface: oklch(95% var(--chroma) var(--hue));
+
+    --color-accent: var(--color-violet-500);
   }
 
-  :is(.dark, .inverted) {
-    --chroma: 0.02;
-    --hue: 300;
-
-    --color-newton: oklch(16% var(--chroma) var(--hue));
-    --color-darwin: oklch(20% var(--chroma) var(--hue));
-    --color-edison: oklch(30% var(--chroma) var(--hue));
-    --color-surface: oklch(97% var(--chroma) var(--hue));
-    --color-accent: var(--color-violet-500);
+  :is(.dark) .inverted {
+    --color-newton: oklch(97% var(--chroma) var(--hue));
+    --color-darwin: oklch(100% 0 var(--hue));
+    --color-edison: oklch(88% var(--chroma) var(--hue));
+    --color-surface: oklch(5% var(--chroma) var(--hue));
   }
 
   input::-webkit-outer-spin-button,
