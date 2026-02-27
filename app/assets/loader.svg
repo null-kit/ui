@@ -1,0 +1,220 @@
+<svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g fill="#D9D9D9">
+    <animate id="loop" attributeName="opacity" values="1;1" dur="4s" begin="0s;loop.end" repeatCount="1" />
+
+    <rect opacity=".3" x="1.5" y="1.5" width="5" height="5">
+      <animate attributeName="opacity" calcMode="discrete" values=".5;1;.5;.3;.3;.3;.3;.3;.3" dur="1"
+        begin="loop.begin+1s" repeatCount="3" />
+
+      <animate attributeName="opacity" calcMode="discrete" values=".15;1;.35;.9;.2;.75;.25;.95;.3"
+        begin="loop.begin+0.14s;loop.begin+3.14s" dur="0.58s" repeatDur="0.95s" />
+    </rect>
+
+    <g>
+      <rect opacity=".3" x="8" y="1.5" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.5;1;.5;.3;.3;.3;.3;.3" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".22;.92;.3;1;.24;.8;.2;.96;.28"
+          begin="loop.begin+0.08s;loop.begin+3.08s" dur="0.62s" repeatDur="0.95s" />
+      </rect>
+
+      <rect opacity=".3" x="1.5" y="8" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.5;1;.5;.3;.3;.3;.3;.3" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".95;.2;.75;.3;1;.25;.8;.2;.9"
+          begin="loop.begin+0.41s;loop.begin+3.41s" dur="0.73s" repeatDur="0.95s" />
+      </rect>
+    </g>
+
+    <g>
+      <rect opacity=".3" x="14.5" y="1.5" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.5;1;.5;.3;.3;.3;.3" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".25;1;.3;.85;.2;.95;.35;.7;.2"
+          begin="loop.begin+0.27s;loop.begin+3.27s" dur="0.64s" repeatDur="0.95s" />
+
+      </rect>
+
+      <rect opacity=".3" x="8" y="8" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.5;1;.5;.3;.3;.3;.3" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.84;.22;1;.26;.9;.2;.76;.24"
+          begin="loop.begin+0.18s;loop.begin+3.18s" dur="0.68s" repeatDur="0.95s" />
+      </rect>
+
+      <rect opacity=".3" x="1.5" y="14.5" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.5;1;.5;.3;.3;.3;.3" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".25;1;.35;.78;.2;.94;.3;.82;.22"
+          begin="loop.begin+0.29s;loop.begin+3.29s" dur="0.57s" repeatDur="0.95s" />
+      </rect>
+    </g>
+
+    <g>
+      <rect opacity=".3" x="21" y="1.5" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.3;.5;1;.5;.3;.3;.3" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".2;.88;.3;1;.24;.92;.28;.74;.2"
+          begin="loop.begin+0.11s;loop.begin+3.11s" dur="0.71s" repeatDur="0.95s" />
+      </rect>
+
+      <rect opacity=".3" x="14.5" y="8" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.3;.5;1;.5;.3;.3;.3" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".34;.8;.22;1;.3;.9;.2;.86;.26"
+          begin="loop.begin+0.23s;loop.begin+3.23s" dur="0.55s" repeatDur="0.95s" />
+      </rect>
+
+      <rect opacity=".3" x="8" y="14.5" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.3;.5;1;.5;.3;.3;.3" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.9;.2;1;.35;.8;.2;.95;.25"
+          begin="loop.begin+0.52s;loop.begin+3.52s" dur="0.56s" repeatDur="0.95s" />
+      </rect>
+
+      <rect opacity=".3" x="1.5" y="21" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.3;.5;1;.5;.3;.3;.3" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values="1;.2;.85;.25;.95;.3;.75;.2;.9"
+          begin="loop.begin+0.31s;loop.begin+3.31s" dur="0.69s" repeatDur="0.95s" />
+      </rect>
+    </g>
+
+    <g>
+      <rect opacity=".3" x="27.5" y="1.5" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.3;.3;.5;1;.5;.3;.3" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".88;.2;1;.3;.78;.22;.96;.27;.84"
+          begin="loop.begin+0.63s;loop.begin+3.63s" dur="0.61s" repeatDur="0.95s" />
+      </rect>
+
+      <rect opacity=".3" x="21" y="8" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.3;.3;.5;1;.5;.3;.3" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".22;1;.3;.92;.24;.86;.2;.98;.28"
+          begin="loop.begin+0.19s;loop.begin+3.19s" dur="0.77s" repeatDur="0.95s" />
+      </rect>
+
+      <rect opacity=".3" x="14.5" y="14.5" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.3;.3;.5;1;.5;.3;.3" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".28;.96;.2;.84;.3;1;.25;.78;.2"
+          begin="loop.begin+0.34s;loop.begin+3.34s" dur="0.64s" repeatDur="0.95s" />
+      </rect>
+
+      <rect opacity=".3" x="8" y="21" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.3;.3;.5;1;.5;.3;.3" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".2;1;.3;.82;.24;.9;.2;.95;.32"
+          begin="loop.begin+0.39s;loop.begin+3.39s" dur="0.72s" repeatDur="0.95s" />
+      </rect>
+
+      <rect opacity=".3" x="1.5" y="27.5" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.3;.3;.5;1;.5;.3;.3" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".35;.82;.2;1;.27;.9;.3;.76;.22"
+          begin="loop.begin+0.46s;loop.begin+3.46s" dur="0.54s" repeatDur="0.95s" />
+      </rect>
+    </g>
+
+    <g>
+      <rect opacity=".3" x="27.5" y="8" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.3;.3;.3;.5;1;.5;.3" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.86;.2;1;.27;.76;.22;.92;.3"
+          begin="loop.begin+0.15s;loop.begin+3.15s" dur="0.63s" repeatDur="0.95s" />
+      </rect>
+
+      <rect opacity=".3" x="21" y="14.5" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.3;.3;.3;.5;1;.5;.3" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".9;.2;1;.28;.82;.22;.96;.3;.88"
+          begin="loop.begin+0.36s;loop.begin+3.36s" dur="0.67s" repeatDur="0.95s" />
+      </rect>
+
+      <rect opacity=".3" x="14.5" y="21" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.3;.3;.3;.5;1;.5;.3" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".84;.25;1;.3;.9;.2;.78;.26;.95"
+          begin="loop.begin+0.57s;loop.begin+3.57s" dur="0.62s" repeatDur="0.95s" />
+      </rect>
+
+      <rect opacity=".3" x="8" y="27.5" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.3;.3;.3;.5;1;.5;.3" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".24;.94;.3;.8;.2;1;.3;.88;.22"
+          begin="loop.begin+0.44s;loop.begin+3.44s" dur="0.58s" repeatDur="0.95s" />
+      </rect>
+    </g>
+
+    <g>
+      <rect opacity=".3" x="27.5" y="14.5" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.3;.3;.3;.3;.5;1;.5" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".2;1;.32;.86;.24;.94;.28;.8;.2"
+          begin="loop.begin+0.24s;loop.begin+3.24s" dur="0.71s" repeatDur="0.95s" />
+      </rect>
+
+      <rect opacity=".3" x="21" y="21" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.3;.3;.3;.3;.5;1;.5" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".32;.78;.2;1;.28;.9;.2;.98;.26"
+          begin="loop.begin+0.2s;loop.begin+3.2s" dur="0.66s" repeatDur="0.95s" />
+      </rect>
+
+      <rect opacity=".3" x="14.5" y="27.5" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.3;.3;.3;.3;.5;1;.5" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.88;.2;1;.26;.92;.3;.74;.22"
+          begin="loop.begin+0.49s;loop.begin+3.49s" dur="0.59s" repeatDur="0.95s" />
+      </rect>
+    </g>
+
+    <g>
+      <rect opacity=".3" x="27.5" y="21" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.3;.3;.3;.3;.3;.5;1" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".2;.9;.3;.84;.25;1;.3;.76;.2"
+          begin="loop.begin+0.26s;loop.begin+3.26s" dur="0.6s" repeatDur="0.95s" />
+      </rect>
+
+      <rect opacity=".3" x="21" y="27.5" width="5" height="5">
+        <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.3;.3;.3;.3;.3;.5;1" dur="1"
+          begin="loop.begin+1s" repeatCount="3" />
+
+        <animate attributeName="opacity" calcMode="discrete" values=".3;1;.2;.88;.26;.94;.22;.8;.3"
+          begin="loop.begin+0.37s;loop.begin+3.37s" dur="0.7s" repeatDur="0.95s" />
+      </rect>
+    </g>
+
+    <rect opacity=".3" x="27.5" y="27.5" width="5" height="5">
+      <animate attributeName="opacity" calcMode="discrete" values=".3;.3;.3;.3;.3;.3;.3;.5;1" dur="1"
+        begin="loop.begin+1s" repeatCount="3" />
+
+      <animate attributeName="opacity" calcMode="discrete" values=".96;.2;.8;.25;1;.3;.86;.2;.9"
+        begin="loop.begin+0.33s;loop.begin+3.33s" dur="0.66s" repeatDur="0.95s" />
+    </rect>
+  </g>
+</svg>
