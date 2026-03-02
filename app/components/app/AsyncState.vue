@@ -1,61 +1,72 @@
 <template>
-  <section v-if="status === 'pending'" class="text-center" :class="attrs.class || 'py-8'">
-    <svg class="mx-auto mb-3 size-6" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g fill="currentColor">
-        <animate id="loop" attributeName="opacity" values="1;1" dur="3s" begin="0s;loop.end" repeatCount="1" />
+  <section class="relative min-h-31">
+    <div v-if="status === 'pending' && !softLoading" class="text-center" :class="attrs.class || 'py-8'">
+      <svg class="mx-auto mb-3 size-6" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g fill="currentColor">
+          <animate id="loop" attributeName="opacity" values="1;1" dur="3s" begin="0s;loop.end" repeatCount="1" />
 
-        <rect
-          v-for="cell in cells"
-          :key="`${cell.x}-${cell.y}`"
-          opacity=".3"
-          :x="cell.x"
-          :y="cell.y"
-          width="5"
-          height="5"
-        >
-          <animate
-            attributeName="opacity"
-            :values="getDiamond(cell.x, cell.y)"
-            dur="1"
-            begin="loop.begin"
-            repeatCount="2"
-          />
+          <rect
+            v-for="cell in cells"
+            :key="`${cell.x}-${cell.y}`"
+            opacity=".3"
+            :x="cell.x"
+            :y="cell.y"
+            width="5"
+            height="5"
+          >
+            <animate
+              attributeName="opacity"
+              :values="getDiamond(cell.x, cell.y)"
+              dur="1"
+              begin="loop.begin"
+              repeatCount="2"
+            />
 
-          <animate attributeName="opacity" :values="getChaos()" begin="loop.begin+1.5s" :dur="Math.random() + 0.5" />
-        </rect>
-      </g>
-    </svg>
+            <animate attributeName="opacity" :values="getChaos()" begin="loop.begin+1.5s" :dur="Math.random() + 0.5" />
+          </rect>
+        </g>
+      </svg>
 
-    <h3 class="text-surface text-md/6 animate-pulse font-medium">{{ pendingTitle }}</h3>
+      <h3 class="text-surface text-md/6 animate-pulse font-medium">{{ pendingTitle }}</h3>
 
-    <p v-if="pendingText" class="text-surface/50 text-sm">{{ pendingText }}</p>
+      <p v-if="pendingText" class="text-surface/50 text-sm">{{ pendingText }}</p>
+    </div>
+
+    <div v-else-if="!hasData && status === 'success'" class="text-center" :class="attrs.class || 'py-8'">
+      <AppIcon name="search-area" class="mx-auto mb-3 size-6" />
+
+      <h3 class="text-surface text-md/6 font-medium">{{ emptyTitle }}</h3>
+
+      <p v-if="emptyText" class="text-surface/50 text-sm">{{ emptyText }}</p>
+    </div>
+
+    <div v-else-if="!hasData && status === 'error'" class="text-center" :class="attrs.class || 'py-8'">
+      <AppIcon name="alert" class="mx-auto mb-3 size-6" />
+
+      <h3 class="text-surface text-md/6 font-medium">{{ errorTitle }}</h3>
+
+      <p v-if="errorText" class="text-surface/50 text-sm">{{ errorText }}</p>
+    </div>
+
+    <div v-else-if="status === 'idle' && idleTitle" class="text-center" :class="attrs.class || 'py-8'">
+      <AppIcon name="search-area" class="mx-auto mb-3 size-6" />
+
+      <h3 class="text-surface text-md/6 font-medium">{{ idleTitle }}</h3>
+
+      <p v-if="idleText" class="text-surface/50 text-sm">{{ idleText }}</p>
+    </div>
+
+    <slot v-else-if="hasData" />
+
+    <Transition enter-from-class="opacity-0" enter-to-class="duration-600" leave-to-class="opacity-0 duration-600">
+      <div
+        v-if="status === 'pending' && softLoading"
+        class="bg-darwin/80 absolute inset-0 grid size-full cursor-wait backdrop-grayscale-100"
+      >
+        <div class="is-loading sticky inset-10 m-auto" />
+      </div>
+    </Transition>
   </section>
-
-  <section v-else-if="!hasData && status === 'success'" class="text-center" :class="attrs.class || 'py-8'">
-    <AppIcon name="search-area" class="mx-auto mb-3 size-6" />
-
-    <h3 class="text-surface text-md/6 font-medium">{{ emptyTitle }}</h3>
-
-    <p v-if="emptyText" class="text-surface/50 text-sm">{{ emptyText }}</p>
-  </section>
-
-  <section v-else-if="!hasData && status === 'error'" class="text-center" :class="attrs.class || 'py-8'">
-    <AppIcon name="alert" class="mx-auto mb-3 size-6" />
-
-    <h3 class="text-surface text-md/6 font-medium">{{ errorTitle }}</h3>
-
-    <p v-if="errorText" class="text-surface/50 text-sm">{{ errorText }}</p>
-  </section>
-
-  <section v-else-if="status === 'idle' && idleTitle" class="text-center" :class="attrs.class || 'py-8'">
-    <AppIcon name="search-area" class="mx-auto mb-3 size-6" />
-
-    <h3 class="text-surface text-md/6 font-medium">{{ idleTitle }}</h3>
-
-    <p v-if="idleText" class="text-surface/50 text-sm">{{ idleText }}</p>
-  </section>
-
-  <slot v-else />
 </template>
 
 <script setup lang="ts">
@@ -69,6 +80,7 @@ withDefaults(
   defineProps<{
     hasData?: boolean;
     status?: AsyncDataRequestStatus;
+    softLoading?: boolean;
 
     pendingTitle?: string;
     pendingText?: string;
