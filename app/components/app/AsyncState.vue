@@ -26,25 +26,33 @@
       </g>
     </svg>
 
-    <h3 class="text-surface animate-pulse font-medium">{{ pendingTitle }}</h3>
+    <h3 class="text-surface text-md/6 animate-pulse font-medium">{{ pendingTitle }}</h3>
 
-    <p v-if="pendingMessage" class="text-surface/50 text-sm">{{ pendingMessage }}</p>
+    <p v-if="pendingText" class="text-surface/50 text-sm">{{ pendingText }}</p>
   </section>
 
   <section v-else-if="!hasData && status === 'success'" class="text-center" :class="attrs.class || 'py-8'">
     <AppIcon name="search-area" class="mx-auto mb-3 size-6" />
 
-    <h3 class="text-surface font-medium">{{ emptyTitle }}</h3>
+    <h3 class="text-surface text-md/6 font-medium">{{ emptyTitle }}</h3>
 
-    <p v-if="emptyMessage" class="text-surface/50 text-sm">{{ emptyMessage }}</p>
+    <p v-if="emptyText" class="text-surface/50 text-sm">{{ emptyText }}</p>
   </section>
 
   <section v-else-if="!hasData && status === 'error'" class="text-center" :class="attrs.class || 'py-8'">
     <AppIcon name="alert" class="mx-auto mb-3 size-6" />
 
-    <h3 class="text-surface font-medium">{{ errorTitle }}</h3>
+    <h3 class="text-surface text-md/6 font-medium">{{ errorTitle }}</h3>
 
-    <p v-if="errorMessage" class="text-surface/50 text-sm">{{ errorMessage }}</p>
+    <p v-if="errorText" class="text-surface/50 text-sm">{{ errorText }}</p>
+  </section>
+
+  <section v-else-if="status === 'idle' && idleTitle" class="text-center" :class="attrs.class || 'py-8'">
+    <AppIcon name="search-area" class="mx-auto mb-3 size-6" />
+
+    <h3 class="text-surface text-md/6 font-medium">{{ idleTitle }}</h3>
+
+    <p v-if="idleText" class="text-surface/50 text-sm">{{ idleText }}</p>
   </section>
 
   <slot v-else />
@@ -63,13 +71,16 @@ withDefaults(
     status?: AsyncDataRequestStatus;
 
     pendingTitle?: string;
-    pendingMessage?: string;
+    pendingText?: string;
 
     emptyTitle?: string;
-    emptyMessage?: string;
+    emptyText?: string;
 
     errorTitle?: string;
-    errorMessage?: string;
+    errorText?: string;
+
+    idleTitle?: string;
+    idleText?: string;
   }>(),
   {
     pendingTitle: 'Please Wait',
