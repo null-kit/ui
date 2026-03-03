@@ -48,7 +48,7 @@
       <p v-if="errorText" class="text-surface/50 text-sm">{{ errorText }}</p>
     </div>
 
-    <div v-else-if="status === 'idle' && idleTitle" class="text-center" :class="attrs.class || 'py-8'">
+    <div v-else-if="!hasData && status === 'idle' && idleTitle" class="text-center" :class="attrs.class || 'py-8'">
       <AppIcon name="search-area" class="mx-auto mb-3 size-6" />
 
       <h3 class="text-surface text-md/6 font-medium">{{ idleTitle }}</h3>
