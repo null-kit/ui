@@ -121,7 +121,7 @@
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 32 32"
-                  class="hover:text-accent size-4 rounded bg-current/10 p-px duration-200"
+                  class="hover:text-accent size-4 shrink-0 rounded bg-current/10 p-px duration-200"
                   :class="hasPreset(preset.list) ? 'text-current' : 'text-surface/50 hover:text-accent'"
                   @click.stop="addPreset(preset.list)"
                 >
@@ -132,7 +132,8 @@
                     :d="hasPreset(preset.list) ? 'm5 18 6 6L26 9' : 'M16 7v18M7 16h18'"
                   />
                 </svg>
-                {{ preset.name }}
+
+                <span class="truncate">{{ preset.name }}</span>
               </button>
             </div>
           </div>
@@ -164,6 +165,7 @@
                       :style="{ strokeDashoffset: isSelected(option) ? 0 : 32 }"
                     />
                   </svg>
+
                   <slot name="option" :value="option">{{ getKeyName(option) }}</slot>
                 </button>
               </template>
