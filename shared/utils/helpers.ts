@@ -7,8 +7,8 @@
  *
  * If no `key` is provided, each item is coerced to a number and summed.
  */
-export const calcTotal = <T extends Record<string, unknown> | number | string>(data: T[], key?: string) => {
-  return data.reduce((acc, curr) => acc + Number((key ? (typeof curr === 'object' ? curr[key] : curr) : curr) ?? 0), 0);
+export const calcTotal = <T>(data: T[], key?: keyof T) => {
+  return data.reduce((acc, cur) => acc + Number((key ? (typeof cur === 'object' ? cur?.[key] : cur) : cur) ?? 0), 0);
 };
 
 /**
@@ -20,9 +20,7 @@ export const calcTotal = <T extends Record<string, unknown> | number | string>(d
  *
  * If no `key` is provided, each item is coerced to a number and averaged.
  */
-export const calcAvg = <T extends Record<string, unknown> | number | string>(data: T[], key?: string) => {
-  return calcTotal(data, key) / data.length;
-};
+export const calcAvg = <T>(data: T[], key?: keyof T) => calcTotal(data, key) / data.length;
 
 /**
  * Calculates the difference between two numbers as a percentage.
