@@ -12,9 +12,9 @@
 export const useClipboard = () => {
   const status = ref(false);
   const statusText = ref('Copy');
-  const copyId = ref<number | null>(null);
+  const copyId = ref<number | string | null>(null);
 
-  const copy = async (text: string, id?: number) => {
+  const copy = async (text: string, id?: number | string) => {
     if (!text || status.value) return;
 
     try {
