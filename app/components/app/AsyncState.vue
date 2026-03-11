@@ -32,28 +32,12 @@
       <p v-if="pendingText" class="text-surface/50 text-sm">{{ pendingText }}</p>
     </div>
 
-    <div v-else-if="!hasData && status === 'success'" class="text-center" :class="attrs.class || 'py-8'">
-      <AppIcon name="search-area" class="mx-auto mb-3 size-6" />
+    <div v-else-if="!hasData" class="text-center" :class="attrs.class || 'py-8'">
+      <AppIcon :name="status === 'error' ? 'alert' : 'search-area'" class="mx-auto mb-3 size-6" />
 
-      <h3 class="text-surface text-md/6 font-medium">{{ emptyTitle }}</h3>
+      <h3 class="text-surface text-md/6 font-medium">{{ title }}</h3>
 
-      <p v-if="emptyText" class="text-surface/50 text-sm">{{ emptyText }}</p>
-    </div>
-
-    <div v-else-if="!hasData && status === 'error'" class="text-center" :class="attrs.class || 'py-8'">
-      <AppIcon name="alert" class="mx-auto mb-3 size-6" />
-
-      <h3 class="text-surface text-md/6 font-medium">{{ errorTitle }}</h3>
-
-      <p v-if="errorText" class="text-surface/50 text-sm">{{ errorText }}</p>
-    </div>
-
-    <div v-else-if="!hasData && status === 'idle' && idleTitle" class="text-center" :class="attrs.class || 'py-8'">
-      <AppIcon name="search-area" class="mx-auto mb-3 size-6" />
-
-      <h3 class="text-surface text-md/6 font-medium">{{ idleTitle }}</h3>
-
-      <p v-if="idleText" class="text-surface/50 text-sm">{{ idleText }}</p>
+      <p v-if="text" class="text-surface/50 text-sm">{{ text }}</p>
     </div>
 
     <slot v-else-if="hasData" />
@@ -76,7 +60,7 @@ defineOptions({ inheritAttrs: false });
 
 const attrs = useAttrs();
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     hasData?: boolean;
     status?: AsyncDataRequestStatus;
@@ -100,6 +84,18 @@ withDefaults(
     errorTitle: 'Something Went Wrong'
   }
 );
+
+const title = computed(() => {
+  if (props.status === 'success') return props.emptyTitle;
+  if (props.status === 'error') return props.errorTitle;
+  return props.idleTitle;
+});
+
+const text = computed(() => {
+  if (props.status === 'success') return props.emptyText;
+  if (props.status === 'error') return props.errorText;
+  return props.idleText;
+});
 
 const cells = [
   { x: 1.5, y: 1.5 },
