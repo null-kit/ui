@@ -10,7 +10,7 @@
       {{ trigger }}
     </slot>
 
-    <AppTooltipContent ref="content" v-if="isActive" :class="$attrs.class" @close="isActive = false">
+    <AppTooltipContent v-if="isActive" ref="content" :class="$attrs.class" @close="isActive = false">
       <slot name="message">{{ message }}</slot>
     </AppTooltipContent>
   </span>
@@ -22,8 +22,8 @@ defineOptions({ inheritAttrs: false });
 defineProps<{
   trigger?: string;
   message?: string;
-  icon?: string;
   hoverClass?: string;
+  icon?: string;
   iconClass?: string;
 }>();
 

@@ -62,8 +62,8 @@ const attrs = useAttrs();
 
 const props = withDefaults(
   defineProps<{
-    hasData?: boolean;
-    status?: AsyncDataRequestStatus;
+    hasData: boolean;
+    status: AsyncDataRequestStatus;
     softLoading?: boolean;
 
     pendingTitle?: string;

@@ -37,7 +37,6 @@ const props = defineProps<{
   titleClass?: string;
   summaryClass?: string;
   contentClass?: string;
-  chevron?: boolean;
   noChevron?: boolean;
   noToggle?: boolean;
   prefix?: boolean;

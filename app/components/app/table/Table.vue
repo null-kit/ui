@@ -49,7 +49,7 @@
                   :name="cell.column.id"
                   :cell="cell.getValue()"
                   :row="row.original"
-                  :isNested="row.depth > 0"
+                  :is-nested="row.depth > 0"
                 >
                   <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
                 </slot>
@@ -81,7 +81,27 @@
 </template>
 
 <script lang="ts">
-import type { RowData, Row, Cell } from '@tanstack/vue-table';
+import type { CSSProperties } from 'vue';
+import {
+  useVueTable,
+  FlexRender,
+  createColumnHelper,
+  getCoreRowModel,
+  getExpandedRowModel,
+  getSortedRowModel
+} from '@tanstack/vue-table';
+import type {
+  ColumnDef,
+  ColumnHelper,
+  Column,
+  ExpandedState,
+  SortingState,
+  VisibilityState,
+  ColumnPinningState,
+  RowData,
+  Row,
+  Cell
+} from '@tanstack/vue-table';
 
 type TdClass<TData, TValue> = string | ((cell: Cell<TData, TValue>) => string | undefined);
 
@@ -102,24 +122,7 @@ const getTdClass = <TData, TValue>(tdClass: TdClass<TData, TValue> | undefined, 
 </script>
 
 <script setup lang="ts" generic="TData">
-import type { CSSProperties } from 'vue';
-import {
-  useVueTable,
-  FlexRender,
-  createColumnHelper,
-  getCoreRowModel,
-  getExpandedRowModel,
-  getSortedRowModel,
-  type ColumnDef,
-  type ColumnHelper,
-  type Column,
-  type ExpandedState,
-  type SortingState,
-  type VisibilityState,
-  type ColumnPinningState
-} from '@tanstack/vue-table';
-
-const slots = defineSlots<TableTanSlots<TData>>();
+defineSlots<TableTanSlots<TData>>();
 
 defineEmits<{ sort: [TableSortType] }>();
 

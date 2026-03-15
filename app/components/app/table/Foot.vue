@@ -19,7 +19,8 @@
 </template>
 
 <script setup lang="ts" generic="TData">
-import { FlexRender, type Table } from '@tanstack/vue-table';
+import { FlexRender } from '@tanstack/vue-table';
+import type { Table } from '@tanstack/vue-table';
 
 const props = defineProps<{ table: Table<TData> }>();
 

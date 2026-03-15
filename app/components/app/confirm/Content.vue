@@ -59,7 +59,7 @@
 <script setup lang="ts">
 import { useFloating, offset, flip, size, autoUpdate } from '@floating-ui/vue';
 
-const emit = defineEmits<{ close: []; confirm: [] }>();
+defineEmits<{ close: []; confirm: [] }>();
 
 const props = defineProps<{
   title?: string;
