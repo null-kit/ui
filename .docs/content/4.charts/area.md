@@ -5,6 +5,10 @@ description: TBA
 
 ## Usage `AppChartArea`
 
+::note{to="https://unovis.dev"}
+Component is built using `@unovis/vue` under the hood.
+::
+
 ```vue [index.vue]
 <template>
   <AppChartArea :data :categories x-key="company" />
@@ -32,15 +36,15 @@ const data = [
   ::
   ::field{name="categories" type="keyof T[]" required}
   ::
-  ::field{name="xKey" type="keyof T" required}
+  ::field{name="x-key" type="keyof T" required}
   ::
-  ::field{name="xFormat" type="(i: string | number) => string"}
+  ::field{name="x-format" type="(i: string | number) => string"}
   ::
-  ::field{name="yFormat" type="(i: string | number) => string"}
+  ::field{name="y-format" type="(i: string | number) => string"}
   :: 
-  ::field{name="numTicks" type="number"}
+  ::field{name="num-ticks" type="number"}
   ::
-  ::field{name="tooltipClass" type="string"}
+  ::field{name="tooltip-class" type="string"}
   ::
 ::
 

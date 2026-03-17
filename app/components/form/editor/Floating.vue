@@ -40,7 +40,7 @@ const onImageUpload = async (event: Event) => {
 
     body.append('image', file);
 
-    const response = await $fetch(`/api/storage/${path}`, { method: 'POST', body });
+    const response = await $fetch(path, { method: 'POST', body });
 
     if (response[0]) editor.commands.setImage({ src: response[0].url });
   }

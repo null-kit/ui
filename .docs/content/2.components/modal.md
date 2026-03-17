@@ -28,10 +28,10 @@ const modalOpen = ref(false);
 
 <!-- prettier-ignore -->
 ::field-group
-  ::field{name="modalClass" type="string"}
+  ::field{name="modal-class" type="string"}
   Default `max-w-xl`
   ::
-  ::field{name="preventClose" type="boolean"}
+  ::field{name="prevent-close" type="boolean"}
   Default `false`<br>
   Locks the modal until it is closed manually using the exposed `onClose` function.
   ::

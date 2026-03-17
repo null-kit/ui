@@ -5,6 +5,10 @@ description: TBA
 
 ## Usage `AppChartDonut`
 
+::note{to="https://unovis.dev"}
+Component is built using `@unovis/vue` under the hood.
+::
+
 ```vue [index.vue]
 <template>
   <AppChartDonut :data category-key="company" value-key="spend" />
@@ -28,15 +32,15 @@ const data = [
 ::field-group
   ::field{name="data" type="T[]" required}
   ::
-  ::field{name="categoryKey" type="keyof T" required}
+  ::field{name="category-key" type="keyof T" required}
   ::
-  ::field{name="valueKey" type="keyof T" required}
+  ::field{name="value-key" type="keyof T" required}
   ::
-  ::field{name="valueFormat" type="(i: number) => string"}
+  ::field{name="value-format" type="(i: number) => string"}
   :: 
-  ::field{name="padAngle" type="number"}
+  ::field{name="pad-angle" type="number"}
   ::
-  ::field{name="tooltipClass" type="string"}
+  ::field{name="tooltip-class" type="string"}
   ::
 ::
 

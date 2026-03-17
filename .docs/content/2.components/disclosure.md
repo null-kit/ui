@@ -26,15 +26,15 @@ description: TBA
   ::
   ::field{name="title" type="string" }
   ::
-  ::field{name="titleClass" type="string" }
+  ::field{name="title-class" type="string" }
   ::
-  ::field{name="summaryClass" type="string" }
+  ::field{name="summary-class" type="string" }
   ::
-  ::field{name="contentClass" type="string" }
+  ::field{name="content-class" type="string" }
   ::
-  ::field{name="noChevron" type="boolean" }
+  ::field{name="no-chevron" type="boolean" }
   ::
-  ::field{name="noToggle" type="boolean" }
+  ::field{name="no-toggle" type="boolean" }
   ::
   ::field{name="prefix" type="boolean" }
   ::

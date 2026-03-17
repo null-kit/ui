@@ -10,9 +10,9 @@
     "access": "public"
   },
   "scripts": {
-    "dev": "nuxi dev .playground",
-    "dev:prepare": "nuxt prepare .playground",
-    "generate": "nuxt generate .playground",
+    "dev": "nuxt dev .docs",
+    "dev:prepare": "nuxt prepare .docs",
+    "generate": "nuxt generate .docs",
     "lint": "eslint . --fix"
   },
   "dependencies": {

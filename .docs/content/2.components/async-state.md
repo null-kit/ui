@@ -24,30 +24,30 @@ const status = ref('pending');
 
 <!-- prettier-ignore -->
 ::field-group
-  ::field{name="hasData" type="boolean" required}
+  ::field{name="has-data" type="boolean" required}
   ::
   ::field{name="status" type="success | error | idle | pending" required}
   ::
-  ::field{name="pendingTitle" type="string"}
+  ::field{name="pending-title" type="string"}
   Default `Please Wait`
   ::
-  ::field{name="pendingText" type="string"}
+  ::field{name="pending-text" type="string"}
   ::
-  ::field{name="emptyTitle" type="string"}
+  ::field{name="empty-title" type="string"}
   Default `No Data Found`
   ::
-  ::field{name="emptyText" type="string"}
+  ::field{name="empty-text" type="string"}
   ::
-  ::field{name="errorTitle" type="string"}
+  ::field{name="error-title" type="string"}
   Default `Something Went Wrong`
   ::
-  ::field{name="errorText" type="string"}
+  ::field{name="error-text" type="string"}
   ::
-  ::field{name="idleTitle" type="string"}
+  ::field{name="idle-title" type="string"}
   ::
-  ::field{name="idleText" type="string"}
+  ::field{name="idle-text" type="string"}
   ::
-  ::field{name="softLoading" type="boolean"}
+  ::field{name="soft-loading" type="boolean"}
   Default: `false`<br>
   The component preserves its state inside the default slot.
   ::

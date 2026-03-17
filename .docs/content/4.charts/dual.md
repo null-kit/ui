@@ -5,6 +5,10 @@ description: TBA
 
 ## Usage `AppChartDual`
 
+::note{to="https://unovis.dev"}
+Component is built using `@unovis/vue` under the hood.
+::
+
 ```vue [index.vue]
 <template>
   <AppChartDual :data left-key="profit" right-key="spend" x-key="date" />
@@ -30,21 +34,21 @@ const data = [
 ::field-group
   ::field{name="data" type="T[]" required}
   ::
-  ::field{name="leftKey" type="keyof T" required}
+  ::field{name="left-key" type="keyof T" required}
   ::
-  ::field{name="rightKey" type="keyof T" required}
+  ::field{name="right-key" type="keyof T" required}
   ::
-  ::field{name="xKey" type="keyof T" required}
+  ::field{name="x-key" type="keyof T" required}
   ::  
-  ::field{name="xFormat" type="(i: string | number) => string"}
+  ::field{name="x-format" type="(i: string | number) => string"}
   ::
-  ::field{name="yFormatLeft" type="(i: string | number) => string"}
+  ::field{name="y-format-left" type="(i: string | number) => string"}
   :: 
-  ::field{name="yFormatRight" type="(i: string | number) => string"}
+  ::field{name="y-format-right" type="(i: string | number) => string"}
   :: 
-  ::field{name="numTicks" type="number"}
+  ::field{name="num-ticks" type="number"}
   ::
-  ::field{name="tooltipClass" type="string"}
+  ::field{name="tooltip-class" type="string"}
   ::
 ::
 

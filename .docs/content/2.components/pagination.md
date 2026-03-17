@@ -17,12 +17,12 @@ description: TBA
 
 <!-- prettier-ignore -->
 ::field-group
-  ::field{name="totalPages" type="number" required}
+  ::field{name="total-pages" type="number" required}
   ::
-  ::field{name="perPage" type="number"}
+  ::field{name="per-page" type="number"}
   Default `25`
   ::
-  ::field{name="scrollTo" type="string"}
+  ::field{name="scroll-to" type="string"}
   Selector (e.g. #records)
   ::
 ::

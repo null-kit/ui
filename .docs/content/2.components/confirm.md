@@ -5,7 +5,9 @@ description: TBA
 
 ## Usage `AppConfirm`
 
-The `AppConfirm` component is built using `@floating-ui/vue` under the hood.
+::note{to="https://floating-ui.com/docs/vue"}
+Component is built using `@floating-ui/vue` under the hood.
+::
 
 ```vue [index.vue]
 <template>
@@ -26,10 +28,10 @@ The `AppConfirm` component is built using `@floating-ui/vue` under the hood.
   ::
   ::field{name="message" type="string"}
   ::
-  ::field{name="confirmText" type="string"}
+  ::field{name="confirm-text" type="string"}
   Default `Confirm`
   ::
-  ::field{name="confirmClass" type="string"}
+  ::field{name="confirm-class" type="string"}
   Default `btn-danger`
   ::  
 ::

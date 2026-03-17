@@ -23,7 +23,7 @@ const isActive = ref(false);
 
 <!-- prettier-ignore -->
 ::field-group
-  ::field{name="noAppear" type="boolean" }
+  ::field{name="no-appear" type="boolean" }
   Disables the appear animation. Default `false`
   ::
 ::

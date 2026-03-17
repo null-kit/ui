@@ -5,6 +5,10 @@ description: TBA
 
 ## Usage `AppChartBar`
 
+::note{to="https://unovis.dev"}
+Component is built using `@unovis/vue` under the hood.
+::
+
 ```vue [index.vue]
 <template>
   <AppChartBar :data :categories x-key="company" />
@@ -32,22 +36,22 @@ const data = [
   ::
   ::field{name="categories" type="keyof T[]" required}
   ::
-  ::field{name="xKey" type="keyof T" required}
+  ::field{name="x-key" type="keyof T" required}
   ::  
-  ::field{name="xTrim" type="boolean"}
+  ::field{name="x-trim" type="boolean"}
   Whether to trim text when no space is available
   ::
-  ::field{name="xFormat" type="(i: string | number) => string"}
+  ::field{name="x-format" type="(i: string | number) => string"}
   ::
-  ::field{name="yFormat" type="(i: string | number) => string"}
+  ::field{name="y-format" type="(i: string | number) => string"}
   :: 
   ::field{name="stacked" type="boolean"}
   :: 
-  ::field{name="roundedCorners" type="number"}
+  ::field{name="rounded-corners" type="number"}
   ::
-  ::field{name="showLegend" type="boolean"}
+  ::field{name="show-legend" type="boolean"}
   ::
-  ::field{name="tooltipClass" type="string"}
+  ::field{name="tooltip-class" type="string"}
   ::
 ::
 

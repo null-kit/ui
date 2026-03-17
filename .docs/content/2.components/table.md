@@ -5,6 +5,10 @@ description: TBA
 
 ## Usage `AppTable`
 
+::note{to="https://tanstack.com/table/latest"}
+Component is built using `@tanstack/vue-table` under the hood.
+::
+
 ```vue [index.vue]
 <template>
   <AppTable :data :columns />

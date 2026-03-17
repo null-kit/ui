@@ -92,7 +92,6 @@ const {
 } = defineProps<{
   range?: boolean;
   disabledDates?: Date[];
-  iso?: boolean;
   preset?: Preset;
   maxToday?: boolean;
   icon?: string;
@@ -259,7 +258,8 @@ const setPreset = (type: Preset) => {
       break;
     case 'this-month':
       selectDate(new Date(today.getFullYear(), today.getMonth(), 1));
-      props.maxToday ? selectDate(today) : selectDate(new Date(today.getFullYear(), today.getMonth() + 1, 0));
+      if (props.maxToday) selectDate(today);
+      else selectDate(new Date(today.getFullYear(), today.getMonth() + 1, 0));
       break;
     case 'this-month-today':
       selectDate(new Date(today.getFullYear(), today.getMonth(), 1));

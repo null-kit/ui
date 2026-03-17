@@ -5,6 +5,10 @@ description: TBA
 
 ## Usage `AppTooltip`
 
+::note{to="https://floating-ui.com/docs/vue"}
+Component is built using `@floating-ui/vue` under the hood.
+::
+
 ```vue [index.vue]
 <template>
   <AppTooltip icon="help" message="Here is a helpful message" />
@@ -21,11 +25,11 @@ description: TBA
   ::
   ::field{name="message" type="string"}
   ::
-  ::field{name="hoverClass" type="string"}
+  ::field{name="hover-class" type="string"}
   ::
   ::field{name="icon" type="string"}
   ::  
-  ::field{name="iconClass" type="string"}
+  ::field{name="icon-class" type="string"}
   ::
 ::
 

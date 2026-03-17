@@ -5,7 +5,9 @@ description: TBA
 
 ## Usage `AppDropdown`
 
-The `AppDropdown` component is built using `@floating-ui/vue` under the hood.
+::note{to="https://floating-ui.com/docs/vue"}
+Component is built using `@floating-ui/vue` under the hood.
+::
 
 ```vue [index.vue]
 <template>
@@ -31,19 +33,19 @@ The `AppDropdown` component is built using `@floating-ui/vue` under the hood.
   ::field{name="placement" type="top | right | bottom | left | (top | bottom | right | left)-(start | end)" }
   Default `bottom-start`
   ::
-  ::field{name="dropdownClass" type="string"}
+  ::field{name="dropdown-class" type="string"}
   ::
-  ::field{name="innerClass" type="string"}
+  ::field{name="inner-class" type="string"}
   ::
-  ::field{name="maxHeight" type="number"}
+  ::field{name="max-height" type="number"}
   ::
   ::field{name="autoclose" type="boolean"}
   ::  
   ::field{name="inline" type="boolean"}
   :: 
-  ::field{name="hoverOpen" type="boolean"}
+  ::field{name="hover-open" type="boolean"}
   :: 
-  ::field{name="noToggle" type="boolean"}
+  ::field{name="no-toggle" type="boolean"}
   ::
 ::
 
