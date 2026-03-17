@@ -45,7 +45,7 @@ export const useDownload = (content: Blob | unknown, filename: string) => {
   window.URL.revokeObjectURL(url);
 };
 
-export const useExportCSV = <T>(data: T[], filename: string) => {
+export const useExportCsv = <T>(data: T[], filename: string) => {
   if (!data.length) return;
 
   const keys = Object.keys(data[0]!) as (keyof T)[];
@@ -60,3 +60,10 @@ export const useExportCSV = <T>(data: T[], filename: string) => {
 
   useDownload(formatCsv(keys.map(String), rows), filename);
 };
+
+/**
+ * Temporary alias for backwards compatibility
+ *
+ * @deprecated Use `useExportCsv` instead
+ */
+export const useExportCSV = useExportCsv;

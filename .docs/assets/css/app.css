@@ -1,0 +1,31 @@
+@import 'tailwindcss';
+@import '@nuxt/ui';
+
+@theme {
+  --hue: 0;
+  --chroma: 0;
+
+  --ui-color-neutral-50: oklch(98% var(--hue) var(--chroma));
+  --ui-color-neutral-100: oklch(95% var(--hue) var(--chroma));
+  --ui-color-neutral-200: oklch(92% var(--hue) var(--chroma));
+  --ui-color-neutral-300: oklch(85% var(--hue) var(--chroma));
+  --ui-color-neutral-400: oklch(68% var(--hue) var(--chroma));
+  --ui-color-neutral-500: oklch(53% var(--hue) var(--chroma));
+  --ui-color-neutral-600: oklch(41% var(--hue) var(--chroma));
+  --ui-color-neutral-700: oklch(35% var(--hue) var(--chroma));
+  --ui-color-neutral-800: oklch(24% var(--hue) var(--chroma));
+  --ui-color-neutral-900: oklch(18% var(--hue) var(--chroma));
+  --ui-color-neutral-950: oklch(14% var(--hue) var(--chroma));
+
+  --ui-primary: oklch(73% 0.13 215);
+}
+
+@layer theme {
+  :root {
+    @apply overscroll-none;
+  }
+
+  .light {
+    --ui-primary: oklch(53% 0.13 215);
+  }
+}

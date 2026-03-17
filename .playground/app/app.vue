@@ -36,7 +36,7 @@
       <fieldset id="utils">
         <legend>Utils</legend>
 
-        <div class="flex gap-10">
+        <div class="flex flex-wrap gap-10">
           <div>
             <div class="text-sm opacity-30">formatDate:</div>
             <div>{{ formatDate(new Date(), { year: true }) }}</div>
@@ -48,8 +48,48 @@
           </div>
 
           <div>
-            <div class="text-sm opacity-30">formatNumber (Currency):</div>
-            <div>{{ formatNumber(345567, { currency: 'USD' }) }}</div>
+            <div class="text-sm opacity-30">formatISO:</div>
+            <div>{{ formatISO(new Date()) }}</div>
+          </div>
+
+          <div>
+            <div class="text-sm opacity-30">formatCurrency:</div>
+            <div>{{ formatCurrency(345567) }}</div>
+          </div>
+
+          <div>
+            <div class="text-sm opacity-30">calcTotal:</div>
+            <div>{{ calcTotal([23, 57, 120, 49]) }}</div>
+          </div>
+
+          <div>
+            <div class="text-sm opacity-30">calcAvg:</div>
+            <div>{{ calcAvg([23, 57, 120, 49]) }}</div>
+          </div>
+
+          <div>
+            <div class="text-sm opacity-30">calcDiffPercentage:</div>
+            <div>{{ calcDiffPercentage(8352.7, 3824.5) }}</div>
+          </div>
+
+          <div>
+            <div class="text-sm opacity-30">toFixedNumber:</div>
+            <div>{{ toFixedNumber(23.5999) }}</div>
+          </div>
+
+          <div>
+            <div class="text-sm opacity-30">toSeparatedArray:</div>
+            <div>{{ toSeparatedArray('apple, banana, cherry', ',') }}</div>
+          </div>
+
+          <div>
+            <div class="text-sm opacity-30">toSeparatedString:</div>
+            <div>{{ toSeparatedString(['apple', 'banana', 'cherry'], ',') }}</div>
+          </div>
+
+          <div>
+            <div class="text-sm opacity-30">generateRandomString:</div>
+            <div>{{ generateRandomString() }}</div>
           </div>
         </div>
       </fieldset>
@@ -92,7 +132,13 @@
             title="Delete John Wick"
             confirm-text="Delete"
             confirm-class="btn-danger"
-            @confirm="setToast({ title: 'Success!', text: 'John Wick deleted successfully!', type: 'success' })"
+            @confirm="
+              setToast({
+                title: 'Success!',
+                text: 'John Wick deleted successfully!',
+                type: 'success'
+              })
+            "
           >
             <button type="button" class="btn btn-default">Delete John Wick</button>
           </AppConfirm>
@@ -114,7 +160,13 @@
           <button
             type="button"
             class="btn btn-default"
-            @click="setToast({ title: 'Success!', text: 'Your operation was successful!', type: 'success' })"
+            @click="
+              setToast({
+                title: 'Success!',
+                text: 'Your operation was successful!',
+                type: 'success'
+              })
+            "
           >
             Success Toast
           </button>

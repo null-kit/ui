@@ -3,7 +3,7 @@ type DateOptions = {
   time?: boolean;
   year?: boolean;
   options?: Intl.DateTimeFormatOptions;
-  locale?: string;
+  locale?: Intl.LocalesArgument;
   hourCycle?: Intl.DateTimeFormatOptions['hourCycle'];
 };
 

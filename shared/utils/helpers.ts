@@ -3,7 +3,7 @@
  *
  * If a `key` is provided, it will sum the values at that key for each object in the array.
  *
- * If an array element is not an object (when key is provided), it uses the value as-is.
+ * If an array element is not an object (when a key is provided), it uses the value as-is.
  *
  * If no `key` is provided, each item is coerced to a number and summed.
  */
@@ -16,7 +16,7 @@ export const calcTotal = <T>(data: T[], key?: keyof T) => {
  *
  * If a `key` is provided, it will average the values at that key for each object in the array.
  *
- * If an array element is not an object (when key is provided), it uses the value as-is.
+ * If an array element is not an object (when a key is provided), it uses the value as-is.
  *
  * If no `key` is provided, each item is coerced to a number and averaged.
  */
@@ -39,7 +39,7 @@ export const calcDiffPercentage = (a: number, b: number) => {
 export const calcPercentage = (a: number, b: number) => toFixedNumber((a / b) * 100);
 
 /**
- * Converts a number to a fixed number with a given precision (default: 2).
+ * Converts a number to a fixed number with given precision (default: 2).
  */
 export const toFixedNumber = (value: number, precision: number = 2) => Number(Number(value).toFixed(precision));
 
@@ -65,7 +65,7 @@ export const toSeparatedArray = (value: string, separator: string, unique: boole
 };
 
 /**
- * Converts a array to a string using a separator.
+ * Converts an array to a string using a separator.
  * @param value - The array of strings or numbers to convert.
  * @param separator - The separator to use.
  * @param unique - Whether to return a unique array.
@@ -77,34 +77,6 @@ export const toSeparatedString = (value: (string | number)[], separator: string,
 
   return value.join(separator);
 };
-
-/**
- * Converts a comma-separated string to an array of strings.
- *
- * @deprecated Use toSeparatedArray instead.
- */
-export const commaToArray = (value: string) => (value ? formatString(value, ',') : []);
-
-/**
- * Converts a comma-separated string to a unique array of strings.
- *
- * @deprecated Use toSeparatedArray instead.
- */
-export const commaToUniqueArray = (value: string) => (value ? [...new Set(commaToArray(value))] : []);
-
-/**
- * Converts a new line-separated string to an array of strings.
- *
- * @deprecated Use toSeparatedArray instead.
- */
-export const newLineToArray = (value: string) => (value ? formatString(value, '\n') : []);
-
-/**
- * Converts a new line-separated string to a unique array of strings.
- *
- * @deprecated Use toSeparatedArray instead.
- */
-export const newLineToUniqueArray = (value: string) => (value ? [...new Set(newLineToArray(value))] : []);
 
 /**
  * Generates a random string of a given length (default: 20).

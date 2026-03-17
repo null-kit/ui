@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import '@null-kit/ui/all';
+@import '@null-kit/ui/all.css';
 
 @theme {
   --chroma: 0.007;
