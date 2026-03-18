@@ -1,6 +1,6 @@
 ---
 title: Helpers
-description: TBA
+description: Utility helpers for calculations, transformations, and string operations
 ---
 
 ## Usage

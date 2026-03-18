@@ -3,11 +3,10 @@
  *
  * Provides reactive state for copy status and convenience methods for copying text to the clipboard.
  *
- * @returns {Object} An object containing:
- *  - {function} copy: Copies the specified text string to the clipboard. Optionally accepts an id for tracking.
- *  - {Ref<number|null>} copyId: The current id associated with the most recent copy action.
- *  - {Ref<boolean>} status: Indicates whether the last copy action was successful.
- *  - {Ref<string>} statusText: The user-facing status message (e.g., "Copy", "Copied!", "Error").
+ *  - copy: Copies the specified text string to the clipboard. Optionally accepts an id for tracking.
+ *  - copyId: The current id associated with the most recent copy action.
+ *  - status: Indicates whether the last copy action was successful.
+ *  - statusText: The user-facing status message (e.g., "Copy", "Copied!", "Error").
  */
 export const useClipboard = () => {
   const status = ref(false);
@@ -28,7 +27,7 @@ export const useClipboard = () => {
         status.value = false;
         statusText.value = 'Copy';
         copyId.value = null;
-      }, 2000);
+      }, 1500);
     } catch (error) {
       status.value = false;
       statusText.value = 'Error';

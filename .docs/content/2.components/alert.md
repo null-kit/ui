@@ -5,7 +5,7 @@ description: TBA
 
 ## Usage `AppAlert`
 
-::tabs{.w-full}
+::tabs
 :::tabs-item{icon="i-lucide-code" label="Code"}
 
 ```vue [index.vue]

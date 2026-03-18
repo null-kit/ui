@@ -1,6 +1,6 @@
 ---
 title: Local Storage
-description: TBA
+description: Utilities for reading and writing values in browser localStorage
 ---
 
 ## Usage `useLocalStorage`

@@ -1,6 +1,7 @@
 export default defineAppConfig({
   settings: {
     key: 'nullkit-ui',
-    theme: 'system'
+    theme: 'system',
+    bookmarks: [] as Array<{ label: string; url: string }>
   }
 });

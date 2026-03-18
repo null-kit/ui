@@ -1,6 +1,6 @@
 ---
 title: Format Date
-description: TBA
+description: Utilities for formatting and manipulating dates in common display and ISO formats
 ---
 
 ## Usage

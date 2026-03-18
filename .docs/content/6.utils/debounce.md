@@ -1,6 +1,6 @@
 ---
 title: Debounce
-description: TBA
+description: A utility for delaying function execution until a specified time has passed since the last call
 ---
 
 ## Usage
@@ -10,7 +10,7 @@ const onSearch = () => console.info('Search Executed');
 
 const onDebouncedSearch = debounce(onSearch, 500);
 
-onDebouncedSearch()
+onDebouncedSearch();
 ```
 
 ## API

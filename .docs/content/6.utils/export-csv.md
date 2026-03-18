@@ -1,6 +1,6 @@
 ---
 title: Export CSV
-description: TBA
+description: Utilities for converting data to CSV and triggering file downloads
 ---
 
 ## Usage

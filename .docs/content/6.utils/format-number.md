@@ -1,6 +1,6 @@
 ---
 title: Format Number
-description: TBA
+description: Utilities for formatting numbers, including general formatting and currency display
 ---
 
 ## Usage

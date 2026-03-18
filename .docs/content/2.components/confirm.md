@@ -1,6 +1,6 @@
 ---
 title: Confirm
-description: TBA
+description: Confirmation dialog before an action is performed
 ---
 
 ## Usage `AppConfirm`
