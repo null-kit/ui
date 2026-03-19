@@ -15,8 +15,6 @@ export default defineNuxtConfig({
 
   css: ['@/assets/css/main.css'],
 
-  // srcDir: join(rootDir, '.docs'),
-
   nullkitSvgSprite: { inputDir: 'assets/img/svg' },
 
   alias: { '@null-kit/ui': join(rootDir, 'app/assets/css') },
@@ -29,6 +27,7 @@ export default defineNuxtConfig({
   eslint: { config: { rootDir: '..' } },
 
   $production: {
-    app: { baseURL: '/ui/' }
+    app: { baseURL: '/ui/' },
+    routeRules: { '/': { redirect: '/ui/getting-started/installation' } }
   }
 });

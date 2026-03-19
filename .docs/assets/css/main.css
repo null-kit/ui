@@ -3,15 +3,12 @@
 @import '@null-kit/ui/all.css';
 
 @theme {
-  --chroma1: 0.007;
-  --hue1: 280;
+  --color-newton: var(--color-dn-50);
+  --color-darwin: var(--color-white);
+  --color-edison: var(--color-dn-200);
+  --color-surface: var(--color-dn-900);
 
-  --color-newton: oklch(97% var(--chroma1) var(--hue1));
-  --color-darwin: oklch(100% 0 var(--hue1));
-  --color-edison: oklch(88% var(--chroma1) var(--hue1));
-  --color-surface: oklch(5% var(--chroma1) var(--hue1));
-
-  --color-accent: var(--ui-primary);
+  --color-accent: var(--color-dp-500);
 }
 
 @layer theme {
@@ -42,20 +39,16 @@
   :is(.dark, .inverted) {
     color: var(--color-surface);
 
-    --chroma1: 0.02;
-
-    --color-newton: oklch(21% var(--chroma1) var(--hue1));
-    --color-darwin: oklch(24% var(--chroma1) var(--hue1));
-    --color-edison: oklch(32% var(--chroma1) var(--hue1));
-    --color-surface: oklch(95% var(--chroma1) var(--hue1));
-
-    --color-accent: var(--color-violet-500);
+    --color-newton: var(--color-dn-500);
+    --color-darwin: var(--color-dn-900);
+    --color-edison: var(--color-dn-700);
+    --color-surface: var(--color-dn-50);
   }
 
-  :is(.dark) .inverted {
-    --color-newton: oklch(97% var(--chroma1) var(--hue1));
+  /* :is(.dark) .inverted {
+    --color-newton: var(--color-dn-600);
     --color-darwin: oklch(100% 0 var(--hue1));
     --color-edison: oklch(88% var(--chroma1) var(--hue1));
     --color-surface: oklch(5% var(--chroma1) var(--hue1));
-  }
+  } */
 }

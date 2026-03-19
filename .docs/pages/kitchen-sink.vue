@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto w-full max-w-(--ui-container) px-4 py-4 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-[15rem_1fr] gap-4">
-      <aside class="sticky top-18 flex h-[calc(100vh-90px)] flex-col">
+    <div class="grid grid-cols-[15rem_1fr] items-start gap-4">
+      <aside class="sticky top-20 flex flex-col">
         <nav class="flex flex-col *:justify-start">
           <NuxtLink to="#utils" class="btn">Utils</NuxtLink>
           <NuxtLink to="#clipboard" class="btn">Clipboard</NuxtLink>
@@ -24,7 +24,9 @@
           <NuxtLink to="#editor" class="btn">Editor</NuxtLink>
         </nav>
 
-        <button type="button" class="btn btn-default mt-auto" @click="$theme.toggleTheme">Toggle Theme</button>
+        <DevOnly>
+          <!-- <button type="button" class="btn btn-default mt-auto" @click="$theme.toggleTheme">Toggle Theme</button> -->
+        </DevOnly>
       </aside>
 
       <main class="min-w-0 space-y-8">
