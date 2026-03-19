@@ -1,7 +1,16 @@
 export default defineNuxtConfig({
   compatibilityDate: 'latest',
 
-  extends: ['docus', '..'],
+  $development: {
+    extends: ['docus', '..']
+  },
+
+  $production: {
+    extends: [
+      ['docus', { install: true }],
+      ['github:null-kit/ui', { install: true }]
+    ]
+  },
 
   modules: ['@nuxt/ui', '@nuxt/eslint'],
 
