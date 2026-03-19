@@ -12,7 +12,7 @@
   "scripts": {
     "dev": "nuxt dev .docs",
     "dev:prepare": "nuxt prepare .docs",
-    "generate": "nuxt generate .docs --extends docus",
+    "generate": "nuxt generate .docs",
     "lint": "eslint . --fix"
   },
   "dependencies": {
