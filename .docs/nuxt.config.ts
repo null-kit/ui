@@ -15,31 +15,18 @@ export default defineNuxtConfig({
 
   css: ['@/assets/css/app.css'],
 
-  nullkitSvgSprite: {
-    inputDir: 'assets/img/svg'
-  },
+  postcss: { plugins: { '@tailwindcss/postcss': {} } },
 
-  alias: {
-    '@null-kit/ui': join(rootDir, 'app', 'assets', 'css')
-  },
+  nullkitSvgSprite: { inputDir: 'assets/img/svg' },
 
-  app: {
-    baseURL: '/ui/'
-  },
+  alias: { '@null-kit/ui': join(rootDir, 'app/assets/css') },
 
-  routeRules: {
-    '/': {
-      redirect: '/getting-started/installation'
-    }
-  },
+  app: { baseURL: '/ui/' },
 
-  mcp: {
-    enabled: false
-  },
+  routeRules: { '/': { redirect: '/getting-started/installation' } },
 
-  eslint: {
-    config: {
-      rootDir: '..'
-    }
-  }
+  robots: { robotsTxt: false },
+  mcp: { enabled: false },
+
+  eslint: { config: { rootDir: '..' } }
 });

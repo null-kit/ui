@@ -2,7 +2,7 @@
   <span v-if="inline" :class="['flex', iconClass]" v-html="iconInline" />
 
   <svg v-else :class="iconClass" fill="none">
-    <use :href="`/sprite.svg#${name}`" />
+    <use :href="`${app.baseURL ? app.baseURL : '/'}sprite.svg#${name}`" />
   </svg>
 </template>
 
@@ -15,6 +15,8 @@ const icons = import.meta.glob<string>('@/assets/img/svg/*.svg', {
 </script>
 
 <script setup lang="ts">
+const { app } = useRuntimeConfig();
+
 const props = defineProps<{ name: string; inline?: boolean }>();
 
 const attrs = useAttrs();
