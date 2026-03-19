@@ -23,6 +23,10 @@ export default defineNuxtConfig({
     '@null-kit/ui': join(rootDir, 'app', 'assets', 'css')
   },
 
+  app: {
+    baseURL: '/ui/'
+  },
+
   routeRules: {
     '/': {
       redirect: '/getting-started/installation'
