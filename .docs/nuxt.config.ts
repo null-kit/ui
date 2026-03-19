@@ -1,16 +1,10 @@
 export default defineNuxtConfig({
   compatibilityDate: 'latest',
 
-  $development: {
-    extends: ['docus', '..']
-  },
-
-  $production: {
-    extends: [
-      ['docus', { install: true }],
-      ['github:null-kit/ui', { install: true }]
-    ]
-  },
+  extends: [
+    ['docus', { install: true }],
+    ['..', { install: true }]
+  ],
 
   modules: ['@nuxt/ui', '@nuxt/eslint'],
 
@@ -18,6 +12,10 @@ export default defineNuxtConfig({
 
   nullkitSvgSprite: {
     inputDir: 'assets/img/svg'
+  },
+
+  alias: {
+    '@null-kit/ui': '../app/assets/css'
   },
 
   routeRules: {
