@@ -5,10 +5,10 @@ export default defineNuxtConfig({
 
   modules: ['@nuxt/ui', '@nuxt/eslint'],
 
-  css: ['~/assets/css/app.css'],
+  css: ['@/assets/css/app.css'],
 
   nullkitSvgSprite: {
-    inputDir: '~/assets/img/svg'
+    inputDir: 'assets/img/svg'
   },
 
   routeRules: {

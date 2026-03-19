@@ -12,7 +12,7 @@
   "scripts": {
     "dev": "nuxt dev .docs",
     "dev:prepare": "nuxt prepare .docs",
-    "generate": "nuxt generate .docs",
+    "generate": "nuxt generate .docs --extends docus",
     "lint": "eslint . --fix"
   },
   "dependencies": {
@@ -46,15 +46,16 @@
   },
   "devDependencies": {
     "@nuxt/eslint": "latest",
+    "@nuxt/ui": "^4.5.1",
     "@tailwindcss/postcss": "^4.1.8",
+    "better-sqlite3": "^12.6.2",
+    "docus": "latest",
     "eslint": "^9.28.0",
     "nuxt": "^4.3.0",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4.1.8",
     "typescript": "^5.8.3",
-    "vue": "latest",
-    "docus": "latest",
-    "better-sqlite3": "^12.6.2"
+    "vue": "latest"
   }
 }
