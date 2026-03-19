@@ -1,3 +1,8 @@
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const rootDir = fileURLToPath(new URL('..', import.meta.url));
+
 export default defineNuxtConfig({
   compatibilityDate: 'latest',
 
@@ -15,7 +20,7 @@ export default defineNuxtConfig({
   },
 
   alias: {
-    '@null-kit/ui': '../app/assets/css'
+    '@null-kit/ui': join(rootDir, 'app', 'assets', 'css')
   },
 
   routeRules: {
