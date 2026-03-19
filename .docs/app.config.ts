@@ -10,5 +10,11 @@ export default defineAppConfig({
   github: {
     url: 'https://github.com/null-kit/ui',
     branch: 'main'
+  },
+  ui: {
+    colors: {
+      primary: 'dp',
+      neutral: 'dn'
+    }
   }
 });

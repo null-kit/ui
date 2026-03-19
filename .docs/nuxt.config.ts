@@ -13,20 +13,22 @@ export default defineNuxtConfig({
 
   modules: ['@nuxt/ui', '@nuxt/eslint'],
 
-  css: ['@/assets/css/app.css'],
+  css: ['@/assets/css/main.css'],
 
-  postcss: { plugins: { '@tailwindcss/postcss': {} } },
+  // srcDir: join(rootDir, '.docs'),
 
   nullkitSvgSprite: { inputDir: 'assets/img/svg' },
 
   alias: { '@null-kit/ui': join(rootDir, 'app/assets/css') },
-
-  app: { baseURL: '/ui/' },
 
   routeRules: { '/': { redirect: '/getting-started/installation' } },
 
   robots: { robotsTxt: false },
   mcp: { enabled: false },
 
-  eslint: { config: { rootDir: '..' } }
+  eslint: { config: { rootDir: '..' } },
+
+  $production: {
+    app: { baseURL: '/ui/' }
+  }
 });
