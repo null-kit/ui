@@ -1,6 +1,6 @@
 ---
 title: Appear
-description: TBA
+description: Appear animation component for smoothly revealing content
 ---
 
 ## Usage `AppAppear`

@@ -1,6 +1,6 @@
 ---
 title: Dual
-description: TBA
+description: Dual chart visualization component
 ---
 
 ## Usage `AppChartDual`

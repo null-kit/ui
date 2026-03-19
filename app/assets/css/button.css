@@ -64,13 +64,13 @@
   @apply text-newton bg-surface ring-surface;
 
   &:not(:disabled):not(:active) {
-    @apply hover:bg-tint-surface/10 dark:hover:bg-shade-surface/10;
+    @apply hover:bg-tint-surface dark:hover:bg-shade-surface;
   }
 }
 
 @utility btn-accent {
   @apply bg-accent ring-accent text-white;
-  @apply not-disabled:not-active:hover:bg-tint-accent/10;
+  @apply not-disabled:not-active:hover:bg-tint-accent;
 }
 
 @utility btn-danger {

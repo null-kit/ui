@@ -1,6 +1,6 @@
 ---
 title: Area
-description: TBA
+description: Area chart visualization component
 ---
 
 ## Usage `AppChartArea`

@@ -3,6 +3,10 @@
 @import '@null-kit/ui/all.css';
 
 @theme {
+  --font-sans: 'Public Sans', sans-serif;
+
+  --breakpoint-3xl: 1920px;
+
   --hue: 0;
   --chroma: 0;
 
@@ -18,7 +22,7 @@
   --ui-color-neutral-900: oklch(18% var(--hue) var(--chroma));
   --ui-color-neutral-950: oklch(14% var(--hue) var(--chroma));
 
-  --ui-primary: oklch(73% 0.13 215);
+  --ui-primary: oklch(80% 0.2 120);
 
   /*  */
   --chroma1: 0.007;
@@ -29,7 +33,7 @@
   --color-edison: oklch(88% var(--chroma1) var(--hue1));
   --color-surface: oklch(5% var(--chroma1) var(--hue1));
 
-  --color-accent: var(--color-violet-700);
+  --color-accent: var(--ui-primary);
 }
 
 @layer theme {
@@ -38,7 +42,7 @@
   }
 
   .light {
-    --ui-primary: oklch(53% 0.13 215);
+    --ui-primary: oklch(60% 1 120);
   }
 
   /*  */

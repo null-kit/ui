@@ -1,6 +1,6 @@
 ---
 title: Dropdown
-description: TBA
+description: Dropdown component for custom menus and popovers
 ---
 
 ## Usage `AppDropdown`

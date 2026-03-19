@@ -1,6 +1,6 @@
 ---
 title: Button
-description: TBA
+description: Button element that can act as a link or trigger an action
 ---
 
 ## Usage `btn`

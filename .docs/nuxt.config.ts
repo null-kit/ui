@@ -7,6 +7,16 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/app.css'],
 
+  nullkitSvgSprite: {
+    inputDir: '~/assets/img/svg'
+  },
+
+  routeRules: {
+    '/': {
+      redirect: '/getting-started/installation'
+    }
+  },
+
   mcp: {
     enabled: false
   },

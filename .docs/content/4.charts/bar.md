@@ -1,6 +1,6 @@
 ---
 title: Bar
-description: TBA
+description: Bar chart visualization component
 ---
 
 ## Usage `AppChartBar`

@@ -1,12 +1,14 @@
 ---
+title: null-kit
+description: Comprehensive Nuxt Layer providing UI components and utils
 seo:
-  title: null kit
-  description: Comprehensive Nuxt Layer providing UI components and utils.
+  title: null-kit
+  description: Comprehensive Nuxt Layer providing UI components and utils
 ---
 
 ::u-page-hero
 #title
-null kit
+null-kit
 
 #description
 Comprehensive Nuxt Layer providing UI components and utils.

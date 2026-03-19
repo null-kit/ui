@@ -1,6 +1,6 @@
 ---
 title: Donut
-description: TBA
+description: Donut chart visualization component
 ---
 
 ## Usage `AppChartDonut`

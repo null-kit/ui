@@ -1,6 +1,6 @@
 ---
 title: Async State
-description: TBA
+description: Displaying different UI states during asynchronous operations
 ---
 
 ## Usage `AppAsyncState`

@@ -1,6 +1,6 @@
 ---
 title: Pagination
-description: TBA
+description: Component for navigating through paginated content
 ---
 
 ## Usage `AppPagination`

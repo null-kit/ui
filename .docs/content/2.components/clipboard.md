@@ -1,6 +1,6 @@
 ---
 title: Clipboard
-description: TBA
+description: Component for copying data between sibling groups
 ---
 
 ## Usage `AppClipboard`

@@ -1,6 +1,6 @@
 ---
 title: Modal
-description: A modal dialog component for displaying overlay content.
+description: Modal dialog component for displaying overlay content
 ---
 
 ## Usage `AppModal`

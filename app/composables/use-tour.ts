@@ -2,9 +2,7 @@ export const useTour = () => {
   const { app } = useRuntimeConfig().public;
   const { getItem, setItem } = useLocalStorage();
 
-  if (!app || !app.name) throw new Error('Please provide app name in nuxt.config.ts');
-
-  const appName = app.name.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+  const appName = app?.name?.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase() ?? 'app';
 
   const activeKey = `${appName}-active-tour`;
   const endedKey = `${appName}-ended-tours`;
@@ -26,7 +24,7 @@ export const useTour = () => {
     setItem(activeKey, { currentStep: step, target: tour.value.target });
   };
 
-  const onTargetClick = (step: string) => {
+  const onTargetClick = (step: string | number) => {
     const element = document.querySelector<HTMLButtonElement>(`[data-${tour.value.target}="${step}"]`);
 
     if (element) element.click();

@@ -1,6 +1,6 @@
 ---
 title: Tabs
-description: TBA
+description: Navigation component for switching between content panels
 ---
 
 ## Usage `AppTabs`

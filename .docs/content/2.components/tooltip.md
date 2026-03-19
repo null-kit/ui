@@ -1,6 +1,6 @@
 ---
 title: Tooltip
-description: TBA
+description: Component for displaying contextual information on hover or focus
 ---
 
 ## Usage `AppTooltip`

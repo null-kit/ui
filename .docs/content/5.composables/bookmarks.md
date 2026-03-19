@@ -6,7 +6,7 @@ description: Utilities for managing route bookmarks
 ## Usage `useBookmarks`
 
 ::warning
-To initialize bookmarks, add `settings.bookmarks` inside `app.config.ts` <br>
+To initialize the bookmarks, add `settings.bookmarks` inside `app.config.ts`
 
 <!-- prettier-ignore -->
 ```ts [app.config.ts]

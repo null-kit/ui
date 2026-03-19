@@ -1,6 +1,6 @@
 ---
 title: Table
-description: TBA
+description: Component for rendering tables with virtualization
 ---
 
 ## Usage `AppTable`

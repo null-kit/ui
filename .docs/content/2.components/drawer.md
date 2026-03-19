@@ -1,6 +1,6 @@
 ---
 title: Drawer
-description: TBA
+description: Drawer dialog component for displaying overlay content
 ---
 
 ## Usage `AppDrawer`

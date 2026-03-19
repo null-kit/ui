@@ -1,6 +1,6 @@
 ---
 title: Badge
-description: Badge component for displaying statuses, types, or labels.
+description: Component for displaying statuses, types, or labels.
 ---
 
 ## Usage `AppBadge`

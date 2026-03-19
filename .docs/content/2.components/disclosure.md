@@ -1,6 +1,6 @@
 ---
 title: Disclosure
-description: TBA
+description: Expandable section for showing and hiding content
 ---
 
 ## Usage `AppDisclosure`

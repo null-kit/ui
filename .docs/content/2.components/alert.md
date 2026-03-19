@@ -1,6 +1,6 @@
 ---
 title: Alert
-description: TBA
+description: Component for important messages, warnings, or status updates
 ---
 
 ## Usage `AppAlert`
@@ -10,15 +10,16 @@ description: TBA
 
 ```vue [index.vue]
 <template>
-  <AppAlert type="warning" label="Please pay attention" />
+  <AppAlert type="warning" icon="alert" label="Please pay attention" />
 </template>
 ```
 
 :::
 
 :::tabs-item{icon="i-lucide-eye" label="Preview"}
-:::app-alert{type="warning" label="Please pay attention"}
-:::
+::::callout
+:::::app-alert{type="warning" icon="alert" label="Please pay attention"}
+::::
 :::
 ::
 
