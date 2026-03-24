@@ -59,9 +59,9 @@ Converts spaces to commas
   ::
   ::field{name="step" type="string" }
   ::  
-  ::field{name="min" type="string" }
+  ::field{name="min" type="string | number" }
   ::
-  ::field{name="max" type="string" }
+  ::field{name="max" type="string | number" }
   ::  
   ::field{name="value" type="string | number | null" }
   ::  

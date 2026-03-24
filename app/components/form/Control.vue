@@ -108,8 +108,8 @@ const {
   accept?: string;
   pattern?: string;
   step?: string;
-  min?: string;
-  max?: string;
+  min?: string | number;
+  max?: string | number;
   value?: string | number | null;
   inputClass?: string;
   validateClass?: string;
