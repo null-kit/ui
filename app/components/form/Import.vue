@@ -1,6 +1,6 @@
 <template>
   <label class="btn" :class="buttonClass">
-    <input type="file" accept=".csv" class="absolute hidden" @change="onImport" />
+    <input type="file" :accept class="absolute hidden" @change="onImport" />
     <AppIcon :name="icon" />
     {{ label }}
 
@@ -16,7 +16,8 @@ const {
   split = ',',
   multiple = false,
   icon = 'file-paste',
-  buttonClass = 'rounded-none'
+  buttonClass = 'rounded-none',
+  accept = '.csv'
 } = defineProps<{
   label?: string;
   join?: Separator;
@@ -24,6 +25,7 @@ const {
   multiple?: boolean;
   icon?: string;
   buttonClass?: string;
+  accept?: string;
 }>();
 
 const model = defineModel<string | number | (string | number)[] | (string | number)[][]>();
