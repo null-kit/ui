@@ -22,7 +22,7 @@ const {
   icon = 'file-paste',
   buttonClass = 'rounded-none',
   accept = '.csv,.xlsx',
-  regex = /^[a-zA-Z0-9\n,.;]+$/
+  regex = /[^a-zA-Z0-9\n,.;]/g
 } = defineProps<{
   label?: string;
   join?: Separator;
