@@ -21,7 +21,8 @@ const {
   multiple = false,
   icon = 'file-paste',
   buttonClass = 'rounded-none',
-  accept = '.csv,.xlsx'
+  accept = '.csv,.xlsx',
+  regex = /^[a-zA-Z0-9\n,.;]+$/
 } = defineProps<{
   label?: string;
   join?: Separator;
@@ -30,6 +31,7 @@ const {
   icon?: string;
   buttonClass?: string;
   accept?: string;
+  regex?: RegExp;
 }>();
 
 const model = defineModel<string | number | (string | number)[] | (string | number)[][]>();
@@ -53,19 +55,25 @@ const parseRows = (rows: string[][]) => {
 const parseXlsx = (buffer: ArrayBuffer) => {
   const workbook = XLSX.read(buffer, { type: 'array' });
   const sheetName = workbook.SheetNames[0];
+
   if (!sheetName) return setToast({ title: 'Import Error!', text: 'No sheets found in file', type: 'error' });
+
   const sheet = workbook.Sheets[sheetName];
   if (!sheet) return setToast({ title: 'Import Error!', text: 'Could not read sheet', type: 'error' });
+
   const rows = XLSX.utils.sheet_to_json<string[]>(sheet, { header: 1, defval: '' });
-  parseRows(rows as string[][]);
+
+  parseRows(rows);
 };
 
 const parseCsv = (text: string) => {
-  const csv = text.replace(/\r/g, '').replace(/[^a-zA-Z0-9\n,.;]/g, '');
+  const csv = text.replace(/\r/g, '').replace(regex, '');
+
   const rows = csv
     .split('\n')
     .filter((row) => row.trim() !== '')
     .map((row) => row.split(split));
+
   parseRows(rows);
 };
 
