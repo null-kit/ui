@@ -47,6 +47,8 @@ Converts spaces to commas
   Displays a visual indicator if the field is required. Default `false`
   ::
   ::field{name="autocomplete" type="string" }
+  ::  
+  ::field{name="autofocus" type="boolean" }
   ::
   ::field{name="help" type="string" }
   Displays the help message. Default: `undefined`

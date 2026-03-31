@@ -57,6 +57,7 @@
           v-bind="{ id, name, placeholder, disabled, accept, pattern, step, min, max, autocomplete }"
           @input="onInput"
           @focusout="onFocusOut"
+          @vue:mounted="autofocus && $event.el.focus()"
         />
 
         <FormValidate v-if="name" :name :class="validateClass" />
@@ -102,6 +103,7 @@ const {
   name?: string;
   placeholder?: string;
   autocomplete?: string;
+  autofocus?: boolean;
   help?: string;
   disabled?: boolean;
   required?: boolean;
