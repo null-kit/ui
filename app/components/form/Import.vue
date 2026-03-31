@@ -1,14 +1,18 @@
 <template>
   <label class="btn" :class="buttonClass">
     <input type="file" :accept class="absolute hidden" @change="onImport" />
+
     <AppIcon :name="icon" />
+
     {{ label }}
 
-    <AppTooltip v-if="!label" message="Import CSV file" hover-class="absolute inset-0" />
+    <AppTooltip v-if="!label" message="Import file" hover-class="absolute inset-0" />
   </label>
 </template>
 
 <script setup lang="ts">
+import * as XLSX from 'xlsx';
+
 type Separator = '\n' | ',' | '.' | ';';
 
 const {
@@ -17,7 +21,7 @@ const {
   multiple = false,
   icon = 'file-paste',
   buttonClass = 'rounded-none',
-  accept = '.csv'
+  accept = '.csv,.xlsx'
 } = defineProps<{
   label?: string;
   join?: Separator;
@@ -32,45 +36,66 @@ const model = defineModel<string | number | (string | number)[] | (string | numb
 
 const { setToast } = useToast();
 
-const onImport = async (event: Event) => {
+const parseRows = (rows: string[][]) => {
+  if (rows.length < 2) return setToast({ title: 'Import Error!', text: 'File has no data rows', type: 'error' });
+
+  const dataRows = rows.slice(1);
+
+  if (multiple) {
+    const columnCount = Math.max(...dataRows.map((cells) => cells.length));
+    model.value = Array.from({ length: columnCount }, (_, colIndex) => dataRows.map((cells) => cells[colIndex] ?? ''));
+    return;
+  }
+
+  model.value = dataRows.map((cells) => cells[0] ?? '').join(join);
+};
+
+const parseXlsx = (buffer: ArrayBuffer) => {
+  const workbook = XLSX.read(buffer, { type: 'array' });
+  const sheetName = workbook.SheetNames[0];
+  if (!sheetName) return setToast({ title: 'Import Error!', text: 'No sheets found in file', type: 'error' });
+  const sheet = workbook.Sheets[sheetName];
+  if (!sheet) return setToast({ title: 'Import Error!', text: 'Could not read sheet', type: 'error' });
+  const rows = XLSX.utils.sheet_to_json<string[]>(sheet, { header: 1, defval: '' });
+  parseRows(rows as string[][]);
+};
+
+const parseCsv = (text: string) => {
+  const csv = text.replace(/\r/g, '').replace(/[^a-zA-Z0-9\n,.;]/g, '');
+  const rows = csv
+    .split('\n')
+    .filter((row) => row.trim() !== '')
+    .map((row) => row.split(split));
+  parseRows(rows);
+};
+
+const onImport = (event: Event) => {
   const target = event.target as HTMLInputElement;
   const file = target.files?.[0];
 
-  if (file) {
-    const fileReader = new FileReader();
+  if (!file) return;
 
-    fileReader.onload = (event) => {
-      try {
-        const csv = String(event.target?.result)
-          .replace(/\r/g, '')
-          .replace(/[^a-zA-Z0-9\n,.;]/g, '');
+  const isXlsx = file.name.endsWith('.xlsx') || file.name.endsWith('.xls');
+  const fileReader = new FileReader();
 
-        const rows = csv.split('\n').filter((row) => row.trim() !== '');
-
-        if (rows.length < 2) return setToast({ title: 'Import Error!', text: 'CSV file is empty', type: 'error' });
-
-        const slicedRows = rows.slice(1);
-
-        if (multiple) {
-          const dataRows = slicedRows.map((row) => row.split(split));
-          const columnCount = Math.max(...dataRows.map((cells) => cells.length));
-
-          model.value = Array.from({ length: columnCount }, (_, colIndex) =>
-            dataRows.map((cells) => cells[colIndex] ?? '')
-          );
-
-          return;
-        }
-
-        model.value = slicedRows.join(join);
-      } catch (error) {
-        return setToast({ title: 'Import Error!', text: `Failed to parse CSV: ${error}`, type: 'error' });
+  fileReader.onload = (e) => {
+    try {
+      if (isXlsx) {
+        parseXlsx(e.target?.result as ArrayBuffer);
+      } else {
+        parseCsv(String(e.target?.result));
       }
-    };
+    } catch (error) {
+      setToast({ title: 'Import Error!', text: `Failed to parse file: ${error}`, type: 'error' });
+    }
+  };
 
+  if (isXlsx) {
+    fileReader.readAsArrayBuffer(file);
+  } else {
     fileReader.readAsText(file);
-
-    target.value = '';
   }
+
+  target.value = '';
 };
 </script>

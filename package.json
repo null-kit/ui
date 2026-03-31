@@ -42,7 +42,8 @@
     "@tiptap/pm": "^2.14.0",
     "@tiptap/vue-3": "^2.14.0",
     "@unovis/ts": "^1.5.2",
-    "@unovis/vue": "^1.5.2"
+    "@unovis/vue": "^1.5.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@nuxt/eslint": "latest",
