@@ -2,7 +2,9 @@
   <div ref="reference" class="inline-flex" @click="isOpen = !isOpen">
     <slot />
 
-    <AppConfirmContent v-if="isOpen" v-bind="{ ...props, reference }" @close="isOpen = false" @confirm="onConfirm" />
+    <AppConfirmContent v-if="isOpen" v-bind="{ ...props, reference }" @close="isOpen = false" @confirm="onConfirm">
+      <slot name="message" />
+    </AppConfirmContent>
   </div>
 </template>
 

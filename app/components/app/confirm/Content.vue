@@ -27,7 +27,7 @@
               <div class="font-semibold">{{ title }}</div>
             </div>
 
-            <slot name="message">
+            <slot>
               <p class="text-sm whitespace-break-spaces">{{ message }}</p>
             </slot>
           </div>
