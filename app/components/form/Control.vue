@@ -46,6 +46,7 @@
           :class="[inputClass, hasSlotStyle($slots)]"
           rows="3"
           v-bind="{ id, name, placeholder, disabled, pattern, autocomplete }"
+          @vue:mounted="autofocus && $event.el.focus()"
         />
 
         <input
