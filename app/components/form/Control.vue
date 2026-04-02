@@ -46,7 +46,7 @@
           class="form-input flex"
           :class="[inputClass, hasSlotStyle($slots)]"
           rows="3"
-          v-bind="{ id, name, placeholder, disabled, pattern, autocomplete }"
+          v-bind="{ id, name, placeholder, disabled, readonly, pattern, autocomplete }"
         />
 
         <input
@@ -56,7 +56,7 @@
           class="form-input"
           :class="[inputClass, hasSlotStyle($slots)]"
           :type="type === 'number' ? 'text' : type"
-          v-bind="{ id, name, placeholder, disabled, accept, pattern, step, min, max, autocomplete }"
+          v-bind="{ id, name, placeholder, disabled, readonly, accept, pattern, step, min, max, autocomplete }"
           @input="onInput"
           @focusout="onFocusOut"
         />
@@ -108,6 +108,7 @@ const {
   autofocus?: boolean;
   help?: string;
   disabled?: boolean;
+  readonly?: boolean;
   required?: boolean;
   accept?: string;
   pattern?: string;
