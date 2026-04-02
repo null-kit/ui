@@ -41,16 +41,17 @@
 
         <textarea
           v-else-if="type === 'textarea'"
+          ref="input"
           v-model="model"
           class="form-input flex"
           :class="[inputClass, hasSlotStyle($slots)]"
           rows="3"
           v-bind="{ id, name, placeholder, disabled, pattern, autocomplete }"
-          @vue:mounted="autofocus && $event.el.focus()"
         />
 
         <input
           v-else
+          ref="input"
           v-model="model"
           class="form-input"
           :class="[inputClass, hasSlotStyle($slots)]"
@@ -58,7 +59,6 @@
           v-bind="{ id, name, placeholder, disabled, accept, pattern, step, min, max, autocomplete }"
           @input="onInput"
           @focusout="onFocusOut"
-          @vue:mounted="autofocus && $event.el.focus()"
         />
 
         <FormValidate v-if="name" :name :class="validateClass" />
@@ -97,7 +97,8 @@ const {
   inputClass,
   value,
   min,
-  max
+  max,
+  autofocus
 } = defineProps<{
   label?: string;
   type?: 'text' | 'password' | 'email' | 'number' | 'textarea' | 'select';
@@ -146,7 +147,11 @@ const hasSlotStyle = (slot: { left?: boolean; right?: boolean }) => {
   return [slot.left && 'rounded-l-none', slot.right && 'rounded-r-none'].filter(Boolean);
 };
 
+const input = useTemplateRef('input');
+
 onMounted(() => {
   if (value) model.value = value;
+
+  if (autofocus) setTimeout(() => input.value?.focus({ preventScroll: true }), 100);
 });
 </script>
