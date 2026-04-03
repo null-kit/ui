@@ -131,6 +131,10 @@ const onInput = (event: Event) => {
 };
 
 const onFocusOut = () => {
+  if (typeof model.value === 'string' && modifiers.spaceToComma) {
+    model.value = model.value.replace(/,{2,}/g, ',').replace(/^,+|,+$/g, '');
+  }
+
   if (type === 'number') {
     const value = Number(model.value);
 
