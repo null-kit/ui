@@ -1,7 +1,6 @@
 @layer components {
   .table-default {
-    @apply text-sm whitespace-nowrap;
-    @apply border-separate border-spacing-0;
+    @apply border-separate border-spacing-0 text-sm whitespace-nowrap;
 
     thead {
       @apply bg-darwin text-surface text-left font-semibold select-none;
@@ -9,11 +8,11 @@
       th {
         &[aria-sort] {
           @apply cursor-pointer transition-colors;
-          @apply hover:bg-shade-darwin/5 dark:hover:bg-shade-darwin/10;
+          @apply hover:bg-darwin-strong;
         }
 
         &:where([aria-sort='ascending'], [aria-sort='descending']) {
-          @apply bg-shade-darwin/3 dark:bg-shade-darwin/7;
+          @apply bg-darwin-strong;
 
           :not([data-resizer]) {
             @apply text-accent;
@@ -25,19 +24,10 @@
     tr {
       @apply divide-edison divide-x;
 
-      &:hover td {
-        @apply bg-tint-edison/30 dark:bg-shade-edison/40;
-      }
-
+      &:hover td,
       &[aria-expanded] td,
       [aria-expanded] {
-        @apply bg-tint-edison/35 dark:bg-shade-edison/40;
-      }
-
-      &[data-row='odd']:not(:hover):not([aria-expanded]) {
-        td:not([aria-expanded]) {
-          @apply bg-tint-edison/60 dark:bg-shade-edison/40;
-        }
+        @apply bg-darwin-subtle;
       }
 
       &:not([aria-hidden]):not(:has(+ tr:not([aria-hidden]))) > td {
@@ -60,13 +50,10 @@
         @apply border-edison border-t;
       }
     }
-  }
-}
 
-@utility table-striped {
-  tr:nth-child(even):not(:hover):not([aria-expanded]) {
-    td:not([aria-expanded]) {
-      @apply bg-tint-edison/60 dark:bg-shade-edison/40;
+    :is(&.table-striped tr:nth-child(even), tr[data-row='odd']):not(:hover):not([aria-expanded])
+      td:not([aria-expanded]) {
+      @apply bg-darwin-strong;
     }
   }
 }

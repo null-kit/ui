@@ -1,9 +1,19 @@
-@plugin "../../utils/tint-shade.ts";
+@plugin '../../utils/tint-shade.ts';
 @source '../../components';
 @source '../../composables';
 
 @custom-variant dark (&:where(.dark, .dark *));
 @custom-variant inverted (&:where(.inverted, .inverted *));
+
+@theme {
+  /* TODO: Timed fallback */
+  --color-newton-strong: var(--color-newton);
+  --color-newton-subtle: var(--color-newton);
+  --color-darwin-strong: var(--color-darwin);
+  --color-darwin-subtle: var(--color-darwin);
+  --color-edison-strong: var(--color-edison);
+  --color-edison-subtle: var(--color-edison);
+}
 
 /* Scrollbar Utility */
 @utility scrollbar {

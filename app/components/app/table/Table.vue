@@ -32,6 +32,8 @@
               :aria-expanded="row.getIsExpanded() || undefined"
               :data-row="striped && virtualScroll && (startIndex + index) % 2 !== 0 ? 'odd' : undefined"
               :height="typeof virtualScroll === 'number' ? virtualScroll : undefined"
+              :class="{ 'cursor-pointer': fullRowExpand && row.getCanExpand() }"
+              @click="fullRowExpand && row.getCanExpand() ? row.toggleExpanded() : undefined"
             >
               <td
                 v-for="cell in row.getVisibleCells()"
@@ -131,6 +133,7 @@ const props = withDefaults(
     data: TData[];
     columns: ColumnDef<TData>[] | ((columnHelper: ColumnHelper<TData>) => ColumnDef<TData>[]);
     nestedKey?: keyof TData;
+    fullRowExpand?: boolean;
     sortDefault?: MaybeRef<TableSortType | string>;
     sort?: 'server' | 'client';
     enableSorting?: boolean;
@@ -161,7 +164,11 @@ const createColumnExpander = () => {
 
         return h(
           'button',
-          { type: 'button', onClick: row.getToggleExpandedHandler(), class: 'btn btn-sm size-6' },
+          {
+            type: 'button',
+            onClick: !props.fullRowExpand ? row.getToggleExpandedHandler() : undefined,
+            class: 'btn btn-sm size-6'
+          },
           h(
             'svg',
             {
