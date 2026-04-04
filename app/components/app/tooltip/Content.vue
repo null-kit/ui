@@ -1,15 +1,7 @@
 <template>
   <Teleport to="#teleports">
-    <Transition
-      enter-from-class="opacity-0"
-      enter-to-class="opacity-100"
-      leave-to-class="opacity-0"
-      class="transition-opacity"
-      :duration="150"
-      @after-leave="$emit('close')"
-    >
+    <Transition enter-from-class="opacity-0" enter-to-class="transition-opacity" appear>
       <div
-        v-if="isActive"
         ref="floating"
         :style="floatingStyles"
         class="tooltip-content pointer-events-none z-10"
@@ -28,8 +20,6 @@ import type { VirtualElement } from '@floating-ui/vue';
 defineOptions({ inheritAttrs: false });
 defineEmits<{ close: [] }>();
 defineProps<{ contentClass?: string }>();
-
-const isActive = ref(false);
 
 const reference = shallowRef<VirtualElement>({
   getBoundingClientRect: () => ({
@@ -66,10 +56,6 @@ const onPointerMove = (event: PointerEvent) => {
 };
 
 defineExpose({
-  onPointerMove,
-  onPointerLeave: () => (isActive.value = false)
+  onPointerMove
 });
-
-onMounted(() => (isActive.value = true));
-onUnmounted(() => (isActive.value = false));
 </script>
