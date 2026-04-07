@@ -1,5 +1,5 @@
 <template>
-  <section :class="{ 'min-h-31': status === 'pending', relative: softLoading }">
+  <section :class="{ 'min-h-31': status === 'pending' && softLoading, relative: softLoading }">
     <div v-if="status === 'pending' && !softLoading" class="text-center" :class="attrs.class || 'py-8'">
       <svg class="mx-auto mb-3 size-6" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g fill="currentColor">
