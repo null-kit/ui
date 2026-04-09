@@ -23,7 +23,7 @@
           v-else
           viewBox="0 0 32 32"
           xmlns="http://www.w3.org/2000/svg"
-          class="group absolute inset-0 size-full p-1 opacity-0 duration-300 peer-checked:opacity-100"
+          class="group pointer-events-none absolute inset-0 size-full p-1 opacity-0 duration-300 peer-checked:opacity-100"
         >
           <circle v-if="type === 'radio'" fill="currentColor" cx="16" cy="16" r="12" />
 
