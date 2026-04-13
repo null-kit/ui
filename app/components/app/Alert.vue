@@ -1,5 +1,10 @@
 <template>
-  <span class="flex items-baseline gap-2 ring ring-inset" :class="[type && styles[type], size && sizes[size]]">
+  <span
+    class="flex items-baseline gap-2 ring ring-inset"
+    :class="[type && styles[type], size && sizes[size]]"
+    :aria-label="`alert-${type}`"
+    role="alert"
+  >
     <slot>
       <slot name="icon">
         <AppIcon v-if="icon" :name="icon" class="relative top-0.5 size-3.5 shrink-0" />
