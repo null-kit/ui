@@ -35,13 +35,13 @@ const date = ref('');
 ::field-group
   ::field{name="range" type="boolean" }
   ::
+  ::field{name="range-year" type="boolean" }
+  Displays `This Year` preset. Default `false`.
+  ::
   ::field{name="preset" type="today | yesterday | last-week | this-month | last-month | this-year" }
   ::
   ::field{name="max-today" type="boolean" }
   Prevents selecting dates greater than today. Default `false`.
-  ::
-  ::field{name="with-year" type="boolean" }
-  Displays `This Year` preset. Default `false`.
   ::
   ::field{name="icon" type="string" }
   Default `calendar`

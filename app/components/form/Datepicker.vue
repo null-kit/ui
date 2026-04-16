@@ -76,7 +76,7 @@
           <button type="button" class="btn btn-sm btn-default" @click="setPreset('last-week')">Last Week</button>
           <button type="button" class="btn btn-sm btn-default" @click="setPreset('this-month')">This Month</button>
           <button type="button" class="btn btn-sm btn-default" @click="setPreset('last-month')">Last Month</button>
-          <button v-if="withYear" type="button" class="btn btn-sm btn-default" @click="setPreset('this-year')">
+          <button v-if="rangeYear" type="button" class="btn btn-sm btn-default" @click="setPreset('this-year')">
             This Year
           </button>
 
@@ -98,7 +98,7 @@ const {
   range?: boolean;
   disabledDates?: Date[];
   preset?: Preset;
-  withYear?: boolean;
+  rangeYear?: boolean;
   maxToday?: boolean;
   icon?: string;
   noIcon?: boolean;
