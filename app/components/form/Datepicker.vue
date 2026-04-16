@@ -76,8 +76,11 @@
           <button type="button" class="btn btn-sm btn-default" @click="setPreset('last-week')">Last Week</button>
           <button type="button" class="btn btn-sm btn-default" @click="setPreset('this-month')">This Month</button>
           <button type="button" class="btn btn-sm btn-default" @click="setPreset('last-month')">Last Month</button>
+          <button v-if="withYear" type="button" class="btn btn-sm btn-default" @click="setPreset('this-year')">
+            This Year
+          </button>
 
-          <slot name="preset" />
+          <slot name="preset" :set-preset />
         </slot>
       </div>
     </div>
@@ -85,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-type Preset = 'today' | 'yesterday' | 'last-week' | 'this-month' | 'this-month-today' | 'last-month';
+type Preset = 'today' | 'yesterday' | `last-${'week' | 'month'}` | `this-${'month' | 'year' | 'month-today'}`;
 
 const {
   disabledDates = [],
@@ -95,6 +98,7 @@ const {
   range?: boolean;
   disabledDates?: Date[];
   preset?: Preset;
+  withYear?: boolean;
   maxToday?: boolean;
   icon?: string;
   noIcon?: boolean;
@@ -273,6 +277,11 @@ const setPreset = (type: Preset) => {
     case 'last-month':
       setDate(new Date(today.getFullYear(), today.getMonth() - 1, 1));
       setDate(new Date(today.getFullYear(), today.getMonth(), 0));
+      break;
+    case 'this-year':
+      setDate(new Date(today.getFullYear(), 0, 1));
+      if (props.maxToday) setDate(today);
+      else setDate(new Date(today.getFullYear(), 12, 0));
       break;
   }
 };
