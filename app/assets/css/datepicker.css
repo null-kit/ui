@@ -25,5 +25,9 @@
     &.day-outside span {
       @apply opacity-40;
     }
+
+    &.day-today:not(.day-selected) span {
+      @apply text-accent;
+    }
   }
 }

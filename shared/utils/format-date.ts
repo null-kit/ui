@@ -7,8 +7,6 @@ type DateOptions = {
   hourCycle?: Intl.DateTimeFormatOptions['hourCycle'];
 };
 
-// type DateFormat = 'iso' | 'yyyy' | 'yyyy-mm' | 'yyyy-mm-dd';
-
 type DateInput = Date | string | number | null | undefined;
 
 /**
@@ -25,13 +23,7 @@ export const formatDate = (
 
   const currentDate = new Date(date);
 
-  if (format === 'iso') {
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const day = String(currentDate.getDate()).padStart(2, '0');
-
-    return `${year}-${month}-${day}`;
-  }
+  if (format === 'iso') return formatISO(date);
 
   const defaultOptions: Intl.DateTimeFormatOptions = {
     hourCycle,
@@ -44,12 +36,48 @@ export const formatDate = (
   return new Intl.DateTimeFormat(locale, options || defaultOptions).format(currentDate);
 };
 
+const toISO = (date: DateInput) => {
+  if (!date) return 'N/A';
+
+  const d = new Date(date);
+
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+};
+
 /**
- * Format a date to an ISO string (YYYY-MM-DD)
+ * Format a date to a local ISO string (YYYY-MM-DD)
  * @param date - The date to format
  * @returns The formatted date
  */
-export const formatISO = (date: DateInput) => formatDate(!date ? 'N/A' : new Date(date), { format: 'iso' });
+export const formatISO = (date: DateInput) => toISO(date);
+
+/**
+ * Format a date to a ISO string (YYYY-MM-DD)
+ * Safe version of formatISO that moves the date back one day if it is the same day and the UTC day has not started yet.
+ * @param date - The date to format
+ * @returns The formatted date
+ */
+export const formatSafeISO = (date: DateInput) => {
+  if (!date) return 'N/A';
+
+  const d = new Date(date);
+  const now = new Date();
+
+  const isSameDay =
+    d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth() && d.getDate() === now.getDate();
+
+  const isUTCDayNotStarted = now.getDate() !== now.getUTCDate();
+
+  if (isSameDay && isUTCDayNotStarted) {
+    d.setDate(d.getDate() - 1);
+  }
+
+  return toISO(d);
+};
 
 /**
  * Set the date of a date object
@@ -78,22 +106,3 @@ export const setDateRange = (startDate: DateInput, endDate: DateInput) => {
 
   return dates;
 };
-
-// const formatDateTo = (date: Date, format?: DateFormat) => {
-//   const year = date.getFullYear();
-//   const month = String(date.getMonth() + 1).padStart(2, '0');
-//   const day = String(date.getDate()).padStart(2, '0');
-
-//   switch (format) {
-//     case 'yyyy':
-//       return year;
-//     case 'yyyy-mm':
-//       return `${year}-${month}`;
-//     case 'iso':
-//       return `${year}-${month}-${day}`;
-//     case 'yyyy-mm-dd':
-//       return `${year}-${month}-${day}`;
-//     default:
-//       return date;
-//   }
-// };

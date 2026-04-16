@@ -5,9 +5,9 @@
     <div class="flex gap-4">
       <FormDatepicker v-model="formData.singleDate" />
 
-      <FormDatepicker v-model="formData.rangeDates" range />
+      <FormDatepicker v-model.iso.safe="formData.rangeDates" preset="last-week" range />
 
-      <FormDatepicker v-model="formData.singleDate" date-mode="short" />
+      <FormDatepicker v-model.iso="formData.singleDate" />
 
       <FormTimepicker v-model="formData.time" />
     </div>
@@ -23,7 +23,7 @@ const seconds = today.getSeconds().toString().padStart(2, '0');
 
 const formData = reactive({
   singleDate: today,
-  rangeDates: [today.setDate(today.getDate() - 7), today] as Date[],
+  rangeDates: [],
   time: `${hours}:${minutes}:${seconds}`
 });
 </script>

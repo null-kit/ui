@@ -22,13 +22,13 @@
         </button>
 
         <div class="flex w-full justify-center font-medium">
-          <select v-model="currentMonth" class="btn btn-sm appearance-none" @change="setYearMonth">
+          <select v-model="currentMonth" class="btn btn-sm appearance-none text-center" @change="setYearMonth">
             <option v-for="(month, index) in months" :key="index" :value="index">
               {{ month }}
             </option>
           </select>
 
-          <select v-model="currentYear" class="btn btn-sm appearance-none" @change="setYearMonth">
+          <select v-model="currentYear" class="btn btn-sm appearance-none text-center" @change="setYearMonth">
             <option v-for="year in years" :key="year" :value="year">
               {{ year }}
             </option>
@@ -61,7 +61,7 @@
             'day-today': isToday(date)
           }"
           :disabled="isDisabled(date)"
-          @click="selectDate(date)"
+          @click="setDate(date)"
         >
           <span class="datepicker-day-inner">
             {{ date.getDate() }}
@@ -76,6 +76,8 @@
           <button type="button" class="btn btn-sm btn-default" @click="setPreset('last-week')">Last Week</button>
           <button type="button" class="btn btn-sm btn-default" @click="setPreset('this-month')">This Month</button>
           <button type="button" class="btn btn-sm btn-default" @click="setPreset('last-month')">Last Month</button>
+
+          <slot name="preset" />
         </slot>
       </div>
     </div>
@@ -98,18 +100,21 @@ const {
   noIcon?: boolean;
 }>();
 
-const [model, modifiers] = defineModel<Date | string | (Date | string)[] | undefined>({
+const [model, modifiers] = defineModel<(Date | string)[] | Date | string>({
   required: true,
-  set(value) {
-    if (value && modifiers.iso) {
-      if (Array.isArray(value)) return value.map(formatISO);
+  set: (value) => {
+    const result = Array.isArray(value) ? value.map(formatWithModifiers) : formatWithModifiers(value);
 
-      return formatISO(value);
-    }
-
-    return value;
+    return result;
   }
 });
+
+const formatWithModifiers = (date: Date | string) => {
+  if (modifiers.iso && modifiers.safe) return formatSafeISO(date);
+  if (modifiers.iso) return formatISO(date);
+
+  return date;
+};
 
 const selectedDates = ref<Date[]>([]);
 
@@ -176,7 +181,7 @@ const setYearMonth = () => {
   currentDate.value = new Date(currentYear.value, currentMonth.value, 1);
 };
 
-const selectDate = (date: Date) => {
+const setDate = (date: Date) => {
   if (isDisabled(date)) return;
 
   if (props.range) {
@@ -187,12 +192,12 @@ const selectDate = (date: Date) => {
       selectedDates.value.sort((a, b) => a.getTime() - b.getTime());
 
       if (selectedDates.value.length === 2) {
-        model.value = selectedDates.value.map((d) => formatDate(d, modifiers.iso && { format: 'iso' }));
+        model.value = selectedDates.value.map(formatWithModifiers);
       }
     }
   } else {
     selectedDates.value = [date];
-    model.value = modifiers.iso ? formatDate(date, { format: 'iso' }) : date;
+    model.value = formatWithModifiers(date);
   }
 
   currentMonth.value = date.getMonth();
@@ -236,7 +241,7 @@ const isDisabled = (date: Date) => {
 
 const onClose = () => {
   if (props.range && selectedDates.value[0] && !selectedDates.value[1]) {
-    selectDate(selectedDates.value[0]);
+    setDate(selectedDates.value[0]);
   }
 };
 
@@ -245,29 +250,29 @@ const setPreset = (type: Preset) => {
 
   switch (type) {
     case 'today':
-      selectDate(today);
-      if (props.range) selectDate(today);
+      setDate(today);
+      if (props.range) setDate(today);
       break;
     case 'yesterday':
-      selectDate(new Date(today.setDate(today.getDate() - 1)));
-      if (props.range) selectDate(new Date(today.setDate(today.getDate())));
+      setDate(new Date(today.setDate(today.getDate() - 1)));
+      if (props.range) setDate(new Date(today.setDate(today.getDate())));
       break;
     case 'last-week':
-      selectDate(new Date(today.setDate(today.getDate() - 6)));
-      selectDate(new Date());
+      setDate(new Date(today.setDate(today.getDate() - 6)));
+      setDate(new Date());
       break;
     case 'this-month':
-      selectDate(new Date(today.getFullYear(), today.getMonth(), 1));
-      if (props.maxToday) selectDate(today);
-      else selectDate(new Date(today.getFullYear(), today.getMonth() + 1, 0));
+      setDate(new Date(today.getFullYear(), today.getMonth(), 1));
+      if (props.maxToday) setDate(today);
+      else setDate(new Date(today.getFullYear(), today.getMonth() + 1, 0));
       break;
     case 'this-month-today':
-      selectDate(new Date(today.getFullYear(), today.getMonth(), 1));
-      selectDate(today);
+      setDate(new Date(today.getFullYear(), today.getMonth(), 1));
+      setDate(today);
       break;
     case 'last-month':
-      selectDate(new Date(today.getFullYear(), today.getMonth() - 1, 1));
-      selectDate(new Date(today.getFullYear(), today.getMonth(), 0));
+      setDate(new Date(today.getFullYear(), today.getMonth() - 1, 1));
+      setDate(new Date(today.getFullYear(), today.getMonth(), 0));
       break;
   }
 };
