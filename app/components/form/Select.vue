@@ -20,6 +20,7 @@
       <AppDropdown
         :autoclose
         :placement
+        :inline
         :dropdown-class="[dropdownClass, 'overflow-clip flex flex-col'].join(' ')"
         :max-height="448"
         class="w-full"
@@ -218,6 +219,7 @@ const props = defineProps<{
   inputClass?: string;
   validateClass?: string;
   dropdownClass?: string;
+  inline?: boolean;
 }>();
 
 const searchInput = ref('');
