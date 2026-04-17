@@ -1,6 +1,6 @@
 <template>
   <div class="relative flex flex-col">
-    <span v-if="label" class="form-label">
+    <span v-if="label" class="form-label" :class="labelClass">
       <slot name="label-left" />
 
       {{ label }}
@@ -216,6 +216,7 @@ const props = defineProps<{
   required?: boolean;
   help?: string;
   presets?: { name: string; list: (string | number)[] }[];
+  labelClass?: string;
   inputClass?: string;
   validateClass?: string;
   dropdownClass?: string;
