@@ -1,6 +1,7 @@
 @layer components {
   .badge {
     @apply rounded-md px-2 py-1 text-xs;
+    @apply inline-flex items-center justify-center gap-1.5 font-medium ring ring-inset;
   }
 }
 
