@@ -1,0 +1,37 @@
+@layer components {
+  .badge {
+    @apply rounded-md px-2 py-1 text-xs;
+  }
+}
+
+@utility badge-default {
+  @apply bg-darwin ring-edison text-current shadow-xs;
+}
+
+@utility badge-success {
+  @apply bg-green-500/10 text-green-600 ring-green-500/20;
+}
+
+@utility badge-warning {
+  @apply bg-yellow-500/10 text-yellow-600 ring-yellow-500/20;
+}
+
+@utility badge-danger {
+  @apply bg-red-500/10 text-red-500 ring-red-500/20;
+}
+
+@utility badge-info {
+  @apply bg-blue-500/10 text-blue-500 ring-blue-500/20;
+}
+
+@utility badge-accent {
+  @apply bg-accent/10 ring-accent/20 text-accent;
+}
+
+@utility badge-sm {
+  @apply px-1.5 py-0.5;
+}
+
+@utility badge-lg {
+  @apply rounded-lg px-2.5 py-1.5 text-sm;
+}
