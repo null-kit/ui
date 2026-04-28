@@ -190,15 +190,7 @@
           </div>
         </fieldset>
 
-        <fieldset id="charts">
-          <legend>Charts</legend>
-
-          <div class="grid gap-10 md:grid-cols-[20rem_1fr]">
-            <AppChartDonut :data="formData.donutChart" category-key="format" value-key="value" />
-
-            <AppChartArea :data="formData.areaChart" :categories="['impressions', 'requests', 'margin']" x-key="date" />
-          </div>
-        </fieldset>
+        <DemoChart />
 
         <DemoDatepicker />
 
@@ -355,17 +347,6 @@ const formData = reactive({
         { name: 'Women', value: 'women' }
       ]
     }
-  ],
-  areaChart: Array.from({ length: 10 }, (_, index) => ({
-    date: `2024-01-${index + 4}`,
-    impressions: Math.floor(Math.random() * 300),
-    requests: Math.floor(Math.random() * 150),
-    margin: Math.floor(Math.random() * 150)
-  })),
-  donutChart: [
-    { format: 'Desktop', value: Math.floor(Math.random() * 300) },
-    { format: 'Mobile', value: Math.floor(Math.random() * 150) },
-    { format: 'Tablet', value: Math.floor(Math.random() * 200) }
   ],
   table: [
     { id: 1, name: 'John', email: 'john@example.com' },

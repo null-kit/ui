@@ -16,4 +16,16 @@
   --vis-donut-central-label-text-color: var(--color-surface);
   --vis-donut-central-sub-label-font-size: var(--text-sm);
   --vis-donut-central-sub-label-text-color: --alpha(var(--color-surface) / 0.4);
+
+  --chart-color-0: var(--color-accent);
+  --chart-color-1: var(--color-indigo-500);
+  --chart-color-2: var(--color-orange-500);
+  --chart-color-3: var(--color-violet-500);
+  --chart-color-4: var(--color-pink-500);
+  --chart-color-5: var(--color-yellow-500);
+  --chart-color-6: var(--color-purple-500);
+  --chart-color-7: var(--color-red-500);
+  --chart-color-8: var(--color-blue-500);
+  --chart-color-9: var(--color-cyan-500);
+  --chart-color-10: var(--color-emerald-500);
 }

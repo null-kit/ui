@@ -57,5 +57,5 @@ const tickFormat = (i: number) => {
   return props.xFormat ? props.xFormat(value) : value;
 };
 
-const colors = ['var(--color-accent)', 'var(--color-indigo-500)'];
+const colors = ['var(--color-chart-0)', 'var(--color-chart-1)'];
 </script>

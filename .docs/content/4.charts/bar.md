@@ -41,6 +41,12 @@ const data = [
   ::field{name="x-trim" type="boolean"}
   Whether to trim text when no space is available
   ::
+  ::field{name="x-hide" type="boolean"}
+  Whether to hide X axis ticks. Default: `false`
+  ::
+  ::field{name="y-hide" type="boolean"}
+  Whether to hide Y axis ticks. Default: `false`
+  ::
   ::field{name="x-format" type="(i: string | number) => string"}
   ::
   ::field{name="y-format" type="(i: string | number) => string"}
@@ -52,6 +58,9 @@ const data = [
   ::field{name="show-legend" type="boolean"}
   ::
   ::field{name="tooltip-class" type="string"}
+  ::  
+  ::field{name="bar-style" type="gradient | solid"}
+  Default: `gradient`
   ::
 ::
 

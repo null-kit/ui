@@ -65,17 +65,5 @@ const chartData = computed(() => {
 
 const total = computed(() => chartData.value.reduce((sum, item) => sum + item.value, 0));
 
-const colors = [
-  'var(--color-accent)',
-  'var(--color-indigo-500)',
-  'var(--color-orange-500)',
-  'var(--color-violet-500)',
-  'var(--color-pink-500)',
-  'var(--color-yellow-500)',
-  'var(--color-purple-500)',
-  'var(--color-red-500)',
-  'var(--color-blue-500)',
-  'var(--color-cyan-500)',
-  'var(--color-emerald-500)'
-];
+const colors = Array.from({ length: 10 }, (_, i) => `var(--chart-color-${i})`);
 </script>
