@@ -18,12 +18,12 @@
 const {
   type = 'default',
   label,
-  size = 'default',
+  size = undefined,
   icon = undefined
 } = defineProps<{
   type?: 'default' | 'success' | 'warning' | 'danger' | 'info' | 'accent';
   label?: string | number;
   icon?: string;
-  size?: 'default' | 'sm' | 'lg';
+  size?: 'sm' | 'lg';
 }>();
 </script>
