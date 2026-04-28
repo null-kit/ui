@@ -33,7 +33,7 @@
               name="checkbox"
               :indeterminate="isIndeterminate(option)"
               class="inline-flex"
-              @change.stop="toggleOption(option)"
+              @click.stop="toggleOption(option)"
             />
 
             <svg

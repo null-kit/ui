@@ -9,6 +9,7 @@
           <NuxtLink to="#toasts" class="btn">Toasts</NuxtLink>
           <NuxtLink to="#charts" class="btn">Charts</NuxtLink>
           <NuxtLink to="#datepicker" class="btn">Datepicker</NuxtLink>
+          <NuxtLink to="#disclosure" class="btn">Disclosure</NuxtLink>
           <NuxtLink to="#table" class="btn">Table</NuxtLink>
           <NuxtLink to="#tabs" class="btn">Tabs</NuxtLink>
           <NuxtLink to="#icon" class="btn">Icon</NuxtLink>
@@ -34,66 +35,7 @@
 
         <DemoButton />
 
-        <fieldset id="utils">
-          <legend>Utils</legend>
-
-          <div class="flex flex-wrap gap-10">
-            <div>
-              <div class="text-sm opacity-30">formatDate:</div>
-              <div>{{ formatDate(new Date(), { year: true }) }}</div>
-            </div>
-
-            <div>
-              <div class="text-sm opacity-30">formatNumber:</div>
-              <div>{{ formatNumber(1234567890) }}</div>
-            </div>
-
-            <div>
-              <div class="text-sm opacity-30">formatISO:</div>
-              <div>{{ formatISO(new Date()) }}</div>
-            </div>
-
-            <div>
-              <div class="text-sm opacity-30">formatCurrency:</div>
-              <div>{{ formatCurrency(345567) }}</div>
-            </div>
-
-            <div>
-              <div class="text-sm opacity-30">calcTotal:</div>
-              <div>{{ calcTotal([23, 57, 120, 49]) }}</div>
-            </div>
-
-            <div>
-              <div class="text-sm opacity-30">calcAvg:</div>
-              <div>{{ calcAvg([23, 57, 120, 49]) }}</div>
-            </div>
-
-            <div>
-              <div class="text-sm opacity-30">calcDiffPercentage:</div>
-              <div>{{ calcDiffPercentage(8352.7, 3824.5) }}</div>
-            </div>
-
-            <div>
-              <div class="text-sm opacity-30">toFixedNumber:</div>
-              <div>{{ toFixedNumber(23.5999) }}</div>
-            </div>
-
-            <div>
-              <div class="text-sm opacity-30">toSeparatedArray:</div>
-              <div>{{ toSeparatedArray('apple, banana, cherry', ',') }}</div>
-            </div>
-
-            <div>
-              <div class="text-sm opacity-30">toSeparatedString:</div>
-              <div>{{ toSeparatedString(['apple', 'banana', 'cherry'], ',') }}</div>
-            </div>
-
-            <div>
-              <div class="text-sm opacity-30">generateRandomString:</div>
-              <div>{{ generateRandomString() }}</div>
-            </div>
-          </div>
-        </fieldset>
+        <DemoUtils />
 
         <fieldset id="clipboard">
           <legend>Clipboard</legend>
@@ -149,6 +91,8 @@
         <DemoToast />
 
         <DemoChart />
+
+        <DemoDisclosure />
 
         <DemoDatepicker />
 
@@ -274,12 +218,6 @@
 </template>
 
 <script setup lang="ts">
-useHead({
-  bodyAttrs: {
-    class: 'bg-darwin'
-  }
-});
-
 const { copy, statusText } = useClipboard();
 
 const formData = reactive({
