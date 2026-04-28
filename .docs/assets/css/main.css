@@ -39,16 +39,16 @@
   :is(.dark, .inverted) {
     color: var(--color-surface);
 
-    --color-newton: var(--color-dn-500);
+    --color-newton: var(--color-dn-800);
     --color-darwin: var(--color-dn-900);
     --color-edison: var(--color-dn-700);
     --color-surface: var(--color-dn-50);
   }
 
-  /* :is(.dark) .inverted {
-    --color-newton: var(--color-dn-600);
-    --color-darwin: oklch(100% 0 var(--hue1));
-    --color-edison: oklch(88% var(--chroma1) var(--hue1));
-    --color-surface: oklch(5% var(--chroma1) var(--hue1));
-  } */
+  :is(.dark) .inverted {
+    --color-newton: var(--color-dn-50);
+    --color-darwin: var(--color-white);
+    --color-edison: var(--color-dn-200);
+    --color-surface: var(--color-dn-900);
+  }
 }
