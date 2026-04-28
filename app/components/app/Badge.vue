@@ -1,5 +1,5 @@
 <template>
-  <span class="badge" :class="[`badge-${type}`, `badge-${size}`]" :aria-label="`badge-${type}`" role="badge">
+  <span class="badge" :class="[types[type], size && sizes[size]]" :aria-label="`badge-${type}`" role="badge">
     <slot>
       <slot name="icon">
         <AppIcon v-if="icon" :name="icon" class="size-3 shrink-0" />
@@ -26,4 +26,18 @@ const {
   icon?: string;
   size?: 'sm' | 'lg';
 }>();
+
+const types = {
+  default: 'badge-default',
+  success: 'badge-success',
+  warning: 'badge-warning',
+  danger: 'badge-danger',
+  info: 'badge-info',
+  accent: 'badge-accent'
+};
+
+const sizes = {
+  sm: 'badge-sm',
+  lg: 'badge-lg'
+};
 </script>
