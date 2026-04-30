@@ -62,6 +62,15 @@ const data = [
   ::field{name="bar-style" type="gradient | solid"}
   Default: `gradient`
   ::
+  ::field{name="bar-padding" type="number"}
+  Default: `0.1`
+  ::
+  ::field{name="height" type="string"}
+  Default: `25rem`
+  ::
+  ::field{name="num-ticks" type="number"}
+  Default: `25rem`
+  ::
 ::
 
 ## Examples

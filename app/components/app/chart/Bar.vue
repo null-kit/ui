@@ -1,5 +1,5 @@
 <template>
-  <VisXYContainer :data="chartData" height="25rem" width="100%">
+  <VisXYContainer :data="chartData" :height width="100%">
     <LazyAppChartLegend v-if="showLegend" v-model="chartData" :categories :colors :data :x-indexes />
 
     <VisBar
@@ -7,7 +7,7 @@
       :y="categories.map((category) => (d: T) => d[category as keyof T])"
       :color="(d: T, i: number) => `url(#vis-bar-g-${i}-${id})`"
       :rounded-corners="roundedCorners || 2"
-      :bar-padding="0.1"
+      :bar-padding
     />
 
     <VisAxis
@@ -15,7 +15,7 @@
       :domain-line="false"
       :grid-line="false"
       :tick-format
-      :num-ticks="data.length"
+      :num-ticks="props.numTicks ?? data.length"
       :tick-text-fit-mode="xTrim ? 'trim' : 'none'"
       :tick-text-color="(i: number) => (xIndexes.has(i) ? 'hsl(from var(--color-surface) h s l / 40%)' : '')"
       :events="{ [Axis.selectors.tick]: { click: (i: number) => toggleX(i) } }"
@@ -45,7 +45,12 @@ import { Axis } from '@unovis/ts';
 
 const id = useId();
 
-const { barStyle = 'gradient', ...props } = defineProps<{
+const {
+  barStyle = 'gradient',
+  height = '25rem',
+  barPadding = 0.1,
+  ...props
+} = defineProps<{
   data: T[];
   categories: string[];
   xKey: Extract<keyof T, string>;
@@ -59,6 +64,9 @@ const { barStyle = 'gradient', ...props } = defineProps<{
   showLegend?: boolean;
   tooltipClass?: string;
   barStyle?: 'gradient' | 'solid';
+  height?: string;
+  barPadding?: number;
+  numTicks?: number;
 }>();
 
 const VisBar = computed(() => (props.stacked ? VisStackedBar : VisGroupedBar));
