@@ -12,7 +12,7 @@
       <slot name="label-right" />
     </span>
 
-    <div class="flex w-full">
+    <div class="form-control flex w-full">
       <div v-if="$slots.left" class="form-slot rounded-r-none">
         <slot name="left" />
       </div>
