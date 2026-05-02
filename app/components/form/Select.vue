@@ -198,7 +198,15 @@ import type { Placement } from '@floating-ui/vue';
 
 const emit = defineEmits<{ change: [value: T] }>();
 
-const model = defineModel<unknown>();
+const model = defineModel<unknown>({
+  set(value) {
+    if ((typeof value === 'string' || Array.isArray(value)) && value.length === 0) {
+      return undefined;
+    }
+
+    return value;
+  }
+});
 
 const props = defineProps<{
   options: T[];
