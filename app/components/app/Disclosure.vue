@@ -42,6 +42,7 @@ const { transitionClass = 'translate-y-2', ...props } = defineProps<{
   titleClass?: string;
   summaryClass?: string;
   contentClass?: string;
+  openClass?: string;
   transitionClass?: string;
   noChevron?: boolean;
   noToggle?: boolean;
@@ -61,6 +62,8 @@ const styles = computed(() => {
   const defaultStyles = ['flex items-center gap-2 border-b px-4 py-2'];
 
   if (props.summaryClass) defaultStyles.push(props.summaryClass);
+
+  if (isOpen.value && props.openClass) defaultStyles.push(props.openClass);
 
   if (isOpen.value) defaultStyles.push('border-edison');
   else defaultStyles.push('border-transparent');
