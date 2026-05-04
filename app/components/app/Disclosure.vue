@@ -26,7 +26,7 @@
       :leave-to-class="`${transitionClass} opacity-0 duration-200 ease-in-out`"
       mode="out-in"
     >
-      <div v-if="isOpen" :class="contentClass">
+      <div v-show="isOpen" :class="contentClass">
         <slot />
       </div>
     </Transition>
