@@ -20,7 +20,12 @@
       />
     </div>
 
-    <Transition enter-from-class="opacity-0 translate-y-4" enter-active-class="duration-300">
+    <Transition
+      :enter-from-class="`${transitionClass} opacity-0`"
+      enter-active-class="duration-200 ease-in-out"
+      :leave-to-class="`${transitionClass} opacity-0 duration-200 ease-in-out`"
+      mode="out-in"
+    >
       <div v-if="isOpen" :class="contentClass">
         <slot />
       </div>
@@ -31,12 +36,13 @@
 <script setup lang="ts">
 const slots = useSlots();
 
-const props = defineProps<{
+const { transitionClass = 'translate-y-2', ...props } = defineProps<{
   open?: boolean;
   title?: string;
   titleClass?: string;
   summaryClass?: string;
   contentClass?: string;
+  transitionClass?: string;
   noChevron?: boolean;
   noToggle?: boolean;
   prefix?: boolean;
