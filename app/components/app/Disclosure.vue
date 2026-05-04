@@ -1,5 +1,5 @@
 <template>
-  <div role="details">
+  <div role="details" :class="isOpen && openClass ? openClass : undefined">
     <div role="summary" class="cursor-default" :class="styles" @click="noToggle ? $event.preventDefault() : onToggle()">
       <slot name="summary" :is-open="isOpen" @toggle="onToggle">
         <slot name="icon">
@@ -62,8 +62,6 @@ const styles = computed(() => {
   const defaultStyles = ['flex items-center gap-2 border-b px-4 py-2'];
 
   if (props.summaryClass) defaultStyles.push(props.summaryClass);
-
-  if (isOpen.value && props.openClass) defaultStyles.push(props.openClass);
 
   if (isOpen.value) defaultStyles.push('border-edison');
   else defaultStyles.push('border-transparent');
