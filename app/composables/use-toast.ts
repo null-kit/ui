@@ -51,12 +51,12 @@ export const useToast = () => {
           onMouseleave: () => holdToast(toast, false)
         },
         [
-          h('div', { class: 'w-full' + (toast.title || toast.text ? ' p-2' : '') }, [
+          h('div', { class: 'toast-text' }, [
             toast.title ? h('h3', { class: 'font-semibold' }, toast.title) : null,
             toast.text ? h('p', { class: 'whitespace-break-spaces' }, toast.text) : null
           ]),
 
-          toast.slot ? h('div', { class: 'px-2 pb-2' }, toast.slot()) : null,
+          toast.slot ? h('div', { class: 'toast-slot' }, toast.slot()) : null,
 
           h('div', { class: 'toast-status ' + meta[toast.type || 'default'].color }, [
             toast.type ? h(AppIcon, { name: meta[toast.type].icon, class: 'size-3.5' }) : null,

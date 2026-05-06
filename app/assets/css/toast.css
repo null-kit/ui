@@ -10,6 +10,14 @@
     @apply relative isolate overflow-clip;
   }
 
+  .toast-text {
+    @apply w-full p-2;
+  }
+
+  .toast-slot {
+    @apply px-2 pb-2;
+  }
+
   .toast-timer {
     @apply absolute top-0 left-0 size-full;
     @apply origin-left bg-white/20;
