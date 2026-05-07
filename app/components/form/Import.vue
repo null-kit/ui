@@ -21,7 +21,7 @@ const {
   multiple = false,
   icon = 'file-paste',
   buttonClass = 'rounded-none',
-  accept = '.csv,.xlsx',
+  accept = '.csv,.xlsx,.txt',
   regex = /[^a-zA-Z0-9\n,.;]/g
 } = defineProps<{
   label?: string;

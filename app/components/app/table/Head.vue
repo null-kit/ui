@@ -17,13 +17,13 @@
             @click="onSort(header.column)"
           >
             <div class="flex w-full items-center gap-1">
-              <slot :name="`th-${header.column.id}-left`" />
+              <slot :name="`th-${header.column.id}-left`" :values="getValues(header.id)" />
 
-              <slot :name="`th-${header.column.id}`">
+              <slot :name="`th-${header.column.id}`" :values="getValues(header.id)">
                 <FlexRender :render="header.column.columnDef.header" :props="header.getContext()" />
               </slot>
 
-              <slot :name="`th-${header.column.id}-right`" />
+              <slot :name="`th-${header.column.id}-right`" :values="getValues(header.id)" />
 
               <svg
                 width="7"
@@ -41,13 +41,13 @@
           </div>
 
           <template v-else>
-            <slot :name="`th-${header.column.id}-left`" />
+            <slot :name="`th-${header.column.id}-left`" :values="getValues(header.id)" />
 
-            <slot :name="`th-${header.column.id}`">
+            <slot :name="`th-${header.column.id}`" :values="getValues(header.id)">
               <FlexRender :render="header.column.columnDef.header" :props="header.getContext()" />
             </slot>
 
-            <slot :name="`th-${header.column.id}-right`" />
+            <slot :name="`th-${header.column.id}-right`" :values="getValues(header.id)" />
           </template>
 
           <div
@@ -108,6 +108,10 @@ const onSort = (column: Column<TData>) => {
 
 const onResetSize = (column: Column<TData>) => {
   props.table.getState().columnSizing[column.id] = column.columnDef.size ?? 0;
+};
+
+const getValues = (column: string) => {
+  return props.table.getRowModel().rows.map((row) => row.original[column as keyof TData]);
 };
 </script>
 
