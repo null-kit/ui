@@ -1,7 +1,7 @@
 <template>
   <Teleport to="#teleports">
     <Transition enter-from-class="opacity-0" leave-to-class="opacity-0">
-      <div v-if="isActive" class="fixed inset-0 z-10 bg-black/50 backdrop-blur-xs duration-400" />
+      <div v-if="isActive" class="modal-backdrop" />
     </Transition>
 
     <Transition

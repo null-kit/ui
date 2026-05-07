@@ -9,4 +9,8 @@
     transform: perspective(1000px) translateZ(-40px) rotateX(6deg) rotateY(6deg);
     @apply blur-xs;
   }
+
+  .modal-backdrop {
+    @apply fixed inset-0 z-10 bg-black/50 backdrop-blur-xs duration-400;
+  }
 }
