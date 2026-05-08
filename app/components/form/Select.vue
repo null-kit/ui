@@ -200,8 +200,10 @@ const emit = defineEmits<{ change: [value: T] }>();
 
 const [model, modifiers] = defineModel<unknown>({
   set(value) {
-    if (typeof value === 'string' && value.length === 0 && modifiers.nonNull) return '';
-    if (Array.isArray(value) && value.length === 0 && modifiers.nonNull) return [];
+    if (modifiers.nonNull) {
+      if (Array.isArray(value) && value.length === 0) return [];
+      if (!value) return '';
+    }
 
     if ((typeof value === 'string' || Array.isArray(value)) && value.length === 0) {
       return undefined;
