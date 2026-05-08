@@ -198,8 +198,11 @@ import type { Placement } from '@floating-ui/vue';
 
 const emit = defineEmits<{ change: [value: T] }>();
 
-const model = defineModel<unknown>({
+const [model, modifiers] = defineModel<unknown>({
   set(value) {
+    if (typeof value === 'string' && value.length === 0 && modifiers.nonNull) return '';
+    if (Array.isArray(value) && value.length === 0 && modifiers.nonNull) return [];
+
     if ((typeof value === 'string' || Array.isArray(value)) && value.length === 0) {
       return undefined;
     }
