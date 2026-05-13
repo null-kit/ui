@@ -121,20 +121,21 @@ const {
   validateClass?: string;
 }>();
 
-const onInput = (event: Event) => {
-  const input = event.target as HTMLInputElement | HTMLTextAreaElement;
+const onInput = (event: InputEvent) => {
+  const isPaste = event.inputType === 'insertFromPaste';
+
+  const inputValue = isPaste ? String(event.data) : (event.target as HTMLInputElement).value;
 
   if (type === 'number') {
-    const value = input.value.replace(/[^\d.]/g, '');
-    model.value = value || undefined;
-    input.value = value;
+    const value = inputValue.replace(/[^\d.]/g, '');
+
+    model.value = value ?? undefined;
+
     return;
   }
 
-  if (max && input.value.length > Number(max)) {
-    const cropped = input.value.slice(0, Number(max));
-    model.value = cropped;
-    input.value = cropped;
+  if (max && inputValue.length > Number(max)) {
+    model.value = inputValue.slice(0, Number(max));
   }
 };
 
