@@ -47,6 +47,7 @@
           :class="[inputClass, hasSlotStyle($slots)]"
           rows="3"
           v-bind="{ id, name, placeholder, disabled, readonly, pattern, autocomplete }"
+          @input="onInput"
         />
 
         <input
@@ -121,30 +122,36 @@ const {
 }>();
 
 const onInput = (event: Event) => {
-  if (type === 'number') {
-    const input = event.target as HTMLInputElement;
-    const value = input.value.replace(/[^\d.]/g, '');
+  const input = event.target as HTMLInputElement | HTMLTextAreaElement;
 
+  if (type === 'number') {
+    const value = input.value.replace(/[^\d.]/g, '');
     model.value = value || undefined;
     input.value = value;
+    return;
+  }
+
+  if (max && input.value.length > Number(max)) {
+    const cropped = input.value.slice(0, Number(max));
+    model.value = cropped;
+    input.value = cropped;
   }
 };
 
 const onFocusOut = () => {
-  if (typeof model.value === 'string' && modifiers.spaceToComma) {
-    model.value = model.value.replace(/,{2,}/g, ',').replace(/^,+|,+$/g, '');
+  const value = model.value;
+
+  if (typeof value === 'string' && modifiers.spaceToComma) {
+    model.value = value.replace(/,{2,}/g, ',').replace(/^,+|,+$/g, '');
   }
 
   if (type === 'number') {
-    const value = Number(model.value);
+    if (min && Number(value) < Number(min)) model.value = min;
+    if (max && Number(value) > Number(max)) model.value = max;
+  }
 
-    if (min && value < Number(min)) {
-      model.value = min;
-    }
-
-    if (max && value > Number(max)) {
-      model.value = max;
-    }
+  if (typeof value === 'string' && max && value.length > Number(max)) {
+    model.value = value.slice(0, Number(max));
   }
 };
 
