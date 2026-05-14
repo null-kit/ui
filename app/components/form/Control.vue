@@ -170,6 +170,8 @@ const input = useTemplateRef('input');
 onMounted(() => {
   if (value) model.value = value;
 
+  if (type === 'number' && typeof model.value === 'string') model.value = Number(model.value);
+
   if (autofocus) setTimeout(() => input.value?.focus({ preventScroll: true }), 100);
 });
 </script>
