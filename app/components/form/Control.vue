@@ -124,18 +124,23 @@ const {
 const onInput = (event: InputEvent) => {
   const isPaste = event.inputType === 'insertFromPaste';
 
-  const inputValue = isPaste ? String(event.data) : (event.target as HTMLInputElement).value;
+  const input = event.target as HTMLInputElement;
+  const inputValue = isPaste ? String(event.data) : input.value;
 
   if (type === 'number') {
     const value = inputValue.replace(/[^\d.]/g, '');
 
     model.value = value ?? undefined;
+    input.value = value;
 
     return;
   }
 
   if (max && inputValue.length > Number(max)) {
-    model.value = inputValue.slice(0, Number(max));
+    const cropped = inputValue.slice(0, Number(max));
+
+    model.value = cropped;
+    input.value = cropped;
   }
 };
 
