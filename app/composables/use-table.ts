@@ -109,30 +109,38 @@ export const useTableVirtualRows = <T>(rows: Ref<T[]>, enabled?: boolean | numbe
     return Math.max(padding, 0);
   });
 
-  const onScroll = () => (scrollY.value = window.scrollY);
-
-  const onResize = () => {
-    viewportHeight.value = window.innerHeight;
-    updateTableTop();
-  };
-
   const updateTableTop = () => {
     if (tableBody.value) {
       tableTop.value = tableBody.value.getBoundingClientRect().top + window.scrollY;
     }
   };
 
-  onMounted(() => {
+  const onScroll = () => {
+    scrollY.value = window.scrollY;
     updateTableTop();
+  };
+
+  const onResize = () => {
+    viewportHeight.value = window.innerHeight;
+    updateTableTop();
+  };
+
+  onMounted(() => {
     onScroll();
+
+    const bodyResizeObserver = new ResizeObserver(updateTableTop);
+
+    bodyResizeObserver.observe(document.body);
 
     window.addEventListener('scroll', onScroll);
     window.addEventListener('resize', onResize);
-  });
 
-  onUnmounted(() => {
-    window.removeEventListener('scroll', onScroll);
-    window.removeEventListener('resize', onResize);
+    onUnmounted(() => {
+      bodyResizeObserver.disconnect();
+
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onResize);
+    });
   });
 
   return {
