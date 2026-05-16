@@ -6,6 +6,8 @@ type ConfirmOptions = {
   message: string;
   confirmText?: string;
   onConfirm: () => Promise<void>;
+  slot?: (closeModal: (confirmed: boolean) => Promise<void>) => VNode;
+  modalClass?: string;
 };
 
 export const useConfirm = (options: ConfirmOptions): void => {
@@ -24,21 +26,27 @@ export const useConfirm = (options: ConfirmOptions): void => {
     container.remove();
   };
 
-  const vnode = h(AppModal, { modalClass: 'p-4 max-w-md flex gap-3' }, () => [
-    h(AppIcon, { name: 'alert', class: 'mt-1 size-5 opacity-40' }),
-    h('div', [
-      h('h3', { class: 'mb-1 text-xl font-medium' }, options.title || 'Please confirm'),
-      h('p', options.message),
-      h('div', { class: 'mt-4 flex gap-4' }, [
-        h(
-          'button',
-          { class: 'btn btn-danger w-24', type: 'button', onClick: () => closeModal(true) },
-          options.confirmText || 'Accept'
-        ),
-        h('button', { class: 'btn btn-default w-24', type: 'button', onClick: () => closeModal(false) }, 'Cancel')
-      ])
-    ])
-  ]);
+  const { modalClass = 'p-4 max-w-md flex gap-3', slot } = options;
+
+  const vnode = h(AppModal, { modalClass }, () =>
+    slot
+      ? slot(closeModal)
+      : [
+          h(AppIcon, { name: 'alert', class: 'mt-1 size-5 opacity-40' }),
+          h('div', [
+            h('h3', { class: 'mb-1 text-xl font-medium' }, options.title || 'Please confirm'),
+            h('p', options.message),
+            h('div', { class: 'mt-4 flex gap-4' }, [
+              h(
+                'button',
+                { class: 'btn btn-danger w-24', type: 'button', onClick: () => closeModal(true) },
+                options.confirmText || 'Accept'
+              ),
+              h('button', { class: 'btn btn-default w-24', type: 'button', onClick: () => closeModal(false) }, 'Cancel')
+            ])
+          ])
+        ]
+  );
 
   render(vnode, container);
 };
