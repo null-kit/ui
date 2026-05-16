@@ -1,38 +1,49 @@
 <template>
   <section :class="{ 'min-h-31': status === 'pending' && softLoading, relative: softLoading }">
-    <div v-if="status === 'pending' && !softLoading" class="text-center" :class="attrs.class || 'py-8'">
-      <svg class="mx-auto mb-3 size-6" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g fill="currentColor">
-          <animate id="loop" attributeName="opacity" values="1;1" dur="3s" begin="0s;loop.end" repeatCount="1" />
+    <div
+      v-if="status === 'pending' && !softLoading"
+      class="text-center"
+      :class="[!$slots.pending ? contentClass : '', pendingClass]"
+    >
+      <slot name="pending">
+        <svg class="mx-auto mb-3 size-6" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g fill="currentColor">
+            <animate id="loop" attributeName="opacity" values="1;1" dur="3s" begin="0s;loop.end" repeatCount="1" />
 
-          <rect
-            v-for="cell in cells"
-            :key="`${cell.x}-${cell.y}`"
-            opacity=".3"
-            :x="cell.x"
-            :y="cell.y"
-            width="5"
-            height="5"
-          >
-            <animate
-              attributeName="opacity"
-              :values="getDiamond(cell.x, cell.y)"
-              dur="1"
-              begin="loop.begin"
-              repeatCount="2"
-            />
+            <rect
+              v-for="cell in cells"
+              :key="`${cell.x}-${cell.y}`"
+              opacity=".3"
+              :x="cell.x"
+              :y="cell.y"
+              width="5"
+              height="5"
+            >
+              <animate
+                attributeName="opacity"
+                :values="getDiamond(cell.x, cell.y)"
+                dur="1"
+                begin="loop.begin"
+                repeatCount="2"
+              />
 
-            <animate attributeName="opacity" :values="getChaos()" begin="loop.begin+1.5s" :dur="Math.random() + 0.5" />
-          </rect>
-        </g>
-      </svg>
+              <animate
+                attributeName="opacity"
+                :values="getChaos()"
+                begin="loop.begin+1.5s"
+                :dur="Math.random() + 0.5"
+              />
+            </rect>
+          </g>
+        </svg>
 
-      <h3 class="text-surface text-md/6 animate-pulse font-medium">{{ pendingTitle }}</h3>
+        <h3 class="text-surface text-md/6 animate-pulse font-medium">{{ pendingTitle }}</h3>
 
-      <p v-if="pendingText" class="text-surface/50 text-sm">{{ pendingText }}</p>
+        <p v-if="pendingText" class="text-surface/50 text-sm">{{ pendingText }}</p>
+      </slot>
     </div>
 
-    <div v-else-if="!hasData" class="text-center" :class="attrs.class || 'py-8'">
+    <div v-else-if="!hasData" class="text-center" :class="[!$slots.empty ? contentClass : '', emptyClass]">
       <slot name="empty">
         <AppIcon :name="status === 'error' ? 'alert' : 'search-area'" class="mx-auto mb-3 size-6" />
 
@@ -58,10 +69,6 @@
 <script setup lang="ts">
 import type { AsyncDataRequestStatus } from '#app';
 
-defineOptions({ inheritAttrs: false });
-
-const attrs = useAttrs();
-
 const props = withDefaults(
   defineProps<{
     hasData: boolean | undefined;
@@ -79,11 +86,16 @@ const props = withDefaults(
 
     idleTitle?: string;
     idleText?: string;
+
+    contentClass?: string;
+    pendingClass?: string;
+    emptyClass?: string;
   }>(),
   {
     pendingTitle: 'Please Wait',
     emptyTitle: 'No Data Found',
-    errorTitle: 'Something Went Wrong'
+    errorTitle: 'Something Went Wrong',
+    contentClass: 'py-8'
   }
 );
 
