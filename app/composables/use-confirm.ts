@@ -3,10 +3,10 @@ import { AppModal, AppIcon } from '#components';
 
 type ConfirmOptions = {
   title?: string;
-  message: string;
+  message?: string;
   confirmText?: string;
-  onConfirm: () => Promise<void>;
-  slot?: (closeModal: (confirmed: boolean) => Promise<void>) => VNode;
+  onConfirm?: () => Promise<void>;
+  slot?: (closeModal: (confirmed: boolean) => Promise<void>) => VNode | VNode[];
   modalClass?: string;
 };
 
@@ -14,7 +14,7 @@ export const useConfirm = (options: ConfirmOptions): void => {
   const container = document.createElement('div');
 
   const closeModal = async (confirmed: boolean) => {
-    if (confirmed) {
+    if (confirmed && options.onConfirm) {
       await options.onConfirm();
     }
 
@@ -26,11 +26,11 @@ export const useConfirm = (options: ConfirmOptions): void => {
     container.remove();
   };
 
-  const { modalClass = 'p-4 max-w-md flex gap-3', slot } = options;
+  const modalClass = options.modalClass ?? (!options.slot ? 'p-4 max-w-md flex gap-3' : undefined);
 
   const vnode = h(AppModal, { modalClass }, () =>
-    slot
-      ? slot(closeModal)
+    options.slot
+      ? options.slot(closeModal)
       : [
           h(AppIcon, { name: 'alert', class: 'mt-1 size-5 opacity-40' }),
           h('div', [
