@@ -1,5 +1,10 @@
 <template>
-  <span :class="['inline-flex min-w-0', hoverClass]" @pointerleave="onPointerLeave" @pointermove="onPointerMove">
+  <span
+    :class="['inline-flex min-w-0', hoverClass]"
+    @pointerenter="onPointerMove"
+    @pointerleave="onPointerLeave"
+    @pointermove="onPointerMove"
+  >
     <slot>
       <AppIcon v-if="icon" :name="icon" :class="iconClass" />
       {{ trigger }}
