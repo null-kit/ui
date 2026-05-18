@@ -1,10 +1,5 @@
 <template>
-  <span
-    :class="['inline-flex min-w-0', hoverClass]"
-    @pointerenter="onPointerMove"
-    @pointerleave="onPointerLeave"
-    @pointermove="onPointerMove"
-  >
+  <span :class="['inline-flex min-w-0', hoverClass]" @pointermove="onPointerMove" @pointerleave="onPointerLeave">
     <slot>
       <AppIcon v-if="icon" :name="icon" :class="iconClass" />
       {{ trigger }}
@@ -36,7 +31,8 @@ const onPointerLeave = () => {
 };
 
 const onPointerMove = (event: PointerEvent) => {
-  content.value?.onPointerMove(event);
+  setTimeout(() => content.value?.onPointerMove(event));
+
   isActive.value = true;
 };
 </script>
