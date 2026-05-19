@@ -1,6 +1,6 @@
 <template>
   <div ref="reference" @click="onTriggerClick" @pointerenter="onPointerEnter" @pointerleave="onPointerLeave">
-    <slot name="trigger" :is-open />
+    <slot name="trigger" :is-open :disabled />
 
     <AppDropdownContent
       v-if="isOpen"
