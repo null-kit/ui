@@ -29,6 +29,7 @@ const props = defineProps<{
 
   hoverOpen?: boolean;
   noToggle?: boolean;
+  disabled?: boolean;
 }>();
 
 const isOpen = ref(false);
@@ -37,7 +38,7 @@ const reference = useTemplateRef('reference');
 const floating = useTemplateRef('floating');
 
 const onTriggerClick = () => {
-  if (props.noToggle && isOpen.value) return;
+  if ((props.noToggle && isOpen.value) || props.disabled) return;
 
   if (isOpen.value) {
     floating.value?.onClose();
