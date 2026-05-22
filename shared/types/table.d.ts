@@ -55,4 +55,5 @@ export type TableTanExtraSlots<TData> = {
 export type TableTanSlots<TData> = TableTanDataSlots<TData> &
   TableTanExtraSlots<TData> & {
     sort: (props: { dir: TableSortDirection }) => void;
+    [`sort-${string}`]: (props: { dir: TableSortDirection }) => void;
   };
