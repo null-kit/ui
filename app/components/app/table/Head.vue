@@ -17,13 +17,13 @@
             @click="onSort(header.column)"
           >
             <div class="flex w-full items-center gap-1">
-              <slot :name="`th-${header.column.id}-left`" :values="getValues(header.id)" />
+              <slot :name="`th-${header.column.id}-left`" :values="getValues(header.id)" :get-values />
 
-              <slot :name="`th-${header.column.id}`" :values="getValues(header.id)">
+              <slot :name="`th-${header.column.id}`" :values="getValues(header.id)" :get-values>
                 <FlexRender :render="header.column.columnDef.header" :props="header.getContext()" />
               </slot>
 
-              <slot :name="`th-${header.column.id}-right`" :values="getValues(header.id)" />
+              <slot :name="`th-${header.column.id}-right`" :values="getValues(header.id)" :get-values />
 
               <slot :name="`sort-${header.column.id}`" :dir="header.column.getIsSorted()">
                 <slot name="sort" :dir="header.column.getIsSorted()">
@@ -45,13 +45,13 @@
           </div>
 
           <template v-else>
-            <slot :name="`th-${header.column.id}-left`" :values="getValues(header.id)" />
+            <slot :name="`th-${header.column.id}-left`" :values="getValues(header.id)" :get-values />
 
-            <slot :name="`th-${header.column.id}`" :values="getValues(header.id)">
+            <slot :name="`th-${header.column.id}`" :values="getValues(header.id)" :get-values>
               <FlexRender :render="header.column.columnDef.header" :props="header.getContext()" />
             </slot>
 
-            <slot :name="`th-${header.column.id}-right`" :values="getValues(header.id)" />
+            <slot :name="`th-${header.column.id}-right`" :values="getValues(header.id)" :get-values />
           </template>
 
           <div
