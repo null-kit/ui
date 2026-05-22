@@ -25,18 +25,22 @@
 
               <slot :name="`th-${header.column.id}-right`" :values="getValues(header.id)" />
 
-              <svg
-                width="7"
-                height="14"
-                class="ml-auto shrink-0"
-                viewBox="0 0 16 30"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="4"
-              >
-                <path d="M2 21L8 27L14 21" :opacity="header.column.getIsSorted() === 'desc' ? 1 : 0.5" />
-                <path d="M2 9L8 3L14 9" :opacity="header.column.getIsSorted() === 'asc' ? 1 : 0.5" />
-              </svg>
+              <slot name="sort" :direction="header.column.getIsSorted()">
+                <slot :name="`th-${header.column.id}-sort`" :direction="header.column.getIsSorted()">
+                  <svg
+                    width="7"
+                    height="14"
+                    class="ml-auto shrink-0"
+                    viewBox="0 0 16 30"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  >
+                    <path d="M2 21L8 27L14 21" :opacity="header.column.getIsSorted() === 'desc' ? 1 : 0.5" />
+                    <path d="M2 9L8 3L14 9" :opacity="header.column.getIsSorted() === 'asc' ? 1 : 0.5" />
+                  </svg>
+                </slot>
+              </slot>
             </div>
           </div>
 
