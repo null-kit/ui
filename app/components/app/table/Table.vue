@@ -124,7 +124,7 @@ const getTdClass = <TData, TValue>(tdClass: TdClass<TData, TValue> | undefined, 
 </script>
 
 <script setup lang="ts" generic="TData">
-defineSlots<TableTanSlots<TData>>();
+defineSlots<TableSlots<TData>>();
 
 defineEmits<{ sort: [TableSortType] }>();
 
