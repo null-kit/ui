@@ -114,8 +114,8 @@ const onResetSize = (column: Column<TData>) => {
   props.table.getState().columnSizing[column.id] = column.columnDef.size ?? 0;
 };
 
-const getValues = (column: string) => {
-  return props.table.getRowModel().rows.map((row) => row.original[column as keyof TData]);
+const getValues = <T extends keyof TData>(column: string) => {
+  return props.table.getRowModel().rows.map((row) => row.original[column as T]);
 };
 </script>
 

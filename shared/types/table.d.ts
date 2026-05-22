@@ -41,15 +41,13 @@ export type TableSortSlots<TData> = {
 
 export type TableHeadSlotProps<TData> = {
   values: TData[keyof TData][];
-  getValues: (column: string) => TData[keyof TData][];
+  getValues: <T>(column: string) => T;
 };
 
 export type TableHeadSlots<TData> = {
   [K in `th-${Extract<keyof TData, string>}`]?: (props: TableHeadSlotProps<TData>) => void;
 } & {
-  [K in `th-${Extract<keyof TData, string>}-left`]?: (props: TableHeadSlotProps<TData>) => void;
-} & {
-  [K in `th-${Extract<keyof TData, string>}-right`]?: (props: TableHeadSlotProps<TData>) => void;
+  [K in `th-${Extract<keyof TData, string>}-${'left' | 'right'}`]?: (props: TableHeadSlotProps<TData>) => void;
 };
 
 export type TableExtraSlots<TData> = {
@@ -61,4 +59,7 @@ export type TableExtraSlots<TData> = {
   }) => void;
 };
 
-export type TableSlots<TData> = TableDataSlots<TData> & TableSortSlots<TData> & TableHeadSlots<TData> & TableExtraSlots<TData>;
+export type TableSlots<TData> = TableDataSlots<TData> &
+  TableSortSlots<TData> &
+  TableHeadSlots<TData> &
+  TableExtraSlots<TData>;
