@@ -9,6 +9,7 @@
             name,
             value,
             disabled,
+            checked,
             indeterminate,
             ...(trueValue !== undefined && { 'true-value': trueValue }),
             ...(falseValue !== undefined && { 'false-value': falseValue })
@@ -19,15 +20,19 @@
 
         <span v-if="isSwitch" class="form-switch" />
 
-        <svg
-          v-else
-          viewBox="0 0 32 32"
-          xmlns="http://www.w3.org/2000/svg"
-          class="group pointer-events-none absolute inset-0 size-full p-1 opacity-0 duration-300 peer-checked:opacity-100"
-        >
+        <svg v-else viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="group form-check-icon">
           <circle v-if="type === 'radio'" fill="currentColor" cx="16" cy="16" r="12" />
 
-          <rect v-else-if="indeterminate" x="5" y="14" width="22" height="4" fill="currentColor" />
+          <rect
+            v-else-if="indeterminate"
+            x="5"
+            y="15"
+            width="22"
+            height="1"
+            stroke-width="3"
+            stroke-linejoin="round"
+            stroke="currentColor"
+          />
 
           <path
             v-else
@@ -70,6 +75,7 @@ const props = withDefaults(
     trueValue?: boolean | string | number | null;
     falseValue?: boolean | string | number | null;
     lazy?: boolean;
+    checked?: boolean;
   }>(),
   {
     type: 'checkbox',

@@ -65,11 +65,10 @@
   /* Checkbox */
   .form-check {
     @apply cursor-pointer appearance-none duration-200;
-    @apply bg-darwin ring-edison size-5 ring;
-    @apply indeterminate:ring-accent checked:ring-accent not-disabled:shadow;
-    @apply disabled:bg-edison/20 disabled:not-checked:ring-edison disabled:cursor-not-allowed;
-
-    @apply [&~svg]:text-accent;
+    @apply bg-darwin ring-edison size-5 ring not-disabled:shadow;
+    @apply disabled:bg-edison/20 disabled:cursor-not-allowed;
+    @apply indeterminate:ring-accent disabled:not-indeterminate:ring-edison;
+    @apply checked:ring-accent disabled:not-checked:ring-edison;
 
     &[type='radio'] {
       @apply rounded-full;
@@ -82,6 +81,12 @@
     &[aria-label='switch'] {
       @apply checked:bg-accent h-6 w-11 rounded-full;
     }
+  }
+
+  .form-check-icon {
+    @apply text-accent pointer-events-none duration-200;
+    @apply absolute inset-0 size-full p-1 opacity-0;
+    @apply peer-checked:opacity-100 peer-indeterminate:opacity-100;
   }
 
   .form-switch {
