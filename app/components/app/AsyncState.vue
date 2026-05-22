@@ -3,7 +3,7 @@
     <div
       v-if="status === 'pending' && !softLoading"
       class="text-center"
-      :class="[!$slots.pending ? contentClass : '', pendingClass]"
+      :class="[!$slots.pending && !pendingClass ? contentClass : '', pendingClass]"
     >
       <slot name="pending">
         <svg class="mx-auto mb-3 size-6" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -43,7 +43,11 @@
       </slot>
     </div>
 
-    <div v-else-if="!hasData" class="text-center" :class="[!$slots.empty ? contentClass : '', emptyClass]">
+    <div
+      v-else-if="!hasData"
+      class="text-center"
+      :class="[!$slots.empty && !emptyClass ? contentClass : '', emptyClass]"
+    >
       <slot name="empty">
         <AppIcon :name="status === 'error' ? 'alert' : 'search-area'" class="mx-auto mb-3 size-6" />
 
