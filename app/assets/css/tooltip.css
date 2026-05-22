@@ -3,4 +3,8 @@
     @apply bg-surface text-newton rounded-md shadow-md;
     @apply px-3 py-1.5 text-sm;
   }
+
+  .confirm-content {
+    @apply bg-darwin text-surface gap-3 rounded-2xl p-3 shadow-lg;
+  }
 }

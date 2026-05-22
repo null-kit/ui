@@ -17,7 +17,7 @@
       >
         <div
           role="dialog"
-          class="bg-darwin text-surface inverted flex gap-3 rounded-2xl p-3 shadow-lg"
+          class="confirm-content inverted flex"
           :class="hasPlacement(['bottom-start', 'bottom-end']) ? 'flex-col-reverse' : 'flex-col'"
         >
           <div>
