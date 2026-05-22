@@ -28,6 +28,8 @@ export type TableDataSlots<T> = {
   [K in keyof T]?: (props: { entry: T; value: T[K]; values: T[]; isNested: boolean }) => void;
 };
 
+export type TableSortDirection = 'asc' | 'desc' | boolean;
+
 export type TableExtraSlots<T> = {
   [key: string]: (props: { entry: T; value: T[keyof T]; values: T[]; isNested: boolean }) => void;
 };
@@ -50,4 +52,7 @@ export type TableTanExtraSlots<TData> = {
   }) => void;
 };
 
-export type TableTanSlots<TData> = TableTanDataSlots<TData> & TableTanExtraSlots<TData>;
+export type TableTanSlots<TData> = TableTanDataSlots<TData> &
+  TableTanExtraSlots<TData> & {
+    sort: (props: { dir: TableSortDirection }) => void;
+  };
