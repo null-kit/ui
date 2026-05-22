@@ -25,8 +25,8 @@
 
               <slot :name="`th-${header.column.id}-right`" :values="getValues(header.id)" />
 
-              <slot name="sort" :dir="header.column.getIsSorted()">
-                <slot :name="`sort-${header.column.id}`" :dir="header.column.getIsSorted()">
+              <slot :name="`sort-${header.column.id}`" :dir="header.column.getIsSorted()">
+                <slot name="sort" :dir="header.column.getIsSorted()">
                   <svg
                     width="7"
                     height="14"
