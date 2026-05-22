@@ -24,11 +24,11 @@ export type TableProps<T> = {
   virtualScroll?: boolean;
 };
 
+export type TableSortDirection = 'asc' | 'desc' | boolean;
+
 export type TableDataSlots<T> = {
   [K in keyof T]?: (props: { entry: T; value: T[K]; values: T[]; isNested: boolean }) => void;
 };
-
-export type TableSortDirection = 'asc' | 'desc' | boolean;
 
 export type TableExtraSlots<T> = {
   [key: string]: (props: { entry: T; value: T[keyof T]; values: T[]; isNested: boolean }) => void;
@@ -43,6 +43,12 @@ export type TableTanDataSlots<TData> = {
   [TValue in keyof TData]?: (props: { row: TData; cell: NoInfer<TData[TValue]>; isNested: boolean }) => void;
 };
 
+export type TableTanSortSlots<TData> = {
+  sort?: (props: { dir: TableSortDirection }) => void;
+} & {
+  [K in `sort-${Extract<keyof TData, string>}`]?: (props: { dir: TableSortDirection }) => void;
+};
+
 export type TableTanExtraSlots<TData> = {
   [key: string]: (props: {
     row: TData;
@@ -52,8 +58,4 @@ export type TableTanExtraSlots<TData> = {
   }) => void;
 };
 
-export type TableTanSlots<TData> = TableTanDataSlots<TData> &
-  TableTanExtraSlots<TData> & {
-    sort: (props: { dir: TableSortDirection }) => void;
-    [`sort-${Extract<keyof TData, string>}`]: (props: { dir: TableSortDirection }) => void;
-  };
+export type TableTanSlots<TData> = TableTanDataSlots<TData> & TableTanSortSlots<TData> & TableTanExtraSlots<TData>;
