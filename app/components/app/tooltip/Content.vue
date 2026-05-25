@@ -16,6 +16,7 @@
           :style="{
             position: 'absolute',
             top: middlewareData.offset?.placement === 'bottom' ? '-3px' : undefined,
+            bottom: middlewareData.offset?.placement === 'top' ? '-3px' : undefined,
             left: middlewareData.arrow?.x != null ? `${middlewareData.arrow.x}px` : ''
           }"
         />
