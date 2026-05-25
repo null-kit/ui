@@ -1,38 +1,54 @@
 <template>
-  <span :class="['inline-flex min-w-0', hoverClass]" @pointermove="onPointerMove" @pointerleave="onPointerLeave">
+  <span
+    ref="reference"
+    :class="['inline-flex min-w-0', hoverClass]"
+    @pointerenter="onPointerEnter"
+    @pointermove="onPointerMove"
+    @pointerleave="onPointerLeave"
+  >
     <slot>
       <AppIcon v-if="icon" :name="icon" :class="iconClass" />
       {{ trigger }}
     </slot>
 
-    <AppTooltipContent v-if="isActive" ref="content" :class="$attrs.class">
+    <AppTooltipContent v-if="isActive" ref="content" :class="$attrs.class" v-bind="{ unfollow, reference, placement }">
       <slot name="message">{{ message }}</slot>
     </AppTooltipContent>
   </span>
 </template>
 
 <script setup lang="ts">
+import type { Placement } from '@floating-ui/vue';
+
 defineOptions({ inheritAttrs: false });
 
-defineProps<{
+const props = defineProps<{
   trigger?: string;
-  message?: string;
   hoverClass?: string;
+  message?: string;
   icon?: string;
   iconClass?: string;
+  unfollow?: boolean;
+  placement?: Placement;
+  open?: boolean;
 }>();
 
-const isActive = ref(false);
+const isActive = ref(props.open ?? false);
 
+const reference = useTemplateRef('reference');
 const content = useTemplateRef('content');
 
 const onPointerLeave = () => {
-  isActive.value = false;
+  if (!props.open) isActive.value = false;
+};
+
+const onPointerEnter = () => {
+  if (!props.open) isActive.value = true;
 };
 
 const onPointerMove = (event: PointerEvent) => {
-  setTimeout(() => content.value?.onPointerMove(event));
+  if (props.unfollow) return;
 
-  isActive.value = true;
+  setTimeout(() => content.value?.onPointerMove(event));
 };
 </script>

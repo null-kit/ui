@@ -8,25 +8,43 @@
         :class="$attrs.class"
       >
         <slot />
+
+        <div
+          v-if="middlewareData.centerOffset !== 0"
+          ref="floatingArrow"
+          class="tooltip-arrow"
+          :style="{
+            position: 'absolute',
+            top: middlewareData.offset?.placement === 'bottom' ? '-3px' : undefined,
+            left: middlewareData.arrow?.x != null ? `${middlewareData.arrow.x}px` : ''
+          }"
+        />
       </div>
     </Transition>
   </Teleport>
 </template>
 
 <script setup lang="ts">
-import { useFloating, offset, shift, autoPlacement } from '@floating-ui/vue';
-import type { VirtualElement } from '@floating-ui/vue';
+import { useFloating, offset, shift, flip, autoUpdate, arrow } from '@floating-ui/vue';
+import type { VirtualElement, Placement } from '@floating-ui/vue';
 
 defineOptions({ inheritAttrs: false });
 defineEmits<{ close: [] }>();
-defineProps<{ contentClass?: string }>();
 
-const reference = shallowRef<VirtualElement>({
+const props = defineProps<{
+  reference: HTMLElement | null;
+  unfollow?: boolean;
+  placement?: Placement;
+}>();
+
+const anchor = toRef(props, 'reference');
+
+const cursor = shallowRef<VirtualElement>({
   getBoundingClientRect: () => ({
     width: 0,
     height: 0,
-    x: -1000,
-    y: -1000,
+    x: 0,
+    y: 0,
     top: 0,
     left: 0,
     right: 0,
@@ -34,14 +52,23 @@ const reference = shallowRef<VirtualElement>({
   })
 });
 
-const floating = useTemplateRef<HTMLElement>('floating');
+const floatingReference = computed(() => (props.unfollow ? anchor.value : cursor.value));
 
-const { floatingStyles, update } = useFloating(reference, floating, {
-  middleware: [offset(20), autoPlacement({ padding: 10 }), shift({ padding: 10 })]
+const floating = useTemplateRef<HTMLElement>('floating');
+const floatingArrow = useTemplateRef<HTMLElement>('floatingArrow');
+
+const padding = props.unfollow ? 8 : 16;
+
+const { floatingStyles, update, middlewareData } = useFloating(floatingReference, floating, {
+  placement: props.placement ?? 'top',
+  middleware: [offset(padding), flip({ padding }), shift({ padding }), arrow({ element: floatingArrow, padding: 3 })],
+  ...(props.unfollow ? { whileElementsMounted: autoUpdate } : {})
 });
 
 const onPointerMove = (event: PointerEvent) => {
-  reference.value.getBoundingClientRect = () => ({
+  if (props.unfollow) return;
+
+  cursor.value.getBoundingClientRect = () => ({
     width: 0,
     height: 0,
     x: event.clientX,
@@ -55,7 +82,5 @@ const onPointerMove = (event: PointerEvent) => {
   update();
 };
 
-defineExpose({
-  onPointerMove
-});
+defineExpose({ onPointerMove });
 </script>
