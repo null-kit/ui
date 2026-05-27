@@ -99,7 +99,7 @@
             autocomplete="off"
             class="form-input focus:bg-edison/30 rounded-none shadow-none ring-0"
             placeholder="Search"
-            @vue:mounted="({ el }: { el: HTMLInputElement }) => el.focus()"
+            @vue:mounted="({ el }: { el: HTMLInputElement }) => el.focus({ preventScroll: true })"
           />
         </div>
 
