@@ -160,7 +160,7 @@ const pickerView = ref<'month' | 'year' | null>(null);
 
 const years = computed(() => {
   const currentYear = new Date().getFullYear();
-  return Array.from({ length: 10 }, (_, i) => currentYear - 5 + i);
+  return Array.from({ length: 9 }, (_, i) => currentYear - 5 + i);
 });
 
 const dates = computed(() => {
