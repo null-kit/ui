@@ -3,7 +3,7 @@
     <template #trigger="{ isOpen }">
       <button
         type="button"
-        :class="['form-input flex items-center gap-2 hover:z-1', { 'ring-accent z-1': isOpen }, { 'min-w-56': range }]"
+        :class="['form-input flex items-center gap-2 hover:z-1', { 'ring-accent z-1': isOpen }]"
         :title="formatDateRange"
       >
         <AppIcon v-if="!noIcon" :name="icon" class="size-4 shrink-0" />
