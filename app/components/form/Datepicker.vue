@@ -1,5 +1,5 @@
 <template>
-  <AppDropdown class="w-fit" dropdown-class="min-w-max" @close="onClose">
+  <AppDropdown ref="dropdown" class="w-fit" dropdown-class="min-w-max" @close="onClose">
     <template #trigger="{ isOpen }">
       <button
         type="button"
@@ -21,18 +21,14 @@
           </slot>
         </button>
 
-        <div class="flex w-full justify-center font-medium">
-          <select v-model="currentMonth" class="btn btn-sm appearance-none text-center" @change="setYearMonth">
-            <option v-for="(month, index) in months" :key="index" :value="index">
-              {{ month }}
-            </option>
-          </select>
+        <div class="flex w-full justify-center gap-1 font-medium">
+          <button type="button" class="btn btn-sm" @click="togglePicker('month')">
+            {{ months[currentMonth] }}
+          </button>
 
-          <select v-model="currentYear" class="btn btn-sm appearance-none text-center" @change="setYearMonth">
-            <option v-for="year in years" :key="year" :value="year">
-              {{ year }}
-            </option>
-          </select>
+          <button type="button" class="btn btn-sm" @click="togglePicker('year')">
+            {{ currentYear }}
+          </button>
         </div>
 
         <button type="button" class="btn btn-sm px-2" @click="nextMonth">
@@ -44,7 +40,33 @@
         </button>
       </div>
 
-      <div class="datepicker grid min-w-max grid-cols-7 overflow-hidden">
+      <div v-if="pickerView === 'month'" class="grid min-w-max grid-cols-3 gap-2">
+        <button
+          v-for="(month, index) in months"
+          :key="index"
+          type="button"
+          class="btn btn-sm btn-default"
+          :class="{ 'btn-accent': index === currentMonth }"
+          @click="selectMonth(index)"
+        >
+          {{ month.slice(0, 3) }}
+        </button>
+      </div>
+
+      <div v-else-if="pickerView === 'year'" class="grid max-h-40 min-w-max grid-cols-3 gap-2">
+        <button
+          v-for="year in years"
+          :key="year"
+          type="button"
+          class="btn btn-sm btn-default"
+          :class="{ 'btn-accent': year === currentYear }"
+          @click="selectYear(year)"
+        >
+          {{ year }}
+        </button>
+      </div>
+
+      <div v-else class="datepicker grid min-w-max grid-cols-7">
         <div v-for="day in days" :key="day" class="p-1 text-xs font-medium uppercase opacity-40">
           {{ day }}
         </div>
@@ -102,6 +124,7 @@ const {
   maxToday?: boolean;
   icon?: string;
   noIcon?: boolean;
+  autoclose?: boolean;
 }>();
 
 const [model, modifiers] = defineModel<(Date | string)[] | Date | string>({
@@ -120,6 +143,8 @@ const formatWithModifiers = (date: Date | string) => {
   return date;
 };
 
+const dropdown = useTemplateRef('dropdown');
+
 const selectedDates = ref<Date[]>([]);
 
 const days = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
@@ -131,6 +156,7 @@ const months = Array.from({ length: 12 }, (_, i) => {
 const currentDate = ref(new Date());
 const currentMonth = ref(currentDate.value.getMonth());
 const currentYear = ref(currentDate.value.getFullYear());
+const pickerView = ref<'month' | 'year' | null>(null);
 
 const years = computed(() => {
   const currentYear = new Date().getFullYear();
@@ -164,6 +190,8 @@ const formatDateRange = computed(() => {
 });
 
 const prevMonth = () => {
+  pickerView.value = null;
+
   if (currentMonth.value === 0) {
     currentMonth.value = 11;
     currentYear.value--;
@@ -173,6 +201,8 @@ const prevMonth = () => {
 };
 
 const nextMonth = () => {
+  pickerView.value = null;
+
   if (currentMonth.value === 11) {
     currentMonth.value = 0;
     currentYear.value++;
@@ -183,6 +213,22 @@ const nextMonth = () => {
 
 const setYearMonth = () => {
   currentDate.value = new Date(currentYear.value, currentMonth.value, 1);
+};
+
+const togglePicker = (view: 'month' | 'year') => {
+  pickerView.value = pickerView.value === view ? null : view;
+};
+
+const selectMonth = (index: number) => {
+  currentMonth.value = index;
+  setYearMonth();
+  pickerView.value = null;
+};
+
+const selectYear = (year: number) => {
+  currentYear.value = year;
+  setYearMonth();
+  pickerView.value = null;
 };
 
 const setDate = (date: Date) => {
@@ -197,11 +243,15 @@ const setDate = (date: Date) => {
 
       if (selectedDates.value.length === 2) {
         model.value = selectedDates.value.map(formatWithModifiers);
+
+        if (props.autoclose) dropdown.value?.onClose();
       }
     }
   } else {
     selectedDates.value = [date];
     model.value = formatWithModifiers(date);
+
+    if (props.autoclose) dropdown.value?.onClose();
   }
 
   currentMonth.value = date.getMonth();
@@ -244,12 +294,16 @@ const isDisabled = (date: Date) => {
 };
 
 const onClose = () => {
+  pickerView.value = null;
+
   if (props.range && selectedDates.value[0] && !selectedDates.value[1]) {
     setDate(selectedDates.value[0]);
   }
 };
 
 const setPreset = (type: Preset) => {
+  pickerView.value = null;
+
   const today = new Date();
 
   switch (type) {
