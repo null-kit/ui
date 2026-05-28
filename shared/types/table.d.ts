@@ -1,35 +1,34 @@
 export type { ColumnHelper, ColumnDef } from '@tanstack/vue-table';
 
-// TanStack Table Slots
 export type TableSortType = `${string}:${'asc' | 'desc'}` | undefined;
 
-export type TableDataSlots<TData> = {
-  [TValue in Extract<keyof TData, string>]?: (props: {
-    row: TData;
-    cell: NoInfer<TData[TValue]>;
-    isNested: boolean;
-  }) => void;
+type TSlot<T> = {
+  [K in Extract<keyof T, string>]?: (props: { row: T; cell: NoInfer<T[K]>; isNested: boolean }) => void;
 } & {
-  [key: string]: (props: { row: TData; cell: NoInfer<TData[TValue]>; isNested: boolean }) => void;
+  [key: string]: (props: { row: T; cell: NoInfer<T[K]>; isNested: boolean }) => void;
 };
 
-export type TableSortDirection = 'asc' | 'desc' | boolean;
+type TSortDir = 'asc' | 'desc' | boolean;
 
-export type TableSortSlots<TData> = {
-  sort?: (props: { dir: TableSortDirection }) => void;
+type TSort<T> = {
+  sort?: (props: { dir: TSortDir }) => void;
 } & {
-  [K in `sort-${keyof TData}`]?: (props: { dir: TableSortDirection }) => void;
+  [K in `sort-${keyof T}`]?: (props: { dir: TSortDir }) => void;
 };
 
-type TableHeadSlotProps<TData> = {
-  values: TData[keyof TData][];
-  getValues: <T extends TData[keyof TData][]>(column: keyof TData) => T;
+type TValues<T> = {
+  values: T[keyof T][];
+  getValues: <T extends T[keyof T][]>(column: keyof T) => T;
 };
 
-export type TableHeadSlots<TData> = {
-  [K in `th-${Extract<keyof TData, string>}`]?: (props: TableHeadSlotProps<TData>) => void;
+type THead<T> = {
+  [K in `th-${Extract<keyof T, string>}`]?: (props: TValues<T>) => void;
 } & {
-  [K in `th-${Extract<keyof TData, string>}-${'left' | 'right'}`]?: (props: TableHeadSlotProps<TData>) => void;
+  [K in `th-${Extract<keyof T, string>}-${'left' | 'right'}`]?: (props: TValues<T>) => void;
 };
 
-export type TableSlots<TData> = TableDataSlots<TData> & TableSortSlots<TData> & TableHeadSlots<TData>;
+type TFoot<T> = {
+  [K in `tf-${Extract<keyof T, string>}`]?: (props: TValues<T>) => void;
+};
+
+export type TableSlots<T> = TSlot<T> & TSort<T> & THead<T> & TFoot<T>;
