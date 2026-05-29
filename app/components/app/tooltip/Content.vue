@@ -10,7 +10,7 @@
         <slot />
 
         <div
-          v-if="middlewareData.centerOffset !== 0"
+          v-if="placement !== 'left' && placement !== 'right'"
           ref="floatingArrow"
           class="tooltip-arrow"
           :style="{
