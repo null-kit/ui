@@ -11,7 +11,7 @@
       {{ trigger }}
     </slot>
 
-    <AppTooltipContent v-if="isActive" ref="content" :class="$attrs.class" v-bind="{ unfollow, reference, placement }">
+    <AppTooltipContent v-if="isActive" ref="content" :class="$attrs.class" v-bind="{ noFollow, reference, placement }">
       <slot name="message">{{ message }}</slot>
     </AppTooltipContent>
   </span>
@@ -28,7 +28,7 @@ const props = defineProps<{
   message?: string;
   icon?: string;
   iconClass?: string;
-  unfollow?: boolean;
+  noFollow?: boolean;
   placement?: Placement;
   open?: boolean;
 }>();
@@ -47,7 +47,7 @@ const onPointerEnter = () => {
 };
 
 const onPointerMove = (event: PointerEvent) => {
-  if (props.unfollow) return;
+  if (props.noFollow) return;
 
   setTimeout(() => content.value?.onPointerMove(event));
 };

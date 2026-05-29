@@ -34,7 +34,7 @@ defineEmits<{ close: [] }>();
 
 const props = defineProps<{
   reference: HTMLElement | null;
-  unfollow?: boolean;
+  noFollow?: boolean;
   placement?: Placement;
 }>();
 
@@ -53,21 +53,21 @@ const cursor = shallowRef<VirtualElement>({
   })
 });
 
-const floatingReference = computed(() => (props.unfollow ? anchor.value : cursor.value));
+const floatingReference = computed(() => (props.noFollow ? anchor.value : cursor.value));
 
 const floating = useTemplateRef<HTMLElement>('floating');
 const floatingArrow = useTemplateRef<HTMLElement>('floatingArrow');
 
-const padding = props.unfollow ? 8 : 16;
+const padding = props.noFollow ? 8 : 16;
 
 const { floatingStyles, update, middlewareData } = useFloating(floatingReference, floating, {
   placement: props.placement ?? 'top',
   middleware: [offset(padding), flip({ padding }), shift({ padding }), arrow({ element: floatingArrow, padding: 3 })],
-  ...(props.unfollow ? { whileElementsMounted: autoUpdate } : {})
+  ...(props.noFollow ? { whileElementsMounted: autoUpdate } : {})
 });
 
 const onPointerMove = (event: PointerEvent) => {
-  if (props.unfollow) return;
+  if (props.noFollow) return;
 
   cursor.value.getBoundingClientRect = () => ({
     width: 0,
