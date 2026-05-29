@@ -152,12 +152,16 @@ const onFocusOut = () => {
   }
 
   if (type === 'number') {
-    if (min && Number(value) < Number(min)) model.value = min;
-    if (max && Number(value) > Number(max)) model.value = max;
+    if (min !== undefined && Number(value) < Number(min)) model.value = min;
+    if (max !== undefined && Number(value) > Number(max)) model.value = max;
   }
 
-  if (typeof value === 'string' && max && value.length > Number(max)) {
+  if (typeof value === 'string' && max !== undefined && value.length > Number(max)) {
     model.value = value.slice(0, Number(max));
+  }
+
+  if (type === 'number' && typeof value === 'string' && value === '') {
+    model.value = undefined;
   }
 };
 
