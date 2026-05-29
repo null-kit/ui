@@ -40,71 +40,80 @@
         </button>
       </div>
 
-      <div v-if="pickerView === 'month'" class="grid min-w-max grid-cols-3 gap-2">
-        <button
-          v-for="(month, index) in months"
-          :key="index"
-          type="button"
-          class="btn btn-sm btn-default"
-          :class="{ 'btn-accent': index === currentMonth }"
-          @click="selectMonth(index)"
-        >
-          {{ month.slice(0, 3) }}
-        </button>
-      </div>
-
-      <div v-else-if="pickerView === 'year'" class="grid max-h-40 min-w-max grid-cols-3 gap-2">
-        <button
-          v-for="year in years"
-          :key="year"
-          type="button"
-          class="btn btn-sm btn-default"
-          :class="{ 'btn-accent': year === currentYear }"
-          @click="selectYear(year)"
-        >
-          {{ year }}
-        </button>
-      </div>
-
-      <div v-else class="datepicker grid min-w-max grid-cols-7">
-        <div v-for="day in days" :key="day" class="p-1 text-xs font-medium uppercase opacity-40">
-          {{ day }}
+      <Transition
+        enter-from-class="opacity-0 translate-x-2"
+        enter-to-class="duration-200 ease-in-out"
+        leave-to-class="opacity-0 -translate-x-2 duration-200 ease-in-out"
+        mode="out-in"
+      >
+        <div v-if="pickerView === 'month'" class="grid min-w-max grid-cols-3 gap-2">
+          <button
+            v-for="(month, index) in months"
+            :key="index"
+            type="button"
+            class="btn btn-sm btn-default"
+            :class="index === currentMonth ? 'btn-main' : 'btn-default'"
+            @click="selectMonth(index)"
+          >
+            {{ month.slice(0, 3) }}
+          </button>
         </div>
 
-        <button
-          v-for="(date, index) in dates"
-          :key="index"
-          type="button"
-          class="datepicker-day"
-          :class="{
-            'day-selected': isSelected(date),
-            'day-in-range': inRange(date),
-            'day-outside': isOutside(date),
-            'day-today': isToday(date)
-          }"
-          :disabled="isDisabled(date)"
-          @click="setDate(date)"
-        >
-          <span class="datepicker-day-inner">
-            {{ date.getDate() }}
-          </span>
-        </button>
-      </div>
-
-      <div v-if="range" class="flex max-w-70 flex-wrap gap-2 rounded-md *:flex-1">
-        <slot name="presets" :set-preset>
-          <button type="button" class="btn btn-sm btn-default" @click="setPreset('today')">Today</button>
-          <button type="button" class="btn btn-sm btn-default" @click="setPreset('yesterday')">Yesterday</button>
-          <button type="button" class="btn btn-sm btn-default" @click="setPreset('last-week')">Last Week</button>
-          <button type="button" class="btn btn-sm btn-default" @click="setPreset('this-month')">This Month</button>
-          <button type="button" class="btn btn-sm btn-default" @click="setPreset('last-month')">Last Month</button>
-          <button v-if="rangeYear" type="button" class="btn btn-sm btn-default" @click="setPreset('this-year')">
-            This Year
+        <div v-else-if="pickerView === 'year'" class="grid min-w-max grid-cols-3 gap-2">
+          <button
+            v-for="year in years"
+            :key="year"
+            type="button"
+            class="btn btn-sm"
+            :class="year === currentYear ? 'btn-main' : 'btn-default'"
+            @click="selectYear(year)"
+          >
+            {{ year }}
           </button>
+        </div>
 
-          <slot name="preset" :set-preset />
-        </slot>
-      </div>
+        <div v-else>
+          <div class="datepicker grid min-w-max grid-cols-7">
+            <div v-for="day in days" :key="day" class="p-1 text-xs font-medium uppercase opacity-40">
+              {{ day }}
+            </div>
+
+            <button
+              v-for="(date, index) in dates"
+              :key="index"
+              type="button"
+              class="datepicker-day"
+              :class="{
+                'day-selected': isSelected(date),
+                'day-in-range': inRange(date),
+                'day-outside': isOutside(date),
+                'day-today': isToday(date)
+              }"
+              :disabled="isDisabled(date)"
+              @click="setDate(date)"
+            >
+              <span class="datepicker-day-inner">
+                {{ date.getDate() }}
+              </span>
+            </button>
+          </div>
+
+          <div v-if="range" class="mt-2 flex max-w-70 flex-wrap gap-2 *:flex-1">
+            <slot name="presets" :set-preset>
+              <button type="button" class="btn btn-sm btn-default" @click="setPreset('today')">Today</button>
+              <button type="button" class="btn btn-sm btn-default" @click="setPreset('yesterday')">Yesterday</button>
+              <button type="button" class="btn btn-sm btn-default" @click="setPreset('last-week')">Last Week</button>
+              <button type="button" class="btn btn-sm btn-default" @click="setPreset('this-month')">This Month</button>
+              <button type="button" class="btn btn-sm btn-default" @click="setPreset('last-month')">Last Month</button>
+              <button v-if="rangeYear" type="button" class="btn btn-sm btn-default" @click="setPreset('this-year')">
+                This Year
+              </button>
+
+              <slot name="preset" :set-preset />
+            </slot>
+          </div>
+        </div>
+      </Transition>
     </div>
   </AppDropdown>
 </template>
@@ -125,6 +134,10 @@ const {
   icon?: string;
   noIcon?: boolean;
   autoclose?: boolean;
+
+  shift?: number;
+  shiftStart?: number;
+  shiftEnd?: number;
 }>();
 
 const [model, modifiers] = defineModel<(Date | string)[] | Date | string>({
@@ -160,7 +173,7 @@ const pickerView = ref<'month' | 'year' | null>(null);
 
 const years = computed(() => {
   const currentYear = new Date().getFullYear();
-  return Array.from({ length: 9 }, (_, i) => currentYear - 5 + i);
+  return Array.from({ length: 12 }, (_, i) => currentYear - 6 + i);
 });
 
 const dates = computed(() => {
@@ -305,6 +318,8 @@ const setPreset = (type: Preset) => {
   pickerView.value = null;
 
   const today = new Date();
+  const startDate = new Date(new Date().setDate(new Date().getDate() + (props.shift ?? props.shiftStart ?? 0)));
+  const endDate = new Date(new Date().setDate(new Date().getDate() + (props.shift ?? props.shiftEnd ?? 0)));
 
   switch (type) {
     case 'today':
@@ -316,17 +331,13 @@ const setPreset = (type: Preset) => {
       if (props.range) setDate(new Date(today.setDate(today.getDate())));
       break;
     case 'last-week':
-      setDate(new Date(today.setDate(today.getDate() - 6)));
-      setDate(new Date());
+      setDate(new Date(startDate.setDate(startDate.getDate() - 6)));
+      setDate(endDate);
       break;
     case 'this-month':
-      setDate(new Date(today.getFullYear(), today.getMonth(), 1));
-      if (props.maxToday) setDate(today);
-      else setDate(new Date(today.getFullYear(), today.getMonth() + 1, 0));
-      break;
-    case 'this-month-today':
-      setDate(new Date(today.getFullYear(), today.getMonth(), 1));
-      setDate(today);
+      setDate(new Date(startDate.getFullYear(), startDate.getMonth(), 1));
+      if (props.maxToday) setDate(startDate);
+      else setDate(new Date(endDate.getFullYear(), endDate.getMonth() + 1, 0));
       break;
     case 'last-month':
       setDate(new Date(today.getFullYear(), today.getMonth() - 1, 1));
@@ -334,8 +345,8 @@ const setPreset = (type: Preset) => {
       break;
     case 'this-year':
       setDate(new Date(today.getFullYear(), 0, 1));
-      if (props.maxToday) setDate(today);
-      else setDate(new Date(today.getFullYear(), 12, 0));
+      if (props.maxToday) setDate(startDate);
+      else setDate(new Date(endDate.getFullYear(), 12, 0));
       break;
   }
 };

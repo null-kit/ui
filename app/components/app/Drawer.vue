@@ -1,26 +1,26 @@
 <template>
   <Teleport to="#teleports">
     <Transition enter-from-class="opacity-0" leave-to-class="opacity-0">
-      <div v-if="isActive" class="fixed inset-0 z-10 bg-black/50 backdrop-blur-xs duration-400" @click="onClose" />
+      <div v-if="isActive" class="app-drawer-backdrop fixed inset-0 z-10" @click="onClose" />
     </Transition>
 
     <Transition
-      enter-from-class="translate-y-full"
+      enter-from-class="app-drawer-motion"
       enter-to-class="duration-400 ease-in-out"
-      leave-to-class="translate-y-full duration-400"
+      leave-to-class="app-drawer-motion duration-400 ease-in-out"
       :duration="400"
       @after-enter="(el) => (el as HTMLDivElement).focus()"
       @after-leave="$emit('close')"
     >
-      <div v-if="isActive" class="fixed inset-x-2 bottom-0 z-10 outline-0" tabindex="0" @keydown.esc="onClose">
-        <div class="drawer-content overflow-auto">
-          <div class="drawer-overflow pointer-events-none sticky top-0 left-0 z-1 w-full bg-linear-0 to-current" />
-
-          <div class="flex items-start justify-center">
-            <slot />
-          </div>
-
-          <div class="drawer-overflow pointer-events-none sticky bottom-0 left-0 z-1 w-full bg-linear-0 from-current" />
+      <div
+        v-if="isActive"
+        class="app-drawer fixed z-10 outline-0"
+        :data-placement="placement"
+        tabindex="0"
+        @keydown.esc="onClose"
+      >
+        <div class="app-drawer-content scrollbar app-drawer-overflow overflow-auto">
+          <slot :on-close />
         </div>
       </div>
     </Transition>
@@ -31,6 +31,10 @@
 defineEmits<{ close: [] }>();
 
 const isActive = ref(false);
+
+const { placement = 'bottom' } = defineProps<{
+  placement?: 'bottom' | 'top' | 'left' | 'right';
+}>();
 
 const onClose = () => {
   isActive.value = false;

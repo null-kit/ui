@@ -1,16 +1,16 @@
 @layer components {
-  .modal-content {
+  .app-modal-content {
     @apply outline-newton outline-6;
     @apply bg-newton rounded-2xl shadow-lg;
     @apply border-edison border;
   }
 
-  .modal-motion {
+  .app-modal-motion {
     transform: perspective(1000px) translateZ(-40px) rotateX(6deg) rotateY(6deg);
     @apply blur-xs;
   }
 
-  .modal-backdrop {
-    @apply fixed inset-0 z-10 bg-black/50 backdrop-blur-xs duration-400;
+  .app-modal-backdrop {
+    @apply bg-black/50 backdrop-blur-xs duration-300;
   }
 }

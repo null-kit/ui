@@ -168,7 +168,7 @@
                     />
                   </svg>
 
-                  <slot name="option" :value="option">{{ getKeyName(option) }}</slot>
+                  <slot name="option" :value="option" :is-selected="isSelected(option)">{{ getKeyName(option) }}</slot>
                 </button>
               </template>
             </div>

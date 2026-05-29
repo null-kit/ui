@@ -1,13 +1,13 @@
 <template>
   <Teleport to="#teleports">
     <Transition enter-from-class="opacity-0" leave-to-class="opacity-0">
-      <div v-if="isActive" class="modal-backdrop" />
+      <div v-if="isActive" class="app-modal-backdrop fixed inset-0 z-10" />
     </Transition>
 
     <Transition
-      enter-from-class="opacity-0 modal-motion"
-      enter-to-class="duration-400"
-      leave-to-class="opacity-0 modal-motion duration-400"
+      enter-from-class="app-modal-motion opacity-0"
+      enter-to-class="duration-400 ease-in-out"
+      leave-to-class="app-modal-motion opacity-0 duration-400 ease-in-out"
       :duration="400"
       @after-enter="(el) => (el as HTMLDivElement).focus()"
       @after-leave="$emit('close')"
@@ -20,8 +20,8 @@
         @keydown.esc="onPreventClose"
         @click.self="onDismiss"
       >
-        <div class="modal-content m-auto w-full" :class="modalClass">
-          <slot v-if="$slots.header || $slots.title" name="header">
+        <div class="app-modal-content m-auto w-full" :class="modalClass">
+          <slot v-if="$slots.header || $slots.title" name="header" :on-close>
             <div class="flex items-center p-4">
               <slot v-if="$slots.title" name="title" />
 
@@ -38,7 +38,7 @@
             </div>
           </slot>
 
-          <slot />
+          <slot :on-close />
         </div>
       </div>
     </Transition>

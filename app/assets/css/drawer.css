@@ -1,10 +1,76 @@
 @layer components {
-  .drawer-content {
+  .app-drawer-content {
     @apply bg-newton ring-edison ring;
-    @apply max-h-[calc(100dvh-3rem)] rounded-t-4xl px-4;
+    @apply px-4;
   }
 
-  .drawer-overflow {
-    @apply text-newton h-8;
+  .app-drawer-overflow {
+    &:after,
+    &:before {
+      @apply pointer-events-none block content-[''];
+      @apply text-newton sticky left-0 z-1 h-4 w-full bg-linear-0;
+    }
+
+    &:before {
+      @apply top-0 to-current;
+    }
+
+    &:after {
+      @apply bottom-0 from-current;
+    }
+  }
+
+  .app-drawer-backdrop {
+    @apply bg-black/50 backdrop-blur-xs duration-300;
+  }
+
+  .app-drawer {
+    &[data-placement='bottom'] {
+      @apply inset-x-2 bottom-0;
+
+      &.app-drawer-motion {
+        @apply translate-y-full;
+      }
+
+      .app-drawer-content {
+        @apply max-h-[calc(100dvh-3rem)] rounded-t-4xl;
+      }
+    }
+
+    &[data-placement='top'] {
+      @apply inset-x-2 top-0;
+
+      &.app-drawer-motion {
+        @apply -translate-y-full;
+      }
+
+      .app-drawer-content {
+        @apply max-h-[calc(100dvh-3rem)] rounded-b-4xl;
+      }
+    }
+
+    &[data-placement='left'] {
+      @apply inset-y-2 left-0;
+
+      &.app-drawer-motion {
+        @apply -translate-x-full;
+      }
+
+      .app-drawer-content {
+        @apply max-h-full min-h-full max-w-[calc(100dvw-3rem)] rounded-r-4xl;
+      }
+    }
+
+    &[data-placement='right'] {
+      @apply inset-y-2 right-0;
+
+      &.app-drawer-motion {
+        @apply translate-x-full;
+      }
+
+      .app-drawer-content {
+        @apply max-h-full min-h-full max-w-[calc(100dvw-3rem)] rounded-l-4xl;
+      }
+    }
   }
 }
