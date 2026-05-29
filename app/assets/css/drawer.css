@@ -1,7 +1,6 @@
 @layer components {
   .app-drawer-content {
     @apply bg-newton ring-edison ring;
-    @apply px-4;
   }
 
   .app-drawer-overflow {
