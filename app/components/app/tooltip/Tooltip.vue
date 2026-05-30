@@ -11,9 +11,14 @@
       {{ trigger }}
     </slot>
 
-    <AppTooltipContent v-if="isActive" ref="content" :class="$attrs.class" v-bind="{ noFollow, reference, placement }">
+    <LazyAppTooltipContent
+      v-if="isActive"
+      ref="content"
+      :class="$attrs.class"
+      v-bind="{ noFollow, reference, placement }"
+    >
       <slot name="message">{{ message }}</slot>
-    </AppTooltipContent>
+    </LazyAppTooltipContent>
   </span>
 </template>
 
@@ -42,13 +47,15 @@ const onPointerLeave = () => {
   if (!props.open) isActive.value = false;
 };
 
-const onPointerEnter = () => {
+const onPointerEnter = (event: PointerEvent) => {
   if (!props.open) isActive.value = true;
+
+  setTimeout(() => content.value?.onPointerMove(event), 10);
 };
 
 const onPointerMove = (event: PointerEvent) => {
   if (props.noFollow) return;
 
-  setTimeout(() => content.value?.onPointerMove(event));
+  content.value?.onPointerMove(event);
 };
 </script>
