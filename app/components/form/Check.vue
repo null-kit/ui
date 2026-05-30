@@ -1,5 +1,5 @@
 <template>
-  <label class="relative inline-flex flex-wrap whitespace-break-spaces">
+  <label class="relative inline-flex flex-wrap whitespace-break-spaces" :class="{ 'pointer-events-none': readonly }">
     <span class="inline-flex items-center gap-2 text-sm" :class="{ 'cursor-not-allowed opacity-50': disabled }">
       <span class="relative flex shrink-0">
         <input
@@ -16,6 +16,9 @@
           }"
           class="form-check peer"
           :aria-label="isSwitch ? 'switch' : undefined"
+          :aria-readonly="readonly || undefined"
+          @click="onClick"
+          @keydown="onKeydown"
         />
 
         <span v-if="isSwitch" class="form-switch" />
@@ -76,15 +79,25 @@ const props = withDefaults(
     falseValue?: boolean | string | number | null;
     lazy?: boolean;
     checked?: boolean;
+    readonly?: boolean;
   }>(),
   {
     type: 'checkbox',
     trueValue: undefined,
-    falseValue: undefined
+    falseValue: undefined,
+    readonly: false
   }
 );
 
 const model = defineModel<unknown>();
+
+const onClick = (event: Event) => {
+  if (props.readonly) event.preventDefault();
+};
+
+const onKeydown = (event: KeyboardEvent) => {
+  if (props.readonly && (event.key === ' ' || event.key === 'Enter')) event.preventDefault();
+};
 
 watch(
   () => props.value,

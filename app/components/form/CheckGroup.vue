@@ -22,6 +22,7 @@
           :value="toLowerCase(option)"
           v-bind="{ type, name, disabled, readonly }"
           @click="onClick($event, option)"
+          @keydown="onKeydown"
         />
 
         <span
@@ -103,6 +104,10 @@ const onClick = (event: Event, option: T) => {
   if (toLowerCase(model.value as T) === toLowerCase(option) && !props.noToggle) {
     model.value = props.type === 'checkbox' ? [] : undefined;
   }
+};
+
+const onKeydown = (event: KeyboardEvent) => {
+  if (props.readonly && (event.key === ' ' || event.key === 'Enter')) event.preventDefault();
 };
 
 onMounted(() => {

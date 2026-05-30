@@ -61,7 +61,7 @@
 
             <span v-if="!selected.length" class="self-center whitespace-nowrap">{{ placeholder }}</span>
 
-            <span class="sticky top-0 right-0 ml-auto flex items-center gap-1">
+            <span class="form-select-clear sticky top-0 right-0 ml-auto flex items-center gap-1">
               <span
                 v-if="multiple && selected.length > 1"
                 class="btn btn-sm btn-default size-5 text-current/50 hover:text-red-500"
@@ -104,41 +104,11 @@
         </div>
 
         <div
-          v-if="hasOptions"
+          v-if="hasGroupOptions"
           class="scrollbar scrollbar-thin flex-1 overflow-auto"
           :style="{ maxHeight: search ? 'calc(var(--floating-height) - 42px)' : 'auto' }"
         >
-          <div v-if="presets && presets.length > 0 && filteredPresets && filteredPresets.length > 0" class="-order-1">
-            <div class="select-group-label">Presets</div>
-
-            <div class="grid gap-0.5 p-1 md:grid-cols-3">
-              <button
-                v-for="(preset, index) in filteredPresets"
-                :key="index"
-                type="button"
-                class="btn btn-sm justify-start pl-1"
-                :class="{ 'bg-accent/5 text-accent font-medium': hasPreset(preset.list) }"
-                @click="addPreset(preset.list, true)"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 32 32"
-                  class="hover:text-accent size-4 shrink-0 rounded bg-current/10 p-px duration-200"
-                  :class="hasPreset(preset.list) ? 'text-current' : 'text-surface/50 hover:text-accent'"
-                  @click.stop="addPreset(preset.list)"
-                >
-                  <path
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="3"
-                    :d="hasPreset(preset.list) ? 'm5 18 6 6L26 9' : 'M16 7v18M7 16h18'"
-                  />
-                </svg>
-
-                <span class="truncate">{{ preset.name }}</span>
-              </button>
-            </div>
-          </div>
+          <LazyFormSelectPresets v-if="presets && presets.length > 0" v-model="model" :presets :search-input />
 
           <div v-if="presets && presets.length > 0" class="select-group-label">All</div>
 
@@ -149,27 +119,36 @@
 
             <div v-if="optionGroup.list.length > 0" class="select-options">
               <template v-for="(option, index) in optionGroup.list" :key="index">
-                <button
-                  v-if="!(typeof option === 'object' && option.excluded)"
-                  type="button"
-                  class="btn justify-start"
-                  :class="{ 'bg-current/5 font-medium': isSelected(option), '-order-1': isSelected(option) && order }"
-                  @click="toggleOption(option)"
+                <slot
+                  name="option"
+                  :value="option"
+                  :is-selected="isSelected(option)"
+                  :on-toggle="() => toggleOption(option)"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="size-4 shrink-0">
-                    <path
-                      fill="none"
-                      stroke-width="3"
-                      d="m5 18 7 7L27 9"
-                      class="duration-300"
-                      stroke="currentColor"
-                      stroke-dasharray="32"
-                      :style="{ strokeDashoffset: isSelected(option) ? 0 : 32 }"
-                    />
-                  </svg>
+                  <button
+                    v-if="!(typeof option === 'object' && option.excluded)"
+                    type="button"
+                    class="btn justify-start"
+                    :class="{ 'bg-current/5 font-medium': isSelected(option), '-order-1': isSelected(option) && order }"
+                    @click="toggleOption(option)"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="size-4 shrink-0">
+                      <path
+                        fill="none"
+                        stroke-width="3"
+                        d="m5 18 7 7L27 9"
+                        class="duration-300"
+                        stroke="currentColor"
+                        stroke-dasharray="32"
+                        :style="{ strokeDashoffset: isSelected(option) ? 0 : 32 }"
+                      />
+                    </svg>
 
-                  <slot name="option" :value="option" :is-selected="isSelected(option)">{{ getKeyName(option) }}</slot>
-                </button>
+                    <slot name="button" :value="option" :is-selected="isSelected(option)">
+                      {{ getKeyName(option) }}
+                    </slot>
+                  </button>
+                </slot>
               </template>
             </div>
           </template>
@@ -320,24 +299,7 @@ const filteredOptions = computed(() => {
   });
 });
 
-const filteredPresets = computed(() => {
-  return props.presets?.filter((preset) => preset.name.toLowerCase().includes(searchInput.value.toLowerCase()));
-});
-
-const hasOptions = computed(() => filteredOptions.value.some((group) => group.list?.length > 0));
-
-const addPreset = (preset: (string | number)[], replace = false) => {
-  model.value = replace
-    ? [...new Set(preset)].filter(Boolean)
-    : [...new Set([...preset, ...(Array.isArray(model.value) ? model.value : [model.value])])].filter(Boolean);
-};
-
-const hasPreset = (preset: (string | number)[]) => {
-  if (preset.every((value) => Array.isArray(model.value) && model.value.includes(value))) {
-    return true;
-  }
-  return false;
-};
+const hasGroupOptions = computed(() => filteredOptions.value.some((group) => group.list?.length > 0));
 
 const onClear = () => {
   model.value = props.multiple ? [] : null;

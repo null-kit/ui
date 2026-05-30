@@ -18,7 +18,7 @@ type TSort<T> = {
 
 type TValues<T> = {
   values: T[keyof T][];
-  getValues: <T extends T[keyof T][]>(column: keyof T) => T;
+  getValues: <TValue extends T[keyof T]>(column: keyof T) => TValue[];
 };
 
 type THead<T> = {

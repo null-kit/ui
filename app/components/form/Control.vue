@@ -84,6 +84,7 @@
 const [model, modifiers] = defineModel<string | number | null>({
   set(value) {
     if (typeof value === 'string' && modifiers.spaceToComma) return value.replace(/ /g, ',');
+    if (typeof value === 'string' && modifiers.clearSpaces) return value.replace(/\s/g, '');
 
     return value;
   }
@@ -149,6 +150,10 @@ const onFocusOut = () => {
 
   if (typeof value === 'string' && modifiers.spaceToComma) {
     model.value = value.replace(/,{2,}/g, ',').replace(/^,+|,+$/g, '');
+  }
+
+  if (typeof value === 'string' && modifiers.clearSpaces) {
+    model.value = value.replace(/\s/g, '');
   }
 
   if (type === 'number') {
