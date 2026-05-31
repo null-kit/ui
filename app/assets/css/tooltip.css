@@ -1,14 +1,14 @@
 @layer components {
-  .tooltip-content {
+  .app-tooltip-content {
     @apply bg-surface text-newton rounded-md shadow-md;
     @apply px-3 py-1.5 text-sm;
   }
 
-  .tooltip-arrow {
+  .app-tooltip-arrow {
     @apply bg-surface size-2 rotate-45 rounded-xs;
   }
 
-  .confirm-content {
+  .app-confirm-content {
     @apply bg-darwin text-surface gap-3 rounded-2xl p-3 shadow-lg;
   }
 }
