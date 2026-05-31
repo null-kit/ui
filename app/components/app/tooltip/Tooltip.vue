@@ -28,7 +28,7 @@ import type { Placement } from '@floating-ui/vue';
 defineOptions({ inheritAttrs: false });
 
 const props = defineProps<{
-  trigger?: string;
+  trigger?: string | number;
   hoverClass?: string;
   message?: string;
   icon?: string;
