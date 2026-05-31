@@ -47,10 +47,8 @@ const onPointerLeave = () => {
   if (!props.open) isActive.value = false;
 };
 
-const onPointerEnter = (event: PointerEvent) => {
+const onPointerEnter = () => {
   if (!props.open) isActive.value = true;
-
-  setTimeout(() => content.value?.onPointerMove(event), 10);
 };
 
 const onPointerMove = (event: PointerEvent) => {

@@ -5,7 +5,17 @@
   }
 
   .app-tooltip-arrow {
-    @apply bg-surface size-2 rotate-45 rounded-xs;
+    @apply bg-surface size-2 rotate-45 rounded-tl-xs rounded-br-xs;
+
+    &[data-placement='bottom'] {
+      @apply -top-1;
+      clip-path: polygon(0 0, 100% 0%, 100% 0, 0 100%);
+    }
+
+    &[data-placement='top'] {
+      @apply -bottom-1;
+      clip-path: polygon(0 100%, 100% 0%, 100% 100%, 0 100%);
+    }
   }
 
   .app-confirm-content {

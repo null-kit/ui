@@ -8,10 +8,9 @@
           v-if="placement !== 'left' && placement !== 'right'"
           ref="floatingArrow"
           class="app-tooltip-arrow"
+          :data-placement="middlewareData.offset?.placement ?? 'top'"
           :style="{
             position: 'absolute',
-            top: middlewareData.offset?.placement === 'bottom' ? '-3px' : undefined,
-            bottom: middlewareData.offset?.placement === 'top' ? '-3px' : undefined,
             left: middlewareData.arrow?.x != null ? `${middlewareData.arrow.x}px` : ''
           }"
         />
@@ -41,8 +40,8 @@ const cursor = shallowRef<VirtualElement>({
     height: 0,
     x: 0,
     y: 0,
-    top: 0,
-    left: 0,
+    top: -1000,
+    left: -1000,
     right: 0,
     bottom: 0
   })
