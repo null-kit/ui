@@ -17,7 +17,7 @@
       >
         <div
           role="dialog"
-          class="confirm-content inverted flex"
+          class="app-confirm-content inverted flex"
           :class="hasPlacement(['bottom-start', 'bottom-end']) ? 'flex-col-reverse' : 'flex-col'"
         >
           <div>

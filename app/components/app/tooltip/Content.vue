@@ -1,18 +1,13 @@
 <template>
   <Teleport to="#teleports">
     <Transition enter-from-class="opacity-0" enter-to-class="transition-opacity" appear>
-      <div
-        ref="floating"
-        :style="floatingStyles"
-        class="tooltip-content pointer-events-none z-10"
-        :class="$attrs.class"
-      >
+      <div ref="floating" :style="floatingStyles" class="app-tooltip z-10" :class="$attrs.class">
         <slot />
 
         <div
           v-if="placement !== 'left' && placement !== 'right'"
           ref="floatingArrow"
-          class="tooltip-arrow"
+          class="app-tooltip-arrow"
           :style="{
             position: 'absolute',
             top: middlewareData.offset?.placement === 'bottom' ? '-3px' : undefined,
