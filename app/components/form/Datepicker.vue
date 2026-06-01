@@ -90,7 +90,7 @@
                 'day-today': isToday(date)
               }"
               :disabled="isDisabled(date)"
-              @click="setDate(date)"
+              @click="onSetDate(date)"
             >
               <span class="datepicker-day-inner">
                 {{ date.getDate() }}
