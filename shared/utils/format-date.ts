@@ -83,7 +83,6 @@ export const formatSafeISO = (date: DateInput) => {
  * Set the date of a date object
  * @param date - The date to set the date of
  * @param offset - The offset to set the date of
- * @param format - The format to return the date in
  * @returns The date with the offset set
  */
 export const setDate = (date: DateInput, offset: number = 0) => {

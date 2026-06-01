@@ -13,7 +13,7 @@
 
     <div class="space-y-2 p-2 text-center">
       <div class="flex justify-between gap-2">
-        <button type="button" class="btn btn-sm px-2" @click="prevMonth">
+        <button type="button" class="btn btn-sm px-2" @click="onPrevMonth">
           <slot name="prev-icon">
             <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="size-5">
               <path fill="none" stroke-width="2" stroke="currentColor" d="m20 6-10 10 10 10" />
@@ -22,16 +22,16 @@
         </button>
 
         <div class="flex w-full justify-center gap-1 font-medium">
-          <button type="button" class="btn btn-sm" @click="togglePicker('month')">
+          <button type="button" class="btn btn-sm" @click="onTogglePicker('month')">
             {{ months[currentMonth] }}
           </button>
 
-          <button type="button" class="btn btn-sm" @click="togglePicker('year')">
+          <button type="button" class="btn btn-sm" @click="onTogglePicker('year')">
             {{ currentYear }}
           </button>
         </div>
 
-        <button type="button" class="btn btn-sm px-2" @click="nextMonth">
+        <button type="button" class="btn btn-sm px-2" @click="onNextMonth">
           <slot name="next-icon">
             <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="size-5">
               <path fill="none" stroke-width="2" stroke="currentColor" d="m12 26 10-10-10-10" />
@@ -53,7 +53,7 @@
             type="button"
             class="btn btn-sm btn-default"
             :class="index === currentMonth ? 'btn-main' : 'btn-default'"
-            @click="selectMonth(index)"
+            @click="onSelectMonth(index)"
           >
             {{ month.slice(0, 3) }}
           </button>
@@ -66,7 +66,7 @@
             type="button"
             class="btn btn-sm"
             :class="year === currentYear ? 'btn-main' : 'btn-default'"
-            @click="selectYear(year)"
+            @click="onSelectYear(year)"
           >
             {{ year }}
           </button>
@@ -98,18 +98,28 @@
             </button>
           </div>
 
-          <div v-if="range" class="mt-2 flex max-w-70 flex-wrap gap-2 *:flex-1">
-            <slot name="presets" :set-preset>
-              <button type="button" class="btn btn-sm btn-default" @click="setPreset('today')">Today</button>
-              <button type="button" class="btn btn-sm btn-default" @click="setPreset('yesterday')">Yesterday</button>
-              <button type="button" class="btn btn-sm btn-default" @click="setPreset('last-week')">Last Week</button>
-              <button type="button" class="btn btn-sm btn-default" @click="setPreset('this-month')">This Month</button>
-              <button type="button" class="btn btn-sm btn-default" @click="setPreset('last-month')">Last Month</button>
-              <button v-if="rangeYear" type="button" class="btn btn-sm btn-default" @click="setPreset('this-year')">
+          <div v-if="range" class="mt-2 grid grid-cols-2 gap-2">
+            <slot name="presets" :on-set-preset>
+              <button
+                v-for="p in presets"
+                :key="p.key"
+                type="button"
+                class="btn btn-sm btn-default"
+                @click="onSetPreset(p.key)"
+              >
+                {{ p.name }}
+              </button>
+
+              <button
+                v-if="rangeYear"
+                type="button"
+                class="btn btn-sm btn-default col-span-2"
+                @click="onSetPreset('this-year')"
+              >
                 This Year
               </button>
 
-              <slot name="preset" :set-preset />
+              <slot name="preset" :on-set-preset />
             </slot>
           </div>
         </div>
@@ -119,7 +129,7 @@
 </template>
 
 <script setup lang="ts">
-type Preset = 'today' | 'yesterday' | `last-${'week' | 'month'}` | `this-${'month' | 'year' | 'month-today'}`;
+type Preset = 'today' | 'yesterday' | `last-${'month' | '7' | '30'}` | `this-${'month' | 'year'}`;
 
 const {
   disabledDates = [],
@@ -129,15 +139,12 @@ const {
   range?: boolean;
   disabledDates?: Date[];
   preset?: Preset;
+  includeToday?: boolean;
   rangeYear?: boolean;
   maxToday?: boolean;
   icon?: string;
   noIcon?: boolean;
   autoclose?: boolean;
-
-  shift?: number;
-  shiftStart?: number;
-  shiftEnd?: number;
 }>();
 
 const [model, modifiers] = defineModel<(Date | string)[] | Date | string>({
@@ -159,6 +166,15 @@ const formatWithModifiers = (date: Date | string) => {
 const dropdown = useTemplateRef('dropdown');
 
 const selectedDates = ref<Date[]>([]);
+
+const presets: Array<{ name: string; key: Preset }> = [
+  { name: 'Today', key: 'today' },
+  { name: 'Yesterday', key: 'yesterday' },
+  { name: 'Last 7 Days', key: 'last-7' },
+  { name: 'Last 30 Days', key: 'last-30' },
+  { name: 'This Month', key: 'this-month' },
+  { name: 'Last Month', key: 'last-month' }
+];
 
 const days = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
@@ -202,7 +218,7 @@ const formatDateRange = computed(() => {
   return String(formatDate(selectedDates.value[0]!));
 });
 
-const prevMonth = () => {
+const onPrevMonth = () => {
   pickerView.value = null;
 
   if (currentMonth.value === 0) {
@@ -213,7 +229,7 @@ const prevMonth = () => {
   }
 };
 
-const nextMonth = () => {
+const onNextMonth = () => {
   pickerView.value = null;
 
   if (currentMonth.value === 11) {
@@ -224,27 +240,27 @@ const nextMonth = () => {
   }
 };
 
-const setYearMonth = () => {
+const onSetYearMonth = () => {
   currentDate.value = new Date(currentYear.value, currentMonth.value, 1);
 };
 
-const togglePicker = (view: 'month' | 'year') => {
+const onTogglePicker = (view: 'month' | 'year') => {
   pickerView.value = pickerView.value === view ? null : view;
 };
 
-const selectMonth = (index: number) => {
+const onSelectMonth = (index: number) => {
   currentMonth.value = index;
-  setYearMonth();
+  onSetYearMonth();
   pickerView.value = null;
 };
 
-const selectYear = (year: number) => {
+const onSelectYear = (year: number) => {
   currentYear.value = year;
-  setYearMonth();
+  onSetYearMonth();
   pickerView.value = null;
 };
 
-const setDate = (date: Date) => {
+const onSetDate = (date: Date) => {
   if (isDisabled(date)) return;
 
   if (props.range) {
@@ -310,43 +326,45 @@ const onClose = () => {
   pickerView.value = null;
 
   if (props.range && selectedDates.value[0] && !selectedDates.value[1]) {
-    setDate(selectedDates.value[0]);
+    onSetDate(selectedDates.value[0]);
   }
 };
 
-const setPreset = (type: Preset) => {
+const onSetPreset = (type: Preset) => {
   pickerView.value = null;
 
   const today = new Date();
-  const startDate = new Date(new Date().setDate(new Date().getDate() + (props.shift ?? props.shiftStart ?? 0)));
-  const endDate = new Date(new Date().setDate(new Date().getDate() + (props.shift ?? props.shiftEnd ?? 0)));
 
   switch (type) {
     case 'today':
-      setDate(today);
-      if (props.range) setDate(today);
+      onSetDate(today);
+      if (props.range) onSetDate(today);
       break;
     case 'yesterday':
-      setDate(new Date(today.setDate(today.getDate() - 1)));
-      if (props.range) setDate(new Date(today.setDate(today.getDate())));
+      onSetDate(setDate(today, -1));
+      if (props.range) onSetDate(setDate(today, -1));
       break;
-    case 'last-week':
-      setDate(new Date(startDate.setDate(startDate.getDate() - 6)));
-      setDate(endDate);
+    case 'last-7':
+      onSetDate(props.includeToday ? setDate(today, -6) : setDate(today, -7));
+      onSetDate(props.includeToday ? today : setDate(today, -1));
+      break;
+    case 'last-30':
+      onSetDate(props.includeToday ? setDate(today, -29) : setDate(today, -30));
+      onSetDate(props.includeToday ? today : setDate(today, -1));
       break;
     case 'this-month':
-      setDate(new Date(startDate.getFullYear(), startDate.getMonth(), 1));
-      if (props.maxToday) setDate(startDate);
-      else setDate(new Date(endDate.getFullYear(), endDate.getMonth() + 1, 0));
+      onSetDate(new Date(today.getFullYear(), today.getMonth(), 1));
+      if (props.maxToday) onSetDate(today);
+      else onSetDate(new Date(today.getFullYear(), today.getMonth() + 1, 0));
       break;
     case 'last-month':
-      setDate(new Date(today.getFullYear(), today.getMonth() - 1, 1));
-      setDate(new Date(today.getFullYear(), today.getMonth(), 0));
+      onSetDate(new Date(today.getFullYear(), today.getMonth() - 1, 1));
+      onSetDate(new Date(today.getFullYear(), today.getMonth(), 0));
       break;
     case 'this-year':
-      setDate(new Date(today.getFullYear(), 0, 1));
-      if (props.maxToday) setDate(startDate);
-      else setDate(new Date(endDate.getFullYear(), 12, 0));
+      onSetDate(new Date(today.getFullYear(), 0, 1));
+      if (props.maxToday) onSetDate(today);
+      else onSetDate(new Date(today.getFullYear(), 12, 0));
       break;
   }
 };
@@ -356,7 +374,7 @@ onMounted(() => {
     selectedDates.value = Array.isArray(model.value) ? model.value.map((d) => new Date(d)) : [new Date(model.value)];
   }
 
-  if (props.preset) setPreset(props.preset);
+  if (props.preset) onSetPreset(props.preset);
 });
 
 watch(model, (value) => {
