@@ -18,6 +18,7 @@
       </div>
 
       <AppDropdown
+        ref="dropdown"
         :autoclose
         :placement
         :inline
@@ -216,6 +217,8 @@ const props = defineProps<{
   inline?: boolean;
 }>();
 
+const dropdown = useTemplateRef('dropdown');
+
 const searchInput = ref('');
 
 const getKeyValue = (option: T) => {
@@ -284,6 +287,10 @@ const toggleOption = (option: T) => {
     model.value = props.keyValue ? selectOptions.map((item) => getKeyValue(item)) : selectOptions;
   } else {
     model.value = selected.value[0] === option ? null : getKeyValue(option);
+
+    if (props.autoclose) {
+      dropdown.value?.onClose();
+    }
   }
 
   emit('change', model.value as T);
