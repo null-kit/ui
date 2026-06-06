@@ -24,12 +24,13 @@ import { useFloating, offset, shift, flip, autoUpdate, arrow } from '@floating-u
 import type { VirtualElement, Placement } from '@floating-ui/vue';
 
 defineOptions({ inheritAttrs: false });
-defineEmits<{ close: [] }>();
+const emit = defineEmits<{ close: [] }>();
 
 const props = defineProps<{
   reference: HTMLElement | null;
   noFollow?: boolean;
   placement?: Placement;
+  open?: boolean;
 }>();
 
 const anchor = toRef(props, 'reference');
@@ -78,4 +79,11 @@ const onPointerMove = (event: PointerEvent) => {
 };
 
 defineExpose({ onPointerMove });
+
+watch(
+  () => props.open,
+  (value) => {
+    if (!value) emit('close');
+  }
+);
 </script>

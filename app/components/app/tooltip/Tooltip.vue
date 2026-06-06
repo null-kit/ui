@@ -15,7 +15,8 @@
       v-if="isActive"
       ref="content"
       :class="$attrs.class"
-      v-bind="{ noFollow, reference, placement }"
+      v-bind="{ noFollow, reference, placement, open }"
+      @close="isActive = false"
     >
       <slot name="message">{{ message }}</slot>
     </LazyAppTooltipContent>
