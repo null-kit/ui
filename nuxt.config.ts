@@ -17,6 +17,9 @@ export default defineNuxtConfig({
         'to-px': 'to-px/browser.js',
         striptags: 'striptags/src/striptags.js'
       }
+    },
+    optimizeDeps: {
+      include: ['@floating-ui/vue', '@tanstack/vue-table', '@vue/devtools-core', '@vue/devtools-kit']
     }
   }
 });
