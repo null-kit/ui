@@ -117,7 +117,7 @@ const onResetSize = (column: Column<TData>) => {
 const getValues = <T extends keyof TData>(column: string) => {
   if (!column) return [];
 
-  return props.table.getRowModel().rows.map((row) => row.original[column as T]);
+  return props.table.getPreExpandedRowModel().rows.map((row) => row.original[column as T]);
 };
 </script>
 

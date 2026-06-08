@@ -9,7 +9,7 @@
           :class="[header.column.columnDef.meta?.class, header.column.columnDef.meta?.tfClass]"
           :colSpan="header.colSpan"
         >
-          <slot v-if="!header.isPlaceholder" :name="`tf-${header.id}`" :values="getValues(header.id)">
+          <slot v-if="!header.isPlaceholder" :name="`tf-${header.id}`" :values="getValues(header.id)" :get-values>
             <FlexRender :render="header.column.columnDef.footer" :props="header.getContext()" />
           </slot>
         </td>
@@ -30,7 +30,9 @@ const hasFooter =
     .flatMap(({ headers }) => headers.map(({ column }) => column.columnDef.footer))
     .filter(Boolean).length > 0;
 
-const getValues = (column: string) => {
-  return props.table.getRowModel().rows.map((row) => row.original[column as keyof TData]);
+const getValues = <T extends keyof TData>(column: string) => {
+  if (!column) return [];
+
+  return props.table.getPreExpandedRowModel().rows.map((row) => row.original[column as T]);
 };
 </script>
