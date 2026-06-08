@@ -19,9 +19,7 @@
 
       <AppDropdown
         ref="dropdown"
-        :autoclose
-        :placement
-        :inline
+        v-bind="{ disabled, autoclose, placement, inline }"
         :dropdown-class="[dropdownClass, 'overflow-clip flex flex-col'].join(' ')"
         :max-height="448"
         class="w-full"
@@ -35,6 +33,7 @@
               inputClass,
               { 'ring-accent': isOpen, 'rounded-l-none': $slots.left, 'rounded-r-none': $slots.right }
             ]"
+            :disabled
           >
             <span v-if="multiple && selected.length > 0" class="select-multiple">
               <span v-for="(option, index) in selected" :key="index" class="btn btn-sm btn-default">
@@ -208,6 +207,7 @@ const props = defineProps<{
   placement?: Placement;
   autoclose?: boolean;
   required?: boolean;
+  disabled?: boolean;
   help?: string;
   presets?: { name: string; list: (string | number)[] }[];
   labelClass?: string;
