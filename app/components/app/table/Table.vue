@@ -27,37 +27,37 @@
             <td :style="{ padding: 0, border: 0, height: topPadding + 'px' }" />
           </tr>
 
-          <template v-for="(row, index) in visibleRows" :key="row.id">
-            <tr
-              :aria-expanded="row.getIsExpanded() || undefined"
-              :data-row="striped && virtualScroll && (startIndex + index) % 2 !== 0 ? 'odd' : undefined"
-              :height="typeof virtualScroll === 'number' ? virtualScroll : undefined"
-              :class="{ 'cursor-pointer': fullRowExpand && row.getCanExpand() }"
-              @click="fullRowExpand && row.getCanExpand() ? row.toggleExpanded() : undefined"
+          <tr
+            v-for="(row, index) in visibleRows"
+            :key="row.id"
+            :aria-expanded="row.getIsExpanded() || undefined"
+            :data-row="striped && virtualScroll && (startIndex + index) % 2 !== 0 ? 'odd' : undefined"
+            :height="typeof virtualScroll === 'number' ? virtualScroll : undefined"
+            :class="{ 'cursor-pointer': fullRowExpand && row.getCanExpand() }"
+            @click="fullRowExpand && row.getCanExpand() ? row.toggleExpanded() : undefined"
+          >
+            <td
+              v-for="cell in row.getVisibleCells()"
+              :key="cell.id"
+              :data-cell="cell.column.id"
+              :aria-expanded="(cell.column.id === 'expander' && row.depth > 0) || undefined"
+              :class="[
+                getTdClass(cell.column.columnDef.meta?.class, cell),
+                getTdClass(cell.column.columnDef.meta?.tdClass, cell)
+              ]"
+              :style="columnStyles(cell.column)"
             >
-              <td
-                v-for="cell in row.getVisibleCells()"
-                :key="cell.id"
-                :data-cell="cell.column.id"
-                :aria-expanded="(cell.column.id === 'expander' && row.depth > 0) || undefined"
-                :class="[
-                  getTdClass(cell.column.columnDef.meta?.class, cell),
-                  getTdClass(cell.column.columnDef.meta?.tdClass, cell)
-                ]"
-                :style="columnStyles(cell.column)"
+              <slot
+                v-if="!cell.getIsPlaceholder()"
+                :name="cell.column.id"
+                :cell="cell.getValue() as NoInfer<TData[keyof TData]>"
+                :row="row.original"
+                :is-nested="row.depth > 0"
               >
-                <slot
-                  v-if="!cell.getIsPlaceholder()"
-                  :name="cell.column.id"
-                  :cell="cell.getValue()"
-                  :row="row.original"
-                  :is-nested="row.depth > 0"
-                >
-                  <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
-                </slot>
-              </td>
-            </tr>
-          </template>
+                <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
+              </slot>
+            </td>
+          </tr>
 
           <tr v-if="virtualScroll" aria-hidden>
             <td :style="{ padding: 0, border: 0, height: bottomPadding + 'px' }" />
@@ -260,7 +260,7 @@ const table = useVueTable({
   }
 });
 
-const columnStyles = (column: Column<TData>): CSSProperties => {
+const computeColumnStyle = (column: Column<TData>): CSSProperties => {
   const isPinned = column.getIsPinned();
   const canResize = column.getCanResize() || column.columnDef.size;
 
@@ -280,6 +280,18 @@ const tableWrapper = useTemplateRef<HTMLElement>('tableWrapper');
 
 const rows = computed(() => table.getRowModel().rows);
 const leafColumns = computed(() => table.getAllLeafColumns());
+
+const columnStyleCache = computed(() => {
+  const cache = new Map<string, CSSProperties>();
+
+  for (const column of leafColumns.value) cache.set(column.id, computeColumnStyle(column));
+
+  return cache;
+});
+
+const columnStyles = (column: Column<TData>): CSSProperties => {
+  return columnStyleCache.value.get(column.id) ?? computeColumnStyle(column);
+};
 
 const { startIndex, visibleRows, topPadding, bottomPadding } = useTableVirtualRows(rows, props.virtualScroll);
 

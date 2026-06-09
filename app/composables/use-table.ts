@@ -71,26 +71,30 @@ export const useTableVirtualRows = <T>(rows: Ref<T[]>, enabled?: boolean | numbe
   if (!enabled) return { startIndex: 0, endIndex: 0, visibleRows: rows };
 
   const rowHeight = typeof enabled === 'number' ? enabled : 37;
-  const buffer = 5;
+  const buffer = 10;
 
   const tableBody = useTemplateRef<HTMLElement>('tbody');
   const scrollY = ref(0);
-  const viewportHeight = ref(window.innerHeight);
+  const scrollDirection = ref<1 | -1>(1);
+  const viewportHeight = ref(import.meta.client ? window.innerHeight : 0);
   const tableTop = ref(0);
 
   const totalRows = computed(() => rows.value.length);
   const totalHeight = computed(() => totalRows.value * rowHeight);
 
+  const overscanTop = computed(() => (scrollDirection.value === -1 ? buffer * 2 : buffer));
+  const overscanBottom = computed(() => (scrollDirection.value === 1 ? buffer * 2 : buffer));
+
   const startIndex = computed(() => {
     const relativeScroll = scrollY.value - tableTop.value;
 
-    return Math.max(Math.floor(relativeScroll / rowHeight) - buffer, 0);
+    return Math.max(Math.floor(relativeScroll / rowHeight) - overscanTop.value, 0);
   });
 
   const endIndex = computed(() => {
     const visibleCount = Math.ceil(viewportHeight.value / rowHeight);
 
-    return Math.min(startIndex.value + visibleCount + buffer * 2, totalRows.value);
+    return Math.min(startIndex.value + visibleCount + overscanTop.value + overscanBottom.value, totalRows.value);
   });
 
   const visibleRows = computed(() => rows.value.slice(startIndex.value, endIndex.value));
@@ -116,8 +120,11 @@ export const useTableVirtualRows = <T>(rows: Ref<T[]>, enabled?: boolean | numbe
   };
 
   const onScroll = () => {
-    scrollY.value = window.scrollY;
-    updateTableTop();
+    const next = window.scrollY;
+
+    if (next !== scrollY.value) scrollDirection.value = next > scrollY.value ? 1 : -1;
+
+    scrollY.value = next;
   };
 
   const onResize = () => {
@@ -132,7 +139,7 @@ export const useTableVirtualRows = <T>(rows: Ref<T[]>, enabled?: boolean | numbe
 
     bodyResizeObserver.observe(document.body);
 
-    window.addEventListener('scroll', onScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onResize);
 
     onUnmounted(() => {
