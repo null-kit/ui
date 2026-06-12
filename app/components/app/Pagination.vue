@@ -51,8 +51,8 @@ const props = withDefaults(
 );
 
 const route = useRoute();
-const routePage = Number(route.query.page);
-const currentPage = ref(routePage || 1);
+const routePage = Number(route.query.page || 1);
+const currentPage = ref(routePage);
 
 const perPage = ref(Number(route.query.perPage) || props.perPage);
 
@@ -96,4 +96,11 @@ watch(currentPage, () => {
 
   if (currentPage.value <= 1) navigateTo({ query: { ...route.query, page: undefined } });
 });
+
+watch(
+  () => route.query.page,
+  (value) => {
+    if (value === undefined) currentPage.value = 1;
+  }
+);
 </script>
