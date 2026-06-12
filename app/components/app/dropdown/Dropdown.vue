@@ -52,7 +52,9 @@ const onClose = () => {
   emit('close');
 };
 
-const onFloatingClose = () => floating.value?.onClose();
+const onFloatingClose = () => {
+  if (isOpen.value) floating.value?.onClose();
+};
 
 const onPointerEnter = () => {
   if (props.hoverOpen) isOpen.value = true;

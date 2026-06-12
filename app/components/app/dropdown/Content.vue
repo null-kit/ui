@@ -12,7 +12,8 @@
         ref="floating"
         :class="['dropdown-content', dropdownClass]"
         :style="floatingStyles"
-        @pointerleave="autoclose && (isOpen = false)"
+        @pointerenter="onClearTimeout"
+        @pointerleave="autoclose ? onDebouncedClose() : undefined"
         @click.stop
       >
         <div :class="['group dropdown-inner', innerClass]">
@@ -68,8 +69,24 @@ const { floatingStyles } = useFloating(reference, floating, {
   ]
 });
 
-defineExpose({ onClose: () => (isOpen.value = false) });
+let closeTimeout: ReturnType<typeof setTimeout> | undefined;
+
+const onClearTimeout = () => {
+  clearTimeout(closeTimeout);
+  closeTimeout = undefined;
+};
+
+const onDebouncedClose = () => {
+  onClearTimeout();
+  closeTimeout = setTimeout(() => (isOpen.value = false), 500);
+};
+
+defineExpose({ onClose: onDebouncedClose });
 
 onMounted(() => (isOpen.value = true));
-onUnmounted(() => (isOpen.value = false));
+
+onBeforeUnmount(() => {
+  onClearTimeout();
+  isOpen.value = false;
+});
 </script>
