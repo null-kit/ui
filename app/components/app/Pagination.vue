@@ -79,8 +79,8 @@ if (routePage <= 1 || isNaN(routePage)) {
   currentPage.value = 1;
 }
 
-watch(perPage, () => {
-  navigateTo({
+watch(perPage, async () => {
+  await navigateTo({
     query: {
       ...route.query,
       perPage: perPage.value === props.perPage ? undefined : perPage.value,
@@ -89,12 +89,12 @@ watch(perPage, () => {
   });
 });
 
-watch(currentPage, () => {
-  navigateTo({ query: { ...route.query, page: currentPage.value } });
+watch(currentPage, async () => {
+  await navigateTo({ query: { ...route.query, page: currentPage.value } });
 
   if (props.scrollTo) document.querySelector(props.scrollTo)?.scrollIntoView({ behavior: 'smooth' });
 
-  if (currentPage.value <= 1) navigateTo({ query: { ...route.query, page: undefined } });
+  if (currentPage.value <= 1) await navigateTo({ query: { ...route.query, page: undefined } });
 });
 
 watch(
