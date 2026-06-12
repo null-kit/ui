@@ -17,13 +17,12 @@
           class="form-check peer"
           :aria-label="isSwitch ? 'switch' : undefined"
           :aria-readonly="readonly || undefined"
+          :data-size="size"
           @click="onClick"
           @keydown="onKeydown"
         />
 
-        <span v-if="isSwitch" class="form-switch" />
-
-        <svg v-else viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="group form-check-icon">
+        <svg v-if="!isSwitch" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" class="group form-check-icon">
           <circle v-if="type === 'radio'" fill="currentColor" cx="16" cy="16" r="12" />
 
           <rect
@@ -80,6 +79,7 @@ const props = withDefaults(
     lazy?: boolean;
     checked?: boolean;
     readonly?: boolean;
+    size?: 'sm';
   }>(),
   {
     type: 'checkbox',

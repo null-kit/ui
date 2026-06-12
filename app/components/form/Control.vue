@@ -17,7 +17,7 @@
         <slot name="left" />
       </div>
 
-      <div class="relative w-full">
+      <div class="relative w-full min-w-0">
         <template v-if="type === 'select'">
           <select
             v-model="model"

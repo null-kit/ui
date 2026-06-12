@@ -32,6 +32,7 @@
             :key="row.id"
             :aria-expanded="row.getIsExpanded() || undefined"
             :data-row="striped && virtualScroll && (startIndex + index) % 2 !== 0 ? 'odd' : undefined"
+            :data-row-context="rowContext ? row.original[rowContext] : undefined"
             :height="typeof virtualScroll === 'number' ? virtualScroll : undefined"
             :class="{ 'cursor-pointer': fullRowExpand && row.getCanExpand() }"
             @click="fullRowExpand && row.getCanExpand() ? row.toggleExpanded() : undefined"
@@ -126,7 +127,7 @@ const getTdClass = <TData, TValue>(tdClass: TdClass<TData, TValue> | undefined, 
 <script setup lang="ts" generic="TData">
 defineSlots<TableSlots<TData>>();
 
-defineEmits<{ sort: [TableSortType] }>();
+defineEmits<{ sort: [TableSortType]; contextmenu: [TData] }>();
 
 const props = withDefaults(
   defineProps<{
@@ -141,6 +142,7 @@ const props = withDefaults(
     stickyHead?: boolean;
     stickyScrollbar?: boolean;
     striped?: boolean;
+    rowContext?: keyof TData;
   }>(),
   {
     enableSorting: undefined

@@ -104,13 +104,13 @@ export const useTableVirtualRows = <T>(rows: Ref<T[]>, enabled?: boolean | numbe
 
     if (padding >= totalHeight.value) return totalHeight.value;
 
-    return Math.max(padding, 0);
+    return Math.max(Math.round(padding), 0);
   });
 
   const bottomPadding = computed(() => {
     const padding = (totalRows.value - endIndex.value) * rowHeight;
 
-    return Math.max(padding, 0);
+    return Math.max(Math.round(padding), 0);
   });
 
   const updateTableTop = () => {

@@ -5,6 +5,6 @@
   }
 
   .dropdown-inner {
-    @apply max-h-[inherit] overflow-auto;
+    @apply scrollbar scrollbar-thin max-h-[inherit] overflow-auto;
   }
 }
