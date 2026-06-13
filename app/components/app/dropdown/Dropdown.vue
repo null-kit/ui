@@ -27,7 +27,7 @@ const props = defineProps<{
   autoclose?: boolean | 'instant';
   inline?: boolean;
 
-  hoverOpen?: boolean;
+  hoverOpen?: boolean | 'instant';
   noToggle?: boolean;
   disabled?: boolean;
 }>();
