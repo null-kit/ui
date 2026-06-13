@@ -10,7 +10,7 @@
       <div
         v-if="isOpen"
         ref="floating"
-        :class="['dropdown-content', dropdownClass]"
+        :class="['dropdown-content z-10', dropdownClass]"
         :style="floatingStyles"
         @pointerenter="onClearTimeout"
         @pointerleave="autoclose ? onDebouncedClose() : undefined"

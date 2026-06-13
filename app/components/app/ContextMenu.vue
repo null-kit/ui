@@ -9,7 +9,7 @@
       enter-to-class="duration-200"
       leave-to-class="opacity-0 -skew-1 blur-xs duration-200"
     >
-      <div v-if="isOpen" :key="menuKey" ref="menuRef" class="dropdown-content fixed z-20" :class="dropdownClass">
+      <div v-if="isOpen" :key="menuKey" ref="menuRef" class="dropdown-content fixed z-10" :class="dropdownClass">
         <slot name="menu" :target="targetElement" :on-close="onClose" />
       </div>
     </Transition>
