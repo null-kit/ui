@@ -13,7 +13,7 @@
         :class="['dropdown-content z-10', dropdownClass]"
         :style="floatingStyles"
         @pointerenter="onClearTimeout"
-        @pointerleave="autoclose ? onDebouncedClose() : undefined"
+        @pointerleave="autoclose ? onClose() : undefined"
         @click.stop
       >
         <div :class="['group dropdown-inner', innerClass]">
@@ -38,7 +38,7 @@ const props = defineProps<{
   dropdownClass?: string;
   innerClass?: string;
   maxHeight?: number;
-  autoclose?: boolean;
+  autoclose?: boolean | 'instant';
   inline?: boolean;
 }>();
 
@@ -72,16 +72,23 @@ const { floatingStyles } = useFloating(reference, floating, {
 let closeTimeout: ReturnType<typeof setTimeout> | undefined;
 
 const onClearTimeout = () => {
+  if (props.autoclose === 'instant') return;
+
   clearTimeout(closeTimeout);
   closeTimeout = undefined;
 };
 
-const onDebouncedClose = () => {
+const onClose = () => {
+  if (props.autoclose === 'instant') {
+    isOpen.value = false;
+    return;
+  }
+
   onClearTimeout();
   closeTimeout = setTimeout(() => (isOpen.value = false), 500);
 };
 
-defineExpose({ onClose: onDebouncedClose });
+defineExpose({ onClose });
 
 onMounted(() => (isOpen.value = true));
 

@@ -24,7 +24,7 @@ const props = defineProps<{
   dropdownClass?: string;
   innerClass?: string;
   maxHeight?: number;
-  autoclose?: boolean;
+  autoclose?: boolean | 'instant';
   inline?: boolean;
 
   hoverOpen?: boolean;
