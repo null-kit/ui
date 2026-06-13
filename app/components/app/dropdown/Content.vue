@@ -12,8 +12,8 @@
         ref="floating"
         :class="['dropdown-content z-10', dropdownClass]"
         :style="floatingStyles"
-        @pointerenter="onClearTimeout"
-        @pointerleave="autoclose ? onClose() : undefined"
+        @pointerenter="autoclose === 'delayed' ? onClearTimeout() : undefined"
+        @pointerleave="autoclose === 'delayed' ? onCloseDelayed() : undefined"
         @click.stop
       >
         <div :class="['group dropdown-inner', innerClass]">
@@ -38,7 +38,7 @@ const props = defineProps<{
   dropdownClass?: string;
   innerClass?: string;
   maxHeight?: number;
-  autoclose?: boolean | 'instant';
+  autoclose?: boolean | 'delayed';
   inline?: boolean;
 }>();
 
@@ -72,20 +72,21 @@ const { floatingStyles } = useFloating(reference, floating, {
 let closeTimeout: ReturnType<typeof setTimeout> | undefined;
 
 const onClearTimeout = () => {
-  if (props.autoclose === 'instant') return;
+  if (props.autoclose !== 'delayed') return;
 
   clearTimeout(closeTimeout);
   closeTimeout = undefined;
 };
 
 const onClose = () => {
-  if (props.autoclose === 'instant') {
-    isOpen.value = false;
-    return;
-  }
+  isOpen.value = false;
+};
+
+const onCloseDelayed = () => {
+  if (props.autoclose !== 'delayed') return onClose();
 
   onClearTimeout();
-  closeTimeout = setTimeout(() => (isOpen.value = false), 500);
+  closeTimeout = setTimeout(onClose, 500);
 };
 
 defineExpose({ onClose });
@@ -94,6 +95,6 @@ onMounted(() => (isOpen.value = true));
 
 onBeforeUnmount(() => {
   onClearTimeout();
-  isOpen.value = false;
+  onClose();
 });
 </script>

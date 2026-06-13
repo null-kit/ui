@@ -24,10 +24,10 @@ const props = defineProps<{
   dropdownClass?: string;
   innerClass?: string;
   maxHeight?: number;
-  autoclose?: boolean | 'instant';
+  autoclose?: boolean | 'delayed';
   inline?: boolean;
 
-  hoverOpen?: boolean | 'instant';
+  hoverOpen?: boolean | 'delayed';
   noToggle?: boolean;
   disabled?: boolean;
 }>();

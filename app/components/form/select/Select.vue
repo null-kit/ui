@@ -205,11 +205,11 @@ const props = defineProps<{
   search?: boolean;
   order?: boolean;
   placement?: Placement;
-  autoclose?: boolean;
+  autoclose?: boolean | 'delayed';
   required?: boolean;
   disabled?: boolean;
   help?: string;
-  presets?: { name: string; list: (string | number)[] }[];
+  presets?: Array<{ name: string; list: (string | number)[] }>;
   labelClass?: string;
   inputClass?: string;
   validateClass?: string;
