@@ -288,9 +288,7 @@ const toggleOption = (option: T) => {
   } else {
     model.value = selected.value[0] === option ? null : getKeyValue(option);
 
-    if (props.autoclose) {
-      dropdown.value?.onClose();
-    }
+    dropdown.value?.onClose();
   }
 
   emit('change', model.value as T);
