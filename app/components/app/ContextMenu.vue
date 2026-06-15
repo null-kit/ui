@@ -41,6 +41,10 @@ const hasTextSelection = () => {
   return selection && !selection.isCollapsed;
 };
 
+const isLinkTarget = (event: MouseEvent) => {
+  return !!(event.target as HTMLElement)?.closest('a');
+};
+
 const onUpdatePosition = async () => {
   if (!menuRef.value) return;
 
@@ -95,6 +99,8 @@ const onClose = () => {
 const onContextMenu = (event: MouseEvent) => {
   if (hasTextSelection()) return;
 
+  if (isLinkTarget(event)) return;
+
   event.preventDefault();
   onOpen(event);
 };
@@ -103,6 +109,8 @@ const onSelectorContextMenu = (event: MouseEvent) => {
   if (!selector) return;
 
   if (hasTextSelection()) return;
+
+  if (isLinkTarget(event)) return;
 
   const target = (event.target as HTMLElement)?.closest(selector);
 
