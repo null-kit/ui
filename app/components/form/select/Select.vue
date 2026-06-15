@@ -40,6 +40,7 @@
                 {{ getKeyName(option) }}
 
                 <svg
+                  v-if="required !== 'no-unselect' || selected.length > 1 || selected[0] !== option"
                   viewBox="0 0 32 32"
                   xmlns="http://www.w3.org/2000/svg"
                   class="size-3 shrink-0 cursor-pointer text-current/50 hover:text-red-500"
@@ -206,7 +207,7 @@ const props = defineProps<{
   order?: boolean;
   placement?: Placement;
   autoclose?: boolean | 'delayed';
-  required?: boolean;
+  required?: boolean | 'no-unselect';
   disabled?: boolean;
   help?: string;
   presets?: Array<{ name: string; list: (string | number)[] }>;
@@ -274,6 +275,8 @@ const isSelected = (option: T): boolean => selected.value.includes(option);
 
 const toggleOption = (option: T) => {
   if (props.multiple) {
+    if (props.required === 'no-unselect' && selected.value.length === 1 && selected.value[0] === option) return;
+
     const selectOptions = [...selected.value];
 
     const index = selectOptions.findIndex((item) => item === option);
@@ -286,6 +289,8 @@ const toggleOption = (option: T) => {
 
     model.value = props.keyValue ? selectOptions.map((item) => getKeyValue(item)) : selectOptions;
   } else {
+    if (props.required === 'no-unselect' && selected.value[0] === option) return;
+
     model.value = selected.value[0] === option ? null : getKeyValue(option);
 
     dropdown.value?.onClose();
