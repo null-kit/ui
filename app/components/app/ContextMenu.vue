@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!selector" @contextmenu.prevent="onOpen">
+  <div v-if="!selector" @contextmenu="onContextMenu">
     <slot />
   </div>
 
@@ -33,6 +33,12 @@ const targetElement = ref<HTMLElement | null>(null);
 
 let virtualElement = {
   getBoundingClientRect: () => DOMRect.fromRect()
+};
+
+const hasTextSelection = () => {
+  const selection = window.getSelection();
+
+  return selection && !selection.isCollapsed;
 };
 
 const onUpdatePosition = async () => {
@@ -86,8 +92,17 @@ const onClose = () => {
   emit('close');
 };
 
+const onContextMenu = (event: MouseEvent) => {
+  if (hasTextSelection()) return;
+
+  event.preventDefault();
+  onOpen(event);
+};
+
 const onSelectorContextMenu = (event: MouseEvent) => {
   if (!selector) return;
+
+  if (hasTextSelection()) return;
 
   const target = (event.target as HTMLElement)?.closest(selector);
 
