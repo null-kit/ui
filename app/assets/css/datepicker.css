@@ -19,7 +19,14 @@
     }
 
     &.day-selected-safe:not(.day-selected) span {
-      @apply bg-accent/20 text-accent ring-accent ring ring-inset;
+      @apply text-accent;
+      background-image: repeating-linear-gradient(
+        -45deg,
+        --alpha(var(--color-accent) / 20%),
+        --alpha(var(--color-accent) / 20%) 1px,
+        transparent 1px,
+        transparent 4px
+      );
     }
 
     &.day-in-range span {

@@ -85,12 +85,13 @@
               class="datepicker-day"
               :class="{
                 'day-selected': isSelected(date),
-                'day-selected-safe': modifiers.safe && isSelected(date, true),
+                'day-selected-safe': modifiers.safe && !isToday(date) && isSelected(date, true),
                 'day-in-range': inRange(date),
                 'day-outside': isOutside(date),
                 'day-today': isToday(date)
               }"
               :disabled="isDisabled(date)"
+              :title="modifiers.safe && !isToday(date) && isSelected(date, true) ? 'Selected in UTC' : undefined"
               @click="onSetDate(date)"
             >
               <span class="datepicker-day-inner">
