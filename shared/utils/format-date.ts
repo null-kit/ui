@@ -3,6 +3,7 @@ type DateOptions = {
   time?: boolean;
   year?: boolean;
   utc?: boolean;
+  safe?: boolean;
   options?: Intl.DateTimeFormatOptions;
   locale?: Intl.LocalesArgument;
   hourCycle?: Intl.DateTimeFormatOptions['hourCycle'];
@@ -23,6 +24,7 @@ export const formatDate = (
     time = false,
     year = true,
     utc = false,
+    safe = false,
     options,
     locale = 'en-US',
     hourCycle = 'h23'
@@ -30,7 +32,7 @@ export const formatDate = (
 ) => {
   if (!date) return 'N/A';
 
-  const currentDate = new Date(date);
+  const currentDate = safe ? toSafeDate(date) : new Date(date);
 
   if (format === 'iso') return formatISO(date);
 
@@ -60,6 +62,22 @@ const toISO = (date: DateInput) => {
   return `${year}-${month}-${day}`;
 };
 
+const toSafeDate = (date: DateInput) => {
+  const now = new Date();
+  const d = new Date(date || now);
+
+  const isSameDay =
+    d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth() && d.getDate() === now.getDate();
+
+  const isUTCDayNotStarted = now.getDate() !== now.getUTCDate();
+
+  if (isSameDay && isUTCDayNotStarted) {
+    d.setDate(d.getDate() - 1);
+  }
+
+  return d;
+};
+
 /**
  * Format a date to a local ISO string (YYYY-MM-DD)
  * @param date - The date to format
@@ -73,23 +91,7 @@ export const formatISO = (date: DateInput) => toISO(date);
  * @param date - The date to format
  * @returns The formatted date
  */
-export const formatSafeISO = (date: DateInput) => {
-  if (!date) return 'N/A';
-
-  const d = new Date(date);
-  const now = new Date();
-
-  const isSameDay =
-    d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth() && d.getDate() === now.getDate();
-
-  const isUTCDayNotStarted = now.getDate() !== now.getUTCDate();
-
-  if (isSameDay && isUTCDayNotStarted) {
-    d.setDate(d.getDate() - 1);
-  }
-
-  return toISO(d);
-};
+export const formatSafeISO = (date: DateInput) => toISO(toSafeDate(date));
 
 /**
  * Set the date of a date object
