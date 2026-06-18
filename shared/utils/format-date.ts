@@ -2,6 +2,7 @@ type DateOptions = {
   format?: 'short' | 'long' | 'iso';
   time?: boolean;
   year?: boolean;
+  utc?: boolean;
   options?: Intl.DateTimeFormatOptions;
   locale?: Intl.LocalesArgument;
   hourCycle?: Intl.DateTimeFormatOptions['hourCycle'];
@@ -17,7 +18,15 @@ type DateInput = Date | string | number | null | undefined;
  */
 export const formatDate = (
   date: DateInput,
-  { format = 'short', time = false, year = true, options, locale = 'en-US', hourCycle = 'h23' }: DateOptions = {}
+  {
+    format = 'short',
+    time = false,
+    year = true,
+    utc = false,
+    options,
+    locale = 'en-US',
+    hourCycle = 'h23'
+  }: DateOptions = {}
 ) => {
   if (!date) return 'N/A';
 
@@ -30,10 +39,13 @@ export const formatDate = (
     month: format === 'long' ? 'long' : 'short',
     day: 'numeric',
     ...(time ? { hour: 'numeric', minute: 'numeric' } : {}),
-    ...(year ? { year: 'numeric' } : {})
+    ...(year ? { year: 'numeric' } : {}),
+    ...(utc ? { timeZone: 'UTC' } : {})
   };
 
-  return new Intl.DateTimeFormat(locale, options || defaultOptions).format(currentDate);
+  const formatOptions = { ...(options || defaultOptions), ...(utc ? { timeZone: 'UTC' } : {}) };
+
+  return new Intl.DateTimeFormat(locale, formatOptions).format(currentDate);
 };
 
 const toISO = (date: DateInput) => {
