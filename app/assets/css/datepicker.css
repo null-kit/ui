@@ -18,6 +18,10 @@
       @apply bg-accent text-newton;
     }
 
+    &.day-selected-safe:not(.day-selected) span {
+      @apply bg-accent/20 text-accent ring-accent ring ring-inset;
+    }
+
     &.day-in-range span {
       @apply bg-accent/20 text-accent;
     }
@@ -26,7 +30,7 @@
       @apply opacity-40;
     }
 
-    &.day-today:not(.day-selected) span {
+    &.day-today:not(.day-selected):not(.day-selected-safe) span {
       @apply text-accent;
     }
   }

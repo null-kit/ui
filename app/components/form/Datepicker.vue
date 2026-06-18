@@ -85,6 +85,7 @@
               class="datepicker-day"
               :class="{
                 'day-selected': isSelected(date),
+                'day-selected-safe': modifiers.safe && isSelected(date, true),
                 'day-in-range': inRange(date),
                 'day-outside': isOutside(date),
                 'day-today': isToday(date)
@@ -213,7 +214,7 @@ const dates = computed(() => {
 
 const formatDateRange = computed(() => {
   if (selectedDates.value.length === 0) return props.range ? 'Select dates' : 'Select date';
-  if (props.range) return selectedDates.value.map((date) => formatDate(date)).join(' - ');
+  if (props.range) return selectedDates.value.map((date) => formatDate(date, { safe: modifiers.safe })).join(' - ');
 
   return String(formatDate(selectedDates.value[0]!));
 });
@@ -291,8 +292,10 @@ const isToday = (date: Date) => {
   return date.toDateString() === new Date().toDateString();
 };
 
-const isSelected = (date: Date) => {
-  return selectedDates.value.some((d) => d.toDateString() === date.toDateString());
+const isSelected = (date: Date, safe: boolean = false) => {
+  return selectedDates.value.some((d) => {
+    return safe ? formatSafeISO(d) === formatSafeISO(date) : d.toDateString() === date.toDateString();
+  });
 };
 
 const inRange = (date: Date) => {
