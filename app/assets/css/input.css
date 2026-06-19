@@ -67,7 +67,7 @@
     @apply cursor-pointer appearance-none duration-200;
     @apply bg-darwin ring-edison size-5 ring not-disabled:shadow;
     @apply disabled:bg-edison/20 disabled:cursor-not-allowed;
-    @apply indeterminate:ring-accent disabled:not-indeterminate:ring-edison;
+    @apply indeterminate:ring-accent;
     @apply checked:ring-accent disabled:not-checked:ring-edison;
 
     &[type='radio'] {
