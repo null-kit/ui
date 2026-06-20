@@ -88,6 +88,11 @@
   @apply not-disabled:active:scale-98;
 }
 
+@utility btn-active {
+  @apply bg-accent/10 text-accent;
+  @apply not-disabled:not-active:hover:bg-accent/15;
+}
+
 @utility btn-pending {
   cursor: progress;
   background-size: 20px 100%;

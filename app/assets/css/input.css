@@ -106,4 +106,32 @@
     @apply absolute inset-0 size-full p-1 opacity-0;
     @apply peer-checked:opacity-100 peer-indeterminate:opacity-100;
   }
+
+  .form-check-group {
+    @apply form-input flex gap-px p-0.5;
+    @apply focus:ring-edison has-focus:ring-edison;
+    @apply has-disabled:cursor-not-allowed;
+
+    label {
+      @apply has-checked:btn-active flex-1;
+      @apply has-disabled:pointer-events-none has-disabled:opacity-60;
+
+      &:not(:is(:first-of-type, :has(:is(:checked, :hover)))):before {
+        content: '';
+        @apply bg-edison absolute inset-y-2 -left-px w-px duration-200;
+      }
+
+      &:is(:hover, :has(:checked)) + label:before {
+        @apply opacity-0;
+      }
+
+      &:has(> input:checked):has(+ label > input:checked) {
+        @apply rounded-r-none!;
+      }
+
+      &:has(> input:checked) + label:has(> input:checked) {
+        @apply rounded-l-none!;
+      }
+    }
+  }
 }

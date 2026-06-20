@@ -5,47 +5,42 @@
 
       {{ label }}
 
-      <AppAppear v-if="required && !model">
+      <AppAppear v-if="required && !hasSelection">
         <span title="Required" class="form-required" />
       </AppAppear>
 
       <slot name="label-right" />
     </div>
 
-    <div v-if="options && options.length > 0" class="btn-group" :class="groupClass">
+    <div v-if="options && options.length > 0" class="form-check-group" :class="groupClass">
       <slot name="left" />
 
-      <label v-for="(option, index) in options" :key="index" class="btn" :class="btnClass">
+      <label v-for="(option, index) in options" :key="index" class="btn btn-sm" :class="btnClass">
         <input
           v-model="model"
-          class="peer checked:bg-accent/10 absolute inset-0 size-full appearance-none disabled:cursor-not-allowed"
+          class="sr-only"
           :value="toLowerCase(option)"
           v-bind="{ type, name, disabled, readonly }"
           @click="onClick($event, option)"
           @keydown="onKeydown"
         />
 
-        <span
-          class="peer-checked:text-accent duration-200 peer-disabled:opacity-50"
-          :class="{ 'flex items-center gap-2': $slots[toLowerCase(option)] }"
-        >
-          {{ getKeyName(option) }}
+        {{ getKeyName(option) }}
 
-          <slot :name="toLowerCase(option)" />
-        </span>
+        <slot :name="toLowerCase(option)" />
       </label>
 
       <slot name="right" />
     </div>
 
-    <AppAppear v-if="!label && required && !model">
+    <AppAppear v-if="!label && required && !hasSelection">
       <span title="Required" class="form-required-floating" />
     </AppAppear>
 
     <FormValidate v-if="name" :name :class="validateClass" />
 
     <div v-if="help || $slots.help" class="form-help">
-      <slot name="help">{{ help }} </slot>
+      <slot name="help">{{ help }}</slot>
     </div>
   </div>
 </template>
@@ -98,11 +93,43 @@ const toLowerCase = (value: T) => {
   return modifiers.lowercase ? keyValue.toLowerCase().replace(/\s+/g, '-') : keyValue;
 };
 
+const selectedValues = computed(() => {
+  if (props.type !== 'checkbox') return [];
+
+  if (!Array.isArray(model.value)) return model.value ? [model.value] : [];
+
+  return model.value;
+});
+
+const hasSelection = computed(() => {
+  if (props.type === 'checkbox') return selectedValues.value.length > 0;
+
+  return Boolean(model.value);
+});
+
+const isOptionSelected = (option: T) => {
+  const optionValue = toLowerCase(option);
+
+  if (props.type === 'checkbox') {
+    return selectedValues.value.some((value) => toLowerCase(value as T) === optionValue);
+  }
+
+  return toLowerCase(model.value as T) === optionValue;
+};
+
 const onClick = (event: Event, option: T) => {
   if (props.readonly) return event.preventDefault();
 
-  if (toLowerCase(model.value as T) === toLowerCase(option) && !props.noToggle) {
-    model.value = props.type === 'checkbox' ? [] : undefined;
+  if (props.type === 'checkbox') {
+    if (props.noToggle && isOptionSelected(option) && selectedValues.value.length === 1) {
+      event.preventDefault();
+    }
+
+    return;
+  }
+
+  if (isOptionSelected(option) && !props.noToggle) {
+    model.value = undefined;
   }
 };
 
@@ -111,6 +138,22 @@ const onKeydown = (event: KeyboardEvent) => {
 };
 
 onMounted(() => {
+  if (props.type === 'checkbox') {
+    if (props.keyValue && Array.isArray(model.value)) {
+      model.value = model.value.map(getKeyValue);
+    } else if (model.value !== undefined && model.value !== null && !Array.isArray(model.value)) {
+      model.value = [toLowerCase(model.value as T)];
+    } else if (!hasSelection.value && props.value) {
+      model.value = Array.isArray(props.value)
+        ? props.value.map((value) => toLowerCase(value as T))
+        : [toLowerCase(props.value as T)];
+    } else if (!model.value) {
+      model.value = [];
+    }
+
+    return;
+  }
+
   if (props.keyValue && Array.isArray(model.value)) {
     model.value = model.value.map(getKeyValue) as T[];
   }
