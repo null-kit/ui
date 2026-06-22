@@ -34,7 +34,7 @@
               <span
                 v-for="(tag, index) in tags"
                 :key="`${String(getTagName(tag))}-${index}`"
-                class="form-tags-tag btn btn-sm btn-default"
+                class="form-tags-tag"
                 :aria-current="activeIndex === index || undefined"
                 :aria-invalid="
                   (isInvalid && inputValue.toLowerCase() === String(getTagName(tag)).toLowerCase()) || undefined

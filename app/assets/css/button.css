@@ -1,10 +1,5 @@
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center gap-2;
-    @apply min-h-8.5 px-3 py-2 duration-200 outline-none;
-    @apply relative isolate whitespace-nowrap;
-    @apply rounded-lg text-sm/none font-medium ring ring-transparent;
-
     &:not(.btn-pending) {
       @apply disabled:cursor-not-allowed disabled:opacity-50;
     }
@@ -33,6 +28,13 @@
       @apply active:scale-100!;
     }
   }
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2;
+  @apply min-h-8.5 px-3 py-2 duration-200 outline-none;
+  @apply relative isolate whitespace-nowrap;
+  @apply rounded-lg text-sm/none font-medium ring ring-transparent;
 }
 
 @utility btn-xs {

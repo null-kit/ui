@@ -1,4 +1,14 @@
 @layer components {
+  .select-input {
+    @apply form-input flex gap-1.25;
+    @apply scrollbar relative overflow-auto;
+
+    &:has(.select-multiple) {
+      @apply py-1 pr-2.5 pl-1.25;
+      --radius-md: var(--radius-sm);
+    }
+  }
+
   .select-group-label {
     @apply sticky top-0 z-1 px-2 py-px;
     @apply cursor-default text-xs font-semibold;
@@ -13,17 +23,5 @@
     @apply min-w-40 p-1;
     @apply flex flex-col gap-0.5;
     @apply whitespace-nowrap;
-  }
-}
-
-@layer utilities {
-  .select-input {
-    @apply form-input flex gap-1.25;
-    @apply scrollbar relative overflow-auto;
-
-    &:has(.select-multiple) {
-      @apply py-1 pr-2.5 pl-1.25;
-      --radius-md: var(--radius-sm);
-    }
   }
 }
