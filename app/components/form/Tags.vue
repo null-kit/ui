@@ -160,9 +160,6 @@ const props = withDefaults(
     required?: boolean;
     value?: T[] | (T | keyof T | T[keyof T])[];
     delimiter?: string | RegExp;
-    addOnPaste?: boolean;
-    addOnBlur?: boolean;
-    addOnTab?: boolean;
     max?: number;
     maxLength?: number;
     duplicate?: boolean;
@@ -364,7 +361,7 @@ const onBlur = () => {
   isFocused.value = false;
   activeIndex.value = null;
 
-  if (props.addOnBlur) onCommit();
+  onCommit();
 
   dropdown.value?.onClose();
 };
@@ -393,8 +390,6 @@ const onInput = (event: Event) => {
 };
 
 const onPaste = (event: ClipboardEvent) => {
-  if (!props.addOnPaste) return;
-
   const text = event.clipboardData?.getData('text');
 
   if (!text) return;
@@ -415,11 +410,6 @@ const onKeydown = (event: KeyboardEvent) => {
   if (event.key === 'Enter' || (typeof props.delimiter === 'string' && event.key === props.delimiter)) {
     event.preventDefault();
     onCommit();
-    return;
-  }
-
-  if (event.key === 'Tab' && props.addOnTab && inputValue.value.trim()) {
-    if (onCommit()) event.preventDefault();
     return;
   }
 
