@@ -13,6 +13,8 @@
   --color-darwin-subtle: var(--color-darwin);
   --color-edison-strong: var(--color-edison);
   --color-edison-subtle: var(--color-edison);
+
+  --animate-shake-x: animate-shake-x 0.1s ease-out 2;
 }
 
 /* Scrollbar Utility */
@@ -55,4 +57,19 @@
     transparent 1px,
     transparent 14px
   );
+}
+
+@keyframes animate-shake-x {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-4px);
+  }
+
+  75% {
+    transform: translateX(4px);
+  }
 }

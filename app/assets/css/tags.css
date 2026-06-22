@@ -1,0 +1,23 @@
+@layer components {
+  .form-tags-input {
+    @apply border-0 bg-transparent p-0 shadow-none ring-0 outline-none;
+    @apply placeholder:text-surface/30 min-w-8 grow text-sm font-medium;
+  }
+}
+
+@layer utilities {
+  .form-tags {
+    @apply form-input flex flex-wrap items-center gap-1.25;
+    @apply aria-invalid:animate-shake-x aria-invalid:ring-red-500;
+
+    &:has(.form-tags-tag) {
+      @apply px-1.25 py-1;
+      --radius-md: var(--radius-sm);
+    }
+  }
+
+  .form-tags-tag {
+    @apply aria-current:ring-accent aria-current:ring-1;
+    @apply aria-invalid:ring-red-500;
+  }
+}

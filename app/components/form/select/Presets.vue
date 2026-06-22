@@ -30,6 +30,8 @@
       </button>
     </div>
   </div>
+
+  <div class="select-group-label">All</div>
 </template>
 
 <script setup lang="ts">

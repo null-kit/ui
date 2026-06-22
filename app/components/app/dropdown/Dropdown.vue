@@ -64,5 +64,11 @@ const onPointerLeave = () => {
   if (props.hoverOpen && props.inline) onFloatingClose();
 };
 
-defineExpose({ onClose: onFloatingClose });
+const onOpen = () => {
+  if (props.disabled) return;
+
+  isOpen.value = true;
+};
+
+defineExpose({ onClose: onFloatingClose, onOpen });
 </script>

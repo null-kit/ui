@@ -104,68 +104,33 @@
           />
         </div>
 
-        <div
+        <FormOptions
           v-if="hasGroupOptions"
-          class="scrollbar scrollbar-thin flex-1 overflow-auto"
-          :style="{ maxHeight: search ? 'calc(var(--floating-height) - 42px)' : 'auto' }"
+          v-bind="{ groups, getKeyName, isSelected, order }"
+          :is-hidden="(option: T) => typeof option === 'object' && Boolean(option.excluded)"
+          variant="select"
+          :max-height="search ? 'calc(var(--floating-height) - 42px)' : undefined"
+          @select="toggleOption"
         >
-          <LazyFormSelectPresets v-if="presets && presets.length > 0" v-model="model" :presets :search-input />
-
-          <div v-if="presets && presets.length > 0" class="select-group-label">All</div>
-
-          <template v-for="(optionGroup, indexParent) in filteredOptions" :key="indexParent">
-            <div v-if="typeof optionGroup === 'object' && optionGroup.group" class="select-group-label">
-              {{ optionGroup.group }}
-            </div>
-
-            <div v-if="optionGroup.list.length > 0" class="select-options">
-              <template v-for="(option, index) in optionGroup.list" :key="index">
-                <slot
-                  name="option"
-                  :value="option"
-                  :is-selected="isSelected(option)"
-                  :on-toggle="() => toggleOption(option)"
-                >
-                  <button
-                    v-if="!(typeof option === 'object' && option.excluded)"
-                    type="button"
-                    class="btn justify-start"
-                    :class="{ 'bg-current/5 font-medium': isSelected(option), '-order-1': isSelected(option) && order }"
-                    @click="toggleOption(option)"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="size-4 shrink-0">
-                      <path
-                        fill="none"
-                        stroke-width="3"
-                        d="m5 18 7 7L27 9"
-                        class="duration-300"
-                        stroke="currentColor"
-                        stroke-dasharray="32"
-                        :style="{ strokeDashoffset: isSelected(option) ? 0 : 32 }"
-                      />
-                    </svg>
-
-                    <slot name="button" :value="option" :is-selected="isSelected(option)">
-                      {{ getKeyName(option) }}
-                    </slot>
-                  </button>
-                </slot>
-              </template>
-            </div>
+          <template #before>
+            <LazyFormSelectPresets v-if="presets && presets.length > 0" v-model="model" :presets :search-input />
           </template>
-        </div>
 
-        <div v-else class="p-4 text-center opacity-40">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="mb-2 inline-block size-5">
-            <circle cx="14" cy="14" r="10" fill="none" stroke="currentColor" stroke-width="3" />
-            <line x1="21" y1="21" x2="28" y2="28" stroke="currentColor" stroke-width="3" />
-          </svg>
+          <template #option="scope">
+            <slot name="option" v-bind="scope" />
+          </template>
 
-          <div class="font-medium whitespace-nowrap">No Results</div>
-        </div>
+          <template #button="scope">
+            <slot name="button" v-bind="scope" />
+          </template>
+        </FormOptions>
+
+        <FormOptionsEmpty v-else />
       </AppDropdown>
 
-      <div v-if="$slots.right" class="form-slot rounded-l-none"><slot name="right" /></div>
+      <div v-if="$slots.right" class="form-slot rounded-l-none">
+        <slot name="right" />
+      </div>
     </div>
 
     <div v-if="help || $slots.help" class="form-help">
@@ -222,23 +187,17 @@ const dropdown = useTemplateRef('dropdown');
 
 const searchInput = ref('');
 
-const getKeyValue = (option: T) => {
-  return props.keyValue && typeof option === 'object' ? (option[props.keyValue] as T) : option;
-};
-
-const getKeyName = (option: T) => {
-  return props.keyName && typeof option === 'object' ? option[props.keyName] : option;
-};
-
-const normalizedOptions = computed(() => {
-  const hasGroup = props.options?.some((option) => typeof option === 'object' && option.group);
-
-  if (hasGroup) return props.options as unknown as Array<{ group?: string; list: T[] }>;
-
-  return [{ list: props.options }];
+const {
+  getKeyValue,
+  getKeyName,
+  allOptions,
+  filterGroups,
+  hasGroupOptions: checkGroupOptions
+} = useFormOptions<T>({
+  options: () => props.options,
+  keyName: () => props.keyName,
+  keyValue: () => props.keyValue
 });
-
-const allOptions = computed(() => normalizedOptions.value.flatMap((group) => group.list));
 
 const selected = computed<T[]>(() => {
   if (model.value === null || model.value === undefined) return [];
@@ -299,17 +258,9 @@ const toggleOption = (option: T) => {
   emit('change', model.value as T);
 };
 
-const filteredOptions = computed(() => {
-  return normalizedOptions.value.map((optionGroup) => {
-    const filteredList = optionGroup.list?.filter((option: T) => {
-      return String(getKeyName(option)).toLowerCase().includes(searchInput.value.toLowerCase());
-    });
+const groups = computed(() => filterGroups(searchInput.value));
 
-    return { group: filteredList?.length ? optionGroup.group : undefined, list: filteredList };
-  });
-});
-
-const hasGroupOptions = computed(() => filteredOptions.value.some((group) => group.list?.length > 0));
+const hasGroupOptions = computed(() => checkGroupOptions(groups.value));
 
 const onClear = () => {
   model.value = props.multiple ? [] : null;
