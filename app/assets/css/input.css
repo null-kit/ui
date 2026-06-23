@@ -124,7 +124,7 @@
   }
 
   .form-check-group {
-    @apply form-input flex gap-px p-0.5;
+    @apply form-input flex min-h-fit gap-px p-0.5;
     @apply focus:ring-edison has-focus:ring-edison;
     @apply has-disabled:cursor-not-allowed;
 

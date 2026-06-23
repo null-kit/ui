@@ -15,7 +15,7 @@
     <div v-if="options && options.length > 0" class="form-check-group" :class="groupClass">
       <slot name="left" />
 
-      <label v-for="(option, index) in options" :key="index" class="btn btn-sm" :class="btnClass">
+      <label v-for="(option, index) in options" :key="index" class="btn" :class="btnClass">
         <input
           v-model="model"
           class="sr-only"
