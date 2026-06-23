@@ -1,6 +1,6 @@
 <template>
   <div v-if="filteredPresets && filteredPresets.length > 0" class="-order-1">
-    <AppDisclosure open>
+    <AppDisclosure open summary-class="sticky top-0 z-1">
       <template #summary="{ isOpen }">
         <div
           class="select-group-label flex items-center justify-between"
