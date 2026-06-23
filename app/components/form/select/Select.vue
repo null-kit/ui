@@ -31,7 +31,7 @@
             :class="[
               'select-input',
               inputClass,
-              size && `form-input-${size}`,
+              size && sizeClasses[size],
               { 'ring-accent': isOpen, 'rounded-l-none': $slots.left, 'rounded-r-none': $slots.right }
             ]"
             :disabled
@@ -267,6 +267,13 @@ const hasGroupOptions = computed(() => checkGroupOptions(groups.value));
 const onClear = () => {
   model.value = props.multiple ? [] : null;
   searchInput.value = '';
+};
+
+const sizeClasses = {
+  xs: 'form-input-xs',
+  sm: 'form-input-sm',
+  md: 'form-input-md',
+  lg: 'form-input-lg'
 };
 
 onMounted(() => {

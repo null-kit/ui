@@ -44,7 +44,7 @@
           ref="input"
           v-model="model"
           class="form-input flex"
-          :class="[inputClass, hasSlotStyle($slots), size && `form-input-${size}`]"
+          :class="[inputClass, hasSlotStyle($slots), size && sizeClasses[size]]"
           rows="3"
           v-bind="{ id, name, placeholder, disabled, readonly, pattern, autocomplete }"
           @input="onInput"
@@ -55,7 +55,7 @@
           ref="input"
           v-model="model"
           class="form-input"
-          :class="[inputClass, hasSlotStyle($slots), size && `form-input-${size}`]"
+          :class="[inputClass, hasSlotStyle($slots), size && sizeClasses[size]]"
           :type="type === 'number' ? 'text' : type"
           v-bind="{ id, name, placeholder, disabled, readonly, accept, pattern, step, min, max, autocomplete }"
           @input="onInput"
@@ -176,6 +176,13 @@ const hasSlotStyle = (slot: { left?: boolean; right?: boolean }) => {
 };
 
 const input = useTemplateRef('input');
+
+const sizeClasses = {
+  xs: 'form-input-xs',
+  sm: 'form-input-sm',
+  md: 'form-input-md',
+  lg: 'form-input-lg'
+};
 
 onMounted(() => {
   if (value) model.value = value;
