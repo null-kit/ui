@@ -44,7 +44,7 @@
           ref="input"
           v-model="model"
           class="form-input flex"
-          :class="[inputClass, hasSlotStyle($slots)]"
+          :class="[inputClass, hasSlotStyle($slots), size && `form-input-${size}`]"
           rows="3"
           v-bind="{ id, name, placeholder, disabled, readonly, pattern, autocomplete }"
           @input="onInput"
@@ -55,7 +55,7 @@
           ref="input"
           v-model="model"
           class="form-input"
-          :class="[inputClass, hasSlotStyle($slots)]"
+          :class="[inputClass, hasSlotStyle($slots), size && `form-input-${size}`]"
           :type="type === 'number' ? 'text' : type"
           v-bind="{ id, name, placeholder, disabled, readonly, accept, pattern, step, min, max, autocomplete }"
           @input="onInput"
@@ -120,6 +120,7 @@ const {
   value?: string | number | null;
   inputClass?: string;
   validateClass?: string;
+  size?: 'xs' | 'sm' | 'md' | 'lg';
 }>();
 
 const onInput = (event: InputEvent) => {

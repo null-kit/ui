@@ -31,6 +31,7 @@
             :class="[
               'select-input',
               inputClass,
+              size && `form-input-${size}`,
               { 'ring-accent': isOpen, 'rounded-l-none': $slots.left, 'rounded-r-none': $slots.right }
             ]"
             :disabled
@@ -181,6 +182,7 @@ const props = defineProps<{
   validateClass?: string;
   dropdownClass?: string;
   inline?: boolean;
+  size?: 'xs' | 'sm' | 'md' | 'lg';
 }>();
 
 const dropdown = useTemplateRef('dropdown');

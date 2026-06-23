@@ -29,6 +29,22 @@
   }
 }
 
+@utility form-input-xs {
+  @apply min-h-4 rounded-sm px-1.5 text-xs;
+}
+
+@utility form-input-sm {
+  @apply min-h-6 rounded-md px-2 py-1 text-[0.8125rem];
+}
+
+@utility form-input-md {
+  @apply min-h-10;
+}
+
+@utility form-input-lg {
+  @apply min-h-12 rounded-xl px-4 py-2 text-lg;
+}
+
 @layer components {
   .form-slot {
     @apply bg-darwin ring-edison min-h-full ring;
