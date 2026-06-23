@@ -6,6 +6,10 @@
   "author": "denisarenko",
   "license": "MIT",
   "main": "./nuxt.config.ts",
+  "exports": {
+    ".": "./nuxt.config.ts",
+    "./*": "./app/assets/css/*"
+  },
   "publishConfig": {
     "access": "public"
   },
