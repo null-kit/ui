@@ -129,6 +129,7 @@
     @apply has-disabled:cursor-not-allowed;
 
     label {
+      @apply btn btn-sm;
       @apply has-checked:btn-active flex-1;
       @apply has-disabled:pointer-events-none has-disabled:opacity-60;
 
