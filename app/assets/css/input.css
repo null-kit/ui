@@ -124,12 +124,14 @@
   }
 
   .form-check-group {
+    --spacing: 0.2237rem;
+
     @apply form-input flex min-h-fit gap-px p-0.5;
     @apply focus:ring-edison has-focus:ring-edison;
     @apply has-disabled:cursor-not-allowed;
 
     label {
-      @apply btn btn-sm;
+      @apply btn;
       @apply has-checked:btn-active flex-1;
       @apply has-disabled:pointer-events-none has-disabled:opacity-60;
 
