@@ -34,7 +34,7 @@
       </button>
     </nav>
 
-    <FormSelect v-if="perPage !== 0" v-model="perPage" :options="[25, 50, 100, 250, 500, 1000]" autoclose />
+    <FormSelect v-if="perPage !== 0" v-model="perPage" :options autoclose required="no-unselect" />
   </div>
 </template>
 
@@ -44,9 +44,11 @@ const props = withDefaults(
     totalPages: number;
     perPage?: number;
     scrollTo?: string;
+    options?: number[];
   }>(),
   {
-    perPage: 25
+    perPage: 25,
+    options: () => [25, 50, 100, 250, 500, 1000]
   }
 );
 
