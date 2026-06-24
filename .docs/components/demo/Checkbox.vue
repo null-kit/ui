@@ -17,6 +17,27 @@
       </fieldset>
 
       <fieldset>
+        <legend>Radio Group</legend>
+
+        <div class="flex flex-wrap items-center gap-4">
+          <FormCheckGroup
+            v-model.lowercase="formData.fruits"
+            type="checkbox"
+            :options="['Apple', 'Banana', 'Orange', 'Grape']"
+          />
+
+          <FormCheckGroup
+            v-model.lowercase="formData.fruits"
+            type="checkbox"
+            btn-class="btn-sm"
+            :options="['Apple', 'Banana', 'Orange', 'Grape']"
+          />
+
+          <code class="bg-edison ml-auto rounded-md p-2 text-xs">{{ formData.fruits }}</code>
+        </div>
+      </fieldset>
+
+      <fieldset>
         <legend>Boolean</legend>
 
         <div class="flex flex-wrap gap-4">
@@ -38,10 +59,31 @@
         <legend>Radio</legend>
 
         <div class="flex flex-wrap gap-4">
-          <FormCheck v-model="formData.size" type="radio" :value="1" label="Small" />
-          <FormCheck v-model="formData.size" type="radio" :value="2" label="Medium" />
-          <FormCheck v-model="formData.size" type="radio" :value="3" label="Large" />
-          <FormCheck v-model="formData.size" type="radio" :value="-1" label="Unknown" />
+          <FormCheck v-model="formData.size" type="radio" name="size" :value="1" label="Small" />
+          <FormCheck v-model="formData.size" type="radio" name="size" :value="2" label="Medium" />
+          <FormCheck v-model="formData.size" type="radio" name="size" :value="3" label="Large" />
+          <FormCheck v-model="formData.size" type="radio" name="size" :value="-1" label="Unknown" />
+
+          <code class="bg-edison ml-auto rounded-md p-2 text-xs">{{ formData.size }}</code>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Radio Group</legend>
+
+        <div class="flex flex-wrap gap-4">
+          <FormCheckGroup
+            v-model="formData.size"
+            type="radio"
+            key-name="name"
+            key-value="value"
+            :options="[
+              { name: 'Small', value: 1 },
+              { name: 'Medium', value: 2 },
+              { name: 'Large', value: 3 },
+              { name: 'Unknown', value: -1 }
+            ]"
+          />
 
           <code class="bg-edison ml-auto rounded-md p-2 text-xs">{{ formData.size }}</code>
         </div>

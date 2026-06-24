@@ -31,6 +31,8 @@
       </aside>
 
       <main class="min-w-0 space-y-8">
+        <DemoTransitions />
+
         <DemoTable />
 
         <DemoButton />
@@ -218,6 +220,8 @@
 </template>
 
 <script setup lang="ts">
+// @ts-ignore
+const { setToast } = useToast();
 const { copy, statusText } = useClipboard();
 
 const formData = reactive({

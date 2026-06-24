@@ -131,7 +131,7 @@
     @apply has-disabled:cursor-not-allowed;
 
     label {
-      @apply btn;
+      @apply btn rounded-[calc(var(--radius-lg)*0.8)];
       @apply has-checked:btn-active flex-1;
       @apply has-disabled:pointer-events-none has-disabled:opacity-60;
 
