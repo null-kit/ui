@@ -65,6 +65,7 @@ jobs:
           path: |
             .docs/dist
             .docs/.nuxt
+            .nuxt
           key: ${{ runner.os }}-nuxt-build-${{ hashFiles('dist') }}
           restore-keys: |
             ${{ runner.os }}-nuxt-build-

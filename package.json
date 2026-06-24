@@ -15,6 +15,7 @@
   "scripts": {
     "dev": "nuxt dev .docs",
     "dev:prepare": "nuxt prepare .docs",
+    "postinstall": "nuxt prepare",
     "generate": "nuxt generate .docs",
     "lint": "eslint . --fix"
   },
