@@ -1,5 +1,5 @@
 <template>
-  <AppDropdown ref="dropdown" class="w-fit" dropdown-class="min-w-max" @close="onClose">
+  <AppDropdown ref="dropdown" class="w-fit" dropdown-class="min-w-max" :placement @close="onClose">
     <template #trigger="{ isOpen }">
       <button
         type="button"
@@ -131,6 +131,8 @@
 </template>
 
 <script setup lang="ts">
+import type { Placement } from '@floating-ui/vue';
+
 type Preset = 'today' | 'yesterday' | `last-${'month' | '7' | '30'}` | `this-${'month' | 'year'}`;
 
 const {
@@ -147,6 +149,7 @@ const {
   icon?: string;
   noIcon?: boolean;
   autoclose?: boolean;
+  placement?: Placement;
 }>();
 
 const [model, modifiers] = defineModel<(Date | string)[] | Date | string>({
