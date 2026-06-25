@@ -13,7 +13,7 @@
 
 @layer theme {
   :root {
-    @apply overscroll-none;
+    @apply scroll-pt-20! overscroll-none scroll-smooth;
 
     --hue: 0;
     --chroma: 0;

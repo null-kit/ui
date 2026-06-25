@@ -1,5 +1,5 @@
 <template>
-  <fieldset id="charts">
+  <fieldset id="transitions">
     <legend>Transitions</legend>
 
     <fieldset>
@@ -9,6 +9,14 @@
         <button class="btn btn-default btn-sm" @click="shuffleNumber">Shuffle</button>
 
         <AppNumberFlow :value="formatCurrency(formData.number)" />
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Text Shimmer</legend>
+
+      <div>
+        <div data-text-shimmer="Processing request..." />
       </div>
     </fieldset>
 
@@ -29,7 +37,7 @@
     </fieldset>
 
     <fieldset>
-      <legend>Dots</legend>
+      <legend>Dot Matrix</legend>
 
       <div class="flex items-center gap-8">
         <AppDotMatrix class="text-accent size-8" />

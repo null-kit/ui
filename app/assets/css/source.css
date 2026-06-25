@@ -59,6 +59,29 @@
   );
 }
 
+[data-text-shimmer] {
+  @apply relative inline-block text-current/60;
+
+  &:empty:after {
+    content: attr(data-text-shimmer);
+  }
+
+  &:before {
+    @apply pointer-events-none absolute inset-0 text-transparent;
+    @apply bg-size-[400%_100%] bg-clip-text bg-position-[100%_0] bg-no-repeat;
+    content: attr(data-text-shimmer);
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      transparent 40%,
+      var(--color-surface) 50%,
+      transparent 60%,
+      transparent 100%
+    );
+    animation: animate-text-shimmer 1.5s linear infinite;
+  }
+}
+
 @keyframes animate-shake-x {
   0%,
   100% {
@@ -71,5 +94,15 @@
 
   75% {
     transform: translateX(4px);
+  }
+}
+
+@keyframes animate-text-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: 0% 0;
   }
 }

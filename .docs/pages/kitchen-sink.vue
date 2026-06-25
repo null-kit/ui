@@ -3,6 +3,8 @@
     <div class="grid grid-cols-[15rem_1fr] items-start gap-4">
       <aside class="sticky top-20 flex flex-col">
         <nav class="flex flex-col *:justify-start">
+          <NuxtLink to="#transitions" class="btn">Transitions</NuxtLink>
+          <NuxtLink to="#async-state" class="btn">Async State</NuxtLink>
           <NuxtLink to="#utils" class="btn">Utils</NuxtLink>
           <NuxtLink to="#clipboard" class="btn">Clipboard</NuxtLink>
           <NuxtLink to="#confirm" class="btn">Confirm</NuxtLink>
@@ -32,6 +34,8 @@
 
       <main class="min-w-0 space-y-8">
         <DemoTransitions />
+
+        <DemoAsyncState />
 
         <DemoTable />
 

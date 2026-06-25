@@ -8,7 +8,7 @@
       <slot name="pending">
         <AppDotMatrix class="mx-auto mb-3" />
 
-        <h3 class="text-surface text-md/6 animate-pulse font-medium">{{ pendingTitle }}</h3>
+        <h3 class="text-surface text-md/6 font-medium" :data-text-shimmer="pendingTitle" />
 
         <p v-if="pendingText" class="text-surface/50 text-sm">{{ pendingText }}</p>
       </slot>
