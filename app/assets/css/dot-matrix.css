@@ -1,0 +1,283 @@
+/* prettier-ignore */
+@keyframes dm-base {
+  0%, 30%, 100% { opacity: 0.3; }
+  15% { opacity: 1; }
+}
+
+/* prettier-ignore */
+@keyframes dm-romb {
+  0%, 50%, 100% { opacity: 0.3; }
+  25% { opacity: 1; }
+}
+
+/* prettier-ignore */
+@keyframes dm-cascade {
+  0%, 40%, 100% { opacity: 0.3; }
+  20% { opacity: 1; }
+}
+
+@property --t {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+/* prettier-ignore */
+@keyframes dm-dna {
+  to { --t: 1; }
+}
+
+[data-dm-variant] {
+  div {
+    @apply size-full bg-current opacity-30;
+    animation: dm-base 2s ease infinite;
+  }
+
+  &[data-dm-shape='circle'] div {
+    @apply rounded-full;
+  }
+}
+
+/* prettier-ignore */
+[data-dm-variant="dna"] {
+  div {
+    --col-phase: 0;
+    --w: calc(1 - abs(2 * var(--t) - 1));
+    opacity: calc(0.3 + 1 * max(0, 1 - abs(var(--w) - var(--col-phase)) * 5));
+    animation: dm-dna 1s ease-in-out infinite;
+  }
+
+  > :nth-child(5n+1) { --col-phase: 0; }
+  > :nth-child(5n+2) { --col-phase: 0.25; }
+  > :nth-child(5n+3) { --col-phase: 0.5; }
+  > :nth-child(5n+4) { --col-phase: 0.75; }
+  > :nth-child(5n) { --col-phase: 1; }
+  > :nth-child(n+1):nth-child(-n+5) { animation-delay: 0s; }
+  > :nth-child(n+6):nth-child(-n+10) { animation-delay: 0.12s; }
+  > :nth-child(n+11):nth-child(-n+15) { animation-delay: 0.24s; }
+  > :nth-child(n+16):nth-child(-n+20) { animation-delay: 0.36s; }
+  > :nth-child(n+21):nth-child(-n+25) { animation-delay: 0.48s; }
+}
+
+/* prettier-ignore */
+[data-dm-variant="spiral"] {
+  > :nth-child(1) { animation-delay: 0.00s; }
+  > :nth-child(2) { animation-delay: 0.07s; }
+  > :nth-child(3) { animation-delay: 0.14s; }
+  > :nth-child(4) { animation-delay: 0.21s; }
+  > :nth-child(5) { animation-delay: 0.28s; }
+  > :nth-child(6) { animation-delay: 1.05s; }
+  > :nth-child(7) { animation-delay: 1.12s; }
+  > :nth-child(8) { animation-delay: 1.19s; }
+  > :nth-child(9) { animation-delay: 1.26s; }
+  > :nth-child(10) { animation-delay: 0.35s; }
+  > :nth-child(11) { animation-delay: 0.98s; }
+  > :nth-child(12) { animation-delay: 1.61s; }
+  > :nth-child(13) { animation-delay: 1.68s; }
+  > :nth-child(14) { animation-delay: 1.33s; }
+  > :nth-child(15) { animation-delay: 0.42s; }
+  > :nth-child(16) { animation-delay: 0.91s; }
+  > :nth-child(17) { animation-delay: 1.54s; }
+  > :nth-child(18) { animation-delay: 1.47s; }
+  > :nth-child(19) { animation-delay: 1.40s; }
+  > :nth-child(20) { animation-delay: 0.49s; }
+  > :nth-child(21) { animation-delay: 0.84s; }
+  > :nth-child(22) { animation-delay: 0.77s; }
+  > :nth-child(23) { animation-delay: 0.70s; }
+  > :nth-child(24) { animation-delay: 0.63s; }
+  > :nth-child(25) { animation-delay: 0.56s; }
+}
+
+/* prettier-ignore */
+[data-dm-variant="columns"] {
+  div {
+    animation: dm-romb 0.58s ease-in-out infinite;
+  }
+  
+  > :nth-child(1) { animation-delay: -0.28s; }
+  > :nth-child(2) { animation-delay: 0.00s; }
+  > :nth-child(3) { animation-delay: -0.28s; }
+  > :nth-child(4) { animation-delay: 0.00s; }
+  > :nth-child(5) { animation-delay: -0.28s; }
+  > :nth-child(6) { animation-delay: -0.21s; }
+  > :nth-child(7) { animation-delay: -0.07s; }
+  > :nth-child(8) { animation-delay: -0.21s; }
+  > :nth-child(9) { animation-delay: -0.07s; }
+  > :nth-child(10) { animation-delay: -0.21s; }
+  > :nth-child(11) { animation-delay: -0.14s; }
+  > :nth-child(12) { animation-delay: -0.14s; }
+  > :nth-child(13) { animation-delay: -0.14s; }
+  > :nth-child(14) { animation-delay: -0.14s; }
+  > :nth-child(15) { animation-delay: -0.14s; }
+  > :nth-child(16) { animation-delay: -0.07s; }
+  > :nth-child(17) { animation-delay: -0.21s; }
+  > :nth-child(18) { animation-delay: -0.07s; }
+  > :nth-child(19) { animation-delay: -0.21s; }
+  > :nth-child(20) { animation-delay: -0.07s; }
+  > :nth-child(21) { animation-delay: 0.00s; }
+  > :nth-child(22) { animation-delay: -0.28s; }
+  > :nth-child(23) { animation-delay: 0.00s; }
+  > :nth-child(24) { animation-delay: -0.28s; }
+  > :nth-child(25) { animation-delay: 0.00s; }
+}
+
+/* prettier-ignore */
+[data-dm-variant="waves"] {
+  div {
+    animation: dm-cascade 0.65s ease-in-out infinite;
+  }
+  
+  > :nth-child(1) { animation-delay: -0.35s; }
+  > :nth-child(2) { animation-delay: -0.28s; }
+  > :nth-child(3) { animation-delay: -0.21s; }
+  > :nth-child(4) { animation-delay: -0.28s; }
+  > :nth-child(5) { animation-delay: -0.35s; }
+  > :nth-child(6) { animation-delay: -0.28s; }
+  > :nth-child(7) { animation-delay: -0.14s; }
+  > :nth-child(8) { animation-delay: -0.07s; }
+  > :nth-child(9) { animation-delay: -0.14s; }
+  > :nth-child(10) { animation-delay: -0.28s; }
+  > :nth-child(11) { animation-delay: -0.21s; }
+  > :nth-child(12) { animation-delay: -0.07s; }
+  > :nth-child(13) { animation-delay: 0.00s; }
+  > :nth-child(14) { animation-delay: -0.07s; }
+  > :nth-child(15) { animation-delay: -0.21s; }
+  > :nth-child(16) { animation-delay: -0.28s; }
+  > :nth-child(17) { animation-delay: -0.14s; }
+  > :nth-child(18) { animation-delay: -0.07s; }
+  > :nth-child(19) { animation-delay: -0.14s; }
+  > :nth-child(20) { animation-delay: -0.28s; }
+  > :nth-child(21) { animation-delay: -0.35s; }
+  > :nth-child(22) { animation-delay: -0.28s; }
+  > :nth-child(23) { animation-delay: -0.21s; }
+  > :nth-child(24) { animation-delay: -0.28s; }
+  > :nth-child(25) { animation-delay: -0.35s; }
+}
+
+/* prettier-ignore */
+[data-dm-variant="romb"] {
+  div {
+    animation: dm-romb 0.5s steps(1, end) infinite;
+  }
+
+  > :nth-child(1) { animation-delay: 0.00s; }
+  > :nth-child(2) { animation-delay: -0.07s; }
+  > :nth-child(3) { animation-delay: -0.14s; }
+  > :nth-child(4) { animation-delay: -0.07s; }
+  > :nth-child(5) { animation-delay: 0.00s; }
+  > :nth-child(6) { animation-delay: -0.07s; }
+  > :nth-child(7) { animation-delay: -0.14s; }
+  > :nth-child(8) { animation-delay: -0.21s; }
+  > :nth-child(9) { animation-delay: -0.14s; }
+  > :nth-child(10) { animation-delay: -0.07s; }
+  > :nth-child(11) { animation-delay: -0.14s; }
+  > :nth-child(12) { animation-delay: -0.21s; }
+  > :nth-child(13) { animation-delay: -0.28s; }
+  > :nth-child(14) { animation-delay: -0.21s; }
+  > :nth-child(15) { animation-delay: -0.14s; }
+  > :nth-child(16) { animation-delay: -0.07s; }
+  > :nth-child(17) { animation-delay: -0.14s; }
+  > :nth-child(18) { animation-delay: -0.21s; }
+  > :nth-child(19) { animation-delay: -0.14s; }
+  > :nth-child(20) { animation-delay: -0.07s; }
+  > :nth-child(21) { animation-delay: 0.00s; }
+  > :nth-child(22) { animation-delay: -0.07s; }
+  > :nth-child(23) { animation-delay: -0.14s; }
+  > :nth-child(24) { animation-delay: -0.07s; }
+  > :nth-child(25) { animation-delay: 0.00s; }
+}
+
+/* prettier-ignore */
+[data-dm-variant="cascade"] {
+  div {
+    animation: dm-cascade 0.74s ease-in-out infinite;
+  }
+  
+  > :nth-child(1) { animation-delay: -0.44s; }
+  > :nth-child(2) { animation-delay: -0.40s; }
+  > :nth-child(3) { animation-delay: -0.36s; }
+  > :nth-child(4) { animation-delay: -0.32s; }
+  > :nth-child(5) { animation-delay: -0.28s; }
+  > :nth-child(6) { animation-delay: -0.37s; }
+  > :nth-child(7) { animation-delay: -0.33s; }
+  > :nth-child(8) { animation-delay: -0.29s; }
+  > :nth-child(9) { animation-delay: -0.25s; }
+  > :nth-child(10) { animation-delay: -0.21s; }
+  > :nth-child(11) { animation-delay: -0.30s; }
+  > :nth-child(12) { animation-delay: -0.26s; }
+  > :nth-child(13) { animation-delay: -0.22s; }
+  > :nth-child(14) { animation-delay: -0.18s; }
+  > :nth-child(15) { animation-delay: -0.14s; }
+  > :nth-child(16) { animation-delay: -0.23s; }
+  > :nth-child(17) { animation-delay: -0.19s; }
+  > :nth-child(18) { animation-delay: -0.15s; }
+  > :nth-child(19) { animation-delay: -0.11s; }
+  > :nth-child(20) { animation-delay: -0.07s; }
+  > :nth-child(21) { animation-delay: -0.16s; }
+  > :nth-child(22) { animation-delay: -0.12s; }
+  > :nth-child(23) { animation-delay: -0.08s; }
+  > :nth-child(24) { animation-delay: -0.04s; }
+  > :nth-child(25) { animation-delay: 0.00s; }
+}
+
+/* prettier-ignore */
+[data-dm-variant="helix"] {
+  > :nth-child(1) { animation-delay: 0.28s; }
+  > :nth-child(2) { animation-delay: 0.98s; }
+  > :nth-child(3) { animation-delay: 1.68s; }
+  > :nth-child(4) { animation-delay: 1.05s; }
+  > :nth-child(5) { animation-delay: 1.75s; }
+  > :nth-child(6) { animation-delay: 0.21s; }
+  > :nth-child(7) { animation-delay: 0.91s; }
+  > :nth-child(8) { animation-delay: 1.61s; }
+  > :nth-child(9) { animation-delay: 1.12s; }
+  > :nth-child(10) { animation-delay: 1.82s; }
+  > :nth-child(11) { animation-delay: 0.14s; }
+  > :nth-child(12) { animation-delay: 0.84s; }
+  > :nth-child(13) { animation-delay: 1.54s; }
+  > :nth-child(14) { animation-delay: 1.19s; }
+  > :nth-child(15) { animation-delay: 1.89s; }
+  > :nth-child(16) { animation-delay: 0.07s; }
+  > :nth-child(17) { animation-delay: 0.77s; }
+  > :nth-child(18) { animation-delay: 1.47s; }
+  > :nth-child(19) { animation-delay: 1.26s; }
+  > :nth-child(20) { animation-delay: 1.96s; }
+  > :nth-child(21) { animation-delay: 0.00s; }
+  > :nth-child(22) { animation-delay: 0.70s; }
+  > :nth-child(23) { animation-delay: 1.40s; }
+  > :nth-child(24) { animation-delay: 1.33s; }
+  > :nth-child(25) { animation-delay: 2.03s; }
+}
+
+/* prettier-ignore */
+[data-dm-variant="chaotic"] {
+  div {
+    animation: dm-base 0.5s ease-in-out infinite;
+  }
+
+  > :nth-child(1) { animation-delay: 0.77s; }
+  > :nth-child(2) { animation-delay: 0.07s; }
+  > :nth-child(3) { animation-delay: 1.05s; }
+  > :nth-child(4) { animation-delay: 0.63s; }
+  > :nth-child(5) { animation-delay: 0.70s; }
+  > :nth-child(6) { animation-delay: 0.21s; }
+  > :nth-child(7) { animation-delay: 1.19s; }
+  > :nth-child(8) { animation-delay: 1.61s; }
+  > :nth-child(9) { animation-delay: 0.42s; }
+  > :nth-child(10) { animation-delay: 1.12s; }
+  > :nth-child(11) { animation-delay: 0.56s; }
+  > :nth-child(12) { animation-delay: 1.47s; }
+  > :nth-child(13) { animation-delay: 0.35s; }
+  > :nth-child(14) { animation-delay: 0.14s; }
+  > :nth-child(15) { animation-delay: 1.26s; }
+  > :nth-child(16) { animation-delay: 0.49s; }
+  > :nth-child(17) { animation-delay: 0.84s; }
+  > :nth-child(18) { animation-delay: 0.28s; }
+  > :nth-child(19) { animation-delay: 1.54s; }
+  > :nth-child(20) { animation-delay: 1.40s; }
+  > :nth-child(21) { animation-delay: 1.68s; }
+  > :nth-child(22) { animation-delay: 0.98s; }
+  > :nth-child(23) { animation-delay: 0.91s; }
+  > :nth-child(24) { animation-delay: 1.33s; }
+  > :nth-child(25) { animation-delay: 0.00s; }
+}

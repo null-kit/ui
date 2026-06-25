@@ -59,10 +59,8 @@
 
 @utility btn-main {
   @apply text-newton bg-surface ring-surface;
-
-  &:not(:disabled):not(:active) {
-    @apply hover:bg-tint-surface dark:hover:bg-shade-surface;
-  }
+  @apply not-disabled:hover:bg-tint-surface not-disabled:active:bg-tint-surface/15;
+  @apply dark:not-disabled:hover:bg-shade-surface dark:not-disabled:active:bg-shade-surface/15;
 }
 
 @utility btn-accent {

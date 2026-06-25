@@ -14,13 +14,11 @@
   },
   "scripts": {
     "dev": "nuxt dev .docs",
-    "dev:prepare": "nuxt prepare .docs",
     "postinstall": "nuxt prepare",
-    "generate": "nuxt generate .docs",
-    "lint": "eslint . --fix"
+    "generate": "nuxt generate .docs"
   },
   "dependencies": {
-    "@floating-ui/vue": "^1.1.6",
+    "@floating-ui/vue": "^2.0.0",
     "@tanstack/vue-table": "^8.21.3",
     "@tiptap/extension-blockquote": "^2.14.0",
     "@tiptap/extension-bold": "^2.14.0",
@@ -45,22 +43,22 @@
     "@tiptap/extension-youtube": "^2.14.0",
     "@tiptap/pm": "^2.14.0",
     "@tiptap/vue-3": "^2.14.0",
-    "@unovis/ts": "^1.5.2",
-    "@unovis/vue": "^1.5.2",
+    "@unovis/ts": "^1.6.6",
+    "@unovis/vue": "^1.6.6",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@nuxt/eslint": "latest",
-    "@nuxt/ui": "^4.5.1",
-    "@tailwindcss/postcss": "^4.1.8",
-    "better-sqlite3": "^12.6.2",
+    "@nuxt/ui": "latest",
+    "@tailwindcss/postcss": "latest",
+    "better-sqlite3": "latest",
     "docus": "latest",
-    "eslint": "^9.28.0",
-    "nuxt": "^4.3.0",
-    "prettier": "^3.8.1",
-    "prettier-plugin-tailwindcss": "^0.7.2",
-    "tailwindcss": "^4.1.8",
-    "typescript": "^5.8.3",
+    "eslint": "latest",
+    "nuxt": "latest",
+    "prettier": "latest",
+    "prettier-plugin-tailwindcss": "latest",
+    "tailwindcss": "latest",
+    "typescript": "latest",
     "vue": "latest"
   }
 }
