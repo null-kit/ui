@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-/* @import '@nuxt/ui'; */
+@import '@nuxt/ui';
 @import '@null-kit/ui/all.css';
 
 @theme {
@@ -50,5 +50,28 @@
     --color-darwin: var(--color-white);
     --color-edison: var(--color-dn-200);
     --color-surface: var(--color-dn-900);
+  }
+
+  :root {
+    view-transition-name: switch-theme;
+  }
+
+  ::view-transition-old(switch-theme) {
+    animation: 1s linear both switch-theme;
+    z-index: 10;
+  }
+
+  ::view-transition-new(switch-theme) {
+    z-index: 9;
+  }
+
+  @keyframes switch-theme {
+    from {
+      clip-path: circle(200% at 100% 100%);
+    }
+
+    to {
+      clip-path: circle(0% at 0% 100%);
+    }
   }
 }
