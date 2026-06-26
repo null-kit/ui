@@ -11,14 +11,16 @@ defineProps<{ noAppear?: boolean }>();
 <style scoped>
 .appear-enter-active,
 .appear-leave-active {
-  transition: all 0.3s cubic-bezier(0.34, 1.45, 0.64, 1);
+  transition: 0.3s ease-out;
+  transition-property: transform, opacity, filter;
   transform-origin: top left;
+  will-change: transform, opacity, filter;
 }
 
 .appear-leave-to,
 .appear-enter-from {
   opacity: 0;
-  transform: translateY(8px) skew(-8deg);
+  transform: translateY(4px) rotateZ(1deg);
   filter: blur(2px);
 }
 </style>
