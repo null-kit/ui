@@ -11,7 +11,7 @@ defineProps<{ noAppear?: boolean }>();
 <style scoped>
 .appear-enter-active,
 .appear-leave-active {
-  transition: 0.3s ease-out;
+  transition: 200ms ease-out;
   transition-property: transform, opacity, filter;
   transform-origin: top left;
   will-change: transform, opacity, filter;
