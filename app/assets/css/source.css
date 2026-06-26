@@ -59,27 +59,20 @@
   );
 }
 
-[data-text-shimmer] {
-  @apply relative inline-block text-current/60;
-
-  &:empty:after {
-    content: attr(data-text-shimmer);
-  }
-
-  &:before {
-    @apply pointer-events-none absolute inset-0 text-transparent;
-    @apply bg-size-[400%_100%] bg-clip-text bg-position-[100%_0] bg-no-repeat;
-    content: attr(data-text-shimmer);
-    background-image: linear-gradient(
-      90deg,
-      transparent 0%,
-      transparent 40%,
-      var(--color-surface) 50%,
-      transparent 60%,
-      transparent 100%
-    );
-    animation: animate-text-shimmer 1.5s linear infinite;
-  }
+[data-text-shimmer]:before {
+  content: attr(data-text-shimmer);
+  mask-size: 400% 100%;
+  mask-position: 100% 0;
+  mask-repeat: no-repeat;
+  mask-image: linear-gradient(
+    90deg,
+    --alpha(currentColor / 60%) 0%,
+    --alpha(currentColor / 60%) 40%,
+    currentColor 50%,
+    --alpha(currentColor / 60%) 60%,
+    --alpha(currentColor / 60%) 100%
+  );
+  animation: animate-text-shimmer 1.5s ease infinite;
 }
 
 @keyframes animate-shake-x {
@@ -98,11 +91,7 @@
 }
 
 @keyframes animate-text-shimmer {
-  0% {
-    background-position: 100% 0;
-  }
-
-  100% {
-    background-position: 0% 0;
+  to {
+    mask-position: 0 0;
   }
 }
