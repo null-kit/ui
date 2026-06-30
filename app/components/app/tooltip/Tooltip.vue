@@ -37,6 +37,7 @@ const props = defineProps<{
   noFollow?: boolean;
   placement?: Placement;
   open?: boolean;
+  disabled?: boolean;
 }>();
 
 const isActive = ref(props.open ?? false);
@@ -45,15 +46,18 @@ const reference = useTemplateRef('reference');
 const content = useTemplateRef('content');
 
 const onPointerLeave = () => {
+  if (props.disabled) return;
+
   if (!props.open) isActive.value = false;
 };
 
 const onPointerEnter = () => {
+  if (props.disabled) return;
   if (!props.open) isActive.value = true;
 };
 
 const onPointerMove = (event: PointerEvent) => {
-  if (props.noFollow) return;
+  if (props.disabled || props.noFollow) return;
 
   content.value?.onPointerMove(event);
 };
