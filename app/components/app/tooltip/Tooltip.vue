@@ -12,7 +12,7 @@
     </slot>
 
     <LazyAppTooltipContent
-      v-if="isActive"
+      v-if="isActive || open"
       ref="content"
       :class="$attrs.class"
       v-bind="{ noFollow, reference, placement, open }"
