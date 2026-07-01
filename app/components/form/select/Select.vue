@@ -23,6 +23,7 @@
         :dropdown-class="[dropdownClass, 'overflow-clip flex flex-col'].join(' ')"
         :max-height="448"
         class="w-full"
+        :no-focus="search"
         @close="searchInput = ''"
       >
         <template #trigger="{ isOpen }">
@@ -101,7 +102,8 @@
             autocomplete="off"
             class="form-input focus:bg-edison/30 rounded-none shadow-none ring-0"
             placeholder="Search"
-            @vue:mounted="({ el }: { el: HTMLInputElement }) => el.focus({ preventScroll: true })"
+            tabindex="0"
+            @vue:mounted="({ el }: { el: HTMLElement }) => el.focus({ preventScroll: true })"
           />
         </div>
 

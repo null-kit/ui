@@ -5,6 +5,7 @@
       enter-to-class="duration-200"
       leave-to-class="opacity-0 translate-y-1 duration-200"
       :duration="200"
+      @after-enter="(el) => !noFocus && (el as HTMLDivElement).focus({ preventScroll: true })"
       @after-leave="$emit('close')"
     >
       <div
@@ -12,9 +13,11 @@
         ref="floating"
         :class="['dropdown-content z-10', dropdownClass]"
         :style="floatingStyles"
+        tabindex="0"
         @pointerenter="autoclose === 'delayed' ? onClearTimeout() : undefined"
         @pointerleave="autoclose === 'delayed' ? onCloseDelayed() : undefined"
         @click.stop
+        @keydown.esc="onClose"
       >
         <div :class="['group dropdown-inner', innerClass]">
           <slot />
@@ -39,6 +42,7 @@ const props = defineProps<{
   innerClass?: string;
   maxHeight?: number;
   autoclose?: boolean | 'delayed';
+  noFocus?: boolean;
   inline?: boolean;
 }>();
 

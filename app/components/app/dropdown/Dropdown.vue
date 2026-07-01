@@ -5,7 +5,7 @@
     <AppDropdownContent
       v-if="isOpen"
       ref="floating"
-      v-bind="{ placement, dropdownClass, innerClass, maxHeight, inline, reference }"
+      v-bind="{ placement, dropdownClass, innerClass, maxHeight, inline, reference, noFocus }"
       :autoclose="autoclose || hoverOpen"
       @close="onClose"
     >
@@ -29,6 +29,7 @@ const props = defineProps<{
 
   hoverOpen?: boolean | 'delayed';
   noToggle?: boolean;
+  noFocus?: boolean;
   disabled?: boolean;
 }>();
 

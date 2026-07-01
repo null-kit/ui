@@ -22,7 +22,8 @@
               class="btn justify-start"
               :class="{
                 'bg-current/5 font-medium': isSelected(option),
-                '-order-1': isSelected(option) && order
+                '-order-1': isSelected(option) && order,
+                'bg-current/10': option === activeOption
               }"
               @mousedown.prevent="emit('select', option)"
             >
@@ -59,7 +60,7 @@
 <script setup lang="ts" generic="T extends Record<string, unknown> | string | number">
 const emit = defineEmits<{ select: [option: T] }>();
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     groups: OptionGroup<T>[];
     getKeyName: (option: T) => unknown;
@@ -73,4 +74,44 @@ withDefaults(
     variant: 'select'
   }
 );
+
+const flatOptions = computed(() => props.groups.flatMap((group) => group.list).filter((opt) => !props.isHidden?.(opt)));
+
+const orderedOptions = computed(() => {
+  if (!props.order) return flatOptions.value;
+
+  return [
+    ...flatOptions.value.filter((opt) => props.isSelected(opt)),
+    ...flatOptions.value.filter((opt) => !props.isSelected(opt))
+  ];
+});
+
+const activeIndex = ref(0);
+const activeOption = computed(() => orderedOptions.value[activeIndex.value]);
+
+const onKeyDown = (event: KeyboardEvent) => {
+  if (['ArrowUp', 'ArrowDown', 'Enter', ' '].includes(event.key)) {
+    event.preventDefault();
+  }
+
+  if (event.key === 'ArrowUp') {
+    if (activeIndex.value > 0) activeIndex.value--;
+  }
+
+  if (event.key === 'ArrowDown') {
+    if (activeIndex.value < orderedOptions.value.length - 1) activeIndex.value++;
+  }
+
+  if (event.key === 'Enter' || event.key === ' ') {
+    if (activeOption.value) emit('select', activeOption.value);
+  }
+};
+
+onMounted(() => {
+  window.addEventListener('keydown', onKeyDown);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', onKeyDown);
+});
 </script>
