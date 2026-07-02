@@ -1,11 +1,13 @@
 <template>
-  <div class="scrollbar scrollbar-thin flex-1 overflow-auto" :style="maxHeight ? { maxHeight } : undefined">
+  <div
+    ref="container"
+    class="scrollbar scrollbar-thin flex-1 overflow-auto"
+    :style="maxHeight ? { maxHeight } : undefined"
+  >
     <slot name="before" />
 
     <template v-for="(optionGroup, indexParent) in groups" :key="indexParent">
-      <div v-if="optionGroup.group" class="select-group-label">
-        {{ optionGroup.group }}
-      </div>
+      <div v-if="optionGroup.group" class="select-group-label">{{ optionGroup.group }}</div>
 
       <div v-if="optionGroup.list.length > 0" class="select-options">
         <template v-for="(option, index) in optionGroup.list" :key="index">
@@ -20,6 +22,7 @@
               v-if="!isHidden?.(option)"
               type="button"
               class="btn justify-start"
+              :aria-current="option === activeOption || undefined"
               :class="{
                 'bg-current/5 font-medium': isSelected(option),
                 '-order-1': isSelected(option) && order,
@@ -86,10 +89,11 @@ const orderedOptions = computed(() => {
   ];
 });
 
-const activeIndex = ref(0);
+const container = useTemplateRef<HTMLElement>('container');
+const activeIndex = ref(-1);
 const activeOption = computed(() => orderedOptions.value[activeIndex.value]);
 
-const onKeyDown = (event: KeyboardEvent) => {
+const onKeyDown = async (event: KeyboardEvent) => {
   if (['ArrowUp', 'ArrowDown', 'Enter', ' '].includes(event.key)) {
     event.preventDefault();
   }
@@ -105,13 +109,11 @@ const onKeyDown = (event: KeyboardEvent) => {
   if (event.key === 'Enter' || event.key === ' ') {
     if (activeOption.value) emit('select', activeOption.value);
   }
+
+  await nextTick();
+  container.value?.querySelector('[aria-current]')?.scrollIntoView({ block: 'center' });
 };
 
-onMounted(() => {
-  window.addEventListener('keydown', onKeyDown);
-});
-
-onUnmounted(() => {
-  window.removeEventListener('keydown', onKeyDown);
-});
+onMounted(() => window.addEventListener('keydown', onKeyDown));
+onUnmounted(() => window.removeEventListener('keydown', onKeyDown));
 </script>
