@@ -4,6 +4,7 @@ import type { ShallowRef } from 'vue';
 
 type Options = {
   el: Readonly<ShallowRef<HTMLElement | null>>;
+  container?: 'parent' | 'window';
   dataKey?: string;
   method?: 'GET' | 'POST';
   query?: MaybeRefOrGetter<SearchParameters>;
@@ -51,22 +52,30 @@ export const useInfinityFetch = <T>(url: string, options: Options) => {
 
   watch(query, () => refresh());
 
+  const isNearBottom = (target: HTMLElement, container: HTMLElement | Window) => {
+    const targetBottom = target.getBoundingClientRect().bottom;
+    const visibleBottom =
+      container instanceof Window ? container.innerHeight : container.getBoundingClientRect().bottom;
+
+    return targetBottom <= visibleBottom;
+  };
+
   onMounted(() => {
     fetchData();
 
     const target = unref(options.el);
-
     if (!target) return;
 
+    const container = options.container === 'parent' ? target.parentElement : window;
+    const scrollTarget = container ?? window;
+
     const onScroll = () => {
-      if (target.getBoundingClientRect().bottom < window.innerHeight) fetchData();
+      if (isNearBottom(target, scrollTarget)) fetchData();
     };
 
-    window.addEventListener('scroll', onScroll);
+    scrollTarget.addEventListener('scroll', onScroll, { passive: true });
 
-    onUnmounted(() => {
-      window.removeEventListener('scroll', onScroll);
-    });
+    onUnmounted(() => scrollTarget.removeEventListener('scroll', onScroll));
   });
 
   return {
