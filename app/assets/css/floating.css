@@ -1,0 +1,42 @@
+@layer components {
+  .app-floating {
+    @apply bg-darwin z-10 rounded-xl shadow-xl;
+    @apply ring-edison overflow-hidden ring;
+
+    [data-resizer] {
+      @apply absolute touch-none;
+    }
+
+    [data-resizer='n'] {
+      @apply top-0 right-2 left-2 h-1 cursor-n-resize;
+    }
+
+    [data-resizer='s'] {
+      @apply right-2 bottom-0 left-2 h-1 cursor-s-resize;
+    }
+
+    [data-resizer='e'] {
+      @apply top-2 right-0 bottom-2 w-1 cursor-e-resize;
+    }
+
+    [data-resizer='w'] {
+      @apply top-2 bottom-2 left-0 w-1 cursor-w-resize;
+    }
+
+    [data-resizer='nw'] {
+      @apply top-0 left-0 size-2 cursor-nw-resize;
+    }
+
+    [data-resizer='ne'] {
+      @apply top-0 right-0 size-2 cursor-ne-resize;
+    }
+
+    [data-resizer='sw'] {
+      @apply bottom-0 left-0 size-2 cursor-sw-resize;
+    }
+
+    [data-resizer='se'] {
+      @apply right-0 bottom-0 size-2 cursor-se-resize;
+    }
+  }
+}
