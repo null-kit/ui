@@ -44,9 +44,11 @@
 }
 
 @utility bg-dot {
-  background-image: radial-gradient(circle at 2px 2px, --alpha(var(--color-surface) / 10%) 1px, transparent 0);
-  background-size: 15px 15px;
-  background-position: 7px 7px;
+  --dot-size: 11px;
+  --dot-pos: 3px;
+  background-image: radial-gradient(circle at 2px 2px, --alpha(var(--color-surface) / 15%) 1px, transparent 0);
+  background-size: var(--dot-size) var(--dot-size);
+  background-position: var(--dot-pos) var(--dot-pos);
 }
 
 @utility bg-diagonal {

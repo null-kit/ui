@@ -67,7 +67,11 @@ export const useTableStickyHead = (tableWrapper: Readonly<Ref<HTMLElement | null
 };
 
 // Virtualization Composable
-export const useTableVirtualRows = <T>(rows: Ref<T[]>, enabled?: boolean | number) => {
+export const useTableVirtualRows = <T>(
+  rows: Ref<T[]>,
+  enabled?: boolean | number,
+  container?: MaybeRefOrGetter<HTMLElement | string | null | undefined>
+) => {
   if (!enabled) return { startIndex: 0, endIndex: 0, visibleRows: rows };
 
   const rowHeight = typeof enabled === 'number' ? enabled : 37;
@@ -145,14 +149,18 @@ export const useTableVirtualRows = <T>(rows: Ref<T[]>, enabled?: boolean | numbe
     onScroll();
   };
 
-  const getScrollParent = (el: HTMLElement): HTMLElement | null => {
-    let node = el.parentElement;
+  const resolveScrollRoot = () => {
+    const target = toValue(container);
+
+    if (typeof target === 'string') return tableBody.value?.closest<HTMLElement>(target) ?? null;
+    if (target) return target;
+
+    let node = tableBody.value?.parentElement ?? null;
 
     while (node && node !== document.documentElement) {
-      const { overflowY, overflow } = getComputedStyle(node);
-      const canScroll = /auto|scroll|overlay/.test(overflowY) || /auto|scroll|overlay/.test(overflow);
+      const { overflowY } = getComputedStyle(node);
 
-      if (canScroll && node.scrollHeight > node.clientHeight) return node;
+      if (/auto|scroll|overlay/.test(overflowY)) return node;
 
       node = node.parentElement;
     }
@@ -161,22 +169,20 @@ export const useTableVirtualRows = <T>(rows: Ref<T[]>, enabled?: boolean | numbe
   };
 
   onMounted(() => {
-    if (!tableBody.value) return;
-
-    scrollRoot.value = getScrollParent(tableBody.value);
+    scrollRoot.value = resolveScrollRoot();
 
     const scrollTarget = scrollRoot.value ?? window;
-    const resizeTarget = scrollRoot.value ?? document.body;
-
-    updateViewport();
-    onScroll();
-
-    const resizeObserver = new ResizeObserver(onResize);
-
-    resizeObserver.observe(resizeTarget);
 
     scrollTarget.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onResize);
+
+    const resizeObserver = new ResizeObserver(onResize);
+
+    resizeObserver.observe(scrollRoot.value ?? document.body);
+
+    if (tableBody.value) resizeObserver.observe(tableBody.value);
+
+    onResize();
 
     onUnmounted(() => {
       resizeObserver.disconnect();

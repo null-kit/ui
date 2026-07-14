@@ -139,6 +139,7 @@ const props = withDefaults(
     sort?: 'server' | 'client';
     enableSorting?: boolean;
     virtualScroll?: boolean | number;
+    container?: MaybeRefOrGetter<string | HTMLElement>;
     stickyHead?: boolean;
     stickyScrollbar?: boolean;
     striped?: boolean;
@@ -295,7 +296,11 @@ const columnStyles = (column: Column<TData>): CSSProperties => {
   return columnStyleCache.value.get(column.id) ?? computeColumnStyle(column);
 };
 
-const { startIndex, visibleRows, topPadding, bottomPadding } = useTableVirtualRows(rows, props.virtualScroll);
+const { startIndex, visibleRows, topPadding, bottomPadding } = useTableVirtualRows(
+  rows,
+  props.virtualScroll,
+  props.container
+);
 
 if (props.stickyScrollbar) useTableStickyScrollbar(tableWrapper);
 if (props.stickyHead) useTableStickyHead(tableWrapper);
