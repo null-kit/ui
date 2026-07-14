@@ -23,13 +23,14 @@
           v-bind="{ placement, inline, maxHeight: 224 }"
           :dropdown-class="[dropdownClass, 'overflow-clip flex flex-col'].join(' ')"
           no-toggle
+          no-focus
         >
           <template #trigger>
             <div
               class="form-tags"
               :aria-invalid="isInvalid"
               :class="[inputClass, { 'rounded-l-none': $slots.left, 'rounded-r-none': $slots.right }]"
-              @click="onInputFocus"
+              @click.stop="onInputFocus"
             >
               <span
                 v-for="(tag, index) in tags"
