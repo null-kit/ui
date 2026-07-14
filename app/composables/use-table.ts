@@ -66,39 +66,24 @@ export const useTableStickyHead = (tableWrapper: Readonly<Ref<HTMLElement | null
   });
 };
 
-const getScrollParent = (el: HTMLElement): HTMLElement | null => {
-  let node = el.parentElement;
-
-  while (node && node !== document.documentElement) {
-    const { overflowY, overflow } = getComputedStyle(node);
-    const canScroll = /auto|scroll|overlay/.test(overflowY) || /auto|scroll|overlay/.test(overflow);
-
-    if (canScroll && node.scrollHeight > node.clientHeight) return node;
-
-    node = node.parentElement;
-  }
-
-  return null;
-};
-
 // Virtualization Composable
 export const useTableVirtualRows = <T>(rows: Ref<T[]>, enabled?: boolean | number) => {
   if (!enabled) return { startIndex: 0, endIndex: 0, visibleRows: rows };
 
   const rowHeight = typeof enabled === 'number' ? enabled : 37;
-  const buffer = 10;
+  const overscan = 10;
+  const threshold = 4;
 
   const tableBody = useTemplateRef<HTMLElement>('tbody');
   const scrollRoot = ref<HTMLElement | null>(null);
   const scrollY = ref(0);
-  const scrollDirection = ref<1 | -1>(1);
   const viewportHeight = ref(import.meta.client ? window.innerHeight : 0);
 
   const totalRows = computed(() => rows.value.length);
   const totalHeight = computed(() => totalRows.value * rowHeight);
 
-  const overscanTop = computed(() => (scrollDirection.value === -1 ? buffer * 2 : buffer));
-  const overscanBottom = computed(() => (scrollDirection.value === 1 ? buffer * 2 : buffer));
+  const startIndex = ref(0);
+  const endIndex = ref(0);
 
   const getRelativeScroll = () => {
     if (!tableBody.value) return 0;
@@ -112,15 +97,23 @@ export const useTableVirtualRows = <T>(rows: Ref<T[]>, enabled?: boolean | numbe
     return -bodyTop;
   };
 
-  const startIndex = computed(() => {
-    return Math.max(Math.floor(scrollY.value / rowHeight) - overscanTop.value, 0);
-  });
-
-  const endIndex = computed(() => {
+  const updateRange = () => {
+    const total = totalRows.value;
+    const first = Math.min(Math.max(Math.floor(scrollY.value / rowHeight), 0), total);
     const visibleCount = Math.ceil(viewportHeight.value / rowHeight);
+    const last = Math.min(first + visibleCount, total);
 
-    return Math.min(startIndex.value + visibleCount + overscanTop.value + overscanBottom.value, totalRows.value);
-  });
+    const needsUpdate =
+      endIndex.value === 0 ||
+      first - startIndex.value < threshold ||
+      endIndex.value - last < threshold ||
+      endIndex.value > total;
+
+    if (!needsUpdate) return;
+
+    startIndex.value = Math.max(first - overscan, 0);
+    endIndex.value = Math.min(last + overscan, total);
+  };
 
   const visibleRows = computed(() => rows.value.slice(startIndex.value, endIndex.value));
 
@@ -143,16 +136,28 @@ export const useTableVirtualRows = <T>(rows: Ref<T[]>, enabled?: boolean | numbe
   };
 
   const onScroll = () => {
-    const next = getRelativeScroll();
-
-    if (next !== scrollY.value) scrollDirection.value = next > scrollY.value ? 1 : -1;
-
-    scrollY.value = next;
+    scrollY.value = getRelativeScroll();
+    updateRange();
   };
 
   const onResize = () => {
     updateViewport();
     onScroll();
+  };
+
+  const getScrollParent = (el: HTMLElement): HTMLElement | null => {
+    let node = el.parentElement;
+
+    while (node && node !== document.documentElement) {
+      const { overflowY, overflow } = getComputedStyle(node);
+      const canScroll = /auto|scroll|overlay/.test(overflowY) || /auto|scroll|overlay/.test(overflow);
+
+      if (canScroll && node.scrollHeight > node.clientHeight) return node;
+
+      node = node.parentElement;
+    }
+
+    return null;
   };
 
   onMounted(() => {
@@ -180,6 +185,8 @@ export const useTableVirtualRows = <T>(rows: Ref<T[]>, enabled?: boolean | numbe
       window.removeEventListener('resize', onResize);
     });
   });
+
+  watch(totalRows, updateRange);
 
   return {
     startIndex,
