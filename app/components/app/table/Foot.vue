@@ -1,7 +1,7 @@
 <template>
   <tfoot v-if="hasFooter">
-    <template v-for="footerGroup in table.getFooterGroups()" :key="footerGroup.id">
-      <tr v-if="footerGroup.headers.some((h) => !h.isPlaceholder && h.column.columnDef.footer)">
+    <template v-for="footerGroup in table.getHeaderGroups()" :key="footerGroup.id">
+      <tr v-if="footerGroup.headers.some((h) => !h.isPlaceholder && h.column.columnDef.header)">
         <td
           v-for="header in footerGroup.headers"
           :key="header.id"
@@ -23,12 +23,16 @@ import { FlexRender } from '@tanstack/vue-table';
 import type { Table } from '@tanstack/vue-table';
 
 const props = defineProps<{ table: Table<TData> }>();
+const slots = useSlots();
 
-const hasFooter =
+const hasSlots = Object.keys(slots).some((key) => key.startsWith('tf-'));
+const hasGroups =
   props.table
     .getFooterGroups()
     .flatMap(({ headers }) => headers.map(({ column }) => column.columnDef.footer))
     .filter(Boolean).length > 0;
+
+const hasFooter = hasSlots || hasGroups;
 
 const getValues = <T extends keyof TData>(column: string) => {
   if (!column) return [];
