@@ -3,7 +3,7 @@
     @apply border-separate border-spacing-0 text-sm whitespace-nowrap;
 
     thead {
-      @apply bg-darwin text-surface text-left font-semibold select-none;
+      @apply bg-darwin-subtle text-surface text-left font-semibold select-none;
 
       th {
         &[aria-sort] {
@@ -27,7 +27,7 @@
       &:hover td,
       &[aria-expanded] td,
       [aria-expanded] {
-        @apply bg-darwin-subtle;
+        @apply bg-shade-darwin-strong/5 dark:bg-shade-darwin-strong;
       }
 
       &:not([aria-hidden]):not(:has(+ tr:not([aria-hidden]))) > td {
@@ -36,7 +36,7 @@
     }
 
     :is(th, td) {
-      @apply bg-darwin border-edison border-b px-3 py-2;
+      @apply bg-darwin-subtle border-edison border-b px-3 py-2;
 
       &[data-cell='expander'] {
         @apply px-1.5 py-0;

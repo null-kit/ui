@@ -2,7 +2,7 @@
   .btn-group {
     @apply scrollbar scrollbar-thin isolate flex overflow-auto;
     @apply rounded-lg shadow duration-300;
-    @apply ring-edison hover:ring-surface/20 bg-darwin ring;
+    @apply ring-edison hover:ring-surface/20 bg-darwin-subtle ring;
     @apply divide-x divide-current/20;
 
     &:has(.btn-sm, .btn-xs) {
@@ -25,7 +25,7 @@
   @apply min-h-8.5 px-3 py-2 duration-200 outline-none;
   @apply relative isolate whitespace-nowrap;
   @apply rounded-lg text-sm/none font-medium ring ring-transparent;
-  @apply not-disabled:hover:bg-surface/5 not-disabled:active:bg-surface/10;
+  @apply not-disabled:hover:bg-current/5 not-disabled:active:bg-current/10;
 
   &:not(.btn-pending) {
     @apply disabled:cursor-not-allowed disabled:opacity-50;
@@ -49,7 +49,7 @@
 }
 
 @utility btn-default {
-  @apply bg-darwin text-surface ring-edison shadow;
+  @apply bg-darwin-subtle text-surface ring-edison shadow;
   @apply not-disabled:active:bg-shade-darwin/8;
 
   &:not(:disabled):not(:active) {

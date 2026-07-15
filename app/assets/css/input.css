@@ -18,7 +18,7 @@
   @apply appearance-none transition duration-200 outline-none;
   @apply size-full max-h-80 min-h-8.5 px-2.5 py-1.5;
   @apply rounded-lg text-sm font-medium;
-  @apply ring-edison bg-darwin shadow ring;
+  @apply ring-edison bg-darwin-subtle shadow ring;
   @apply placeholder:text-surface/30;
   @apply focus:ring-accent has-focus:ring-accent hover:ring-surface/20;
   @apply scrollbar scrollbar-thin;
@@ -47,7 +47,7 @@
 
 @layer components {
   .form-slot {
-    @apply bg-darwin ring-edison min-h-full ring;
+    @apply bg-darwin-subtle ring-edison min-h-full ring;
     @apply flex shrink-0 overflow-clip rounded-lg text-sm shadow;
 
     &:disabled {
@@ -81,7 +81,7 @@
   /* Checkbox */
   .form-check {
     @apply cursor-pointer appearance-none duration-200;
-    @apply bg-darwin ring-edison size-5 ring not-disabled:shadow;
+    @apply bg-darwin-subtle ring-edison size-5 ring not-disabled:shadow;
     @apply disabled:bg-edison/20 disabled:cursor-not-allowed;
     @apply indeterminate:ring-accent;
     @apply checked:ring-accent disabled:not-checked:ring-edison;
@@ -104,7 +104,7 @@
       }
 
       &:checked:after {
-        @apply bg-darwin translate-x-full;
+        @apply bg-darwin-subtle translate-x-full;
       }
 
       &[data-size='sm'] {

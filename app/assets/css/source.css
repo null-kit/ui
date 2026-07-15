@@ -9,8 +9,10 @@
   /* TODO: Timed fallback */
   --color-newton-strong: var(--color-newton);
   --color-newton-subtle: var(--color-newton);
+
   --color-darwin-strong: var(--color-darwin);
   --color-darwin-subtle: var(--color-darwin);
+
   --color-edison-strong: var(--color-edison);
   --color-edison-subtle: var(--color-edison);
 

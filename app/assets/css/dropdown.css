@@ -1,7 +1,7 @@
 @layer components {
   .dropdown-content {
     @apply scrollbar scrollbar-thin rounded-xl outline-none;
-    @apply ring-edison bg-darwin text-sm shadow-lg ring;
+    @apply ring-edison bg-darwin-subtle text-sm shadow-lg ring;
   }
 
   .dropdown-inner {

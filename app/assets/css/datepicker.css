@@ -4,7 +4,7 @@
   }
 
   .datepicker-day {
-    @apply bg-darwin ring-edison p-1 ring;
+    @apply bg-darwin-subtle ring-edison p-1 ring;
     @apply disabled:text-surface/40 disabled:cursor-not-allowed;
     @apply not-disabled:hover:text-accent;
 
