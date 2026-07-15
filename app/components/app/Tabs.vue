@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="ring-edison bg-darwin flex gap-1 rounded-xl p-1.5 shadow ring select-none" :class="tabsClass">
+    <div class="flex gap-2 select-none" :class="tabsClass">
       <button
         v-for="(tab, index) in tabs"
         :key="index"
@@ -32,7 +32,7 @@ const props = withDefaults(
     noQuery?: boolean;
   }>(),
   {
-    tabsClass: 'w-fit mb-4',
+    tabsClass: 'w-fit rounded-xl shadow ring-edison bg-darwin ring mb-4 p-2',
     tabClass: 'btn w-full',
     tabInnerClass: undefined,
     activeClass: 'btn-default text-accent',

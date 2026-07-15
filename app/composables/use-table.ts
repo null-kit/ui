@@ -67,11 +67,7 @@ export const useTableStickyHead = (tableWrapper: Readonly<Ref<HTMLElement | null
 };
 
 // Virtualization Composable
-export const useTableVirtualRows = <T>(
-  rows: Ref<T[]>,
-  enabled?: boolean | number,
-  container?: MaybeRefOrGetter<HTMLElement | string | null | undefined>
-) => {
+export const useTableVirtualRows = <T>(rows: Ref<T[]>, enabled?: boolean | number) => {
   if (!enabled) return { startIndex: 0, endIndex: 0, visibleRows: rows };
 
   const rowHeight = typeof enabled === 'number' ? enabled : 37;
@@ -79,7 +75,6 @@ export const useTableVirtualRows = <T>(
   const threshold = 4;
 
   const tableBody = useTemplateRef<HTMLElement>('tbody');
-  const scrollRoot = ref<HTMLElement | null>(null);
   const scrollY = ref(0);
   const viewportHeight = ref(import.meta.client ? window.innerHeight : 0);
 
@@ -89,16 +84,12 @@ export const useTableVirtualRows = <T>(
   const startIndex = ref(0);
   const endIndex = ref(0);
 
+  // Position relative to the viewport top; intermediate scroll containers move the tbody rect too,
+  // so this single measurement works for both window and container scrolling.
   const getRelativeScroll = () => {
     if (!tableBody.value) return 0;
 
-    const bodyTop = tableBody.value.getBoundingClientRect().top;
-
-    if (scrollRoot.value) {
-      return scrollRoot.value.getBoundingClientRect().top - bodyTop;
-    }
-
-    return -bodyTop;
+    return -tableBody.value.getBoundingClientRect().top;
   };
 
   const updateRange = () => {
@@ -136,58 +127,44 @@ export const useTableVirtualRows = <T>(
   });
 
   const updateViewport = () => {
-    viewportHeight.value = scrollRoot.value?.clientHeight ?? window.innerHeight;
-  };
-
-  const onScroll = () => {
-    scrollY.value = getRelativeScroll();
-    updateRange();
-  };
-
-  const onResize = () => {
-    updateViewport();
-    onScroll();
-  };
-
-  const resolveScrollRoot = () => {
-    const target = toValue(container);
-
-    if (typeof target === 'string') return tableBody.value?.closest<HTMLElement>(target) ?? null;
-    if (target) return target;
-
-    let node = tableBody.value?.parentElement ?? null;
-
-    while (node && node !== document.documentElement) {
-      const { overflowY } = getComputedStyle(node);
-
-      if (/auto|scroll|overlay/.test(overflowY)) return node;
-
-      node = node.parentElement;
-    }
-
-    return null;
+    viewportHeight.value = window.innerHeight;
   };
 
   onMounted(() => {
-    scrollRoot.value = resolveScrollRoot();
+    let frame = 0;
 
-    const scrollTarget = scrollRoot.value ?? window;
+    const onScroll = () => {
+      if (frame) return;
 
-    scrollTarget.addEventListener('scroll', onScroll, { passive: true });
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        scrollY.value = getRelativeScroll();
+        updateRange();
+      });
+    };
+
+    const onResize = () => {
+      updateViewport();
+      onScroll();
+    };
+
+    // Capture phase catches scroll from any ancestor container (scroll events don't bubble),
+    // so we never resolve the scroll root and both window and container scrolling are handled.
+    window.addEventListener('scroll', onScroll, { capture: true, passive: true });
     window.addEventListener('resize', onResize);
 
     const resizeObserver = new ResizeObserver(onResize);
-
-    resizeObserver.observe(scrollRoot.value ?? document.body);
 
     if (tableBody.value) resizeObserver.observe(tableBody.value);
 
     onResize();
 
     onUnmounted(() => {
+      if (frame) cancelAnimationFrame(frame);
+
       resizeObserver.disconnect();
 
-      scrollTarget.removeEventListener('scroll', onScroll);
+      window.removeEventListener('scroll', onScroll, { capture: true });
       window.removeEventListener('resize', onResize);
     });
   });

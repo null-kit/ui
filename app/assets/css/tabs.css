@@ -1,0 +1,5 @@
+@layer components {
+  .app-tabs {
+    @apply flex gap-2 select-none;
+  }
+}

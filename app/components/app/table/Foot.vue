@@ -1,7 +1,7 @@
 <template>
   <tfoot v-if="hasFooter">
-    <template v-for="footerGroup in table.getHeaderGroups()" :key="footerGroup.id">
-      <tr v-if="footerGroup.headers.some((h) => !h.isPlaceholder && h.column.columnDef.header)">
+    <template v-for="footerGroup in table.getFooterGroups()" :key="footerGroup.id">
+      <tr v-if="footerGroup.headers.some((h) => !h.isPlaceholder && h.column.columnDef.footer)">
         <td
           v-for="header in footerGroup.headers"
           :key="header.id"
