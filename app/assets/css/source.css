@@ -43,21 +43,20 @@
     9px 9px;
 }
 
-@utility bg-dot {
-  --dot-size: 11px;
-  --dot-pos: 3px;
+@utility bg-dot-* {
   background-image: radial-gradient(circle at 2px 2px, --alpha(var(--color-surface) / 15%) 1px, transparent 0);
-  background-size: var(--dot-size) var(--dot-size);
-  background-position: var(--dot-pos) var(--dot-pos);
+  background-size: calc(--value(integer, --default(12)) * 1px) calc(--value(integer, --default(12)) * 1px);
+  background-position: calc((--value(integer, --default(12)) / 3) * 1px)
+    calc((--value(integer, --default(12)) / 3) * 1px);
 }
 
-@utility bg-diagonal {
+@utility bg-diagonal-* {
   background-image: repeating-linear-gradient(
     -45deg,
     --alpha(var(--color-surface) / 10%),
     --alpha(var(--color-surface) / 10%) 1px,
     transparent 1px,
-    transparent 14px
+    transparent calc(--value(integer, --default(12)) * 1px)
   );
 }
 
