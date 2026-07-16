@@ -27,7 +27,7 @@
       &:hover td,
       &[aria-expanded] td,
       [aria-expanded] {
-        @apply bg-shade-darwin-strong/5 dark:bg-shade-darwin-strong;
+        @apply bg-shade-darwin-strong/5 dark:bg-shade-darwin-strong/8;
       }
 
       &:not([aria-hidden]):not(:has(+ tr:not([aria-hidden]))) > td {

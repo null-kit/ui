@@ -35,6 +35,7 @@
                     fill="none"
                     stroke="currentColor"
                     stroke-width="4"
+                    data-sort-icon
                   >
                     <path d="M2 21L8 27L14 21" :opacity="header.column.getIsSorted() === 'desc' ? 1 : 0.5" />
                     <path d="M2 9L8 3L14 9" :opacity="header.column.getIsSorted() === 'asc' ? 1 : 0.5" />
