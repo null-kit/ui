@@ -3,7 +3,7 @@
     @apply scrollbar scrollbar-thin isolate flex overflow-auto;
     @apply rounded-lg shadow duration-300;
     @apply ring-edison hover:ring-surface/20 bg-darwin-subtle ring;
-    @apply divide-x divide-current/20;
+    @apply divide-edison divide-x hover:divide-current/20;
 
     &:has(.btn-sm, .btn-xs) {
       @apply rounded-md;
