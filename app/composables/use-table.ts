@@ -84,13 +84,7 @@ export const useTableVirtualRows = <T>(rows: Ref<T[]>, enabled?: boolean | numbe
   const startIndex = ref(0);
   const endIndex = ref(0);
 
-  // Position relative to the viewport top; intermediate scroll containers move the tbody rect too,
-  // so this single measurement works for both window and container scrolling.
-  const getRelativeScroll = () => {
-    if (!tableBody.value) return 0;
-
-    return -tableBody.value.getBoundingClientRect().top;
-  };
+  const getRelativeScroll = () => (!tableBody.value ? 0 : -tableBody.value.getBoundingClientRect().top);
 
   const updateRange = () => {
     const total = totalRows.value;
@@ -148,8 +142,6 @@ export const useTableVirtualRows = <T>(rows: Ref<T[]>, enabled?: boolean | numbe
       onScroll();
     };
 
-    // Capture phase catches scroll from any ancestor container (scroll events don't bubble),
-    // so we never resolve the scroll root and both window and container scrolling are handled.
     window.addEventListener('scroll', onScroll, { capture: true, passive: true });
     window.addEventListener('resize', onResize);
 

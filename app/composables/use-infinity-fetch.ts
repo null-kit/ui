@@ -4,7 +4,6 @@ import type { ShallowRef } from 'vue';
 
 type Options = {
   el: Readonly<ShallowRef<HTMLElement | null>>;
-  container?: 'parent' | 'window';
   dataKey?: string;
   method?: 'GET' | 'POST';
   query?: MaybeRefOrGetter<SearchParameters>;
@@ -52,30 +51,29 @@ export const useInfinityFetch = <T>(url: string, options: Options) => {
 
   watch(query, () => refresh());
 
-  const isNearBottom = (target: HTMLElement, container: HTMLElement | Window) => {
-    const targetBottom = target.getBoundingClientRect().bottom;
-    const visibleBottom =
-      container instanceof Window ? container.innerHeight : container.getBoundingClientRect().bottom;
-
-    return targetBottom <= visibleBottom;
-  };
-
   onMounted(() => {
     fetchData();
 
     const target = unref(options.el);
     if (!target) return;
 
-    const container = options.container === 'parent' ? target.parentElement : window;
-    const scrollTarget = container ?? window;
+    const isNearBottom = () => target.getBoundingClientRect().bottom <= window.innerHeight;
 
     const onScroll = () => {
-      if (isNearBottom(target, scrollTarget)) fetchData();
+      if (isNearBottom()) fetchData();
     };
 
-    scrollTarget.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('scroll', onScroll, { capture: true, passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
 
-    onUnmounted(() => scrollTarget.removeEventListener('scroll', onScroll));
+    watch(status, (value) => {
+      if (value === 'idle') onScroll();
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener('scroll', onScroll, { capture: true });
+      window.removeEventListener('resize', onScroll);
+    });
   });
 
   return {
