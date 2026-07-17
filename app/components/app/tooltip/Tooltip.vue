@@ -64,6 +64,6 @@ const onPointerMove = (event: PointerEvent) => {
 
 watch(
   () => props.disabled,
-  (value) => (isActive.value = !value)
+  () => (isActive.value = false)
 );
 </script>
