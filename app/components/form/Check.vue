@@ -1,6 +1,6 @@
 <template>
   <label class="relative inline-flex flex-wrap whitespace-break-spaces" :class="{ 'pointer-events-none': readonly }">
-    <span class="inline-flex items-center gap-2 text-sm" :class="{ 'cursor-not-allowed opacity-50': disabled }">
+    <span class="flex items-center gap-2 text-sm" :class="{ 'cursor-not-allowed opacity-50': disabled }">
       <span class="relative flex shrink-0">
         <input
           v-model="model"
