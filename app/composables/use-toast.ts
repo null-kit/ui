@@ -46,19 +46,19 @@ export const useToast = () => {
         'div',
         {
           key: toast.id,
-          class: 'toast inverted',
+          class: 'app-toast inverted',
           onMouseenter: () => holdToast(toast, true),
           onMouseleave: () => holdToast(toast, false)
         },
         [
-          h('div', { class: 'toast-text' }, [
+          h('div', { class: 'app-toast-text' }, [
             toast.title ? h('h3', { class: 'font-semibold' }, toast.title) : null,
             toast.text ? h('p', { class: 'whitespace-break-spaces' }, toast.text) : null
           ]),
 
-          toast.slot ? h('div', { class: 'toast-slot' }, toast.slot()) : null,
+          toast.slot ? h('div', { class: 'app-toast-slot' }, toast.slot()) : null,
 
-          h('div', { class: 'toast-status ' + meta[toast.type || 'default'].color }, [
+          h('div', { class: 'app-toast-status ' + meta[toast.type || 'default'].color }, [
             toast.type ? h(AppIcon, { name: meta[toast.type].icon, class: 'size-3.5' }) : null,
             h(
               'svg',
@@ -69,7 +69,7 @@ export const useToast = () => {
               },
               h('path', { stroke: 'currentColor', 'stroke-width': '2', d: 'M2 2l12 12M2 14L14 2' })
             ),
-            toast.manualClose ? null : h('div', { class: 'toast-timer' })
+            toast.manualClose ? null : h('div', { class: 'app-toast-timer' })
           ])
         ]
       );

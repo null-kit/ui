@@ -1,7 +1,8 @@
 @layer components {
   .app-floating {
-    @apply bg-darwin z-10 rounded-xl shadow-xl;
-    @apply ring-edison overflow-hidden ring;
+    @apply bg-darwin z-10 rounded-xl shadow-md;
+    @apply ring-edison overflow-hidden ring transition-shadow;
+    @apply has-active:ring-accent has-active:shadow-xl;
 
     [data-resizer] {
       @apply absolute touch-none;

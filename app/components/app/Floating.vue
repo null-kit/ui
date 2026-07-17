@@ -1,25 +1,34 @@
 <template>
-  <Teleport to="#teleports">
-    <div ref="floating" class="app-floating fixed flex flex-col" :class="floatingClass" :style="floatingStyle">
-      <div
-        v-if="$slots.header"
-        class="app-floating-header cursor-grab select-none active:cursor-grabbing"
-        @pointerdown="onDragStart"
-      >
-        <slot name="header" />
-      </div>
+  <Teleport to="#teleports" defer>
+    <Transition appear-from-class="opacity-0" appear-to-class="transition-opacity delay-200" appear>
+      <div ref="floating" class="app-floating fixed flex flex-col" :class="floatingClass" :style="floatingStyle">
+        <div
+          v-if="$slots.header"
+          class="app-floating-header cursor-grab select-none active:cursor-grabbing"
+          title="Drag to move. Double-click to reset."
+          @pointerdown="onDragStart"
+          @pointerup="$emit('drag', left, top)"
+          @dblclick="onResetBounds"
+        >
+          <slot name="header" />
+        </div>
 
-      <div class="scrollbar scrollbar-thin min-h-0 flex-1 overflow-auto">
-        <slot />
-      </div>
+        <div class="scrollbar scrollbar-thin min-h-0 flex-1 overflow-auto">
+          <slot />
+        </div>
 
-      <div
-        v-for="handle in resizeHandles"
-        :key="handle"
-        :data-resizer="handle"
-        @pointerdown="onResizeStart($event, handle)"
-      />
-    </div>
+        <div
+          v-for="handle in resizeHandles"
+          :key="handle"
+          :data-resizer="handle"
+          @pointerdown="onResizeStart($event, handle)"
+          @pointerup="
+            $emit('resize', widthCur, heightCur);
+            $emit('drag', left, top);
+          "
+        />
+      </div>
+    </Transition>
   </Teleport>
 </template>
 
@@ -29,13 +38,17 @@ type ResizeHandle = 'n' | 's' | 'e' | 'w' | 'nw' | 'ne' | 'sw' | 'se';
 type HorizontalAnchor = { side: 'left' | 'right'; offset: number };
 type VerticalAnchor = { side: 'top' | 'bottom'; offset: number };
 
+const emit = defineEmits<{ resize: [width?: number, height?: number]; drag: [left: number, top: number] }>();
+
 const {
   resize = 'none',
   bounding = true,
   minWidth = 0,
-  minHeight = 0,
+  minHeight = 30,
   maxWidth,
   maxHeight,
+  width: widthProp,
+  height: heightProp,
   top: topProp,
   left: leftProp,
   right: rightProp,
@@ -48,6 +61,8 @@ const {
   minHeight?: number;
   maxWidth?: number;
   maxHeight?: number;
+  width?: number;
+  height?: number;
   top?: number;
   left?: number;
   right?: number;
@@ -57,8 +72,8 @@ const {
 
 const left = ref(100);
 const top = ref(100);
-const width = ref<number>();
-const height = ref<number>();
+const widthCur = ref<number>();
+const heightCur = ref<number>();
 const widthLocked = ref(false);
 const heightLocked = ref(false);
 const horizontalAnchor = ref<HorizontalAnchor | null>(null);
@@ -91,7 +106,7 @@ const getRect = () => {
   const el = floating.value;
 
   if (!el) {
-    return { left: left.value, top: top.value, width: width.value ?? 0, height: height.value ?? 0 };
+    return { left: left.value, top: top.value, width: widthCur.value ?? 0, height: heightCur.value ?? 0 };
   }
 
   const rect = el.getBoundingClientRect();
@@ -102,6 +117,18 @@ const getRect = () => {
     width: rect.width,
     height: rect.height
   };
+};
+
+const syncSizeFromProps = () => {
+  if (widthProp !== undefined) {
+    widthLocked.value = true;
+    widthCur.value = widthProp;
+  }
+
+  if (heightProp !== undefined) {
+    heightLocked.value = true;
+    heightCur.value = heightProp;
+  }
 };
 
 const syncAnchorsFromProps = () => {
@@ -221,8 +248,8 @@ const syncBounds = () => {
     top.value = clamp(rect.top, 0, Math.max(0, viewport.height - rect.height));
   }
 
-  if (widthLocked.value) width.value = next.width;
-  if (heightLocked.value) height.value = next.height;
+  if (widthLocked.value) widthCur.value = next.width;
+  if (heightLocked.value) heightCur.value = next.height;
 };
 
 const floatingStyle = computed(() => {
@@ -230,10 +257,11 @@ const floatingStyle = computed(() => {
   const maxHeightValue = getMaxHeight();
 
   return {
-    left: `${left.value}px`,
-    top: `${top.value}px`,
-    width: widthLocked.value && width.value ? `${width.value}px` : undefined,
-    height: heightLocked.value && height.value ? `${height.value}px` : undefined,
+    left: 0,
+    top: 0,
+    transform: `translate(${left.value}px, ${top.value}px)`,
+    width: widthLocked.value && widthCur.value ? `${widthCur.value}px` : undefined,
+    height: heightLocked.value && heightCur.value ? `${heightCur.value}px` : undefined,
     maxWidth: !widthLocked.value && maxWidthValue !== undefined ? `${maxWidthValue}px` : undefined,
     maxHeight: !heightLocked.value && maxHeightValue !== undefined ? `${maxHeightValue}px` : undefined
   };
@@ -286,15 +314,18 @@ const onDragStart = (event: PointerEvent) => {
   const rect = getRect();
 
   onPointerDrag(event, (moveEvent, startEvent) => {
-    const next = applyBounds(
-      rect.left + moveEvent.clientX - startEvent.clientX,
-      rect.top + moveEvent.clientY - startEvent.clientY,
-      rect.width,
-      rect.height
-    );
+    const viewport = getViewport();
 
-    left.value = next.left;
-    top.value = next.top;
+    let nextLeft = rect.left + moveEvent.clientX - startEvent.clientX;
+    let nextTop = rect.top + moveEvent.clientY - startEvent.clientY;
+
+    if (bounding) {
+      nextLeft = clamp(nextLeft, 0, Math.max(0, viewport.width - rect.width));
+      nextTop = clamp(nextTop, 0, Math.max(0, viewport.height - rect.height));
+    }
+
+    left.value = nextLeft;
+    top.value = nextTop;
   });
 };
 
@@ -310,49 +341,68 @@ const onResizeStart = (event: PointerEvent, handle: ResizeHandle) => {
   if (handle.includes('n') || handle.includes('s')) heightLocked.value = true;
   if (handle.includes('e') || handle.includes('w')) widthLocked.value = true;
 
-  width.value = rect.width;
-  height.value = rect.height;
+  widthCur.value = rect.width;
+  heightCur.value = rect.height;
+
+  const rightEdge = rect.left + rect.width;
+  const bottomEdge = rect.top + rect.height;
 
   onPointerDrag(event, (moveEvent, startEvent) => {
     const dx = moveEvent.clientX - startEvent.clientX;
     const dy = moveEvent.clientY - startEvent.clientY;
+    const viewport = getViewport();
 
     let nextLeft = rect.left;
     let nextTop = rect.top;
     let nextWidth = rect.width;
     let nextHeight = rect.height;
 
-    if (handle.includes('e')) nextWidth = rect.width + dx;
-    if (handle.includes('w')) {
-      nextWidth = rect.width - dx;
-      nextLeft = rect.left + dx;
+    if (handle.includes('e')) {
+      const boundMax = bounding ? viewport.width - rect.left : Number.POSITIVE_INFINITY;
+      nextWidth = clamp(rect.width + dx, minWidth, Math.min(maxWidth ?? Number.POSITIVE_INFINITY, boundMax));
+      nextLeft = rect.left;
+    } else if (handle.includes('w')) {
+      const boundMax = bounding ? rightEdge : Number.POSITIVE_INFINITY;
+      nextWidth = clamp(rect.width - dx, minWidth, Math.min(maxWidth ?? Number.POSITIVE_INFINITY, boundMax));
+      nextLeft = rightEdge - nextWidth;
     }
 
-    if (handle.includes('s')) nextHeight = rect.height + dy;
-    if (handle.includes('n')) {
-      nextHeight = rect.height - dy;
-      nextTop = rect.top + dy;
+    if (handle.includes('s')) {
+      const boundMax = bounding ? viewport.height - rect.top : Number.POSITIVE_INFINITY;
+      nextHeight = clamp(rect.height + dy, minHeight, Math.min(maxHeight ?? Number.POSITIVE_INFINITY, boundMax));
+      nextTop = rect.top;
+    } else if (handle.includes('n')) {
+      const boundMax = bounding ? bottomEdge : Number.POSITIVE_INFINITY;
+      nextHeight = clamp(rect.height - dy, minHeight, Math.min(maxHeight ?? Number.POSITIVE_INFINITY, boundMax));
+      nextTop = bottomEdge - nextHeight;
     }
 
-    if (resize === 'x') nextHeight = rect.height;
-    if (resize === 'y') nextWidth = rect.width;
-
-    const next = applyBounds(nextLeft, nextTop, nextWidth, nextHeight);
-
-    left.value = next.left;
-    top.value = next.top;
-    width.value = next.width;
-    height.value = next.height;
+    left.value = nextLeft;
+    top.value = nextTop;
+    widthCur.value = nextWidth;
+    heightCur.value = nextHeight;
   });
 };
 
 let resizeObserver: ResizeObserver | undefined;
 
+syncSizeFromProps();
 syncAnchorsFromProps();
 
+const onResetBounds = () => {
+  widthLocked.value = false;
+  heightLocked.value = false;
+  widthCur.value = undefined;
+  heightCur.value = undefined;
+  clearAnchors();
+  nextTick(() => syncBounds());
+  emit('resize', widthCur.value, heightCur.value);
+};
+
 watch(
-  () => [topProp, leftProp, rightProp, bottomProp],
+  () => [topProp, leftProp, rightProp, bottomProp, widthProp, heightProp],
   () => {
+    syncSizeFromProps();
     syncAnchorsFromProps();
     syncBounds();
   }

@@ -54,7 +54,7 @@
 
   &:not(:disabled):not(:active) {
     @apply hover:ring-surface/20;
-    @apply hover:bg-shade-darwin/5 dark:hover:bg-tint-darwin/5;
+    @apply hover:bg-shade-darwin/5 dark:hover:bg-tint-darwin;
   }
 }
 
