@@ -115,11 +115,25 @@
               <button
                 v-if="rangeYear"
                 type="button"
-                class="btn btn-sm btn-default col-span-2"
+                class="btn btn-sm btn-default"
+                :class="{ 'col-span-2': !rangeQuarter }"
                 @click="onSetPreset('this-year')"
               >
                 This Year
               </button>
+
+              <div v-if="rangeQuarter" class="btn-group" :class="{ 'col-span-2': !rangeYear }">
+                <button
+                  v-for="q in 4"
+                  :key="q"
+                  type="button"
+                  class="btn btn-sm btn-default"
+                  :disabled="!isQuarterReady(q)"
+                  @click="onSetPreset(`q${q}` as Preset)"
+                >
+                  {{ `Q${q}` }}
+                </button>
+              </div>
 
               <slot name="preset" :on-set-preset />
             </slot>
@@ -133,7 +147,7 @@
 <script setup lang="ts">
 import type { Placement } from '@floating-ui/vue';
 
-type Preset = 'today' | 'yesterday' | `last-${'month' | '7' | '30'}` | `this-${'month' | 'year'}`;
+type Preset = 'today' | 'yesterday' | `last-${'month' | '7' | '30'}` | `this-${'month' | 'year'}` | `q${1 | 2 | 3 | 4}`;
 
 const {
   disabledDates = [],
@@ -145,6 +159,7 @@ const {
   preset?: Preset;
   includeToday?: boolean;
   rangeYear?: boolean;
+  rangeQuarter?: boolean;
   maxToday?: boolean;
   icon?: string;
   noIcon?: boolean;
@@ -315,6 +330,18 @@ const inRange = (date: Date) => {
 
 const isOutside = (date: Date) => date.getMonth() !== currentMonth.value;
 
+const isQuarterReady = (quarter: number) => {
+  const today = new Date();
+  const month = today.getMonth();
+  const startMonth = (quarter - 1) * 3;
+
+  if (month < startMonth) return false;
+
+  if (props.maxToday) return true;
+
+  return month >= quarter * 3;
+};
+
 const isDisabled = (date: Date) => {
   if (disabledDates.some((d) => new Date(d).toDateString() === date.toDateString())) {
     return true;
@@ -371,6 +398,26 @@ const onSetPreset = (type: Preset) => {
     case 'this-year':
       onSetDate(new Date(today.getFullYear(), 0, 1));
       if (props.maxToday) onSetDate(today);
+      else onSetDate(new Date(today.getFullYear(), 12, 0));
+      break;
+    case 'q1':
+      onSetDate(new Date(today.getFullYear(), 0, 1));
+      if (props.maxToday && today.getMonth() < 3) onSetDate(today);
+      else onSetDate(new Date(today.getFullYear(), 3, 0));
+      break;
+    case 'q2':
+      onSetDate(new Date(today.getFullYear(), 3, 1));
+      if (props.maxToday && today.getMonth() < 6) onSetDate(today);
+      else onSetDate(new Date(today.getFullYear(), 6, 0));
+      break;
+    case 'q3':
+      onSetDate(new Date(today.getFullYear(), 6, 1));
+      if (props.maxToday && today.getMonth() < 9) onSetDate(today);
+      else onSetDate(new Date(today.getFullYear(), 9, 0));
+      break;
+    case 'q4':
+      onSetDate(new Date(today.getFullYear(), 9, 1));
+      if (props.maxToday && today.getMonth() < 12) onSetDate(today);
       else onSetDate(new Date(today.getFullYear(), 12, 0));
       break;
   }
