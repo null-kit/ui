@@ -110,7 +110,7 @@
         <FormOptions
           v-if="hasGroupOptions"
           v-bind="{ groups, getKeyName, isSelected, order }"
-          :is-hidden="(option: T) => typeof option === 'object' && Boolean(option.excluded)"
+          :is-hidden="(option) => typeof option === 'object' && Boolean(option.excluded)"
           variant="select"
           :max-height="search ? 'calc(var(--floating-height) - 42px)' : undefined"
           @select="toggleOption"
@@ -142,7 +142,7 @@
   </div>
 </template>
 
-<script setup lang="ts" generic="T extends Record<string, unknown> | string | number">
+<script setup lang="ts" generic="T">
 import type { Placement } from '@floating-ui/vue';
 
 const emit = defineEmits<{ change: [value: T] }>();
@@ -157,6 +157,8 @@ const [model, modifiers] = defineModel<unknown>({
     if ((typeof value === 'string' || Array.isArray(value)) && value.length === 0) {
       return undefined;
     }
+
+    if (value === null) return undefined;
 
     return value;
   }
@@ -197,7 +199,7 @@ const {
   allOptions,
   filterGroups,
   hasGroupOptions: checkGroupOptions
-} = useFormOptions<T>({
+} = useFormOptions<any>({
   options: () => props.options,
   keyName: () => props.keyName,
   keyValue: () => props.keyValue
