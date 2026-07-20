@@ -1,4 +1,4 @@
-export const useDraggable = <T extends string | number>(list: T[], preserveKey?: string | string[]) => {
+export const useDraggable = <T extends string | number>(list: (T | string)[], preserveKey?: string | string[]) => {
   const { settings } = useAppConfig();
   const dragIndex = ref<number | null>(null);
 

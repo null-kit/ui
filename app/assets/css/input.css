@@ -106,7 +106,7 @@
     }
 
     &[data-size='sm'] {
-      @apply size-4;
+      @apply size-4 rounded;
 
       & + .form-check-icon {
         @apply p-0.75;
