@@ -45,7 +45,7 @@
   </div>
 </template>
 
-<script setup lang="ts" generic="T extends string | Record<string, string | number>">
+<script setup lang="ts" generic="T">
 const props = withDefaults(
   defineProps<{
     options: T[];
@@ -80,11 +80,11 @@ const [model, modifiers] = defineModel<unknown, 'lowercase' | 'number'>({
 });
 
 const getKeyValue = (option: T) => {
-  return props.keyValue && typeof option === 'object' ? option[props.keyValue] : option;
+  return props.keyValue && typeof option === 'object' ? (option?.[props.keyValue] as T) : option;
 };
 
 const getKeyName = (option: T) => {
-  return props.keyName && typeof option === 'object' ? option[props.keyName] : option;
+  return props.keyName && typeof option === 'object' ? (option?.[props.keyName] as T) : option;
 };
 
 const toLowerCase = (value: T) => {

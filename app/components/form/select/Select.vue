@@ -38,7 +38,11 @@
             :disabled
           >
             <span v-if="multiple && selected.length > 0" class="select-multiple">
-              <span v-for="(option, index) in selected" :key="index" class="btn btn-sm btn-default">
+              <span v-if="flatten && flatten <= selected.length" class="btn btn-sm btn-default">
+                {{ selected.length }} selected
+              </span>
+
+              <span v-else v-for="(option, index) in selected" :key="index" class="btn btn-sm btn-default">
                 {{ getKeyName(option) }}
 
                 <svg
@@ -187,6 +191,7 @@ const props = defineProps<{
   dropdownClass?: string;
   inline?: boolean;
   size?: 'xs' | 'sm' | 'md' | 'lg';
+  flatten?: number;
 }>();
 
 const dropdown = useTemplateRef('dropdown');

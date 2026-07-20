@@ -19,7 +19,15 @@ export default defineNuxtConfig({
       }
     },
     optimizeDeps: {
-      include: ['@vue/devtools-core', '@vue/devtools-kit']
+      include: [
+        '@unovis/ts',
+        '@unovis/vue',
+        '@floating-ui/vue',
+        '@tanstack/vue-table',
+        '@floating-ui/dom',
+        '@vue/devtools-core',
+        '@vue/devtools-kit'
+      ]
     }
   }
 });

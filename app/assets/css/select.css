@@ -17,6 +17,10 @@
 
   .select-multiple {
     @apply flex flex-wrap items-center gap-1.5;
+
+    .btn {
+      --color-darwin-subtle: var(--color-darwin);
+    }
   }
 
   .select-options {
