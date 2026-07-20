@@ -57,6 +57,7 @@ const onToggle = () => {
 };
 
 const styles = computed(() => {
+  if (slots.summary && props.summaryClass) return props.summaryClass;
   if (slots.summary) return '';
 
   const defaultStyles = ['flex items-center gap-2 border-b px-4 py-2'];
