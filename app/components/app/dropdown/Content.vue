@@ -5,7 +5,7 @@
       enter-to-class="duration-200"
       leave-to-class="opacity-0 translate-y-1 duration-200"
       :duration="200"
-      @after-enter="(el) => !noFocus && (el as HTMLDivElement).focus({ preventScroll: true })"
+      @after-enter="noFocus ? undefined : (el: HTMLDivElement) => el.focus({ preventScroll: true })"
       @after-leave="$emit('close')"
     >
       <div
