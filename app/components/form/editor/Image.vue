@@ -11,11 +11,11 @@
     <div class="flex gap-2 p-2">
       <div class="btn-group">
         <button
-          v-for="action in Object.keys(actions) as (keyof typeof actions)[]"
+          v-for="action in actions"
           :key="action"
           type="button"
           class="btn btn-sm"
-          :class="{ 'text-accent bg-accent/5': editor.getAttributes('image').class === actions[action] }"
+          :class="{ 'text-accent bg-accent/5': editor.getAttributes('image').class === ACTION_MAP[action] }"
           @click="onSubmit(action)"
         >
           <AppIcon :name="`editor:${action}`" />
@@ -50,7 +50,7 @@ const image = reactive({
   class: ''
 });
 
-const actions = {
+const ACTION_MAP = {
   'align-left': 'mr-auto',
   'align-center': 'mx-auto',
   'align-right': 'ml-auto',
@@ -58,8 +58,10 @@ const actions = {
   'float-right': 'float-right ml-4'
 };
 
-const onSubmit = (align?: keyof typeof actions) => {
-  if (align) image.class = actions[align];
+const actions = Object.keys(ACTION_MAP) as (keyof typeof ACTION_MAP)[];
+
+const onSubmit = (align?: keyof typeof ACTION_MAP) => {
+  if (align) image.class = ACTION_MAP[align];
 
   editor.commands.setImage({
     src: editor.getAttributes('image').src,
