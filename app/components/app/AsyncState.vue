@@ -20,9 +20,13 @@
       :class="[!$slots.empty && !emptyClass ? contentClass : '', emptyClass]"
     >
       <slot name="empty">
-        <AppIcon :name="status === 'error' ? 'alert' : 'search-area'" class="mx-auto mb-3 size-6" />
+        <AppIcon
+          v-if="title || text"
+          :name="status === 'error' ? 'alert' : 'search-area'"
+          class="mx-auto mb-3 size-6"
+        />
 
-        <h3 class="text-surface text-md/6 font-medium">{{ title }}</h3>
+        <h3 v-if="title" class="text-surface text-md/6 font-medium">{{ title }}</h3>
 
         <p v-if="text" class="text-surface/50 text-sm">{{ text }}</p>
       </slot>
