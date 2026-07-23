@@ -21,13 +21,14 @@ const {
   size = undefined,
   icon = undefined
 } = defineProps<{
-  type?: 'default' | 'success' | 'warning' | 'danger' | 'info' | 'accent';
+  type?: 'clear' | 'default' | 'success' | 'warning' | 'danger' | 'info' | 'accent';
   label?: string | number;
   icon?: string;
   size?: 'sm' | 'lg';
 }>();
 
 const types = {
+  clear: 'badge-clear',
   default: 'badge-default',
   success: 'badge-success',
   warning: 'badge-warning',

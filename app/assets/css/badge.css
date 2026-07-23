@@ -1,31 +1,37 @@
 @layer components {
   .badge {
     @apply rounded-md px-2 py-1 text-xs;
-    @apply inline-flex items-center justify-center gap-1.5 font-medium ring ring-inset;
+    @apply inline-flex items-center justify-center gap-1.5 font-medium;
   }
 }
 
 @utility badge-default {
-  @apply bg-darwin ring-edison text-current shadow-xs;
+  @apply ring ring-inset;
+  @apply bg-darwin-subtle ring-edison text-current shadow-xs;
 }
 
 @utility badge-success {
+  @apply ring ring-inset;
   @apply bg-green-500/10 text-green-600 ring-green-500/20;
 }
 
 @utility badge-warning {
+  @apply ring ring-inset;
   @apply bg-yellow-500/10 text-yellow-600 ring-yellow-500/20;
 }
 
 @utility badge-danger {
+  @apply ring ring-inset;
   @apply bg-red-500/10 text-red-500 ring-red-500/20;
 }
 
 @utility badge-info {
+  @apply ring ring-inset;
   @apply bg-blue-500/10 text-blue-500 ring-blue-500/20;
 }
 
 @utility badge-accent {
+  @apply ring ring-inset;
   @apply bg-accent/10 ring-accent/20 text-accent;
 }
 
