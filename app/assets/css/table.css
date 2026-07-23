@@ -35,7 +35,7 @@
       }
     }
 
-    :is(th, td) {
+    tr:not([aria-hidden]) > :is(th, td) {
       @apply bg-darwin-subtle border-edison border-b px-3 py-2;
 
       &[data-cell='expander'] {

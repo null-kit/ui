@@ -24,7 +24,7 @@
 
         <tbody ref="tbody" class="isolate">
           <tr v-if="virtualScroll" aria-hidden>
-            <td :style="{ padding: 0, border: 0, height: topPadding + 'px' }" />
+            <td colspan="100%" :style="{ padding: 0, border: 0, height: topPadding + 'px' }" />
           </tr>
 
           <tr
@@ -61,7 +61,7 @@
           </tr>
 
           <tr v-if="virtualScroll" aria-hidden>
-            <td :style="{ padding: 0, border: 0, height: bottomPadding + 'px' }" />
+            <td colspan="100%" :style="{ padding: 0, border: 0, height: bottomPadding + 'px' }" />
           </tr>
         </tbody>
 

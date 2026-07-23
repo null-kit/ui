@@ -8,7 +8,7 @@ export default defineNuxtConfig({
     '@null-kit/utils': resolve('./shared/utils')
   },
 
-  modules: [resolve('modules/svg-sprite')],
+  modules: [resolve('modules/svg-sprite'), '@nuxt/eslint'],
 
   // fix unovis issues
   vite: {

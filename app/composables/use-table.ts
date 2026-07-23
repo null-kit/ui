@@ -71,8 +71,8 @@ export const useTableVirtualRows = <T>(rows: Ref<T[]>, enabled?: boolean | numbe
   if (!enabled) return { startIndex: 0, endIndex: 0, visibleRows: rows };
 
   const rowHeight = typeof enabled === 'number' ? enabled : 37;
-  const overscan = 10;
-  const threshold = 4;
+  const overscan = 20;
+  const threshold = 10;
 
   const tableBody = useTemplateRef<HTMLElement>('tbody');
   const scrollY = ref(0);
