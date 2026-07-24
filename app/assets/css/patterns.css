@@ -1,7 +1,7 @@
 @utility bg-polka {
   background-image:
-    radial-gradient(--alpha(var(--color-surface) / 10%) 1px, transparent 1px),
-    radial-gradient(--alpha(var(--color-surface) / 10%) 1px, transparent 1px);
+    radial-gradient(--alpha(currentColor / 10%) 1px, transparent 1px),
+    radial-gradient(--alpha(currentColor / 10%) 1px, transparent 1px);
   background-size: 18px 18px;
   background-position:
     0 0,
@@ -10,8 +10,8 @@
 
 @utility bg-graph-dot {
   background-image:
-    radial-gradient(circle, --alpha(var(--color-surface) / 10%) 1px, transparent 1px),
-    radial-gradient(circle, --alpha(var(--color-surface) / 10%) 1px, transparent 1px);
+    radial-gradient(circle, --alpha(currentColor / 10%) 1px, transparent 1px),
+    radial-gradient(circle, --alpha(currentColor / 10%) 1px, transparent 1px);
   background-size:
     5px 20px,
     20px 5px;
@@ -21,7 +21,7 @@
 }
 
 @utility bg-dot-* {
-  background-image: radial-gradient(circle at 2px 2px, --alpha(var(--color-surface) / 15%) 1px, transparent 0);
+  background-image: radial-gradient(circle at 2px 2px, --alpha(currentColor / 15%) 1px, transparent 0);
   background-size: calc(--value(integer, --default(12)) * 1px) calc(--value(integer, --default(12)) * 1px);
   background-position: calc((--value(integer, --default(12)) / 3) * 1px)
     calc((--value(integer, --default(12)) / 3) * 1px);
@@ -30,8 +30,8 @@
 @utility bg-diagonal-* {
   background-image: repeating-linear-gradient(
     -45deg,
-    --alpha(var(--color-surface) / 10%),
-    --alpha(var(--color-surface) / 10%) 1px,
+    --alpha(currentColor / 10%),
+    --alpha(currentColor / 10%) 1px,
     transparent 1px,
     transparent calc(--value(integer, --default(12)) * 1px)
   );

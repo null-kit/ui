@@ -1,6 +1,6 @@
 @layer components {
   .btn-group {
-    @apply scrollbar scrollbar-thin isolate flex overflow-auto;
+    @apply scrollbar isolate flex scrollbar-thin overflow-auto;
     @apply rounded-lg shadow duration-300;
     @apply bg-darwin-subtle;
 
@@ -98,21 +98,5 @@
 }
 
 @utility btn-pending {
-  cursor: progress;
-  background-size: 20px 100%;
-  background-position: 0 0;
-  animation: btn-pending 2s infinite linear forwards;
-  background-image: repeating-linear-gradient(
-    -75deg,
-    --alpha(currentColor / 10%),
-    --alpha(currentColor / 10%) 10px,
-    transparent 10px,
-    transparent 20px
-  );
-}
-
-@keyframes btn-pending {
-  100% {
-    background-position: 20px 0;
-  }
+  @apply is-pending;
 }

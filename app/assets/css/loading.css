@@ -1,5 +1,5 @@
 @utility is-loading {
-  @apply relative *:!opacity-70;
+  @apply relative *:opacity-70!;
 
   &:after {
     @apply absolute inset-0 z-1 backdrop-blur content-[''];
@@ -10,14 +10,34 @@
     @apply top-1/2 left-1/2 -mt-1.5 -ml-8;
     @apply bg-radial-[circle_closest-side];
     @apply from-surface from-92% to-transparent;
-    @apply bg-[size:calc(100%/3)_100%] bg-[position:calc(100%/2)_0];
+    @apply bg-size-[calc(100%/3)_100%] bg-position-[calc(100%/2)_0];
 
-    animation: loading 0.8s ease-in-out infinite;
+    animation: is-loading 0.8s ease-in-out infinite;
   }
 }
 
-@keyframes loading {
+@keyframes is-loading {
   to {
     background-position: 0 0;
+  }
+}
+
+@utility is-pending {
+  cursor: progress;
+  background-size: 20px 100%;
+  background-position: 0 0;
+  animation: is-pending 2s infinite linear forwards;
+  background-image: repeating-linear-gradient(
+    -75deg,
+    --alpha(currentColor / 10%),
+    --alpha(currentColor / 10%) 10px,
+    transparent 10px,
+    transparent 20px
+  );
+}
+
+@keyframes is-pending {
+  100% {
+    background-position: 20px 0;
   }
 }
