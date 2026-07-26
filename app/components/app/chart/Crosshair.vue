@@ -21,7 +21,7 @@
         <div v-for="(category, index) in categories" :key="category" class="flex items-center gap-2">
           <div v-if="colors" class="h-3 w-1 rounded-full" :style="{ backgroundColor: colors[index] }" />
 
-          <div>{{ category }}</div>
+          <div :class="labelClass">{{ labelFormat ? labelFormat(category) : category }}</div>
 
           <div class="ml-auto font-semibold">
             {{ yFormat ? yFormat(currentData[category] || 0) : formatNumber(currentData[category] || 0) }}
@@ -39,9 +39,11 @@ defineProps<{
   categories: Extract<keyof T, string>[];
   colors?: string[];
   xKey: keyof T;
-  xFormat?: (i: string | number) => string | Date;
+  xFormat?: (i: string | number) => string | number | Date;
   yFormat?: (i: string | number) => string;
+  labelFormat?: (i: string) => string;
   tooltipClass?: string;
+  labelClass?: string;
 }>();
 
 const tooltip = useTemplateRef<HTMLDivElement>('tooltip');

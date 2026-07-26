@@ -28,7 +28,7 @@
       v-bind="{ ...(yHide ? { tickLine: false, tickTextFontSize: 0, domainLine: false } : {}) }"
     />
 
-    <LazyAppChartCrosshair v-bind="{ categories, colors, xKey, yFormat, xFormat, tooltipClass }" />
+    <LazyAppChartCrosshair v-bind="{ categories, colors, xKey, yFormat, xFormat, tooltipClass, labelClass }" />
 
     <svg width="0" height="0">
       <linearGradient v-for="(color, i) in colors" :id="`vis-bar-g-${i}-${id}`" :key="i" x1="0" y1="0" x2="0" y2="1">
@@ -63,6 +63,7 @@ const {
   roundedCorners?: number;
   showLegend?: boolean;
   tooltipClass?: string;
+  labelClass?: string;
   barStyle?: 'gradient' | 'solid';
   height?: string;
   barPadding?: number;

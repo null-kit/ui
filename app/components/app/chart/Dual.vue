@@ -2,6 +2,7 @@
   <div class="relative">
     <VisXYContainer :data :margin :auto-margin="false" class="pointer-events-none" height="20rem">
       <VisLine :x :y="(d: T) => Number(d[leftKey])" :color="colors[0]" />
+      <VisArea v-if="gradient" :x :y="(d: T) => Number(d[leftKey])" :color="`url(#vis-g-${0})`" />
       <VisScatter :x :y="(d: T) => Number(d[leftKey])" :color="colors[0]" :size="7" />
 
       <VisAxis
@@ -16,6 +17,7 @@
 
     <VisXYContainer :data :margin :auto-margin="false" class="-mt-80" height="20rem">
       <VisLine :x :y="(d: T) => Number(d[rightKey])" :color="colors[1]" />
+      <VisArea v-if="gradient" :x :y="(d: T) => Number(d[rightKey])" :color="`url(#vis-g-${1})`" />
       <VisScatter :x :y="(d: T) => Number(d[rightKey])" :color="colors[1]" :size="7" />
 
       <VisAxis
@@ -27,24 +29,36 @@
         :tick-text-color="colors[1]"
       />
 
-      <AppChartCrosshair :categories="[leftKey, rightKey]" :colors :x-key :x-format :tooltip-class />
+      <LazyAppChartCrosshair
+        :categories="[leftKey, rightKey]"
+        v-bind="{ colors, xKey, xFormat, tooltipClass, labelClass }"
+      />
+
+      <svg v-if="gradient" width="0" height="0">
+        <linearGradient v-for="(color, i) in colors" :id="`vis-g-${i}`" :key="i" x1="0" y1="0" x2="0" y2="1">
+          <stop :stop-color="color" stop-opacity="0.2" />
+          <stop offset="0.9" :stop-color="color" stop-opacity="0" />
+        </linearGradient>
+      </svg>
     </VisXYContainer>
   </div>
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, unknown | Record<string, unknown>>">
-import { VisXYContainer, VisAxis, VisLine, VisScatter } from '@unovis/vue';
+import { VisXYContainer, VisAxis, VisLine, VisScatter, VisArea } from '@unovis/vue';
 
 const props = defineProps<{
   data: T[];
   leftKey: Extract<keyof T, string>;
   rightKey: Extract<keyof T, string>;
   xKey: Extract<keyof T, string>;
-  xFormat?: (i: string | number) => string | Date;
+  xFormat?: (i: string | number) => string | number | Date;
   yFormatLeft?: (i: string | number) => string;
   yFormatRight?: (i: string | number) => string;
   tooltipClass?: string;
+  labelClass?: string;
   numTicks?: number;
+  gradient?: boolean;
 }>();
 
 const margin = { left: 50, right: 50, top: 0, bottom: 40 };
