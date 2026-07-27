@@ -42,7 +42,7 @@
                 {{ selected.length }} selected
               </span>
 
-              <span v-else v-for="(option, index) in selected" :key="index" class="btn btn-sm btn-default">
+              <span v-for="(option, index) in selected" v-else :key="index" class="btn btn-sm btn-default">
                 {{ getKeyName(option) }}
 
                 <svg
@@ -146,7 +146,7 @@
   </div>
 </template>
 
-<script setup lang="ts" generic="T">
+<script setup lang="ts" generic="T extends string | number | Record<string, unknown>">
 import type { Placement } from '@floating-ui/vue';
 
 const emit = defineEmits<{ change: [value: T] }>();
@@ -170,7 +170,7 @@ const [model, modifiers] = defineModel<unknown>({
 
 const props = defineProps<{
   options: T[];
-  value?: T | T[] | keyof T | T[keyof T];
+  value?: T | T[] | keyof T | T[keyof T] | null;
   label?: string;
   name?: string;
   placeholder?: string;
@@ -204,7 +204,7 @@ const {
   allOptions,
   filterGroups,
   hasGroupOptions: checkGroupOptions
-} = useFormOptions<any>({
+} = useFormOptions<T>({
   options: () => props.options,
   keyName: () => props.keyName,
   keyValue: () => props.keyValue
