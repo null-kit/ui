@@ -70,7 +70,7 @@ const props = withDefaults(
   }
 );
 
-const [model, modifiers] = defineModel<unknown, 'lowercase' | 'number' | 'nonNull'>({
+const [model, modifiers] = defineModel<unknown, 'lowercase' | 'number' | 'nonNull' | 'null'>({
   set(value) {
     if (value && modifiers.lowercase) {
       return Array.isArray(value) ? value.map(toLowerCase) : toLowerCase(value as T);
@@ -79,6 +79,10 @@ const [model, modifiers] = defineModel<unknown, 'lowercase' | 'number' | 'nonNul
     if (modifiers.nonNull) {
       if (Array.isArray(value) && value.length === 0) return [];
       if (!value) return '';
+    }
+
+    if (modifiers.null) {
+      if (!value || (Array.isArray(value) && value.length === 0)) return null;
     }
 
     if ((typeof value === 'string' || Array.isArray(value)) && value.length === 0) {
