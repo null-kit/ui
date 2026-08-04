@@ -57,7 +57,7 @@ const padding = props.noFollow ? 8 : 16;
 
 const { floatingStyles, update, middlewareData } = useFloating(floatingReference, floating, {
   placement: props.placement ?? 'top',
-  middleware: [offset(padding), flip({ padding }), shift({ padding }), arrow({ element: floatingArrow, padding: 3 })],
+  middleware: [offset(padding), flip({ padding }), shift({ padding }), arrow({ element: floatingArrow, padding: 8 })],
   ...(props.noFollow ? { whileElementsMounted: autoUpdate } : {})
 });
 

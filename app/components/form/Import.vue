@@ -6,7 +6,7 @@
 
     {{ label }}
 
-    <AppTooltip v-if="!label" message="Import file" hover-class="absolute inset-0" />
+    <AppTooltip v-if="!label" message="Import file" hover-class="absolute inset-0" no-follow />
   </label>
 </template>
 
@@ -22,7 +22,7 @@ const {
   icon = 'file-paste',
   buttonClass = 'rounded-none',
   accept = '.csv,.xlsx,.txt',
-  regex = /[^a-zA-Z0-9\n,.;]/g
+  regex = /[^a-zA-Z0-9\n_,.;]/g
 } = defineProps<{
   label?: string;
   join?: Separator;

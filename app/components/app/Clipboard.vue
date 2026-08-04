@@ -23,6 +23,14 @@
         </AppAppear>
       </div>
     </template>
+
+    <template v-if="slots['right']" #right>
+      <slot name="right" />
+    </template>
+
+    <template v-if="slots['left']" #left>
+      <slot name="left" />
+    </template>
   </component>
 </template>
 
