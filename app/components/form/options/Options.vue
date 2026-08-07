@@ -6,9 +6,14 @@
   >
     <slot name="before" />
 
-    <div ref="body" class="select-options">
-      <div v-if="virtualScroll" aria-hidden :style="{ height: topSize + 'px' }" />
-
+    <div
+      ref="body"
+      class="select-options"
+      :style="{
+        paddingTop: topSize ? topSize + 'px' : undefined,
+        paddingBottom: bottomSize ? bottomSize + 'px' : undefined
+      }"
+    >
       <template v-for="(row, index) in visibleRows" :key="startIndex + index">
         <div v-if="row.type === 'group'" class="select-group-label">{{ row.label }}</div>
 
@@ -54,8 +59,6 @@
           </button>
         </slot>
       </template>
-
-      <div v-if="virtualScroll" aria-hidden :style="{ height: bottomSize + 'px' }" />
     </div>
 
     <slot name="after" />
