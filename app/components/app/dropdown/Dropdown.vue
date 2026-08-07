@@ -2,7 +2,7 @@
   <div ref="reference" @click="onTriggerClick" @pointerenter="onPointerEnter" @pointerleave="onPointerLeave">
     <slot name="trigger" :is-open :disabled />
 
-    <AppDropdownContent
+    <LazyAppDropdownContent
       v-if="isOpen"
       ref="floating"
       v-bind="{ placement, dropdownClass, innerClass, maxHeight, inline, reference, noFocus }"
@@ -10,7 +10,7 @@
       @close="onClose"
     >
       <slot :on-close="onFloatingClose" />
-    </AppDropdownContent>
+    </LazyAppDropdownContent>
   </div>
 </template>
 

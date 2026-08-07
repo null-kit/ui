@@ -43,6 +43,7 @@
             v-model="formData.countries"
             placeholder="Select countries"
             :options="options"
+            :virtual-scroll="34"
             key-name="name"
             key-value="id"
             multiple
@@ -63,15 +64,5 @@ const formData = reactive({
   countries: [2, 3]
 });
 
-const options = ref([
-  { id: 1, name: 'United States' },
-  { id: 2, name: 'Canada' },
-  { id: 3, name: 'United Kingdom' },
-  { id: 4, name: 'Australia' },
-  { id: 5, name: 'New Zealand' },
-  { id: 6, name: 'South Africa' },
-  { id: 7, name: 'India' },
-  { id: 8, name: 'China' },
-  { id: 9, name: 'Japan' }
-]);
+const options = ref(Array.from({ length: 300 }, (_, i) => ({ id: i + 1, name: `Option ${i + 1}` })));
 </script>

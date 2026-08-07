@@ -24,7 +24,7 @@
 
         <tbody ref="tbody" class="isolate">
           <tr v-if="virtualScroll" aria-hidden>
-            <td colspan="100%" :style="{ padding: 0, border: 0, height: topPadding + 'px' }" />
+            <td colspan="100%" :style="{ padding: 0, border: 0, height: topSize + 'px' }" />
           </tr>
 
           <tr
@@ -61,7 +61,7 @@
           </tr>
 
           <tr v-if="virtualScroll" aria-hidden>
-            <td colspan="100%" :style="{ padding: 0, border: 0, height: bottomPadding + 'px' }" />
+            <td colspan="100%" :style="{ padding: 0, border: 0, height: bottomSize + 'px' }" />
           </tr>
         </tbody>
 
@@ -279,6 +279,7 @@ const computeColumnStyle = (column: Column<TData>): CSSProperties => {
 };
 
 const tableWrapper = useTemplateRef<HTMLElement>('tableWrapper');
+const tbody = useTemplateRef<HTMLElement>('tbody');
 
 const rows = computed(() => table.getRowModel().rows);
 const leafColumns = computed(() => table.getAllLeafColumns());
@@ -295,7 +296,11 @@ const columnStyles = (column: Column<TData>): CSSProperties => {
   return columnStyleCache.value.get(column.id) ?? computeColumnStyle(column);
 };
 
-const { startIndex, visibleRows, topPadding, bottomPadding } = useTableVirtualRows(rows, props.virtualScroll);
+const { startIndex, visibleRows, topSize, bottomSize } = useVirtualRows({
+  rows,
+  enabledOrHeight: props.virtualScroll,
+  body: tbody
+});
 
 if (props.stickyScrollbar) useTableStickyScrollbar(tableWrapper);
 if (props.stickyHead) useTableStickyHead(tableWrapper);

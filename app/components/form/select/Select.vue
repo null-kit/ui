@@ -22,7 +22,7 @@
         v-bind="{ disabled, autoclose, placement, inline }"
         :dropdown-class="[dropdownClass, 'overflow-clip flex flex-col'].join(' ')"
         :max-height="448"
-        class="w-full"
+        class="w-full min-w-0"
         :no-focus="search"
         @close="searchInput = ''"
       >
@@ -113,7 +113,7 @@
 
         <FormOptions
           v-if="hasGroupOptions"
-          v-bind="{ groups, getKeyName, isSelected, order }"
+          v-bind="{ groups, getKeyName, isSelected, order, virtualScroll }"
           :is-hidden="(option) => typeof option === 'object' && Boolean(option.excluded)"
           variant="select"
           :max-height="search ? 'calc(var(--floating-height) - 42px)' : undefined"
@@ -192,6 +192,7 @@ const props = defineProps<{
   inline?: boolean;
   size?: 'xs' | 'sm' | 'md' | 'lg';
   flatten?: number;
+  virtualScroll?: boolean | number;
 }>();
 
 const dropdown = useTemplateRef('dropdown');

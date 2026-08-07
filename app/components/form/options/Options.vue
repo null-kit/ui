@@ -1,66 +1,70 @@
 <template>
   <div
     ref="container"
-    class="scrollbar scrollbar-thin flex-1 overflow-auto"
+    class="scrollbar max-h-[inherit] flex-1 scrollbar-thin overflow-auto [overflow-anchor:none]"
     :style="maxHeight ? { maxHeight } : undefined"
   >
     <slot name="before" />
 
-    <template v-for="(optionGroup, indexParent) in groups" :key="indexParent">
-      <div v-if="optionGroup.group" class="select-group-label">{{ optionGroup.group }}</div>
+    <div ref="body" class="select-options">
+      <div v-if="virtualScroll" aria-hidden :style="{ height: topSize + 'px' }" />
 
-      <div v-if="optionGroup.list.length > 0" class="select-options">
-        <template v-for="(option, index) in optionGroup.list" :key="index">
-          <slot
-            name="option"
-            :value="option"
-            :is-selected="isSelected(option)"
-            :on-select="() => emit('select', option)"
-            :on-toggle="() => emit('select', option)"
+      <template v-for="(row, index) in visibleRows" :key="startIndex + index">
+        <div v-if="row.type === 'group'" class="select-group-label">{{ row.label }}</div>
+
+        <slot
+          v-else
+          name="option"
+          :value="row.value"
+          :is-selected="isSelected(row.value)"
+          :on-select="() => emit('select', row.value)"
+          :on-toggle="() => emit('select', row.value)"
+        >
+          <button
+            type="button"
+            class="btn min-h-0 shrink-0 justify-start"
+            :style="typeof virtualScroll === 'number' ? { height: virtualScroll + 'px' } : undefined"
+            :aria-current="row.value === activeOption || undefined"
+            :class="{
+              'bg-current/5 font-medium': isSelected(row.value),
+              'bg-current/10': row.value === activeOption
+            }"
+            @mousedown.prevent="emit('select', row.value)"
           >
-            <button
-              v-if="!isHidden?.(option)"
-              type="button"
-              class="btn justify-start"
-              :aria-current="option === activeOption || undefined"
-              :class="{
-                'bg-current/5 font-medium': isSelected(option),
-                '-order-1': isSelected(option) && order,
-                'bg-current/10': option === activeOption
-              }"
-              @mousedown.prevent="emit('select', option)"
+            <svg
+              v-if="variant === 'select'"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 32 32"
+              class="size-4 shrink-0"
             >
-              <svg
-                v-if="variant === 'select'"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 32 32"
-                class="size-4 shrink-0"
-              >
-                <path
-                  fill="none"
-                  stroke-width="3"
-                  d="m5 18 7 7L27 9"
-                  class="duration-300"
-                  stroke="currentColor"
-                  stroke-dasharray="32"
-                  :style="{ strokeDashoffset: isSelected(option) ? 0 : 32 }"
-                />
-              </svg>
+              <path
+                fill="none"
+                stroke-width="3"
+                d="m5 18 7 7L27 9"
+                class="duration-300"
+                stroke="currentColor"
+                stroke-dasharray="32"
+                :style="{ strokeDashoffset: isSelected(row.value) ? 0 : 32 }"
+              />
+            </svg>
 
-              <slot name="button" :value="option" :is-selected="isSelected(option)">
-                {{ getKeyName(option) }}
-              </slot>
-            </button>
-          </slot>
-        </template>
-      </div>
-    </template>
+            <slot name="button" :value="row.value" :is-selected="isSelected(row.value)">
+              <span class="max-w-sm truncate">{{ getKeyName(row.value) }}</span>
+            </slot>
+          </button>
+        </slot>
+      </template>
+
+      <div v-if="virtualScroll" aria-hidden :style="{ height: bottomSize + 'px' }" />
+    </div>
 
     <slot name="after" />
   </div>
 </template>
 
 <script setup lang="ts" generic="T extends Record<string, unknown> | string | number">
+type Row<T> = { type: 'group'; label: string } | { type: 'option'; value: T };
+
 const emit = defineEmits<{ select: [option: T] }>();
 
 const props = withDefaults(
@@ -72,6 +76,7 @@ const props = withDefaults(
     variant?: 'select' | 'pick';
     order?: boolean;
     maxHeight?: string;
+    virtualScroll?: boolean | number;
   }>(),
   {
     variant: 'select'
@@ -89,7 +94,36 @@ const orderedOptions = computed(() => {
   ];
 });
 
+const rows = computed<Row<T>[]>(() => {
+  if (props.order) {
+    return orderedOptions.value.map((value) => ({ type: 'option' as const, value }));
+  }
+
+  const rows: Row<T>[] = [];
+
+  for (const optionGroup of props.groups) {
+    const list = optionGroup.list.filter((opt) => !props.isHidden?.(opt));
+
+    if (!list.length) continue;
+
+    if (optionGroup.group) rows.push({ type: 'group', label: optionGroup.group });
+
+    for (const value of list) rows.push({ type: 'option', value });
+  }
+
+  return rows;
+});
+
 const container = useTemplateRef<HTMLElement>('container');
+const body = useTemplateRef<HTMLElement>('body');
+
+const { startIndex, visibleRows, topSize, bottomSize } = useVirtualRows({
+  rows,
+  enabledOrHeight: props.virtualScroll,
+  container,
+  body
+});
+
 const activeIndex = ref(-1);
 const activeOption = computed(() => orderedOptions.value[activeIndex.value]);
 
