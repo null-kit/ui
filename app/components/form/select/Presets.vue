@@ -93,18 +93,15 @@
 </template>
 
 <script setup lang="ts">
-type Preset = { name: string; list: (string | number)[] };
-type PresetGroup = { name: string; presets: Preset[] };
-type Presets = Preset[] | PresetGroup[];
-
 const model = defineModel<unknown>();
 
 const props = defineProps<{
-  presets: Presets;
+  presets: FormSelectPresets;
   searchInput: string;
 }>();
 
-const isPresetGroup = (item: Preset | PresetGroup): item is PresetGroup => 'presets' in item;
+const isPresetGroup = (item: FormSelectPreset | FormSelectPresetGroup): item is FormSelectPresetGroup =>
+  'presets' in item;
 
 const isGrouped = computed(() => props.presets?.some(isPresetGroup) ?? false);
 
@@ -113,7 +110,7 @@ const filteredFlatPresets = computed(() => {
 
   return (
     props.presets?.filter(
-      (preset): preset is Preset =>
+      (preset): preset is FormSelectPreset =>
         !isPresetGroup(preset) && preset.name.toLowerCase().includes(props.searchInput.toLowerCase())
     ) ?? []
   );
@@ -124,7 +121,7 @@ const filteredGroups = computed(() => {
 
   const search = props.searchInput.toLowerCase();
 
-  return (props.presets as PresetGroup[])
+  return (props.presets as FormSelectPresetGroup[])
     .map((group) => ({
       ...group,
       presets: group.presets.filter(

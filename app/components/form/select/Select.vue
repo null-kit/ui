@@ -184,10 +184,7 @@ const props = defineProps<{
   required?: boolean | 'no-unselect';
   disabled?: boolean;
   help?: string;
-  presets?: Array<
-    | { name: string; list: (string | number)[] }
-    | { name: string; presets: Array<{ name: string; list: (string | number)[] }> }
-  >;
+  presets?: FormSelectPresets;
   labelClass?: string;
   inputClass?: string;
   validateClass?: string;
