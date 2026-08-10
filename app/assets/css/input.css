@@ -147,7 +147,7 @@
 
     @apply form-input flex min-h-fit gap-px p-0.5;
     @apply focus:ring-edison has-focus:ring-edison;
-    @apply has-disabled:cursor-not-allowed;
+    @apply select-none has-disabled:cursor-not-allowed;
 
     label {
       @apply btn rounded-[calc(var(--radius-lg)*0.8)];

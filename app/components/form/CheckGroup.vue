@@ -17,11 +17,12 @@
 
       <label v-for="(option, index) in options" :key="index" :class="btnClass">
         <input
-          v-model="model"
           class="sr-only"
           :value="toLowerCase(option)"
+          :checked="isOptionSelected(option)"
           v-bind="{ type, name, disabled, readonly }"
           @click="onClick($event, option)"
+          @change="onChange($event, option)"
           @keydown="onKeydown"
         />
 
@@ -147,6 +148,27 @@ const onClick = (event: Event, option: T) => {
   if (isOptionSelected(option) && !props.noToggle) {
     model.value = undefined;
   }
+};
+
+const onChange = (event: Event, option: T) => {
+  const optionValue = toLowerCase(option);
+
+  if (props.type !== 'checkbox') {
+    model.value = optionValue;
+
+    return;
+  }
+
+  const values = [...selectedValues.value] as T[];
+  const index = values.findIndex((value) => toLowerCase(value) === optionValue);
+
+  if ((event.target as HTMLInputElement).checked) {
+    if (index === -1) values.push(optionValue as T);
+  } else if (index > -1) {
+    values.splice(index, 1);
+  }
+
+  model.value = values;
 };
 
 const onKeydown = (event: KeyboardEvent) => {
