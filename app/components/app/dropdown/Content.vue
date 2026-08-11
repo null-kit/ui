@@ -41,6 +41,7 @@ const props = defineProps<{
   dropdownClass?: string;
   innerClass?: string;
   maxHeight?: number;
+  minHeight?: number;
   autoclose?: boolean | 'delayed';
   noFocus?: boolean;
   inline?: boolean;
@@ -56,11 +57,10 @@ const { floatingStyles } = useFloating(reference, floating, {
   placement: props.placement || 'bottom-start',
   middleware: [
     offset(8),
-    flip({ padding: 8, fallbackStrategy: 'initialPlacement' }),
     size({
       padding: 8,
       apply({ availableWidth, availableHeight, elements }) {
-        const height = Math.max(100, Math.min(availableHeight, props.maxHeight || availableHeight));
+        const height = Math.max(props.minHeight || 100, Math.min(availableHeight, props.maxHeight || availableHeight));
 
         elements.floating.style.setProperty('--floating-height', `${height}px`);
 
@@ -69,7 +69,8 @@ const { floatingStyles } = useFloating(reference, floating, {
           maxHeight: `var(--floating-height)`
         });
       }
-    })
+    }),
+    flip({ padding: 8 })
   ]
 });
 

@@ -19,7 +19,7 @@
 
       <AppDropdown
         ref="dropdown"
-        v-bind="{ disabled, autoclose, placement, inline }"
+        v-bind="{ disabled, autoclose, placement, inline, innerClass, minHeight }"
         :dropdown-class="[dropdownClass, 'overflow-clip flex flex-col'].join(' ')"
         :max-height="448"
         class="w-full min-w-0"
@@ -189,10 +189,12 @@ const props = defineProps<{
   inputClass?: string;
   validateClass?: string;
   dropdownClass?: string;
+  innerClass?: string;
   inline?: boolean;
   size?: 'xs' | 'sm' | 'md' | 'lg';
   flatten?: number;
   virtualScroll?: boolean | number;
+  minHeight?: number;
 }>();
 
 const dropdown = useTemplateRef('dropdown');

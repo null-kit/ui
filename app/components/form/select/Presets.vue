@@ -25,7 +25,7 @@
             </div>
           </template>
 
-          <FormSelectPresetGrid v-model="model" :presets="group.presets" :key-prefix="group.name" />
+          <FormSelectPresetGrid v-model="model" :presets="group.presets" />
         </AppDisclosure>
       </template>
 

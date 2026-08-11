@@ -5,7 +5,7 @@
     <LazyAppDropdownContent
       v-if="isOpen"
       ref="floating"
-      v-bind="{ placement, dropdownClass, innerClass, maxHeight, inline, reference, noFocus }"
+      v-bind="{ placement, dropdownClass, innerClass, maxHeight, minHeight, inline, reference, noFocus }"
       :autoclose="autoclose || hoverOpen"
       @close="onClose"
     >
@@ -24,6 +24,7 @@ const props = defineProps<{
   dropdownClass?: string;
   innerClass?: string;
   maxHeight?: number;
+  minHeight?: number;
   autoclose?: boolean | 'delayed';
   inline?: boolean;
 
