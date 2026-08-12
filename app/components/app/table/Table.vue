@@ -52,7 +52,7 @@
                 :row="row.original"
                 :is-nested="row.depth > 0"
               >
-                <FlexRender :cell />
+                <FlexRender :render="cell.column.columnDef.cell" :props="{ ...cell.getContext() }" />
               </slot>
             </td>
           </tr>

@@ -10,7 +10,7 @@
           :colSpan="header.colSpan"
         >
           <slot v-if="!header.isPlaceholder" :name="`tf-${header.id}`" :values="getValues(header.id)" :get-values>
-            <FlexRender :footer="header" />
+            <FlexRender :render="header.column.columnDef.footer" :props="{ ...header.getContext() }" />
           </slot>
         </td>
       </tr>
@@ -34,22 +34,9 @@ const hasGroups =
 
 const hasFooter = hasSlots || hasGroups;
 
-const rowValues = computed(() => ({
-  rows: props.table.getPreExpandedRowModel().rows,
-  cache: new Map<string, unknown[]>()
-}));
-
 const getValues = <T extends keyof TData>(column: string) => {
   if (!column) return [];
 
-  const { rows, cache } = rowValues.value;
-  let values = cache.get(column) as TData[T][] | undefined;
-
-  if (!values) {
-    values = rows.map((row) => row.original[column as T]);
-    cache.set(column, values);
-  }
-
-  return values;
+  return props.table.getPreExpandedRowModel().rows.map((row) => row.original[column as T]);
 };
 </script>

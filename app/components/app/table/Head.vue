@@ -20,7 +20,7 @@
               <slot :name="`th-${header.column.id}-left`" :values="getValues(header.id)" :get-values />
 
               <slot :name="`th-${header.column.id}`" :values="getValues(header.id)" :get-values>
-                <FlexRender :header />
+                <FlexRender :render="header.column.columnDef.header" :props="{ ...header.getContext() }" />
               </slot>
 
               <slot :name="`th-${header.column.id}-right`" :values="getValues(header.id)" :get-values />
@@ -49,7 +49,7 @@
             <slot :name="`th-${header.column.id}-left`" :values="getValues(header.id)" :get-values />
 
             <slot :name="`th-${header.column.id}`" :values="getValues(header.id)" :get-values>
-              <FlexRender :header />
+              <FlexRender :render="header.column.columnDef.header" :props="{ ...header.getContext() }" />
             </slot>
 
             <slot :name="`th-${header.column.id}-right`" :values="getValues(header.id)" :get-values />
@@ -144,22 +144,9 @@ const onResetSize = (column: TableColumn<TData>) => {
   column.resetSize();
 };
 
-const rowValues = computed(() => ({
-  rows: props.table.getPreExpandedRowModel().rows,
-  cache: new Map<string, unknown[]>()
-}));
-
 const getValues = <T extends keyof TData>(column: string) => {
   if (!column) return [];
 
-  const { rows, cache } = rowValues.value;
-  let values = cache.get(column) as TData[T][] | undefined;
-
-  if (!values) {
-    values = rows.map((row) => row.original[column as T]);
-    cache.set(column, values);
-  }
-
-  return values;
+  return props.table.getPreExpandedRowModel().rows.map((row) => row.original[column as T]);
 };
 </script>
