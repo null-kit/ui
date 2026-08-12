@@ -57,6 +57,7 @@ const { floatingStyles } = useFloating(reference, floating, {
   placement: props.placement || 'bottom-start',
   middleware: [
     offset(8),
+    flip({ padding: 8, fallbackAxisSideDirection: 'end' }),
     size({
       padding: 8,
       apply({ availableWidth, availableHeight, elements }) {
@@ -69,8 +70,7 @@ const { floatingStyles } = useFloating(reference, floating, {
           maxHeight: `var(--floating-height)`
         });
       }
-    }),
-    flip({ padding: 8 })
+    })
   ]
 });
 

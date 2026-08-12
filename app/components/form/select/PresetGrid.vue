@@ -8,7 +8,11 @@
       :class="{ 'btn-active': hasPreset(preset.list) }"
       @click.stop="addPreset(preset.list)"
     >
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="size-4">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 32 32"
+        class="size-3.5 opacity-50 group-hover/preset:opacity-100"
+      >
         <path
           fill="none"
           stroke="currentColor"
