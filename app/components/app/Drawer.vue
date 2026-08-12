@@ -15,11 +15,12 @@
       <div
         v-if="isActive"
         class="app-drawer fixed z-10 outline-0"
+        :class="drawerClass"
         :data-placement="placement"
         tabindex="0"
         @keydown.esc="onClose"
       >
-        <div class="app-drawer-content scrollbar app-drawer-overflow overflow-auto">
+        <div class="app-drawer-content scrollbar app-drawer-overflow overflow-auto" :class="innerClass">
           <slot :on-close />
         </div>
       </div>
@@ -34,6 +35,8 @@ const isActive = ref(false);
 
 const { placement = 'bottom' } = defineProps<{
   placement?: 'bottom' | 'top' | 'left' | 'right';
+  drawerClass?: string;
+  innerClass?: string;
 }>();
 
 const onClose = () => {

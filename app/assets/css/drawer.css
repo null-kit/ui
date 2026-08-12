@@ -6,7 +6,7 @@
   .app-drawer-overflow {
     &:after,
     &:before {
-      @apply pointer-events-none block content-[''];
+      @apply pointer-events-none block shrink-0 content-[''];
       @apply text-newton sticky left-0 z-1 h-4 w-full bg-linear-0;
     }
 
