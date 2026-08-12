@@ -8,7 +8,7 @@
         :data-cell="header.column.id"
         :aria-sort="getSortDirection(header)"
         :class="['relative', header.column.columnDef.meta?.class, header.column.columnDef.meta?.thClass]"
-        :style="getPinStyles(header.column)"
+        :style="getThStyle(header.column)"
       >
         <template v-if="!header.isPlaceholder">
           <div
@@ -20,7 +20,7 @@
               <slot :name="`th-${header.column.id}-left`" :values="getValues(header.id)" :get-values />
 
               <slot :name="`th-${header.column.id}`" :values="getValues(header.id)" :get-values>
-                <FlexRender :render="header.column.columnDef.header" :props="header.getContext()" />
+                <FlexRender :header />
               </slot>
 
               <slot :name="`th-${header.column.id}-right`" :values="getValues(header.id)" :get-values />
@@ -49,7 +49,7 @@
             <slot :name="`th-${header.column.id}-left`" :values="getValues(header.id)" :get-values />
 
             <slot :name="`th-${header.column.id}`" :values="getValues(header.id)" :get-values>
-              <FlexRender :render="header.column.columnDef.header" :props="header.getContext()" />
+              <FlexRender :header />
             </slot>
 
             <slot :name="`th-${header.column.id}-right`" :values="getValues(header.id)" :get-values />
@@ -77,8 +77,8 @@
         @change="header.column.pin($event.target.value)"
       >
         <option :selected="!header.column.getIsPinned()" disabled value="false">Pin Column</option>
-        <option value="left">Left</option>
-        <option value="right">Right</option>
+        <option value="start">Start</option>
+        <option value="end">End</option>
         <option v-if="header.column.getIsPinned()" value="false">Reset</option>
       </select>
 
@@ -96,20 +96,19 @@
   </DevOnly>
 </template>
 
-<script setup lang="ts" generic="TData">
+<script setup lang="ts" generic="TData extends RowData">
 import { FlexRender } from '@tanstack/vue-table';
 import type { CSSProperties } from 'vue';
-import type { Column, Table, Header } from '@tanstack/vue-table';
 
 const emit = defineEmits<{ sort: [TableSortType] }>();
 
 const props = defineProps<{
-  table: Table<TData>;
-  columnStyles?: (column: Column<TData>) => CSSProperties;
+  table: TableInstance<TData>;
+  columnStyles?: (column: TableColumn<TData>) => CSSProperties;
   isHidden?: boolean;
 }>();
 
-const getSortDirection = (header: Header<TData, unknown>) => {
+const getSortDirection = (header: TableHeader<TData>) => {
   if (!header.column.getCanSort() || header.isPlaceholder) return undefined;
 
   if (!header.column.getIsSorted()) return 'none';
@@ -117,19 +116,23 @@ const getSortDirection = (header: Header<TData, unknown>) => {
   return header.column.getIsSorted() === 'desc' ? 'descending' : 'ascending';
 };
 
-const getPinStyles = (column: Column<TData>): CSSProperties => {
+const noPinStyle: CSSProperties = Object.freeze({});
+
+const getThStyle = (column: TableColumn<TData>): CSSProperties => {
+  if (props.columnStyles) return props.columnStyles(column);
+
   const isPinned = column.getIsPinned();
 
+  if (!isPinned) return noPinStyle;
+
   return {
-    left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
-    right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
-    position: isPinned ? 'sticky' : undefined,
-    zIndex: isPinned ? 2 : undefined,
-    ...(props.columnStyles ? props.columnStyles(column) : undefined)
+    position: 'sticky',
+    zIndex: 2,
+    ...(isPinned === 'start' ? { left: `${column.getStart('start')}px` } : { right: `${column.getAfter('end')}px` })
   };
 };
 
-const onSort = (column: Column<TData>) => {
+const onSort = (column: TableColumn<TData>) => {
   column.toggleSorting();
 
   const dir = column.getIsSorted();
@@ -137,13 +140,26 @@ const onSort = (column: Column<TData>) => {
   emit('sort', dir ? `${column.id}:${dir}` : undefined);
 };
 
-const onResetSize = (column: Column<TData>) => {
-  props.table.getState().columnSizing[column.id] = column.columnDef.size ?? 0;
+const onResetSize = (column: TableColumn<TData>) => {
+  column.resetSize();
 };
+
+const rowValues = computed(() => ({
+  rows: props.table.getPreExpandedRowModel().rows,
+  cache: new Map<string, unknown[]>()
+}));
 
 const getValues = <T extends keyof TData>(column: string) => {
   if (!column) return [];
 
-  return props.table.getPreExpandedRowModel().rows.map((row) => row.original[column as T]);
+  const { rows, cache } = rowValues.value;
+  let values = cache.get(column) as TData[T][] | undefined;
+
+  if (!values) {
+    values = rows.map((row) => row.original[column as T]);
+    cache.set(column, values);
+  }
+
+  return values;
 };
 </script>

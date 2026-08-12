@@ -10,7 +10,7 @@
           :colSpan="header.colSpan"
         >
           <slot v-if="!header.isPlaceholder" :name="`tf-${header.id}`" :values="getValues(header.id)" :get-values>
-            <FlexRender :render="header.column.columnDef.footer" :props="header.getContext()" />
+            <FlexRender :footer="header" />
           </slot>
         </td>
       </tr>
@@ -18,14 +18,14 @@
   </tfoot>
 </template>
 
-<script setup lang="ts" generic="TData">
+<script setup lang="ts" generic="TData extends RowData">
 import { FlexRender } from '@tanstack/vue-table';
-import type { Table } from '@tanstack/vue-table';
 
-const props = defineProps<{ table: Table<TData> }>();
+const props = defineProps<{ table: TableInstance<TData> }>();
 const slots = useSlots();
 
 const hasSlots = Object.keys(slots).some((key) => key.startsWith('tf-'));
+
 const hasGroups =
   props.table
     .getFooterGroups()
@@ -34,9 +34,22 @@ const hasGroups =
 
 const hasFooter = hasSlots || hasGroups;
 
+const rowValues = computed(() => ({
+  rows: props.table.getPreExpandedRowModel().rows,
+  cache: new Map<string, unknown[]>()
+}));
+
 const getValues = <T extends keyof TData>(column: string) => {
   if (!column) return [];
 
-  return props.table.getPreExpandedRowModel().rows.map((row) => row.original[column as T]);
+  const { rows, cache } = rowValues.value;
+  let values = cache.get(column) as TData[T][] | undefined;
+
+  if (!values) {
+    values = rows.map((row) => row.original[column as T]);
+    cache.set(column, values);
+  }
+
+  return values;
 };
 </script>

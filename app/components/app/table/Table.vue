@@ -42,10 +42,7 @@
               :key="cell.id"
               :data-cell="cell.column.id"
               :aria-expanded="(cell.column.id === 'expander' && row.depth > 0) || undefined"
-              :class="[
-                getTdClass(cell.column.columnDef.meta?.class, cell),
-                getTdClass(cell.column.columnDef.meta?.tdClass, cell)
-              ]"
+              :class="[cell.column.columnDef.meta?.class, getTdClass(cell.column.columnDef.meta?.tdClass, cell)]"
               :style="columnStyles(cell.column)"
             >
               <slot
@@ -55,7 +52,7 @@
                 :row="row.original"
                 :is-nested="row.depth > 0"
               >
-                <FlexRender :render="cell.column.columnDef.cell" :props="cell.getContext()" />
+                <FlexRender :cell />
               </slot>
             </td>
           </tr>
@@ -85,46 +82,18 @@
 
 <script lang="ts">
 import type { CSSProperties } from 'vue';
-import {
-  useVueTable,
-  FlexRender,
-  createColumnHelper,
-  getCoreRowModel,
-  getExpandedRowModel,
-  getSortedRowModel
-} from '@tanstack/vue-table';
-import type {
-  ColumnDef,
-  ColumnHelper,
-  Column,
-  ExpandedState,
-  SortingState,
-  VisibilityState,
-  ColumnPinningState,
-  RowData,
-  Row,
-  Cell
-} from '@tanstack/vue-table';
+import { useTable, FlexRender, createColumnHelper } from '@tanstack/vue-table';
+import type { ExpandedState, SortingState, ColumnVisibilityState, ColumnPinningState } from '@tanstack/vue-table';
 
-type TdClass<TData, TValue> = string | ((cell: Cell<TData, TValue>) => string | undefined);
-
-declare module '@tanstack/vue-table' {
-  interface ColumnMeta<TData extends RowData, TValue> {
-    class?: string;
-    thClass?: string;
-    tdClass?: TdClass<TData, TValue>;
-    tfClass?: string;
-    show?: boolean;
-    pin?: 'left' | 'right';
-  }
-}
-
-const getTdClass = <TData, TValue>(tdClass: TdClass<TData, TValue> | undefined, cell: Cell<TData, TValue>) => {
-  return typeof tdClass === 'function' ? tdClass(cell) : tdClass;
+const getTdClass = <TData extends RowData, TValue>(
+  tdClass: TableTdClass<TData, TValue> | undefined,
+  cell: TableCell<TData, TValue>
+) => {
+  return typeof tdClass === 'function' ? tdClass(cell.getContext()) : tdClass;
 };
 </script>
 
-<script setup lang="ts" generic="TData">
+<script setup lang="ts" generic="TData extends RowData">
 defineSlots<TableSlots<TData>>();
 
 defineEmits<{ sort: [TableSortType]; contextmenu: [TData] }>();
@@ -161,7 +130,7 @@ const createColumnExpander = () => {
       id: 'expander',
       enablePinning: false,
       size: 38,
-      cell: ({ row }: { row: Row<TData> }) => {
+      cell: ({ row }: { row: TableRow<TData> }) => {
         if (!row.getCanExpand()) return;
 
         return h(
@@ -186,7 +155,7 @@ const createColumnExpander = () => {
   ];
 };
 
-const initialSorting = computed<SortingState>(() => {
+const getInitialSorting = (): SortingState => {
   const sortBy = (route.query.sortBy as string) || unref(props.sortDefault);
   if (!sortBy) return [];
 
@@ -194,21 +163,24 @@ const initialSorting = computed<SortingState>(() => {
   if (!column) return [];
 
   return [{ id: column, desc: direction === 'desc' }];
-});
+};
 
 const expanded = ref<ExpandedState>({});
-const sorting = ref<SortingState>(initialSorting.value);
-const columnVisibility = ref<VisibilityState>({});
+const sorting = ref<SortingState>(getInitialSorting());
+const columnVisibility = ref<ColumnVisibilityState>({});
 const columnPinning = ref<ColumnPinningState>({
-  left: ['expander']
+  start: ['expander'],
+  end: []
 });
 
-const table = useVueTable({
+const table = useTable({
+  features: tableFeatureSet,
   get data() {
     return props.data;
   },
   get columns() {
-    const columns = typeof props.columns === 'function' ? props.columns(createColumnHelper<TData>()) : props.columns;
+    const columns =
+      typeof props.columns === 'function' ? props.columns(createColumnHelper<TableFeatureSet, TData>()) : props.columns;
 
     return [...createColumnExpander(), ...columns];
   },
@@ -219,10 +191,7 @@ const table = useVueTable({
   },
   manualSorting: props.sort === 'server',
   columnResizeMode: 'onChange',
-  getSubRows: (row) => (row && props.nestedKey ? (row[props.nestedKey] as TData[]) : undefined),
-  getCoreRowModel: getCoreRowModel(),
-  getExpandedRowModel: getExpandedRowModel(),
-  getSortedRowModel: getSortedRowModel(),
+  getSubRows: (row: TData) => (row && props.nestedKey ? (row[props.nestedKey] as TData[]) : undefined),
   state: {
     get expanded() {
       return expanded.value;
@@ -262,20 +231,35 @@ const table = useVueTable({
   }
 });
 
-const computeColumnStyle = (column: Column<TData>): CSSProperties => {
+const noColumnStyle: CSSProperties = Object.freeze({});
+
+const computeColumnStyle = (column: TableColumn<TData>): CSSProperties => {
   const isPinned = column.getIsPinned();
   const canResize = column.getCanResize() || column.columnDef.size;
 
-  return {
-    left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
-    right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
-    position: isPinned ? 'sticky' : undefined,
-    zIndex: isPinned ? 2 : undefined,
-    [`--size`]: canResize ? `${column.getSize()}px` : undefined,
-    minWidth: canResize ? `var(--size)` : undefined,
-    maxWidth: canResize ? `var(--size)` : undefined,
-    width: canResize ? `var(--size)` : undefined
-  };
+  if (!isPinned && !canResize) return noColumnStyle;
+
+  const style: CSSProperties = {};
+
+  if (isPinned) {
+    style.position = 'sticky';
+    style.zIndex = 2;
+
+    if (isPinned === 'start') {
+      style.left = `${column.getStart('start')}px`;
+    } else {
+      style.right = `${column.getAfter('end')}px`;
+    }
+  }
+
+  if (canResize) {
+    style['--size'] = `${column.getSize()}px`;
+    style.minWidth = 'var(--size)';
+    style.maxWidth = 'var(--size)';
+    style.width = 'var(--size)';
+  }
+
+  return style;
 };
 
 const tableWrapper = useTemplateRef<HTMLElement>('tableWrapper');
@@ -287,12 +271,12 @@ const leafColumns = computed(() => table.getAllLeafColumns());
 const columnStyleCache = computed(() => {
   const cache = new Map<string, CSSProperties>();
 
-  for (const column of leafColumns.value) cache.set(column.id, computeColumnStyle(column));
+  for (const column of table.getAllFlatColumns()) cache.set(column.id, computeColumnStyle(column));
 
   return cache;
 });
 
-const columnStyles = (column: Column<TData>): CSSProperties => {
+const columnStyles = (column: TableColumn<TData>): CSSProperties => {
   return columnStyleCache.value.get(column.id) ?? computeColumnStyle(column);
 };
 
@@ -306,12 +290,12 @@ if (props.stickyScrollbar) useTableStickyScrollbar(tableWrapper);
 if (props.stickyHead) useTableStickyHead(tableWrapper);
 
 for (const column of leafColumns.value) {
-  if (column.columnDef.meta?.pin === 'left') {
-    columnPinning.value.left?.push(column.id);
+  if (column.columnDef.meta?.pin === 'start') {
+    columnPinning.value.start.push(column.id);
   }
 
-  if (column.columnDef.meta?.pin === 'right') {
-    columnPinning.value.right?.push(column.id);
+  if (column.columnDef.meta?.pin === 'end') {
+    columnPinning.value.end.push(column.id);
   }
 }
 
@@ -319,9 +303,9 @@ watch(
   leafColumns,
   (columns) => {
     for (const column of columns) {
-      if (column.columnDef.meta?.show !== undefined) {
-        columnVisibility.value[column.id] = column.columnDef.meta?.show;
-      }
+      const show = column.columnDef.meta?.show;
+
+      if (show !== undefined) columnVisibility.value[column.id] = show;
     }
   },
   { immediate: true }

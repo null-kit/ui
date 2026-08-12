@@ -224,7 +224,6 @@
 </template>
 
 <script setup lang="ts">
-// @ts-ignore
 const { setToast } = useToast();
 const { copy, statusText } = useClipboard();
 
