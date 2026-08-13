@@ -10,10 +10,12 @@
   </label>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends string | string[][] | undefined">
 import * as XLSX from 'xlsx';
 
 type Separator = '\n' | ',' | '.' | ';';
+
+const emit = defineEmits<{ import: [T] }>();
 
 const {
   join = ',',
@@ -34,7 +36,7 @@ const {
   regex?: RegExp;
 }>();
 
-const model = defineModel<string | number | (string | number)[] | (string | number)[][]>();
+const model = defineModel<T>();
 
 const { setToast } = useToast();
 
@@ -45,11 +47,13 @@ const parseRows = (rows: string[][]) => {
 
   if (multiple) {
     const columnCount = Math.max(...dataRows.map((cells) => cells.length));
-    model.value = Array.from({ length: columnCount }, (_, colIndex) => dataRows.map((cells) => cells[colIndex] ?? ''));
+
+    // prettier-ignore
+    model.value = Array.from({ length: columnCount }, (_, colIndex) => dataRows.map((cells) => cells[colIndex] ?? '')) as T;
     return;
   }
 
-  model.value = dataRows.map((cells) => cells[0] ?? '').join(join);
+  model.value = dataRows.map((cells) => cells[0] ?? '').join(join) as T;
 };
 
 const parseXlsx = (buffer: ArrayBuffer) => {
@@ -93,6 +97,8 @@ const onImport = (event: Event) => {
       } else {
         parseCsv(String(e.target?.result));
       }
+
+      emit('import', model.value as T);
     } catch (error) {
       setToast({ title: 'Import Error!', text: `Failed to parse file: ${error}`, type: 'error' });
     }
