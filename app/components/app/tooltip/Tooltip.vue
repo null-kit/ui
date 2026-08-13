@@ -14,7 +14,7 @@
     <LazyAppTooltipContent
       v-if="isActive || open"
       ref="content"
-      :class="$attrs.class"
+      :class="messageClass"
       v-bind="{ noFollow, reference, placement, open }"
       @close="isActive = false"
     >
@@ -26,12 +26,11 @@
 <script setup lang="ts">
 import type { Placement } from '@floating-ui/vue';
 
-defineOptions({ inheritAttrs: false });
-
 const props = defineProps<{
   trigger?: string | number;
   hoverClass?: string;
   message?: string;
+  messageClass?: string;
   icon?: string;
   iconClass?: string;
   noFollow?: boolean;
