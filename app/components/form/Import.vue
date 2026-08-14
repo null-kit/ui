@@ -6,7 +6,7 @@
 
     {{ label }}
 
-    <AppTooltip v-if="!label" message="Import file" hover-class="absolute inset-0" no-follow />
+    <AppTooltip v-if="!label" message="Import file" trigger-class="absolute inset-0" no-follow />
   </label>
 </template>
 
