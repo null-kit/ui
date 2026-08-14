@@ -1,34 +1,39 @@
 <template>
+  <component :is="vReference" v-if="vReference" />
+
   <span
+    v-else
     ref="reference"
-    :class="['inline-flex min-w-0', hoverClass]"
+    :class="['inline-flex min-w-0', triggerClass]"
+    v-bind="$attrs"
     @pointerenter="onPointerEnter"
     @pointermove="onPointerMove"
     @pointerleave="onPointerLeave"
   >
-    <slot>
-      <AppIcon v-if="icon" :name="icon" :class="iconClass" />
-      {{ trigger }}
-    </slot>
-
-    <LazyAppTooltipContent
-      v-if="isActive || open"
-      ref="content"
-      :class="messageClass"
-      v-bind="{ noFollow, reference, placement, open }"
-      @close="isActive = false"
-    >
-      <slot name="message">{{ message }}</slot>
-    </LazyAppTooltipContent>
+    <AppIcon v-if="icon" :name="icon" :class="iconClass" />
+    {{ trigger }}
   </span>
+
+  <LazyAppTooltipContent
+    v-if="isActive || open"
+    ref="content"
+    :class="messageClass"
+    v-bind="{ noFollow, reference, placement, open }"
+    @close="isActive = false"
+  >
+    <slot name="message">{{ message }}</slot>
+  </LazyAppTooltipContent>
 </template>
 
 <script setup lang="ts">
+import { cloneVNode } from 'vue';
 import type { Placement } from '@floating-ui/vue';
+
+const slots = useSlots();
 
 const props = defineProps<{
   trigger?: string | number;
-  hoverClass?: string;
+  triggerClass?: string;
   message?: string;
   messageClass?: string;
   icon?: string;
@@ -41,12 +46,11 @@ const props = defineProps<{
 
 const isActive = ref(props.open ?? false);
 
-const reference = useTemplateRef('reference');
+const reference = ref<HTMLElement | null>(null);
 const content = useTemplateRef('content');
 
 const onPointerLeave = () => {
   if (props.disabled) return;
-
   if (!props.open) isActive.value = false;
 };
 
@@ -57,9 +61,23 @@ const onPointerEnter = () => {
 
 const onPointerMove = (event: PointerEvent) => {
   if (props.disabled || props.noFollow) return;
-
   content.value?.onPointerMove(event);
 };
+
+const vReference = computed(() => {
+  const vnode = slots.default?.()[0];
+
+  if (!vnode) return null;
+
+  return cloneVNode(vnode, {
+    ref: (el) => {
+      reference.value = el as HTMLElement;
+    },
+    onPointerenter: onPointerEnter,
+    onPointermove: onPointerMove,
+    onPointerleave: onPointerLeave
+  });
+});
 
 watch(
   () => props.disabled,
