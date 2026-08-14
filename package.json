@@ -58,7 +58,7 @@
     "nuxt": "latest",
     "prettier": "latest",
     "prettier-plugin-tailwindcss": "latest",
-    "tailwindcss": "latest",
+    "tailwindcss": "^4.3.3",
     "typescript": "latest",
     "vue": "latest"
   }
