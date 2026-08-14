@@ -10,7 +10,7 @@
   </label>
 </template>
 
-<script setup lang="ts" generic="T extends string | string[][] | undefined">
+<script setup lang="ts" generic="T extends string | string[][] | number | undefined">
 import * as XLSX from 'xlsx';
 
 type Separator = '\n' | ',' | '.' | ';';
