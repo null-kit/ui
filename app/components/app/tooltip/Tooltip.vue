@@ -4,7 +4,7 @@
   <span
     v-else
     ref="reference"
-    :class="['inline-flex min-w-0', triggerClass]"
+    :class="['min-w-0', triggerClass, { 'inline-flex': icon }]"
     v-bind="$attrs"
     @pointerenter="onPointerEnter"
     @pointermove="onPointerMove"
