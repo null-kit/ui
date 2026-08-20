@@ -120,7 +120,7 @@
           @select="toggleOption"
         >
           <template #before>
-            <LazyFormSelectPresets v-if="presets && presets.length > 0" v-model="model" :presets :search-input />
+            <LazyFormSelectPresets v-if="presets && presets.length > 0" v-model="model" :presets :search-input :order />
           </template>
 
           <template #option="scope">
