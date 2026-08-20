@@ -1,5 +1,5 @@
 <template>
-  <component :is="vReference" v-if="vReference" />
+  <component :is="vReference()" v-if="$slots.default" />
 
   <span
     v-else
@@ -64,7 +64,7 @@ const onPointerMove = (event: PointerEvent) => {
   content.value?.onPointerMove(event);
 };
 
-const vReference = computed(() => {
+const vReference = () => {
   const vnode = slots.default?.()[0];
 
   if (!vnode) return null;
@@ -77,7 +77,7 @@ const vReference = computed(() => {
     onPointermove: onPointerMove,
     onPointerleave: onPointerLeave
   });
-});
+};
 
 watch(
   () => props.disabled,
