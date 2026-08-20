@@ -39,7 +39,7 @@
               'btn-active': hasPreset(preset.list),
               '-order-1': order && group.presets.length > 39 && hasPreset(preset.list)
             }"
-            @click.stop="addPreset(preset.list)"
+            @click.stop="togglePreset(preset.list)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -63,7 +63,7 @@
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  @click.stop="addPreset(preset.list, true)"
+                  @click.stop="togglePreset(preset.list, true)"
                 >
                   <path
                     d="M17 19L21 15L17 11 M20 15L2 15L2 5L12.25 5"
@@ -112,7 +112,11 @@ const groups = computed(() => {
   return groups;
 });
 
-const has = (value: string | undefined, search: string) => value?.toLowerCase().includes(search);
+const hasValue = (value: string | undefined, search: string) => value?.toLowerCase().includes(search);
+
+const hasPreset = (preset: Array<string | number>) => {
+  return preset.every((value) => Array.isArray(model.value) && model.value.includes(value));
+};
 
 const filteredGroups = computed(() => {
   const search = props.searchInput.toLowerCase();
@@ -120,18 +124,21 @@ const filteredGroups = computed(() => {
   return groups.value
     .map((group) => ({
       ...group,
-      presets: group.presets.filter((preset) => has(preset.name, search) || has(group.name, search))
+      presets: group.presets.filter((preset) => hasValue(preset.name, search) || hasValue(group.name, search))
     }))
     .filter((group) => group.presets.length > 0);
 });
 
-const addPreset = (preset: (string | number)[], replace = false) => {
-  model.value = replace
-    ? [...new Set(preset)].filter(Boolean)
-    : [...new Set([...preset, ...(Array.isArray(model.value) ? model.value : [model.value])])].filter(Boolean);
-};
+const togglePreset = (preset: (string | number)[], replace = false) => {
+  const current = Array.isArray(model.value) ? model.value : [model.value];
 
-const hasPreset = (preset: (string | number)[]) => {
-  return preset.every((value) => Array.isArray(model.value) && model.value.includes(value));
+  if (replace) {
+    model.value = [...new Set(preset)].filter(Boolean);
+    return;
+  }
+
+  model.value = hasPreset(preset)
+    ? current.filter((value) => !preset.includes(value as string | number))
+    : [...new Set([...preset, ...current])].filter(Boolean);
 };
 </script>
