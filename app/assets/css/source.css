@@ -5,6 +5,18 @@
 @custom-variant dark (&:where(.dark, .dark *));
 @custom-variant inverted (&:where(.inverted, .inverted *));
 
+@custom-variant inverted {
+  &:not(:is(.dark, .dark *)) {
+    color-scheme: dark;
+    @slot;
+  }
+
+  &:is(.dark, .dark *) {
+    color-scheme: light;
+    @slot;
+  }
+}
+
 @theme {
   /* TODO: Timed fallback */
   --color-newton-strong: var(--color-newton);

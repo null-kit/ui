@@ -1,8 +1,7 @@
 @layer components {
   .btn-group {
     @apply scrollbar isolate flex scrollbar-thin overflow-auto;
-    @apply rounded-lg shadow duration-300;
-    @apply bg-darwin-subtle;
+    @apply bg-darwin-subtle rounded-lg shadow;
 
     &:not(:has(.btn-accent)) {
       @apply ring-edison hover:ring-surface/20 ring;
@@ -30,7 +29,7 @@
 
 @utility btn {
   @apply inline-flex items-center justify-center gap-2;
-  @apply min-h-8.5 px-3 py-2 duration-200 outline-none;
+  @apply min-h-8.5 px-3 py-2 outline-none;
   @apply relative isolate whitespace-nowrap;
   @apply rounded-lg text-sm/none font-medium ring ring-transparent;
   @apply not-disabled:hover:bg-current/5 not-disabled:active:bg-current/10;
@@ -94,7 +93,7 @@
 
 :is(.btn-main, .btn-accent, .btn-danger, .btn-success) {
   @apply shadow inset-shadow-xs inset-shadow-white/20;
-  @apply not-disabled:active:scale-98;
+  @apply duration-200 not-disabled:active:scale-98;
 }
 
 @utility btn-pending {

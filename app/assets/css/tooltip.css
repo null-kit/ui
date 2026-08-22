@@ -1,11 +1,13 @@
 @layer components {
   .app-tooltip {
-    @apply bg-surface text-newton rounded-md shadow-md;
-    @apply px-3 py-1.5 text-sm;
+    @apply rounded-md px-2 py-1 text-[0.8125rem] shadow-md ring ring-current/10;
+    @apply bg-black text-white dark:bg-white dark:text-black;
   }
 
   .app-tooltip-arrow {
-    @apply bg-surface size-2 rotate-45 rounded-tl-xs rounded-br-xs;
+    @apply size-2 rotate-45 rounded-tl-xs rounded-br-xs;
+    @apply ring ring-current/20 ring-inset;
+    @apply bg-black dark:bg-white;
 
     &[data-placement='bottom'] {
       @apply -top-1;
