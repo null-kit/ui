@@ -40,11 +40,11 @@
 }
 
 @utility btn-xs {
-  @apply min-h-4 gap-1 rounded-md px-1.5 py-0.5 text-xs;
+  @apply min-h-4 gap-1 rounded-md px-1.5 py-0.5 text-xs/none;
 }
 
 @utility btn-sm {
-  @apply min-h-6 gap-1 rounded-md px-2 py-1 text-[0.8125rem];
+  @apply min-h-6 gap-1 rounded-md px-2 py-1 text-[0.8125rem]/none;
 }
 
 @utility btn-md {
@@ -52,7 +52,7 @@
 }
 
 @utility btn-lg {
-  @apply min-h-12 rounded-xl px-6 py-3;
+  @apply min-h-12 rounded-xl px-6 py-3 text-base/none;
 }
 
 @utility btn-default {

@@ -12,7 +12,7 @@
       <slot name="label-right" />
     </label>
 
-    <div class="form-control flex w-full">
+    <div class="flex w-full">
       <div v-if="$slots.left" class="form-slot rounded-r-none">
         <slot name="left" />
       </div>
@@ -30,6 +30,7 @@
               class="form-tags"
               :aria-invalid="isInvalid"
               :class="[inputClass, { 'rounded-l-none': $slots.left, 'rounded-r-none': $slots.right }]"
+              :data-size="size"
               @click.stop="onInputFocus"
             >
               <span
@@ -171,6 +172,7 @@ const props = withDefaults(
     inputClass?: string;
     validateClass?: string;
     dropdownClass?: string;
+    size?: 'xs' | 'sm' | 'md' | 'lg';
   }>(),
   {
     delimiter: ','

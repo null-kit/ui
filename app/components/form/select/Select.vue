@@ -12,7 +12,7 @@
       <slot name="label-right" />
     </span>
 
-    <div class="form-control flex w-full">
+    <div class="flex w-full">
       <div v-if="$slots.left" class="form-slot rounded-r-none">
         <slot name="left" />
       </div>
@@ -32,17 +32,17 @@
             :class="[
               'select-input',
               inputClass,
-              size && sizeClasses[size],
               { 'ring-accent': isOpen, 'rounded-l-none': $slots.left, 'rounded-r-none': $slots.right }
             ]"
+            :data-size="size"
             :disabled
           >
             <span v-if="multiple && selected.length > 0" class="select-multiple">
-              <span v-if="flatten && flatten <= selected.length" class="btn btn-sm btn-default">
+              <span v-if="flatten && flatten <= selected.length" class="btn btn-default">
                 {{ selected.length }} selected
               </span>
 
-              <span v-for="(option, index) in selected" v-else :key="index" class="btn btn-sm btn-default">
+              <span v-for="(option, index) in selected" v-else :key="index" class="btn btn-default">
                 {{ getKeyName(option) }}
 
                 <svg
@@ -71,7 +71,7 @@
             <span class="form-select-clear sticky top-0 right-0 ml-auto flex items-center gap-1">
               <span
                 v-if="multiple && selected.length > 1"
-                class="btn btn-sm btn-default size-5 text-current/50 hover:text-red-500"
+                class="btn btn-default size-4 text-current/50 hover:text-red-500"
                 title="Remove all"
                 @click.stop="onClear"
               >
@@ -279,13 +279,6 @@ const hasGroupOptions = computed(() => checkGroupOptions(groups.value));
 const onClear = () => {
   model.value = props.multiple ? [] : null;
   searchInput.value = '';
-};
-
-const sizeClasses = {
-  xs: 'form-input-xs',
-  sm: 'form-input-sm',
-  md: 'form-input-md',
-  lg: 'form-input-lg'
 };
 
 onMounted(() => {

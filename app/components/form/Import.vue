@@ -2,7 +2,7 @@
   <label class="btn" :class="buttonClass">
     <input type="file" :accept class="absolute hidden" @change="onImport" />
 
-    <AppIcon :name="icon" />
+    <AppIcon :name="icon" :class="iconClass" />
 
     {{ label }}
 
@@ -31,6 +31,7 @@ const {
   split?: Separator;
   multiple?: boolean;
   icon?: string;
+  iconClass?: string;
   buttonClass?: string;
   accept?: string;
   regex?: RegExp;

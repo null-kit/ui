@@ -15,7 +15,7 @@
         :style="floatingStyles"
         tabindex="0"
         @pointerenter="autoclose === 'delayed' ? onClearTimeout() : undefined"
-        @pointerleave="autoclose === 'delayed' ? onCloseDelayed() : undefined"
+        @pointerleave="autoclose === 'delayed' ? onCloseDelayed() : autoclose ? onClose() : undefined"
         @click.stop
         @keydown.esc="onClose"
       >

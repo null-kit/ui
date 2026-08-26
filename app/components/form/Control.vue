@@ -12,7 +12,7 @@
       <slot name="label-right" />
     </label>
 
-    <div class="form-control relative flex">
+    <div class="relative flex">
       <div v-if="slots.left" class="form-slot rounded-r-none">
         <slot name="left" />
       </div>
@@ -23,6 +23,7 @@
             v-model="model"
             class="form-input"
             :class="[inputClass, 'pr-7', hasSlotStyle($slots)]"
+            :data-size="size"
             v-bind="{ id, name, disabled }"
           >
             <option selected disabled value>{{ placeholder }}</option>
@@ -44,7 +45,8 @@
           ref="input"
           v-model="model"
           class="form-input flex"
-          :class="[inputClass, hasSlotStyle($slots), size && sizeClasses[size]]"
+          :class="[inputClass, hasSlotStyle($slots)]"
+          :data-size="size"
           rows="3"
           v-bind="{ id, name, placeholder, disabled, readonly, pattern, autocomplete }"
           @input="onInput"
@@ -55,7 +57,8 @@
           ref="input"
           v-model="model"
           class="form-input"
-          :class="[inputClass, hasSlotStyle($slots), size && sizeClasses[size]]"
+          :class="[inputClass, hasSlotStyle($slots)]"
+          :data-size="size"
           :type="type === 'number' ? 'text' : type"
           v-bind="{ id, name, placeholder, disabled, readonly, accept, pattern, step, min, max, autocomplete }"
           @input="onInput"
@@ -176,13 +179,6 @@ const hasSlotStyle = (slot: { left?: boolean; right?: boolean }) => {
 };
 
 const input = useTemplateRef('input');
-
-const sizeClasses = {
-  xs: 'form-input-xs',
-  sm: 'form-input-sm',
-  md: 'form-input-md',
-  lg: 'form-input-lg'
-};
 
 onMounted(() => {
   if (value) model.value = value;

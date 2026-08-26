@@ -25,24 +25,25 @@
 
   &:disabled {
     @apply text-surface/40 cursor-not-allowed;
-    @apply bg-tint-edison/50 dark:bg-shade-edison/15;
+    @apply bg-edison/70;
+    /* @apply bg-tint-edison/50 dark:bg-shade-edison/15; */
   }
-}
 
-@utility form-input-xs {
-  @apply min-h-4 rounded-sm px-1.5 text-xs;
-}
+  &[data-size='xs'] {
+    @apply min-h-4 rounded-sm px-1.5 text-xs/none;
+  }
 
-@utility form-input-sm {
-  @apply min-h-6 rounded-md px-2 py-1 text-[0.8125rem];
-}
+  &[data-size='sm'] {
+    @apply min-h-6 rounded-md px-2 py-1 text-[0.8125rem]/none;
+  }
 
-@utility form-input-md {
-  @apply min-h-10;
-}
+  &[data-size='md'] {
+    @apply min-h-10;
+  }
 
-@utility form-input-lg {
-  @apply min-h-12 rounded-xl px-4 py-2 text-lg;
+  &[data-size='lg'] {
+    @apply min-h-12 rounded-xl px-4 py-2 text-lg/none;
+  }
 }
 
 @layer components {

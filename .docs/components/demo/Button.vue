@@ -45,6 +45,7 @@
         <legend>Sizes</legend>
 
         <div class="flex flex-wrap items-center gap-2">
+          <button class="btn btn-default btn-xs">Extra Small</button>
           <button class="btn btn-default btn-sm">Small</button>
           <button class="btn btn-default">Default</button>
           <button class="btn btn-default btn-md">Medium</button>
