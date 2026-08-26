@@ -3,7 +3,7 @@
     <template #trigger="{ isOpen }">
       <button
         type="button"
-        :class="['form-input flex items-center gap-2 hover:z-1', { 'ring-accent z-1': isOpen }]"
+        :class="['form-input flex items-center gap-2 hover:z-1', { 'ring-accent z-1': isOpen }, buttonClass]"
         :title="formatDateRange"
       >
         <AppIcon v-if="!noIcon" :name="icon" class="size-4 shrink-0" />
@@ -165,6 +165,7 @@ const {
   noIcon?: boolean;
   autoclose?: boolean;
   placement?: Placement;
+  buttonClass?: string;
 }>();
 
 const [model, modifiers] = defineModel<(Date | string)[] | Date | string>({
@@ -233,7 +234,18 @@ const dates = computed(() => {
 
 const formatDateRange = computed(() => {
   if (selectedDates.value.length === 0) return props.range ? 'Select dates' : 'Select date';
-  if (props.range) return selectedDates.value.map((date) => formatDate(date, { safe: modifiers.safe })).join(' - ');
+
+  if (props.range) {
+    const startDate = selectedDates.value[0];
+    const endDate = selectedDates.value[1];
+
+    if (startDate && endDate) {
+      const year = startDate.getFullYear() !== endDate.getFullYear();
+      const safe = modifiers.safe;
+
+      return `${formatDate(startDate, { safe, year })} - ${formatDate(endDate, { safe })}`;
+    }
+  }
 
   return String(formatDate(selectedDates.value[0]!));
 });
