@@ -68,7 +68,7 @@
 
             <span v-if="!selected.length" class="self-center whitespace-nowrap">{{ placeholder }}</span>
 
-            <span class="form-select-clear sticky top-0 right-0 ml-auto flex items-center gap-1">
+            <span class="form-select-clear sticky top-0 right-0 ml-auto flex items-center gap-1 pl-0.5">
               <span
                 v-if="multiple && selected.length > 1"
                 class="btn btn-default size-4 text-current/50 hover:text-red-500"
@@ -80,13 +80,9 @@
                 </svg>
               </span>
 
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 32 32"
-                class="pointer-events-none size-4 h-full shrink-0 opacity-50"
-              >
-                <polyline points="10 22 16 28 22 22" fill="none" stroke="currentColor" stroke-width="3" />
-                <polyline points="10 10 16 4 22 10" fill="none" stroke="currentColor" stroke-width="3" />
+              <svg class="h-3 shrink-0 opacity-50" viewBox="0 0 10 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 14L5 18L9 14" stroke="currentColor" stroke-width="2.2" />
+                <path d="M1 6L5 2L9 6" stroke="currentColor" stroke-width="2.2" />
               </svg>
             </span>
           </button>

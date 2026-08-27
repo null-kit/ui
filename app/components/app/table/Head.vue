@@ -13,36 +13,34 @@
         <template v-if="!header.isPlaceholder">
           <div
             v-if="header.column.getCanSort()"
-            class="isolate flex items-center gap-1 after:absolute after:inset-0 after:-z-1"
+            class="isolate flex w-full items-center gap-1 after:absolute after:inset-0 after:-z-1"
             @click="onSort(header.column)"
           >
-            <div class="flex w-full items-center gap-1">
-              <slot :name="`th-${header.column.id}-left`" :values="getValues(header.id)" :get-values />
+            <slot :name="`th-${header.column.id}-left`" :values="getValues(header.id)" :get-values />
 
-              <slot :name="`th-${header.column.id}`" :values="getValues(header.id)" :get-values>
-                <FlexRender :render="header.column.columnDef.header" :props="{ ...header.getContext() }" />
+            <slot :name="`th-${header.column.id}`" :values="getValues(header.id)" :get-values>
+              <FlexRender :render="header.column.columnDef.header" :props="{ ...header.getContext() }" />
+            </slot>
+
+            <slot :name="`th-${header.column.id}-right`" :values="getValues(header.id)" :get-values />
+
+            <slot :name="`sort-${header.column.id}`" :dir="header.column.getIsSorted()">
+              <slot name="sort" :dir="header.column.getIsSorted()">
+                <svg
+                  width="7"
+                  height="14"
+                  class="ml-auto shrink-0"
+                  viewBox="0 0 16 30"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="4"
+                  data-sort-icon
+                >
+                  <path d="M2 21L8 27L14 21" :opacity="header.column.getIsSorted() === 'desc' ? 1 : 0.5" />
+                  <path d="M2 9L8 3L14 9" :opacity="header.column.getIsSorted() === 'asc' ? 1 : 0.5" />
+                </svg>
               </slot>
-
-              <slot :name="`th-${header.column.id}-right`" :values="getValues(header.id)" :get-values />
-
-              <slot :name="`sort-${header.column.id}`" :dir="header.column.getIsSorted()">
-                <slot name="sort" :dir="header.column.getIsSorted()">
-                  <svg
-                    width="7"
-                    height="14"
-                    class="ml-auto shrink-0"
-                    viewBox="0 0 16 30"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="4"
-                    data-sort-icon
-                  >
-                    <path d="M2 21L8 27L14 21" :opacity="header.column.getIsSorted() === 'desc' ? 1 : 0.5" />
-                    <path d="M2 9L8 3L14 9" :opacity="header.column.getIsSorted() === 'asc' ? 1 : 0.5" />
-                  </svg>
-                </slot>
-              </slot>
-            </div>
+            </slot>
           </div>
 
           <template v-else>

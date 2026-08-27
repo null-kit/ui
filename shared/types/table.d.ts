@@ -55,7 +55,7 @@ type TSortDir = 'asc' | 'desc' | boolean;
 type TSort<T> = {
   sort?: (props: { dir: TSortDir }) => void;
 } & {
-  [K in `sort-${keyof T}`]?: (props: { dir: TSortDir }) => void;
+  [K in `sort-${keyof T | string}`]?: (props: { dir: TSortDir }) => void;
 };
 
 type TValues<T> = {
@@ -64,9 +64,9 @@ type TValues<T> = {
 };
 
 type THead<T> = {
-  [K in `th-${Extract<keyof T, string>}`]?: (props: TValues<T>) => void;
+  [K in `th-${Extract<keyof T, string> | string}`]?: (props: TValues<T>) => void;
 } & {
-  [K in `th-${Extract<keyof T, string>}-${'left' | 'right'}`]?: (props: TValues<T>) => void;
+  [K in `th-${Extract<keyof T, string> | string}-${'left' | 'right'}`]?: (props: TValues<T>) => void;
 };
 
 type TFoot<T> = {
