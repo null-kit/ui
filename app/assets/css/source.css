@@ -3,17 +3,25 @@
 @source '../../composables';
 
 @custom-variant dark (&:where(.dark, .dark *));
-@custom-variant inverted (&:where(.inverted, .inverted *));
+/* @custom-variant inverted (&:where(.inverted, .inverted *)); */
 
 @custom-variant inverted {
   &:not(:is(.dark, .dark *)) {
     color-scheme: dark;
     @slot;
+
+    /* > * {
+      color-scheme: light;
+    } */
   }
 
   &:is(.dark, .dark *) {
     color-scheme: light;
     @slot;
+
+    /* > * {
+      color-scheme: dark;
+    } */
   }
 }
 
