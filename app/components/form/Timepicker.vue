@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="form-input flex items-center">
+    <div class="form-input flex items-center" :data-size="size">
       <AppIcon v-if="!noIcon" :name="icon" class="mr-2 size-4 shrink-0" />
 
       <template v-for="(segment, index) in timeSegments" :key="index">
@@ -18,7 +18,7 @@
 
           <div :id="`${segment}-time`" class="flex mask-y-from-60%" @vue:mounted="onScrollTo(true)">
             <div
-              class="flex max-h-20 flex-1 snap-y flex-col items-center overflow-auto py-8 [scrollbar-width:none]"
+              class="flex max-h-20 flex-1 snap-y [scrollbar-width:none] flex-col items-center overflow-auto py-8"
               @scrollend="onScrollEnd($event, 'hour', segment)"
             >
               <button
@@ -36,7 +36,7 @@
             <span class="self-center">:</span>
 
             <div
-              class="flex max-h-20 flex-1 snap-y flex-col items-center overflow-auto py-8 [scrollbar-width:none]"
+              class="flex max-h-20 flex-1 snap-y [scrollbar-width:none] flex-col items-center overflow-auto py-8"
               @scrollend="onScrollEnd($event, 'minute', segment)"
             >
               <button
@@ -54,7 +54,7 @@
             <span class="self-center">:</span>
 
             <div
-              class="flex max-h-20 flex-1 snap-y flex-col items-center overflow-auto py-8 [scrollbar-width:none]"
+              class="flex max-h-20 flex-1 snap-y [scrollbar-width:none] flex-col items-center overflow-auto py-8"
               @scrollend="onScrollEnd($event, 'second', segment)"
             >
               <button
@@ -90,6 +90,7 @@ const props = withDefaults(
     icon?: string;
     noIcon?: boolean;
     range?: boolean;
+    size?: 'sm' | 'md' | 'lg';
   }>(),
   {
     icon: 'clock'

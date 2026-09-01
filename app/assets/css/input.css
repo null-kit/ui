@@ -19,7 +19,7 @@
   @apply size-full max-h-80 min-h-8.5 px-2.5 py-1.5;
   @apply rounded-lg text-sm font-medium;
   @apply ring-edison bg-darwin-subtle shadow ring;
-  @apply placeholder:text-surface/30;
+  @apply placeholder:text-surface/30 text-surface;
   @apply focus:ring-accent has-focus:ring-accent hover:ring-surface/20;
   @apply scrollbar scrollbar-thin;
 
@@ -30,11 +30,13 @@
   }
 
   &[data-size='xs'] {
-    @apply min-h-4 rounded-sm px-1.5 text-xs/none;
+    --radius-lg: var(--radius-sm);
+    @apply min-h-4 px-1.5 text-xs/none;
   }
 
   &[data-size='sm'] {
-    @apply min-h-6 rounded-md px-2 py-1 text-[0.8125rem]/none;
+    --radius-lg: var(--radius-md);
+    @apply min-h-6 px-2 py-1 text-[0.8125rem]/none;
   }
 
   &[data-size='md'] {
@@ -42,7 +44,8 @@
   }
 
   &[data-size='lg'] {
-    @apply min-h-12 rounded-xl px-4 py-2 text-lg/none;
+    --radius-lg: var(--radius-xl);
+    @apply min-h-12 px-4 py-2 text-lg/none;
   }
 }
 

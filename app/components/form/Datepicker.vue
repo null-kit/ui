@@ -4,6 +4,7 @@
       <button
         type="button"
         :class="['form-input flex items-center gap-2 hover:z-1', { 'ring-accent z-1': isOpen }, buttonClass]"
+        :data-size="size"
         :title="formatDateRange"
       >
         <AppIcon v-if="!noIcon" :name="icon" class="size-4 shrink-0" />
@@ -166,6 +167,7 @@ const {
   autoclose?: boolean;
   placement?: Placement;
   buttonClass?: string;
+  size?: 'sm' | 'md' | 'lg';
 }>();
 
 const [model, modifiers] = defineModel<(Date | string)[] | Date | string>({

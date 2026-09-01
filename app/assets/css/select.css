@@ -31,8 +31,14 @@
       @apply btn-sm;
     }
 
-    &[data-size='sm'] .btn {
-      @apply btn-xs;
+    &[data-size='sm'] {
+      &:not(:has(.select-multiple)) {
+        @apply py-1.5;
+      }
+
+      .btn {
+        @apply btn-xs;
+      }
     }
   }
 }
