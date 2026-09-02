@@ -275,6 +275,8 @@ const hasGroupOptions = computed(() => checkGroupOptions(groups.value));
 const onClear = () => {
   model.value = props.multiple ? [] : null;
   searchInput.value = '';
+
+  emit('change', model.value as T);
 };
 
 onMounted(() => {
