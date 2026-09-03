@@ -25,10 +25,10 @@ const props = defineProps<{
   innerClass?: string;
   maxHeight?: number;
   minHeight?: number;
-  autoclose?: boolean | 'delayed';
+  autoclose?: boolean | 'delayed' | number;
   inline?: boolean;
 
-  hoverOpen?: boolean | 'delayed';
+  hoverOpen?: boolean | 'delayed' | number;
   noToggle?: boolean;
   noFocus?: boolean;
   disabled?: boolean;
@@ -59,11 +59,21 @@ const onFloatingClose = () => {
 };
 
 const onPointerEnter = () => {
-  if (props.hoverOpen) isOpen.value = true;
+  if (!props.hoverOpen) return;
+
+  floating.value?.onClearTimeout();
+  isOpen.value = true;
 };
 
-const onPointerLeave = () => {
-  if (props.hoverOpen && props.inline) onFloatingClose();
+const onPointerLeave = (event: PointerEvent) => {
+  if (!props.hoverOpen || !props.inline) return;
+  if (event.relatedTarget instanceof Node && reference.value?.contains(event.relatedTarget)) return;
+
+  if (props.hoverOpen === 'delayed' || typeof props.hoverOpen === 'number') {
+    floating.value?.onCloseDelayed();
+  } else {
+    onFloatingClose();
+  }
 };
 
 const onOpen = () => {

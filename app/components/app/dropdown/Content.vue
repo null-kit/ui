@@ -14,8 +14,8 @@
         :class="['dropdown-content z-10', dropdownClass]"
         :style="floatingStyles"
         tabindex="0"
-        @pointerenter="autoclose === 'delayed' ? onClearTimeout() : undefined"
-        @pointerleave="autoclose === 'delayed' ? onCloseDelayed() : autoclose ? onClose() : undefined"
+        @pointerenter="closeDelay != null ? onClearTimeout() : undefined"
+        @pointerleave="onPointerLeave"
         @click.stop
         @keydown.esc="onClose"
       >
@@ -42,7 +42,7 @@ const props = defineProps<{
   innerClass?: string;
   maxHeight?: number;
   minHeight?: number;
-  autoclose?: boolean | 'delayed';
+  autoclose?: boolean | 'delayed' | number;
   noFocus?: boolean;
   inline?: boolean;
 }>();
@@ -76,8 +76,15 @@ const { floatingStyles } = useFloating(reference, floating, {
 
 let closeTimeout: ReturnType<typeof setTimeout> | undefined;
 
+const closeDelay = computed(() => {
+  if (typeof props.autoclose === 'number') return props.autoclose;
+  if (props.autoclose === 'delayed') return 500;
+
+  return null;
+});
+
 const onClearTimeout = () => {
-  if (props.autoclose !== 'delayed') return;
+  if (closeDelay.value == null) return;
 
   clearTimeout(closeTimeout);
   closeTimeout = undefined;
@@ -88,13 +95,23 @@ const onClose = () => {
 };
 
 const onCloseDelayed = () => {
-  if (props.autoclose !== 'delayed') return onClose();
+  if (closeDelay.value == null) return onClose();
 
   onClearTimeout();
-  closeTimeout = setTimeout(onClose, 500);
+  closeTimeout = setTimeout(onClose, closeDelay.value);
 };
 
-defineExpose({ onClose });
+const onPointerLeave = (event: PointerEvent) => {
+  if (event.relatedTarget instanceof Node && props.reference?.contains(event.relatedTarget)) {
+    onClearTimeout();
+    return;
+  }
+
+  if (closeDelay.value != null) onCloseDelayed();
+  else if (props.autoclose) onClose();
+};
+
+defineExpose({ onClose, onCloseDelayed, onClearTimeout });
 
 onMounted(() => (isOpen.value = true));
 

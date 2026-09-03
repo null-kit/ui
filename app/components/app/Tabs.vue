@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="flex gap-2 select-none" :class="tabsClass">
+  <slot :toggle-tab="toggleTab" :active-tab>
+    <div v-if="!noTabs" class="flex gap-2 select-none" :class="tabsClass">
       <button
         v-for="(tab, index) in tabs"
         :key="index"
@@ -15,9 +15,9 @@
         </slot>
       </button>
     </div>
+  </slot>
 
-    <slot :name="activeTab" />
-  </div>
+  <slot :name="activeTab" />
 </template>
 
 <script setup lang="ts">
@@ -30,6 +30,7 @@ const props = withDefaults(
     activeClass?: string;
     defaultTab?: string;
     noQuery?: boolean;
+    noTabs?: boolean;
   }>(),
   {
     tabsClass: 'w-fit rounded-xl shadow ring-edison bg-darwin ring mb-4 p-2',
@@ -72,4 +73,6 @@ onMounted(() => {
     navigateTo({ query: { ...route.query, tab: undefined } });
   }
 });
+
+defineExpose({ toggleTab, activeTab });
 </script>
