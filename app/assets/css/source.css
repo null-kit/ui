@@ -39,6 +39,22 @@
   --animate-shake-x: animate-shake-x 0.1s ease-out 2;
 }
 
+@layer theme {
+  :root {
+    color-scheme: light;
+    view-transition-name: switch-theme;
+  }
+
+  :is(.dark, .inverted) {
+    color: var(--color-surface);
+    color-scheme: dark;
+  }
+
+  :is(.dark) .inverted {
+    color-scheme: light;
+  }
+}
+
 /* Scrollbar Utility */
 @utility scrollbar {
   scrollbar-width: var(--scrollbar-width, auto);
