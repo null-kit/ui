@@ -191,10 +191,8 @@
     label {
       @apply btn app-control-child;
       @apply has-checked:btn-active grow;
-
       @apply has-disabled:pointer-events-none has-disabled:opacity-60;
 
-      /* segments stretch to fill, so they keep the group's own text size */
       --app-control-text: inherit;
 
       &:not(:is(:first-of-type, :has(:is(:checked, :hover)))):before {
