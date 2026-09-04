@@ -12,10 +12,20 @@
       <slot name="label-right" />
     </div>
 
-    <div v-if="options && options.length > 0" class="form-check-group" :class="groupClass">
+    <div
+      v-if="options && options.length > 0"
+      class="form-check-group"
+      :class="groupClass"
+      :aria-selected="hasSelection"
+    >
       <slot name="left" />
 
-      <label v-for="(option, index) in options" :key="index" :class="[btnClass, size ? `btn-${size}` : undefined]">
+      <label
+        v-for="(option, index) in options"
+        :key="index"
+        :class="[btnClass, size ? `btn-${size}` : undefined]"
+        :aria-selected="isOptionSelected(option)"
+      >
         <input
           class="sr-only"
           :value="toLowerCase(option)"

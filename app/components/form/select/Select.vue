@@ -35,6 +35,7 @@
               { 'ring-accent': isOpen, 'rounded-l-none': $slots.left, 'rounded-r-none': $slots.right }
             ]"
             :data-size="size"
+            :aria-selected="selected.length > 0"
             :disabled
           >
             <span v-if="multiple && selected.length > 0" class="select-multiple">

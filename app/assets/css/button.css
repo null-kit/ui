@@ -8,7 +8,7 @@
       @apply divide-edison divide-x hover:divide-current/20;
     }
 
-    &:has(.btn-accent) {
+    &:has(.btn-accent, .btn-main) {
       @apply divide-x divide-current/20;
     }
 
