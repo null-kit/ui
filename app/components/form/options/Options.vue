@@ -27,7 +27,7 @@
         >
           <button
             type="button"
-            class="btn min-h-0 shrink-0 justify-start"
+            class="btn min-h-0 shrink-0 justify-start py-2"
             :style="typeof virtualScroll === 'number' ? { height: virtualScroll + 'px' } : undefined"
             :aria-current="row.value === activeOption || undefined"
             :class="{

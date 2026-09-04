@@ -12,27 +12,38 @@
       @apply divide-x divide-current/20;
     }
 
-    &:has(.btn-sm, .btn-xs) {
+    &:has(.btn-xs) {
+      @apply rounded-sm;
+    }
+
+    &:has(.btn-sm) {
       @apply rounded-md;
     }
 
-    &:has(.btn-lg) {
+    &:has(.btn-xl) {
       @apply rounded-xl;
     }
 
     .btn {
-      @apply grow rounded-none! shadow-none! ring-0!;
+      @apply rounded-none! shadow-none! ring-0!;
       @apply active:scale-100!;
     }
   }
 }
 
 @utility btn {
-  @apply inline-flex items-center justify-center gap-2;
-  @apply min-h-8.5 px-3 py-2 duration-150 outline-none;
+  @apply inline-flex items-center justify-center;
   @apply relative isolate whitespace-nowrap;
-  @apply rounded-lg text-sm/none font-medium ring ring-transparent;
+  @apply font-medium ring ring-transparent duration-150 outline-none;
   @apply not-disabled:hover:bg-current/5 not-disabled:active:bg-current/10;
+
+  min-height: var(--app-control-h);
+  padding-block: 0;
+  padding-inline: var(--app-control-px-label);
+  gap: var(--app-control-gap);
+  font-size: var(--app-control-text);
+  line-height: 1;
+  border-radius: var(--app-control-radius);
 
   &:not(.btn-pending) {
     @apply disabled:cursor-not-allowed disabled:opacity-50;
@@ -40,19 +51,23 @@
 }
 
 @utility btn-xs {
-  @apply min-h-4 gap-1 rounded-md px-1.5 py-0.5 text-xs/none;
+  @apply app-control-xs;
 }
 
 @utility btn-sm {
-  @apply min-h-6 gap-1 rounded-md px-2 py-1 text-[0.8125rem]/none;
+  @apply app-control-sm;
 }
 
 @utility btn-md {
-  @apply min-h-10;
+  @apply app-control-md;
 }
 
 @utility btn-lg {
-  @apply min-h-12 rounded-xl px-6 py-3 text-base/none;
+  @apply app-control-lg;
+}
+
+@utility btn-xl {
+  @apply app-control-xl;
 }
 
 @utility btn-default {

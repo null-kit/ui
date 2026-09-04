@@ -13,7 +13,7 @@
     </label>
 
     <div class="relative flex">
-      <div v-if="slots.left" class="form-slot rounded-r-none">
+      <div v-if="slots.left" class="form-slot rounded-r-none" :data-size="size">
         <slot name="left" />
       </div>
 
@@ -72,7 +72,7 @@
         </AppAppear>
       </div>
 
-      <div v-if="slots.right" class="form-slot rounded-l-none">
+      <div v-if="slots.right" class="form-slot rounded-l-none" :data-size="size">
         <slot name="right" />
       </div>
     </div>
@@ -123,7 +123,7 @@ const {
   value?: string | number | null;
   inputClass?: string;
   validateClass?: string;
-  size?: 'xs' | 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }>();
 
 const onInput = (event: InputEvent) => {

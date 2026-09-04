@@ -167,7 +167,7 @@ const {
   autoclose?: boolean;
   placement?: Placement;
   buttonClass?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }>();
 
 const [model, modifiers] = defineModel<(Date | string)[] | Date | string>({

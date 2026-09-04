@@ -13,7 +13,7 @@
     </span>
 
     <div class="flex w-full">
-      <div v-if="$slots.left" class="form-slot rounded-r-none">
+      <div v-if="$slots.left" class="form-slot rounded-r-none" :data-size="size">
         <slot name="left" />
       </div>
 
@@ -132,7 +132,7 @@
         <FormOptionsEmpty v-else />
       </AppDropdown>
 
-      <div v-if="$slots.right" class="form-slot rounded-l-none">
+      <div v-if="$slots.right" class="form-slot rounded-l-none" :data-size="size">
         <slot name="right" />
       </div>
     </div>
@@ -188,7 +188,7 @@ const props = defineProps<{
   dropdownClass?: string;
   innerClass?: string;
   inline?: boolean;
-  size?: 'xs' | 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   flatten?: number;
   virtualScroll?: boolean | number;
   minHeight?: number;

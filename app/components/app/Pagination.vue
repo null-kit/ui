@@ -1,7 +1,14 @@
 <template>
-  <div class="flex gap-3">
+  <div class="flex gap-[inherit]">
     <nav v-if="totalPages >= 2" class="btn-group w-fit">
-      <button v-if="currentPage >= 2" type="button" class="btn" title="Previous Page" @click.prevent="currentPage--">
+      <button
+        v-if="currentPage >= 2"
+        type="button"
+        class="btn"
+        :class="buttonClass"
+        title="Previous Page"
+        @click.prevent="currentPage--"
+      >
         <svg xmlns="http://www.w3.org/2000/svg" class="m-auto size-3" viewBox="0 0 32 32">
           <polyline points="20 28 8 16 20 4" fill="none" stroke="currentColor" stroke-width="3" />
         </svg>
@@ -12,19 +19,23 @@
         :key="page"
         type="button"
         class="btn hidden md:flex"
-        :class="{
-          'text-surface/50 pointer-events-none': page === '...',
-          'text-accent bg-surface/3 pointer-events-none font-medium': page === currentPage
-        }"
+        :class="[
+          buttonClass,
+          {
+            'pointer-events-none': page === '...' || page === currentPage,
+            'btn-active font-medium': page === currentPage
+          }
+        ]"
         @click.prevent="currentPage = Number(page)"
       >
-        <span class="m-auto block min-w-4">{{ page }}</span>
+        <span class="m-auto block min-w-4" :class="{ 'opacity-50': page === '...' }">{{ page }}</span>
       </button>
 
       <button
         v-if="totalPages > currentPage"
         type="button"
         class="btn"
+        :class="buttonClass"
         title="Next Page"
         @click.prevent="currentPage++"
       >
@@ -34,7 +45,14 @@
       </button>
     </nav>
 
-    <FormSelect v-if="perPage !== 0" v-model="perPage" :options autoclose required="no-unselect" />
+    <FormSelect
+      v-if="perPage !== 0"
+      v-model="perPage"
+      :options
+      autoclose
+      required="no-unselect"
+      :input-class="buttonClass"
+    />
   </div>
 </template>
 
@@ -45,6 +63,7 @@ const props = withDefaults(
     perPage?: number;
     scrollTo?: string;
     options?: number[];
+    buttonClass?: string;
   }>(),
   {
     perPage: 25,

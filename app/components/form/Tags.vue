@@ -13,7 +13,7 @@
     </label>
 
     <div class="flex w-full">
-      <div v-if="$slots.left" class="form-slot rounded-r-none">
+      <div v-if="$slots.left" class="form-slot rounded-r-none" :data-size="size">
         <slot name="left" />
       </div>
 
@@ -83,7 +83,7 @@
               <button
                 v-if="tags.length > 1"
                 type="button"
-                class="btn btn-sm btn-default size-5 text-current/50 hover:text-red-500"
+                class="form-tags-clear text-current/50 hover:text-red-500"
                 title="Remove all"
                 :disabled
                 @click.stop="onClear"
@@ -118,7 +118,7 @@
         </AppDropdown>
       </div>
 
-      <div v-if="$slots.right" class="form-slot rounded-l-none">
+      <div v-if="$slots.right" class="form-slot rounded-l-none" :data-size="size">
         <slot name="right" />
       </div>
     </div>
@@ -172,7 +172,7 @@ const props = withDefaults(
     inputClass?: string;
     validateClass?: string;
     dropdownClass?: string;
-    size?: 'xs' | 'sm' | 'md' | 'lg';
+    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   }>(),
   {
     delimiter: ','

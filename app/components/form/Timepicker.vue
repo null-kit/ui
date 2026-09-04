@@ -90,7 +90,7 @@ const props = withDefaults(
     icon?: string;
     noIcon?: boolean;
     range?: boolean;
-    size?: 'sm' | 'md' | 'lg';
+    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   }>(),
   {
     icon: 'clock'

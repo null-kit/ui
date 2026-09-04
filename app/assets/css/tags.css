@@ -1,22 +1,42 @@
 @layer components {
   .form-tags {
-    @apply form-input flex flex-wrap items-center gap-1.25;
+    @apply form-input flex flex-wrap items-center;
     @apply aria-invalid:animate-shake-x aria-invalid:ring-red-500;
 
+    gap: var(--app-control-inset);
+
+    /* with tags it becomes a wrapper: inset padding keeps the nominal height */
     &:has(.form-tags-tag) {
-      @apply px-1.25 py-1;
-      --radius-md: var(--radius-sm);
+      @apply app-control-wrap;
     }
   }
 
   .form-tags-tag {
-    @apply btn btn-sm btn-default;
+    @apply btn btn-default;
     @apply aria-current:ring-accent aria-current:ring-1;
     @apply aria-invalid:text-red-500 aria-invalid:ring-current;
   }
 
+  .form-tags-clear {
+    @apply btn btn-default;
+
+    padding-inline: 0;
+    width: var(--app-control-h);
+  }
+
   .form-tags-input {
     @apply border-0 bg-transparent p-0 shadow-none ring-0 outline-none;
-    @apply placeholder:text-surface/30 min-w-8 grow text-sm font-medium;
+    @apply placeholder:text-surface/30 min-w-8 grow font-medium;
+
+    height: var(--app-control-h);
+    font-size: var(--app-control-text);
+    line-height: 1;
+  }
+}
+
+@layer overrides {
+  /* tags and the clear button sit one step below the field itself */
+  .form-tags :is(.form-tags-tag, .form-tags-clear, .form-tags-input) {
+    @apply app-control-child;
   }
 }

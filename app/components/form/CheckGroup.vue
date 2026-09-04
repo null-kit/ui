@@ -16,6 +16,7 @@
       v-if="options && options.length > 0"
       class="form-check-group"
       :class="groupClass"
+      :data-size="size"
       :aria-selected="hasSelection"
     >
       <slot name="left" />
@@ -23,7 +24,7 @@
       <label
         v-for="(option, index) in options"
         :key="index"
-        :class="[btnClass, size ? `btn-${size}` : undefined]"
+        :class="btnClass"
         :aria-selected="isOptionSelected(option)"
       >
         <input
@@ -74,7 +75,7 @@ const props = withDefaults(
     groupClass?: string;
     btnClass?: string;
     validateClass?: string;
-    size?: 'sm' | 'md' | 'lg';
+    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   }>(),
   {
     type: 'radio',

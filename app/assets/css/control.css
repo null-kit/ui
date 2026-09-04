@@ -1,0 +1,129 @@
+@utility app-control-2xs {
+  --app-control-h: --spacing(3);
+  --app-control-px: --spacing(1);
+  --app-control-px-label: --spacing(1);
+  --app-control-gap: 2px;
+  --app-control-text: 0.6875rem;
+  --app-control-radius: var(--radius-xs);
+  --app-control-inset: 0px;
+
+  --app-control-child-h: --spacing(3);
+  --app-control-child-px: --spacing(1);
+  --app-control-child-px-label: --spacing(1);
+  --app-control-child-gap: 2px;
+  --app-control-child-text: 0.6875rem;
+  --app-control-child-radius: var(--radius-xs);
+  --app-control-child-inset: 0px;
+}
+
+@utility app-control-xs {
+  --app-control-h: --spacing(4);
+  --app-control-px: --spacing(1.5);
+  --app-control-px-label: --spacing(1.5);
+  --app-control-gap: --spacing(1);
+  --app-control-text: var(--text-xs);
+  --app-control-radius: var(--radius-sm);
+  --app-control-inset: 2px;
+
+  --app-control-child-h: --spacing(3);
+  --app-control-child-px: --spacing(1);
+  --app-control-child-px-label: --spacing(1);
+  --app-control-child-gap: 2px;
+  --app-control-child-text: 0.6875rem;
+  --app-control-child-radius: var(--radius-xs);
+  --app-control-child-inset: 0px;
+}
+
+@utility app-control-sm {
+  --app-control-h: --spacing(6);
+  --app-control-px: --spacing(2);
+  --app-control-px-label: --spacing(2);
+  --app-control-gap: --spacing(1);
+  --app-control-text: 0.8125rem;
+  --app-control-radius: var(--radius-md);
+  --app-control-inset: 4px;
+
+  --app-control-child-h: --spacing(4);
+  --app-control-child-px: --spacing(1.5);
+  --app-control-child-px-label: --spacing(1.5);
+  --app-control-child-gap: --spacing(1);
+  --app-control-child-text: var(--text-xs);
+  --app-control-child-radius: var(--radius-sm);
+  --app-control-child-inset: 2px;
+}
+
+@utility app-control-md {
+  --app-control-h: --spacing(8.5);
+  --app-control-px: --spacing(2.5);
+  --app-control-px-label: --spacing(3);
+  --app-control-gap: --spacing(2);
+  --app-control-text: var(--text-sm);
+  --app-control-radius: var(--radius-lg);
+  --app-control-inset: 5px;
+
+  --app-control-child-h: --spacing(6);
+  --app-control-child-px: --spacing(2);
+  --app-control-child-px-label: --spacing(2);
+  --app-control-child-gap: --spacing(1);
+  --app-control-child-text: 0.8125rem;
+  --app-control-child-radius: var(--radius-md);
+  --app-control-child-inset: 4px;
+}
+
+@utility app-control-lg {
+  --app-control-h: --spacing(10);
+  --app-control-px: --spacing(3);
+  --app-control-px-label: --spacing(3);
+  --app-control-gap: --spacing(2);
+  --app-control-text: var(--text-sm);
+  --app-control-radius: var(--radius-lg);
+  --app-control-inset: 8px;
+
+  --app-control-child-h: --spacing(6);
+  --app-control-child-px: --spacing(2);
+  --app-control-child-px-label: --spacing(2);
+  --app-control-child-gap: --spacing(1);
+  --app-control-child-text: 0.8125rem;
+  --app-control-child-radius: var(--radius-md);
+  --app-control-child-inset: 4px;
+}
+
+@utility app-control-xl {
+  --app-control-h: --spacing(12);
+  --app-control-px: --spacing(4);
+  --app-control-px-label: --spacing(6);
+  --app-control-gap: --spacing(2);
+  --app-control-text: var(--text-base);
+  --app-control-radius: var(--radius-xl);
+  --app-control-inset: 7px;
+
+  --app-control-child-h: --spacing(8.5);
+  --app-control-child-px: --spacing(2.5);
+  --app-control-child-px-label: --spacing(3);
+  --app-control-child-gap: --spacing(2);
+  --app-control-child-text: var(--text-sm);
+  --app-control-child-radius: var(--radius-lg);
+  --app-control-child-inset: 5px;
+}
+
+@layer base {
+  :root {
+    @apply app-control-md;
+  }
+}
+
+@utility app-control-wrap {
+  min-height: var(--app-control-h);
+  padding: var(--app-control-inset);
+  gap: var(--app-control-inset);
+}
+
+@utility app-control-child {
+  --app-control-h: var(--app-control-child-h);
+  --app-control-px: var(--app-control-child-px);
+  --app-control-px-label: var(--app-control-child-px-label);
+  --app-control-gap: var(--app-control-child-gap);
+  --app-control-text: var(--app-control-child-text);
+  --app-control-radius: var(--app-control-child-radius);
+  --app-control-inset: var(--app-control-child-inset);
+}

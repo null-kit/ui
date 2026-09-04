@@ -1,10 +1,13 @@
 @layer components {
   .select-input {
-    @apply form-input flex gap-1.25;
+    @apply form-input flex;
     @apply scrollbar relative overflow-auto;
 
+    /* with chips it becomes a wrapper: inset padding keeps the nominal height */
     &:has(.select-multiple) {
-      @apply py-1 pr-2.5 pl-1.25;
+      @apply app-control-wrap;
+
+      padding-right: var(--app-control-px);
     }
   }
 
@@ -15,7 +18,9 @@
   }
 
   .select-multiple {
-    @apply flex flex-wrap items-center gap-1.5;
+    @apply flex flex-wrap items-center;
+
+    gap: var(--app-control-inset);
   }
 
   .select-options {
@@ -26,19 +31,8 @@
 }
 
 @layer overrides {
-  .select-input {
-    .btn {
-      @apply btn-sm;
-    }
-
-    &[data-size='sm'] {
-      &:not(:has(.select-multiple)) {
-        @apply py-1.5;
-      }
-
-      .btn {
-        @apply btn-xs;
-      }
-    }
+  /* chips and the clear button sit one step below the select itself */
+  .select-input .btn {
+    @apply app-control-child;
   }
 }

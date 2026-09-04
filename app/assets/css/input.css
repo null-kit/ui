@@ -16,12 +16,24 @@
 /* Input */
 @utility form-input {
   @apply appearance-none transition duration-200 outline-none;
-  @apply size-full max-h-80 min-h-8.5 px-2.5 py-1.5;
-  @apply rounded-lg text-sm font-medium;
+  @apply size-full max-h-80 font-medium;
   @apply ring-edison bg-darwin-subtle shadow ring;
   @apply placeholder:text-surface/30 text-surface;
   @apply focus:ring-accent has-focus:ring-accent hover:ring-surface/20;
   @apply scrollbar scrollbar-thin;
+
+  min-height: var(--app-control-h);
+  padding-block: 0;
+  padding-inline: var(--app-control-px);
+  gap: var(--app-control-gap);
+  font-size: var(--app-control-text);
+  line-height: 1.25;
+  border-radius: var(--app-control-radius);
+
+  &:is(textarea) {
+    padding-block: var(--app-control-inset);
+    line-height: 1.5;
+  }
 
   &:disabled {
     @apply text-surface/40 cursor-not-allowed;
@@ -30,29 +42,53 @@
   }
 
   &[data-size='xs'] {
-    --radius-lg: var(--radius-sm);
-    @apply min-h-4 px-1.5 text-xs/none;
+    @apply app-control-xs;
   }
 
   &[data-size='sm'] {
-    --radius-lg: var(--radius-md);
-    @apply min-h-6 px-2 py-1 text-[0.8125rem]/none;
+    @apply app-control-sm;
   }
 
   &[data-size='md'] {
-    @apply min-h-10;
+    @apply app-control-md;
   }
 
   &[data-size='lg'] {
-    --radius-lg: var(--radius-xl);
-    @apply min-h-12 px-4 py-2 text-lg/none;
+    @apply app-control-lg;
+  }
+
+  &[data-size='xl'] {
+    @apply app-control-xl;
   }
 }
 
 @layer components {
   .form-slot {
     @apply bg-darwin-subtle ring-edison min-h-full ring;
-    @apply flex shrink-0 overflow-clip rounded-lg text-sm shadow;
+    @apply flex shrink-0 overflow-clip shadow;
+
+    font-size: var(--app-control-text);
+    border-radius: var(--app-control-radius);
+
+    &[data-size='xs'] {
+      @apply app-control-xs;
+    }
+
+    &[data-size='sm'] {
+      @apply app-control-sm;
+    }
+
+    &[data-size='md'] {
+      @apply app-control-md;
+    }
+
+    &[data-size='lg'] {
+      @apply app-control-lg;
+    }
+
+    &[data-size='xl'] {
+      @apply app-control-xl;
+    }
 
     &:disabled {
       @apply text-surface/40 cursor-not-allowed;
@@ -147,20 +183,23 @@
   }
 
   .form-check-group {
-    --spacing: 0.2237rem;
-
-    @apply form-input flex min-h-fit gap-px p-0.5;
+    @apply form-input app-control-wrap flex;
     @apply focus:ring-edison has-focus:ring-edison;
     @apply select-none has-disabled:cursor-not-allowed;
+    @apply gap-0.5 p-0.75;
 
     label {
-      @apply btn rounded-[calc(var(--radius-lg)*0.8)];
-      @apply has-checked:btn-active flex-1;
+      @apply btn app-control-child;
+      @apply has-checked:btn-active grow;
+
       @apply has-disabled:pointer-events-none has-disabled:opacity-60;
+
+      /* segments stretch to fill, so they keep the group's own text size */
+      --app-control-text: inherit;
 
       &:not(:is(:first-of-type, :has(:is(:checked, :hover)))):before {
         content: '';
-        @apply bg-edison absolute inset-y-2 -left-px w-px duration-200;
+        @apply bg-edison absolute inset-y-[20%] -left-px w-px duration-200;
       }
 
       &:is(:hover, :has(:checked)) + label:before {
