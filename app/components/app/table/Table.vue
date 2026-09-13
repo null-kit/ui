@@ -138,7 +138,7 @@ const createColumnExpander = () => {
           {
             type: 'button',
             onClick: !props.fullRowExpand ? row.getToggleExpandedHandler() : undefined,
-            class: 'btn btn-sm size-6'
+            class: 'btn btn-sm size-6 align-middle'
           },
           h(
             'svg',

@@ -42,7 +42,7 @@
   padding-inline: var(--app-control-px-label);
   gap: var(--app-control-gap);
   font-size: var(--app-control-text);
-  line-height: 1;
+  line-height: 1.1;
   border-radius: var(--app-control-radius);
 
   &:not(.btn-pending) {

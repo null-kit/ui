@@ -1,9 +1,7 @@
 @layer components {
   .select-input {
-    @apply form-input flex;
-    @apply scrollbar relative overflow-auto;
+    @apply form-input relative flex overflow-auto;
 
-    /* with chips it becomes a wrapper: inset padding keeps the nominal height */
     &:has(.select-multiple) {
       @apply app-control-wrap;
 
@@ -31,7 +29,6 @@
 }
 
 @layer overrides {
-  /* chips and the clear button sit one step below the select itself */
   .select-input .btn {
     @apply app-control-child;
   }

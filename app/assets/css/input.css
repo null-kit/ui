@@ -37,8 +37,7 @@
 
   &:disabled {
     @apply text-surface/40 cursor-not-allowed;
-    @apply bg-edison/70;
-    /* @apply bg-tint-edison/50 dark:bg-shade-edison/15; */
+    @apply bg-shade-darwin-subtle/5 dark:bg-tint-darwin-subtle/5;
   }
 
   &[data-size='xs'] {
@@ -111,7 +110,10 @@
   }
 
   .form-required-floating {
-    @apply absolute top-1.5 right-1.5 size-1 rounded-full bg-red-600 shadow;
+    @apply absolute size-1 rounded-full bg-red-600 shadow;
+
+    top: calc(var(--app-control-px) - 0.3rem);
+    right: calc(var(--app-control-px) - 0.3rem);
   }
 
   .form-help {
