@@ -51,6 +51,7 @@
                 :cell="cell.getValue() as NoInfer<TData[keyof TData]>"
                 :row="row.original"
                 :is-nested="row.depth > 0"
+                :is-expanded="row.getIsExpanded()"
               >
                 <FlexRender :render="cell.column.columnDef.cell" :props="{ ...cell.getContext() }" />
               </slot>

@@ -118,9 +118,9 @@ const getKeyName = (option: T) => {
 };
 
 const toLowerCase = (value: T) => {
-  const keyValue = String(getKeyValue(value));
+  const keyValue = getKeyValue(value);
 
-  return modifiers.lowercase ? keyValue.toLowerCase().replace(/\s+/g, '-') : keyValue;
+  return modifiers.lowercase ? String(keyValue).toLowerCase().replace(/\s+/g, '-') : keyValue;
 };
 
 const selectedValues = computed(() => {

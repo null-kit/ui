@@ -170,7 +170,7 @@ const onFocusOut = () => {
   }
 
   if (type === 'number' && typeof value === 'string' && value === '') {
-    model.value = undefined;
+    model.value = min ?? undefined;
   }
 };
 

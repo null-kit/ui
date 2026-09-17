@@ -45,9 +45,14 @@ declare module '@tanstack/vue-table' {
 export type TableSortType = `${string}:${'asc' | 'desc'}` | undefined;
 
 type TSlot<T> = {
-  [K in Extract<keyof T, string>]?: (props: { row: T; cell: NoInfer<T[K]>; isNested: boolean }) => void;
+  [K in Extract<keyof T, string>]?: (props: {
+    row: T;
+    cell: NoInfer<T[K]>;
+    isNested: boolean;
+    isExpanded: boolean;
+  }) => void;
 } & {
-  [key: string]: (props: { row: T; cell: NoInfer<T[K]>; isNested: boolean }) => void;
+  [key: string]: (props: { row: T; cell: NoInfer<T[K]>; isNested: boolean; isExpanded: boolean }) => void;
 };
 
 type TSortDir = 'asc' | 'desc' | boolean;
