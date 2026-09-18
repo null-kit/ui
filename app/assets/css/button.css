@@ -1,7 +1,9 @@
 @layer components {
   .btn-group {
     @apply scrollbar isolate flex scrollbar-thin overflow-auto;
-    @apply bg-darwin-subtle rounded-lg shadow;
+    @apply bg-darwin-subtle shadow;
+
+    border-radius: var(--app-control-radius);
 
     &:not(:has(.btn-accent)) {
       @apply ring-edison hover:ring-surface/20 ring;
@@ -13,15 +15,15 @@
     }
 
     &:has(.btn-xs) {
-      @apply rounded-sm;
+      @apply app-control-sm;
     }
 
     &:has(.btn-sm) {
-      @apply rounded-md;
+      @apply app-control-md;
     }
 
     &:has(.btn-xl) {
-      @apply rounded-xl;
+      @apply app-control-xl;
     }
 
     .btn {
