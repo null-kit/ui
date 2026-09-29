@@ -7,14 +7,14 @@
           class="app-floating-header cursor-grab select-none active:cursor-grabbing"
           title="Drag to move. Double-click to reset."
           @pointerdown="onDragStart"
-          @pointerup="$emit('drag', left, top)"
+          @pointerup="onDragEnd"
           @dblclick="onResetBounds"
         >
           <slot name="header" />
         </div>
 
-        <div class="scrollbar scrollbar-thin min-h-0 flex-1 overflow-auto">
-          <slot />
+        <div class="scrollbar min-h-0 flex-1 scrollbar-thin overflow-auto">
+          <slot v-bind="{ onDragStart, onDragEnd, onResetBounds }" />
         </div>
 
         <div
@@ -24,7 +24,7 @@
           @pointerdown="onResizeStart($event, handle)"
           @pointerup="
             $emit('resize', widthCur, heightCur);
-            $emit('drag', left, top);
+            onDragEnd();
           "
         />
       </div>
@@ -327,6 +327,10 @@ const onDragStart = (event: PointerEvent) => {
     left.value = nextLeft;
     top.value = nextTop;
   });
+};
+
+const onDragEnd = () => {
+  emit('drag', left.value, top.value);
 };
 
 const onResizeStart = (event: PointerEvent, handle: ResizeHandle) => {
