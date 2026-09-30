@@ -18,3 +18,15 @@ export const formatCurrency = (
 ) => {
   return formatNumber(value, { style: 'currency', currency: options?.currency ?? 'USD', ...options }, locale);
 };
+
+export const formatPercentage = (
+  value: number | string | undefined | null,
+  options?: Intl.NumberFormatOptions,
+  locale: Intl.LocalesArgument = 'en-US'
+) => {
+  return formatNumber(
+    value,
+    { style: 'percent', ...(options ?? { minimumFractionDigits: 1, maximumFractionDigits: 1 }) },
+    locale
+  );
+};
