@@ -35,6 +35,10 @@
   @apply bg-accent/10 ring-accent/20 text-accent;
 }
 
+@utility badge-xs {
+  @apply px-1 py-0.5 text-xs;
+}
+
 @utility badge-sm {
   @apply px-1.5 py-0.5;
 }
