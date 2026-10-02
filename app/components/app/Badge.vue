@@ -24,7 +24,7 @@ const {
   type?: 'clear' | 'default' | 'success' | 'warning' | 'danger' | 'info' | 'accent';
   label?: string | number;
   icon?: string;
-  size?: 'sm' | 'lg';
+  size?: 'xs' | 'sm' | 'lg';
 }>();
 
 const types = {
@@ -38,6 +38,7 @@ const types = {
 };
 
 const sizes = {
+  xs: 'badge-xs',
   sm: 'badge-sm',
   lg: 'badge-lg'
 };
