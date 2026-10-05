@@ -123,6 +123,30 @@ const toLowerCase = (value: T) => {
   return modifiers.lowercase ? String(keyValue).toLowerCase().replace(/\s+/g, '-') : keyValue;
 };
 
+const isRecord = (value: unknown): value is Record<string, unknown> => {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+};
+
+const sameRecord = (left: Record<string, unknown>, right: Record<string, unknown>) => {
+  const leftKeys = Object.keys(left);
+
+  if (leftKeys.length !== Object.keys(right).length) return false;
+
+  return leftKeys.every((key) => left[key] === right[key]);
+};
+
+const isSameValue = (value: unknown, option: T) => {
+  if (!props.keyValue && isRecord(option) && isRecord(value)) {
+    if (value === option) return true;
+
+    if (props.keyName) return getKeyName(value as T) === getKeyName(option);
+
+    return sameRecord(value, option);
+  }
+
+  return toLowerCase(value as T) === toLowerCase(option);
+};
+
 const selectedValues = computed(() => {
   if (props.type !== 'checkbox') return [];
 
@@ -138,13 +162,11 @@ const hasSelection = computed(() => {
 });
 
 const isOptionSelected = (option: T) => {
-  const optionValue = toLowerCase(option);
-
   if (props.type === 'checkbox') {
-    return selectedValues.value.some((value) => toLowerCase(value as T) === optionValue);
+    return selectedValues.value.some((value) => isSameValue(value, option));
   }
 
-  return toLowerCase(model.value as T) === optionValue;
+  return isSameValue(model.value, option);
 };
 
 const onClick = (event: Event, option: T) => {
@@ -173,7 +195,7 @@ const onChange = (event: Event, option: T) => {
   }
 
   const values = [...selectedValues.value] as T[];
-  const index = values.findIndex((value) => toLowerCase(value) === optionValue);
+  const index = values.findIndex((value) => isSameValue(value, option));
 
   if ((event.target as HTMLInputElement).checked) {
     if (index === -1) values.push(optionValue as T);
