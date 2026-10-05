@@ -138,6 +138,8 @@ const onInput = (event: InputEvent) => {
     model.value = value ?? undefined;
     input.value = value;
 
+    syncInput();
+
     return;
   }
 
@@ -147,31 +149,47 @@ const onInput = (event: InputEvent) => {
     model.value = cropped;
     input.value = cropped;
   }
+
+  syncInput();
 };
 
 const onFocusOut = () => {
-  const value = model.value;
+  let value = model.value;
 
   if (typeof value === 'string' && modifiers.spaceToComma) {
-    model.value = value.replace(/,{2,}/g, ',').replace(/^,+|,+$/g, '');
+    value = value.replace(/,{2,}/g, ',').replace(/^,+|,+$/g, '');
   }
 
   if (typeof value === 'string' && modifiers.clearSpaces) {
-    model.value = value.replace(/\s/g, '');
+    value = value.replace(/\s/g, '');
   }
 
   if (type === 'number') {
-    if (min !== undefined && Number(value) < Number(min)) model.value = min;
-    if (max !== undefined && Number(value) > Number(max)) model.value = max;
+    const number = Number(value);
+
+    if (value === '' || value === null || value === undefined || Number.isNaN(number)) {
+      value = min !== undefined ? Number(min) : undefined;
+    } else {
+      value = number;
+
+      if (min !== undefined && value < Number(min)) value = Number(min);
+      if (max !== undefined && value > Number(max)) value = Number(max);
+    }
+  } else if (typeof value === 'string' && max !== undefined && value.length > Number(max)) {
+    value = value.slice(0, Number(max));
   }
 
-  if (typeof value === 'string' && max !== undefined && value.length > Number(max)) {
-    model.value = value.slice(0, Number(max));
-  }
+  model.value = value;
 
-  if (type === 'number' && typeof value === 'string' && value === '') {
-    model.value = min ?? undefined;
-  }
+  syncInput();
+};
+
+const syncInput = () => {
+  nextTick(() => {
+    const value = String(model.value ?? '');
+
+    if (input.value && input.value.value !== value) input.value.value = value;
+  });
 };
 
 const hasSlotStyle = (slot: { left?: boolean; right?: boolean }) => {
@@ -184,6 +202,8 @@ onMounted(() => {
   if (value) model.value = value;
 
   if (type === 'number' && typeof model.value === 'string') model.value = Number(model.value);
+
+  syncInput();
 
   if (autofocus) setTimeout(() => input.value?.focus({ preventScroll: true }), 100);
 });
